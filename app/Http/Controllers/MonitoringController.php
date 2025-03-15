@@ -10,4 +10,11 @@ class MonitoringController extends Controller
 {
     return view('pages.MonitoringDashboard');
 }
+
+   public function MonitoringDisplay()
+   {
+    return view('pages.Display_Monitoring');
+
+   }
+
 }
