@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UptimeGuard - Website Monitoring Service</title>
+  <title>CheckMySite - Website Monitoring Service</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
@@ -80,7 +80,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
   <div class="container">
     <a class="navbar-brand text-primary fw-bold" href="#">
-      <i class="fas fa-heartbeat me-2"></i>UptimeGuard
+      <i class="fas fa-heartbeat me-2"></i>CheckMySite
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false" aria-controls="navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -122,7 +122,7 @@
       <div class="row align-items-center">
         <div class="col-lg-6 text-center text-lg-start">
           <h1 class="display-4 fw-bold mb-4">Never Miss a Website Downtime Again</h1>
-          <p class="lead mb-4">Get instant alerts when your websites go down. Monitor performance, uptime, and response times with UptimeGuard's powerful monitoring tools.</p>
+          <p class="lead mb-4">Get instant alerts when your websites go down. Monitor performance, uptime, and response times with CheckMySite's powerful monitoring tools.</p>
           <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
             <a href="#" class="btn btn-light btn-lg text-primary fw-bold">Start Monitoring</a>
             <a href="#" class="btn btn-outline-light btn-lg">Watch Demo</a>
@@ -223,7 +223,7 @@
   <section id="how-it-works" class="py-5 bg-light">
     <div class="container">
       <div class="text-center mb-5">
-        <h2 class="fw-bold mb-3">How UptimeGuard Works</h2>
+        <h2 class="fw-bold mb-3">How CheckMySite Works</h2>
         <p class="text-muted mx-auto" style="max-width: 600px;">Simple setup, powerful results. Get started in less than 2 minutes.</p>
       </div>
       
@@ -351,7 +351,7 @@
     <div class="container">
       <div class="text-center mb-5">
         <h2 class="fw-bold mb-3">What Our Customers Say</h2>
-        <p class="text-muted mx-auto" style="max-width: 600px;">Thousands of businesses trust UptimeGuard to keep their websites running smoothly.</p>
+        <p class="text-muted mx-auto" style="max-width: 600px;">Thousands of businesses trust CheckMySite to keep their websites running smoothly.</p>
       </div>
       
       <div class="row g-4">
@@ -374,7 +374,7 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
               </div>
-              <p class="text-muted">"UptimeGuard has been a game-changer for our business. We were alerted to an outage within seconds and resolved it before most of our customers even noticed. The detailed reporting helps us optimize our infrastructure."</p>
+              <p class="text-muted">"CheckMySite has been a game-changer for our business. We were alerted to an outage within seconds and resolved it before most of our customers even noticed. The detailed reporting helps us optimize our infrastructure."</p>
             </div>
           </div>
         </div>
@@ -398,7 +398,7 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
               </div>
-              <p class="text-muted">"As a small business owner, I don't have time to constantly check if my online store is up. UptimeGuard gives me peace of mind knowing I'll be alerted immediately if there's an issue with my website."</p>
+              <p class="text-muted">"As a small business owner, I don't have time to constantly check if my online store is up. CheckMySite gives me peace of mind knowing I'll be alerted immediately if there's an issue with my website."</p>
             </div>
           </div>
         </div>
@@ -422,7 +422,7 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
               </div>
-              <p class="text-muted">"We monitor over 200 websites across multiple regions with UptimeGuard. The global monitoring network gives us confidence that our services are accessible to customers worldwide. Great value for the price."</p>
+              <p class="text-muted">"We monitor over 200 websites across multiple regions with CheckMySite. The global monitoring network gives us confidence that our services are accessible to customers worldwide. Great value for the price."</p>
             </div>
           </div>
         </div>
@@ -517,7 +517,7 @@
       <div class="row justify-content-center text-center">
         <div class="col-lg-8">
           <h2 class="display-5 fw-bold mb-4">Ready to Monitor Your Websites?</h2>
-          <p class="lead mb-5">Join thousands of businesses that trust UptimeGuard to keep their websites and services running smoothly.</p>
+          <p class="lead mb-5">Join thousands of businesses that trust CheckMySite to keep their websites and services running smoothly.</p>
           <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
             <a href="#" class="btn btn-light btn-lg text-primary fw-bold px-4">Start Your Free Trial</a>
             <a href="#" class="btn btn-outline-light btn-lg px-4">Schedule a Demo</a>
@@ -532,7 +532,7 @@
     <div class="container">
       <div class="row gy-4">
         <div class="col-lg-3 col-md-6">
-          <h3 class="h5 fw-bold mb-3">UptimeGuard</h3>
+          <h3 class="h5 fw-bold mb-3">CheckMySite</h3>
           <p class="mb-3">Enterprise-grade website monitoring for businesses of all sizes.</p>
           <div class="d-flex gap-3">
             <a href="#" class="text-light"><i class="fab fa-twitter"></i></a>
@@ -580,7 +580,7 @@
       
       <div class="row align-items-center">
         <div class="col-md-6 text-center text-md-start">
-          <p class="mb-md-0">© 2025 UptimeGuard. All rights reserved.</p>
+          <p class="mb-md-0">© 2025 CheckMySite. All rights reserved.</p>
         </div>
         <div class="col-md-6 text-center text-md-end">
           <a href="#" class="text-light text-decoration-none me-3">Privacy Policy</a>
