@@ -43,10 +43,18 @@
         <a href="#pricing" class="text-gray-600 hover:text-blue-600 transition">Pricing</a>
         <a href="#testimonials" class="text-gray-600 hover:text-blue-600 transition">Testimonials</a>
       </div>
+      @if (Route::has('login'))      
       <div class="flex items-center space-x-4">
-        <a href="#" class="text-gray-600 hover:text-blue-600 transition">Login</a>
-        <a href="#" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Sign Up Free</a>
+        @auth 
+        <a href="{{ url('/dashboard') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Dashboard</a>
+        @else
+        <a href="{{ route('login') }}" class="text-gray-600 hover:text-blue-600 transition">Login</a>
+         @if (Route::has('register'))      
+        <a href="{{ route('register') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Sign Up Free</a>
+        @endif
+        @endauth
       </div>
+      @endif
     </div>
   </nav>
 
