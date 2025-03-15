@@ -76,44 +76,45 @@
 </head>
 <body>
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
-    <div class="container">
-      <a class="navbar-brand text-primary fw-bold" href="#">
-        <i class="fas fa-heartbeat me-2"></i>UptimeGuard
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#features">Features</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#how-it-works">How It Works</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#pricing">Pricing</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#testimonials">Testimonials</a>
-          </li>
-        </ul>
-        @if (Route::has('login'))      
-        <div class="d-flex">
-        @auth 
-        <a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a>
-        @else  
-        <a href="{{ route('login') }}" class="btn btn-link text-secondary me-3">Login</a>
-        @if (Route::has('register'))  
-        <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
-        @endif
-        @endauth
-        </div>
-        @endif
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand text-primary fw-bold" href="#">
+      <i class="fas fa-heartbeat me-2"></i>UptimeGuard
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false" aria-controls="navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#features">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#how-it-works">How It Works</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#pricing">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#testimonials">Testimonials</a>
+        </li>
+      </ul>
+      @if (Route::has('login'))      
+      <div class="d-flex">
+      @auth 
+      <a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a>
+      @else  
+      <a href="{{ route('login') }}" class="btn btn-link text-secondary me-3">Login</a>
+      @if (Route::has('register'))  
+      <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
+      @endif
+      @endauth
       </div>
+      @endif
     </div>
-  </nav>
+  </div>
+</nav>
 
   <!-- Hero Section -->
   <section class="gradient-bg hero-section text-white">
@@ -588,12 +589,7 @@
       </div>
     </div>
   </footer>
-
-<!-- Mobile Menu Toggle (Bootstrap version) -->
-<div class="fixed-bottom d-md-none" style="right: 1.5rem; bottom: 1.5rem;">
-  <button class="btn btn-primary rounded-circle shadow" style="width: 3.5rem; height: 3.5rem;">
-    <i class="fas fa-bars"></i>
-  </button>
-</div>
+  <!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
