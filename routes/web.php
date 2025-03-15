@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/monitoring/dashboard', [MonitoringController::class, 'MonitoringDashboard'])->name('monitoring.dashboard');
+
+    Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->name('add.monitoring');
 });
 
 require __DIR__.'/auth.php';

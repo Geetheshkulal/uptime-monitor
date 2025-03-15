@@ -38,6 +38,7 @@
     <!-- Custom styles for this template-->
     <link href="{{asset('frontend/assets/css/sb-admin-2.min.css')}}" rel="stylesheet">
 
+   
 </head>
 
 <body id="page-top">
