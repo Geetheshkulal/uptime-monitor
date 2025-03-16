@@ -15,4 +15,10 @@ class MonitoringController extends Controller
 
     return view('pages.Add_Monitor');
  }
+   public function MonitoringDisplay()
+   {
+    return view('pages.Display_Monitoring');
+
+   }
+
 }
