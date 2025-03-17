@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MonitoringController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/ssl-check', [SslCheckController::class, 'index'])->name('ssl.check');
     Route::post('/ssl-check', [SslCheckController::class, 'check'])->name('ssl.check.domain');
+
+    Route::get('/incidents', [IncidentController::class, 'incidents'])->name('incidents');
 });
 
 require __DIR__.'/auth.php';
