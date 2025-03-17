@@ -203,7 +203,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('frontend/assets/vendor/jquery/jquery.min.js') }}"></script>
+    @push('scripts')
     <script src="{{ asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
@@ -216,4 +216,5 @@
             $('#dataTable').DataTable();
         });
     </script>
+    @endpush
 @endsection
