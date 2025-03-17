@@ -119,7 +119,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr class="odd">
+                                        <tr class="odd">
                                             <td class="sorting_1">Airi Satou</td>
                                             <td>
                                                 <span class="badge badge-success">Up</span>
@@ -129,7 +129,21 @@
                                             <td>200- OK</td>
                                             <td>
                                             @foreach (range(1, 13) as $number)
-                                                <div style="width: 4.8px; height: 16px; margin: 2.4px; --hover-scale: 1.5; display: inline-block; background-color: #5cdd8b; border-radius:50rem;"></div>                                                
+                                                <div style="width: 4.8px; height: 16px; margin: 1px; --hover-scale: 1.5; display: inline-block; background-color: #5cdd8b; border-radius:50rem;"></div>                                                
+                                            @endforeach
+                                            </td>
+                                        </tr>
+                                        <tr class="odd">
+                                            <td class="sorting_1">Fas</td>
+                                            <td>
+                                                <span class="badge badge-success">Up</span>
+                                                <span class="badge badge-danger">Down</span>
+                                            </td>
+                                            <td>2008/11/28</td>
+                                            <td>200- OK</td>
+                                            <td>
+                                            @foreach (range(1, 13) as $number)
+                                                <div style="width: 4.8px; height: 16px; margin: 1px; --hover-scale: 1.5; display: inline-block; background-color: #5cdd8b; border-radius:50rem;"></div>                                                
                                             @endforeach
                                             </td>
                                         </tr>
