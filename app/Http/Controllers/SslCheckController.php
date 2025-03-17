@@ -31,6 +31,15 @@ class SslCheckController extends Controller
         $validFrom = date("Y-m-d", $cert['validFrom_time_t']);
         $validTo = date("Y-m-d", $cert['validTo_time_t']);
         $daysRemaining = (strtotime($validTo) - time()) / 86400;
+
+        // Determine SSL Status
+        if ($daysRemaining <= 0) {
+            $status = 'Expired 🔴';
+        } elseif ($daysRemaining <= 30) {
+            $status = 'Expiring Soon 🟠';
+        } else {
+            $status = 'Active🟢';
+        }
     
         return back()->with([
             'ssl_details' => [
@@ -38,7 +47,8 @@ class SslCheckController extends Controller
                 'issuer' => $cert['issuer']['O'] ?? 'Unknown',
                 'valid_from' => $validFrom,
                 'valid_to' => $validTo,
-                'days_remaining' => round($daysRemaining)
+                'days_remaining' => round($daysRemaining),
+                'status' => $status
             ]
         ]);
     }

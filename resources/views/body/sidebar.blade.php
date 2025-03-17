@@ -15,20 +15,53 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    {{-- <li class="nav-item active">
         <a class="nav-link" href="{{route('monitoring.dashboard')}}">
+           
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
-    </li>
-    <li class="nav-item active">
+    </li> --}}
+
+
+    {{-- <li class="nav-item active">
         <a class="nav-link" href="{{route('incidents')}}">
             <i class="fas fa-exclamation-triangle"></i>
             <span>Incidents</span></a>
-    </li>
-    <li class="nav-item active">
+    </li> --}}
+
+
+    {{-- <li class="nav-item active">
         <a class="nav-link" href="{{ route('ssl.check') }}">
             <i class="fas fa-lock"></i>
             <span>SSL Check</span></a>
+    </li> --}}
+
+
+    <li class="nav-item {{ request()->is('monitoring*') ? 'active' : '' }}" 
+        style="{{ request()->is('monitoring*') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white" href="{{ route('monitoring.dashboard') }}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    
+
+
+    <li class="nav-item {{ request()->routeIs('incidents') ? 'active' : '' }}" 
+        style="{{ request()->routeIs('incidents') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white" href="{{ route('incidents') }}">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Incidents</span>
+        </a>
+    </li>
+
+
+    <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}" 
+        style="{{ request()->routeIs('ssl.check') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white" href="{{ route('ssl.check') }}">
+            <i class="fas fa-lock"></i>
+            <span>SSL Check</span>
+        </a>
     </li>
 
     <!-- Divider -->

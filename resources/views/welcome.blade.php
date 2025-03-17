@@ -101,7 +101,7 @@
       @if (Route::has('login'))      
       <div class="d-flex">
       @auth 
-      <a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a>
+      <a href="{{ url('/monitoring/dashboard') }}" class="btn btn-primary">Dashboard</a>
       @else  
       <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
       &nbsp;
