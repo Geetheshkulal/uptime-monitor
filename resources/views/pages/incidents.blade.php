@@ -1,0 +1,82 @@
+@extends('dashboard')
+@section('content')
+
+
+<div id="content-wrapper" class="d-flex flex-column">
+    @push('styles')
+    <style>
+        .tablerow:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+    @endpush
+
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Incident Management</h1>
+            </div>
+
+            <!-- Data Table -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table" id="incidentTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>URL</th>
+                                <th>Root Cause</th>
+                                <th>Start Date</th>
+                                <th>Ends On</th>
+                                 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (range(1, 5) as $num)
+                                <tr class="tablerow">
+                                    <td>
+                                        <span class="badge badge-success">Ongoing</span>
+                                        <span class="badge badge-danger">Resolved</span>
+                                    </td>
+                                    <td>https://example.com</td>
+                                    <td>Server Crash</td>
+                                    <td>2025/03/17 10:30 AM</td>
+                                    <td>2025/03/17 03:45 PM</td>
+                                    
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        
+        <!-- End of Main Content -->
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+
+<!-- Scripts -->
+@push('scripts')
+<script src="{{ asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+<script src="{{ asset('frontend/assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('frontend/assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('#incidentTable').DataTable({
+            columnDefs: [
+                { targets: [5], searchable: false } // Exclude Action column from search
+            ]
+        });
+    });
+</script>
+@endpush
+
+
+@endsection
