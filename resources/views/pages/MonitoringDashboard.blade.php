@@ -2,6 +2,13 @@
 @section('content')
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
+        @push('styles')
+        <style>
+            .tablerow:hover{
+                background-color: #f0f0f0;
+            }
+        </style>
+        @endpush
 
         <!-- Main Content -->
         <div id="content">
@@ -116,10 +123,13 @@
                                     <th>DateTime</th>
                                     <th>Message</th>
                                     <th>Last Calls Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                        <tr class="odd">
+                            @foreach (range(1, 3) as $num)
+
+                                        <tr class="tablerow">
                                             <td class="sorting_1">Airi Satou</td>
                                             <td>
                                                 <span class="badge badge-success">Up</span>
@@ -132,21 +142,13 @@
                                                 <div style="width: 4.8px; height: 16px; margin: 1px; --hover-scale: 1.5; display: inline-block; background-color: #5cdd8b; border-radius:50rem;"></div>                                                
                                             @endforeach
                                             </td>
-                                        </tr>
-                                        <tr class="odd">
-                                            <td class="sorting_1">Fas</td>
                                             <td>
-                                                <span class="badge badge-success">Up</span>
-                                                <span class="badge badge-danger">Down</span>
-                                            </td>
-                                            <td>2008/11/28</td>
-                                            <td>200- OK</td>
-                                            <td>
-                                            @foreach (range(1, 13) as $number)
-                                                <div style="width: 4.8px; height: 16px; margin: 1px; --hover-scale: 1.5; display: inline-block; background-color: #5cdd8b; border-radius:50rem;"></div>                                                
-                                            @endforeach
+                                                <a href="#" class="btn btn-success">
+                                                    <i class="fas fa-eye fa-sm"></i> View
+                                                </a>
                                             </td>
                                         </tr>
+                            @endforeach
                                 <!-- Add more rows as needed -->
                             </tbody>
                         </table>
@@ -165,12 +167,17 @@
     <script src="{{ asset('frontend/assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/demo/datatables-demo.js') }}"></script>
-
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable();
+            $('#dataTable').DataTable({
+                columnDefs: [
+                    { targets: [5], searchable: false } // Exclude column index 5 (action button column) from search
+                ]
+            });
         });
+
     </script>
+
+
     @endpush
 @endsection
