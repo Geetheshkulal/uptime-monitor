@@ -21,7 +21,7 @@
             <span>Dashboard</span></a>
     </li>
     <li class="nav-item active">
-        <a class="nav-link" href="{{route('monitoring.dashboard')}}">
+        <a class="nav-link" href="{{route('incidents')}}">
             <i class="fas fa-exclamation-triangle"></i>
             <span>Incidents</span></a>
     </li>
