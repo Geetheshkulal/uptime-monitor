@@ -20,6 +20,16 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="{{route('monitoring.dashboard')}}">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Incidents</span></a>
+    </li>
+    <li class="nav-item active">
+        <a class="nav-link" href="{{route('monitoring.dashboard')}}">
+            <i class="fas fa-lock"></i>
+            <span>SSL Check</span></a>
+    </li>
 
     <!-- Divider -->
     <!-- <hr class="sidebar-divider"> -->
