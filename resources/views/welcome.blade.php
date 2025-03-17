@@ -79,7 +79,7 @@
   <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
   <div class="container">
-    <a class="navbar-brand text-primary fw-bold" href="#">
+    <a class="navbar-brand text-primary fw-bold" href="/">
       <i class="fas fa-heartbeat me-2"></i>CheckMySite
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false" aria-controls="navbarNav">
