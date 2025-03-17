@@ -96,9 +96,7 @@
         <li class="nav-item">
           <a class="nav-link" href="#pricing">Pricing</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#testimonials">Testimonials</a>
-        </li>
+        
       </ul>
       @if (Route::has('login'))      
       <div class="d-flex">
@@ -125,7 +123,7 @@
           <p class="lead mb-4">Get instant alerts when your websites go down. Monitor performance, uptime, and response times with CheckMySite's powerful monitoring tools.</p>
           <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
             <a href="#" class="btn btn-light btn-lg text-primary fw-bold">Start Monitoring</a>
-            <a href="#" class="btn btn-outline-light btn-lg">Watch Demo</a>
+            
           </div>
         </div>
         <div class="col-lg-6">
@@ -198,7 +196,7 @@
               <div class="feature-icon bg-primary bg-opacity-10">
                 <i class="fas fa-shield-alt text-primary fs-4"></i>
               </div>
-              <h3 class="h5 fw-bold">SSL Monitoring</h3>
+              <h3 class="h5 fw-bold">SSL expiry check</h3>
               <p class="text-muted">Get alerted before your SSL certificates expire to avoid security warnings.</p>
             </div>
           </div>
@@ -249,7 +247,7 @@
     </div>
   </section>
 
-  <!-- Stats Section -->
+  {{-- <!-- Stats Section -->
   <section class="py-5 gradient-bg text-white">
     <div class="container">
       <div class="row text-center">
@@ -271,7 +269,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> --}}
 
   <!-- Pricing Section -->
   <section id="pricing" class="py-5">
@@ -285,57 +283,36 @@
         <div class="col-lg-4">
           <div class="card h-100 border-light shadow-sm">
             <div class="card-body p-4">
-              <h3 class="fw-bold mb-2">Starter</h3>
+              <h3 class="fw-bold mb-2">Basic</h3>
               <div class="text-primary mb-4">
-                <span class="display-6 fw-bold">$9</span>
-                <span class="text-muted">/month</span>
+                <span class="display-6 fw-bold">free</span>
               </div>
               <ul class="list-unstyled mb-4">
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 10 websites</li>
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 5-minute checks</li>
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email alerts</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 7-day history</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-day history</li>
               </ul>
               <a href="#" class="btn btn-primary d-block">Get Started</a>
             </div>
           </div>
         </div>
         
-        <div class="col-lg-4">
-          <div class="card h-100 popular-plan shadow">
-            <span class="badge bg-primary popular-badge px-3 py-2 rounded-pill">MOST POPULAR</span>
-            <div class="card-body p-4">
-              <h3 class="fw-bold mb-2">Professional</h3>
-              <div class="text-primary mb-4">
-                <span class="display-6 fw-bold">$29</span>
-                <span class="text-muted">/month</span>
-              </div>
-              <ul class="list-unstyled mb-4">
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 50 websites</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-minute checks</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email, SMS & Slack alerts</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 30-day history</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> API access</li>
-              </ul>
-              <a href="#" class="btn btn-primary d-block">Get Started</a>
-            </div>
-          </div>
-        </div>
+       
         
         <div class="col-lg-4">
           <div class="card h-100 border-light shadow-sm">
             <div class="card-body p-4">
-            <h3 class="fw-bold mb-2">Enterprise</h3>
+            <h3 class="fw-bold mb-2">Premium</h3>
               <div class="text-primary mb-4">
-                <span class="display-6 fw-bold">$99</span>
+                <span class="display-6 fw-bold">₹399</span>
                 <span class="text-muted">/month</span>
               </div>
               <ul class="list-unstyled mb-4">
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited websites</li>
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 30-second checks</li>
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> All alert channels</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-year history</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Priority support</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> SSL expiry check</li>
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom integrations</li>
               </ul>
               <a href="#" class="btn btn-primary d-block">Get Started</a>
@@ -346,7 +323,7 @@
     </div>
   </section>
 
-  <!-- Testimonials Section -->
+  {{-- <!-- Testimonials Section -->
   <section id="testimonials" class="py-5 bg-light">
     <div class="container">
       <div class="text-center mb-5">
@@ -509,7 +486,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> --}}
 
   <!-- CTA Section -->
   <section class="py-5 gradient-bg text-white">
@@ -519,76 +496,94 @@
           <h2 class="display-5 fw-bold mb-4">Ready to Monitor Your Websites?</h2>
           <p class="lead mb-5">Join thousands of businesses that trust CheckMySite to keep their websites and services running smoothly.</p>
           <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-            <a href="#" class="btn btn-light btn-lg text-primary fw-bold px-4">Start Your Free Trial</a>
-            <a href="#" class="btn btn-outline-light btn-lg px-4">Schedule a Demo</a>
+            <a href="" class="btn btn-light btn-lg text-primary fw-bold px-4">Start Your Free Trial</a>
+            {{-- <a href="#" class="btn btn-outline-light btn-lg px-4">Schedule a Demo</a> --}}
           </div>
         </div>
       </div>
     </div>
   </section>
-
   <!-- Footer -->
-  <footer class="bg-dark text-light py-5">
-    <div class="container">
-      <div class="row gy-4">
-        <div class="col-lg-3 col-md-6">
-          <h3 class="h5 fw-bold mb-3">CheckMySite</h3>
-          <p class="mb-3">Enterprise-grade website monitoring for businesses of all sizes.</p>
-          <div class="d-flex gap-3">
-            <a href="#" class="text-light"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="text-light"><i class="fab fa-facebook"></i></a>
-            <a href="#" class="text-light"><i class="fab fa-linkedin"></i></a>
-            <a href="#" class="text-light"><i class="fab fa-github"></i></a>
-          </div>
-        </div>
-        
-        <div class="col-lg-3 col-md-6">
-          <h3 class="h5 fw-bold mb-3">Product</h3>
-          <ul class="list-unstyled">
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Features</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Pricing</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Integrations</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">API</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Status</a></li>
-          </ul>
-        </div>
-        
-        <div class="col-lg-3 col-md-6">
-          <h3 class="h5 fw-bold mb-3">Resources</h3>
-          <ul class="list-unstyled">
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Documentation</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Blog</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Knowledge Base</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Uptime Calculator</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Community</a></li>
-          </ul>
-        </div>
-        
-        <div class="col-lg-3 col-md-6">
-          <h3 class="h5 fw-bold mb-3">Company</h3>
-          <ul class="list-unstyled">
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">About Us</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Careers</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Contact</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
-            <li class="mb-2"><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
-          </ul>
+<footer class="bg-dark text-light py-5">
+  <div class="container">
+    <div class="row gy-4">
+      
+      <!-- Company Info -->
+      <div class="col-lg-3 col-md-6">
+        <h3 class="h5 fw-bold mb-3">CheckMySite</h3>
+        <p class="mb-3">Enterprise-grade website monitoring for businesses of all sizes.</p>
+        <div class="d-flex gap-3">
+          <a href="#" class="text-light"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-light"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-light"><i class="fab fa-linkedin"></i></a>
+          <a href="#" class="text-light"><i class="fab fa-github"></i></a>
         </div>
       </div>
-      
-      <hr class="my-4 bg-secondary">
-      
-      <div class="row align-items-center">
-        <div class="col-md-6 text-center text-md-start">
-          <p class="mb-md-0">© 2025 CheckMySite. All rights reserved.</p>
+
+      <!-- Product Section -->
+      {{-- <div class="col-lg-3 col-md-6">
+        <h3 class="h5 fw-bold mb-3">Product</h3>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#features" class="text-light text-decoration-none">Features</a></li>
+          <li class="mb-2"><a href="#pricing" class="text-light text-decoration-none">Pricing</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Integrations</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">API</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Status</a></li>
+        </ul>
+      </div> --}}
+      <div class="col-lg-4 col-md-4">
+        <h3 class="h6 fw-bold mb-3">Product</h3>
+        <div class="d-flex flex-wrap gap-3">
+          <a href="#features" class="text-light text-decoration-none">Features</a>
+          <a href="#pricing" class="text-light text-decoration-none">Pricing</a>
+          <a href="#" class="text-light text-decoration-none">Integrations</a>
+          <a href="#" class="text-light text-decoration-none">API</a>
+          <a href="#" class="text-light text-decoration-none">Status</a>
         </div>
-        <div class="col-md-6 text-center text-md-end">
-          <a href="#" class="text-light text-decoration-none me-3">Privacy Policy</a>
-          <a href="#" class="text-light text-decoration-none">Terms of Service</a>
-        </div>
+      </div>
+      <!-- Future Sections (Currently Commented Out) -->
+      {{-- 
+      <div class="col-lg-3 col-md-6">
+        <h3 class="h5 fw-bold mb-3">Resources</h3>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Documentation</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Blog</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Knowledge Base</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Uptime Calculator</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Community</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <h3 class="h5 fw-bold mb-3">Company</h3>
+        <ul class="list-unstyled">
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">About Us</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Careers</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Contact</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
+          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
+        </ul>
+      </div>
+      --}}
+
+    </div>
+
+    <!-- Footer Divider -->
+    <hr class="my-4 bg-secondary">
+
+    <!-- Copyright & Legal Links -->
+    <div class="row align-items-center">
+      <div class="col-md-6 text-center text-md-start">
+        <p class="mb-md-0">© 2025 CheckMySite. All rights reserved.</p>
+      </div>
+      <div class="col-md-6 text-center text-md-end">
+        <a href="#" class="text-light text-decoration-none me-3">Privacy Policy</a>
+        <a href="#" class="text-light text-decoration-none">Terms of Service</a>
       </div>
     </div>
-  </footer>
+
+  </div>
+</footer>
   <!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
