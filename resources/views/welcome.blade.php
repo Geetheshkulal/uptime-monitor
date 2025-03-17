@@ -122,8 +122,18 @@
           <h1 class="display-4 fw-bold mb-4">Never Miss a Website Downtime Again</h1>
           <p class="lead mb-4">Get instant alerts when your websites go down. Monitor performance, uptime, and response times with CheckMySite's powerful monitoring tools.</p>
           <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-3">
-            <a href="#" class="btn btn-light btn-lg text-primary fw-bold">Start Monitoring</a>
-            
+            {{-- <a href="{{ route('login') }}" class="btn btn-light btn-lg text-primary fw-bold">Start Monitoring</a>
+             --}}
+             @if(auth()->check())
+    <a href="{{ route('monitoring.dashboard') }}" class="btn btn-light btn-lg text-primary fw-bold">
+        Start Monitoring
+    </a>
+@else
+    <a href="{{ route('login') }}" class="btn btn-light btn-lg text-primary fw-bold">
+        Start Monitoring
+    </a>
+@endif
+
           </div>
         </div>
         <div class="col-lg-6">
@@ -293,7 +303,16 @@
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email alerts</li>
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-day history</li>
               </ul>
-              <a href="#" class="btn btn-primary d-block">Get Started</a>
+              @if(auth()->check())
+    <a href="{{ route('monitoring.dashboard') }}" class="btn btn-primary d-block">
+      Get Started
+    </a>
+@else
+    <a href="{{ route('login') }}" class="btn btn-primary d-block">
+      Get Started
+    </a>
+@endif
+
             </div>
           </div>
         </div>
