@@ -100,7 +100,8 @@
             </div>
         </div>
     </div>
-
+    <script src="{{ asset('frontend/assets/vendor/jquery/jquery.min.js') }}"></script>
+    @stack('scripts')
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
