@@ -20,23 +20,16 @@
 </div>
 
 
-
-
 <!-- URL Field -->
 <div class="container-fluid">
     <div class="row">
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="d-flex align-items-center">
-           <h2>Domain:Google.com
-           </h2>
+           <h3>Domain:Google.com </h3>
             </div>
         </div>
     </div>
 </div>
-
-
-
-
 
 <div class="row">
 
@@ -53,7 +46,8 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-info-circle fa-2x text-gray-300"></i> <!-- Changed Icon -->
+                        <i class="fas fa-bolt fa-2x text-primary">
+                     </i>
                     </div>
                 </div>
             </div>
@@ -74,17 +68,13 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-check-circle fa-2x text-gray-300"></i> <!-- Changed Icon -->
+                        <i class="fas fa-check-circle fa-2x text-success"></i> <!-- Changed Icon -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    
-
-
-
     <!-- Average Response Card Example -->
     <div class="col-xl-3 col-md-6 mb-4 pl-5">   
 
@@ -98,7 +88,7 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-hourglass-half fa-2x text-gray-300"></i> <!-- Changed Icon -->
+                        <i class="fas fa-hourglass-half fa-2x text-warning"></i> <!-- Changed Icon -->
                     </div>
                 </div>
             </div>
@@ -109,11 +99,7 @@
 
 
 <div class="col-12"> <!-- Added ml-4 -->
-
     <div class="card shadow mb-4">
-       
-     
-
         <!-- Card Header - Dropdown -->
         <div
             class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -141,6 +127,5 @@
         </div>
     </div>
 </div>
-
 
 @endsection
