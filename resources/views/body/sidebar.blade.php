@@ -26,7 +26,7 @@
             <span>Incidents</span></a>
     </li>
     <li class="nav-item active">
-        <a class="nav-link" href="{{route('monitoring.dashboard')}}">
+        <a class="nav-link" href="{{ route('ssl.check') }}">
             <i class="fas fa-lock"></i>
             <span>SSL Check</span></a>
     </li>
