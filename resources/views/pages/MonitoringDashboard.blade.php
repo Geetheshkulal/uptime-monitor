@@ -18,6 +18,9 @@
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Overview</h1>
+                    <a href="{{route("add.monitoring")}}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Add New Monitor
+                    </a>
                 </div>
 
                 <!-- Content Row -->
@@ -167,7 +170,6 @@
     <script src="{{ asset('frontend/assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
-    
     <script>
         $(document).ready(function() {
             $('#dataTable').DataTable({
