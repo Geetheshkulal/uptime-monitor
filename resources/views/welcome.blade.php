@@ -103,7 +103,9 @@
       @auth 
       <a href="{{ url('/dashboard') }}" class="btn btn-primary">Dashboard</a>
       @else  
-      <a href="{{ route('login') }}" class="btn btn-link text-secondary me-3">Login</a>
+      <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+      &nbsp;
+      &nbsp;
       @if (Route::has('register'))  
       <a href="{{ route('register') }}" class="btn btn-primary">Register</a>
       @endif
@@ -295,7 +297,7 @@
             <div class="card-body p-4">
               <h3 class="fw-bold mb-2">Basic</h3>
               <div class="text-primary mb-4">
-                <span class="display-6 fw-bold">free</span>
+                <span class="display-6 fw-bold">₹0</span>
               </div>
               <ul class="list-unstyled mb-4">
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 10 websites</li>
