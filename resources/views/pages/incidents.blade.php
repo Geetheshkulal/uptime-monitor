@@ -122,7 +122,7 @@
                 </div>
 
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">My Monitors</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Incidents</h1>
                 </div>
 
                 <!-- Data Table -->
@@ -136,8 +136,6 @@
                                     <th>Root Cause</th>
                                     <th>Start Date</th>
                                     <th>Ends On</th>
-                                    <th style="display: none;">Action</th> 
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -151,7 +149,6 @@
                                     <td>Server Crash</td>
                                     <td>2025/03/17 10:30 AM</td>
                                     <td>2025/03/17 03:45 PM</td>
-                                    <td style="display: none;"></td> 
 
                                 </tr>
                             @endforeach
@@ -175,11 +172,7 @@
     <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable({
-                columnDefs: [
-                    { targets: [5], searchable: false } // Exclude column index 5 (action button column) from search
-                ]
-            });
+            $('#dataTable').DataTable();
         });
 
     </script>
