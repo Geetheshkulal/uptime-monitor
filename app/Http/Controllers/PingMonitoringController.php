@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Monitor;
+use App\Models\Monitors;
 use Illuminate\Http\Request;
 
 class PingMonitoringController extends Controller
@@ -21,7 +21,7 @@ class PingMonitoringController extends Controller
         ]);
 
         // Save the monitor data to the database
-        $monitor = Monitor::create([
+        $monitor = Monitors::create([
             'user_id' => auth()->id(),
             'name' => $request->name,
             'url' => $request->url,
