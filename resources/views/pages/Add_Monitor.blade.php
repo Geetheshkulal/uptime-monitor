@@ -111,20 +111,64 @@
                 </div>
             `
         },
-        dns: {
-            title: "DNS Monitoring",
-           
-            fields: `
-                <div class="mb-3">
-                    <label for="domain" class="form-label">Domain</label>
-                    <input id="domain" class="form-control" name="domain" type="text" required>
-                </div>
-                <div class="mb-3">
-                    <label for="dns_server" class="form-label">DNS Server</label>
-                    <input id="dns_server" class="form-control" name="dns_server" type="text" required>
-                </div>
-            `
-        }
+         dns: {
+        title: "DNS Monitoring",
+        fields: `
+          <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input id="name" class="form-control" name="name" type="text" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="domain" class="form-label">Domain</label>
+                <input id="domain" class="form-control" name="domain" type="text" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="interval" class="form-label">Interval (in minutes)</label>
+                <input id="interval" class="form-control" name="interval" type="number" min="1" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" class="form-control" name="email" type="email" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="retries" class="form-label">Retries</label>
+                <input id="retries" class="form-control" name="retries" type="number" min="0" value="3" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="dns_resource_type" class="form-label">DNS Resource Type</label>
+                <select id="dns_resource_type" class="form-control" name="dns_resource_type" required>
+                    <option value="A">A</option>
+                    <option value="AAAA">AAAA</option>
+                    <option value="CNAME">CNAME</option>
+                    <option value="MX">MX</option>
+                    <option value="NS">NS</option>
+                    <option value="SOA">SOA</option>
+                    <option value="TXT">TXT</option>
+                    <option value="SRV">SRV</option>
+                    <option value="DNS_ALL">DNS_ALL</option>
+                </select>
+            </div>
+
+            <h5 class="card-title">Notification</h5>
+
+            <div class="mb-3">
+                <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+            </div>
+
+            <div class="mb-3">
+                <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
+            </div>
+
+            `,
+            action:'/add/dns'
+    },
     };
 
     function showForm(type) {
