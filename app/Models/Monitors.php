@@ -9,4 +9,9 @@ class Monitors extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function pingResponses()
+    {
+        return $this->hasMany(PingResponse::class, 'monitor_id');
+    }
 }

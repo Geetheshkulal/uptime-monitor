@@ -11,6 +11,8 @@ use App\Models\DnsResponse;
 use App\Mail\MonitorDownAlert;
 use Illuminate\Support\Facades\Mail;
 
+use App\Models\PingResponse;
+
 class MonitorJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -94,6 +96,67 @@ class MonitorJob
         return $records ?: null;
     }
 
+
+
+
+
+
+
+
+
+
+    private function checkPing(Monitors $monitor)
+    {
+        $domain = parse_url($monitor->url, PHP_URL_HOST) ?? $monitor->url;
+        $attempt = 0;
+        $status = 'down';  
+        $responseTime = 0;
+        $startTime = microtime(true); 
+        $retries = $monitor->retries; // Get retries from DB
+
+        while ($attempt < $retries) {
+            $command = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? "ping -n 1 {$domain}" : "ping -c 1 {$domain}";
+            exec($command, $output, $resultCode);
+
+            if ($resultCode === 0) { 
+                $status = 'up';
+                break;
+            }
+
+            $attempt++;
+            sleep(min(pow(2, $attempt), 5)); // Exponential backoff
+        }
+
+        $responseTime = round((microtime(true) - $startTime) * 1000, 2); 
+
+        // Store response
+        PingResponse::create([
+            'monitor_id' => $monitor->id,
+            'status' => $status,
+            'response_time' => $responseTime
+        ]);
+
+
+        $this->sendAlert($monitor, $status);
+        // Update monitor status
+        $monitor->update([
+            'last_checked_at' => now(),
+            'status' => $status
+        ]);
+
+        return $status === 'up';
+    }
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Execute the job.
      */
@@ -110,10 +173,14 @@ class MonitorJob
                 case 'dns':
                     $this->checkDnsRecords($monitor);
                     break;
-                case 'port':
-                    // Add port check logic here
+                case 'ping':
+                    $this->checkPing($monitor);
                     break;
             }
         }
     }
+
+
+
+
 }
