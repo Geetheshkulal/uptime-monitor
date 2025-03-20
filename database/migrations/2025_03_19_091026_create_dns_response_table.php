@@ -13,18 +13,12 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('monitors', function (Blueprint $table) {
+        Schema::create('dns_response', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->string('url');
-            $table->string('type');
-            $table->integer('port');
-            $table->integer('retries');
-            $table->integer('interval');
-            $table->string('email');
-            $table->string('telegram_id')->nullable();
-            $table->string('telegram_bot_token')->nullable();
+            $table->unsignedBigInteger('monitor_id');
+            $table->foreign('monitor_id')->references('id')->on('monitors');
+            $table->string('status');
+            $table->bigInteger('response_time');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
@@ -37,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('monitors');
+        Schema::dropIfExists('dns_response');
     }
 };
