@@ -33,7 +33,7 @@ class PingMonitoringController extends Controller
             'email' => $request->email,
             'telegram_id' => $request->telegram_id,
             'telegram_bot_token' => $request->telegram_bot_token,
-            'status' => 'DOWN', 
+            'status' => 'down', 
             // Default to DOWN until the cron job updates it
         ]);
         
