@@ -6,6 +6,7 @@ use App\Http\Controllers\MonitoringController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SslCheckController;
 use App\Http\Controllers\DnsController;
+use App\Http\Controllers\PingMonitoringController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,11 +45,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/ssl-check', [SslCheckController::class, 'index'])->name('ssl.check');
     Route::post('/ssl-check', [SslCheckController::class, 'check'])->name('ssl.check.domain');
     Route::get('/incidents', [IncidentController::class, 'incidents'])->name('incidents');
-    
-    Route::post('/dns-check', [DnsController::class, 'checkDnsRecords']);
-    
 
+    Route::post('/dns-check', [DnsController::class, 'checkDnsRecords']);
     Route::post('/add/dns', [DnsController::class,'AddDNS'])->name('add.dns');
+
+    Route::post('/monitoring/ping', [PingMonitoringController::class, 'store'])->name('ping.monitoring.store');
+
+
 });
 
 require __DIR__.'/auth.php';

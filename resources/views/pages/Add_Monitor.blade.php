@@ -89,11 +89,36 @@
         },
         ping: {
             title: "Ping Monitoring",
-           
+            action: "{{ route('ping.monitoring.store') }}",
             fields: `
                 <div class="mb-3">
-                    <label for="ip_address" class="form-label">IP Address</label>
-                    <input id="ip_address" class="form-control" name="ip_address" type="text" required>
+                    <label for="name" class="form-label">Name</label>
+                    <input id="name" class="form-control" name="name" type="text" required>
+                </div>
+                <div class="mb-3">
+                    <label for="url" class="form-label">URL</label>
+                    <input id="url" class="form-control" name="url" type="text" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" class="form-control" name="email" type="email" required>
+                </div>
+                <div class="mb-3">
+                        <label for="retries" class="form-label">Retries</label>
+                        <input id="retries" class="form-control" name="retries" type="number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="interval" class="form-label">Interval (in seconds)</label>
+                        <input id="interval" class="form-control" name="interval" type="number" required>
+                    </div>
+                <h5 class="card-title">Notification</h5>
+                <div class="mb-3">
+                    <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                    <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+                </div>
+                <div class="mb-3">
+                    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
                 </div>
             `
         },
