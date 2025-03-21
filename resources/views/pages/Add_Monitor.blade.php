@@ -76,7 +76,7 @@
     const forms = {
         http: {
             title: "HTTP Monitoring",
-            action:"{{route('monitoring.http.store')}}"
+            action:"{{route('monitoring.http.store')}}",
             fields: `
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
@@ -261,7 +261,6 @@
         formContainer.innerHTML = `
             <h4 class="card-title">${forms[type].title}</h4>
             <form id="monitoringForm" method="POST" action="${forms[type].action}">
-                @csrf
                 ${forms[type].fields}
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
                 
