@@ -37,9 +37,9 @@ class PingMonitoringController extends Controller
             // Default to DOWN until the cron job updates it
         ]);
         
+        return redirect()->route('monitoring.dashboard')->with('success', ucfirst($request->type) . ' monitoring added successfully!');
 
-        return response()->json([
-            'message' => 'Monitor created successfully. The system will check the status periodically.',
-        ]);
+
+        
     }
 }
