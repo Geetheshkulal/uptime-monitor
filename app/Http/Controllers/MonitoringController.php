@@ -99,4 +99,41 @@ public function MonitoringDashboard()
      return view('pages.DisplayMonitoring', compact('details','ChartResponses','type'));
    }
 
+
+   public function MonitoringChartUpdate($id, $type)
+   {
+
+    $details=Monitors::findOrFail($id);
+
+    switch($type) {
+
+        case 'dns':
+            $ChartResponses = DnsResponse::where('monitor_id', $id)
+                ->orderBy('created_at', 'asc')
+                ->get(['created_at', 'response_time']);
+                break;
+            
+        case 'port':
+            $ChartResponses = PortResponse::where('monitor_id', $id)
+                ->orderBy('created_at', 'asc')
+                ->get(['created_at', 'response_time']);
+                break;
+        case 'ping':
+                  $ChartResponses = PingResponse::where('monitor_id', $id)
+                  ->orderBy('created_at', 'asc')
+                  ->get(['created_at', 'response_time']);
+                  break;
+
+        case 'http':
+                $ChartResponses = HttpResponse::where('monitor_id', $id)
+                ->orderBy('created_at', 'asc')
+                ->get(['created_at', 'response_time']);
+                break;
+
+        default:
+                $ChartResponses = collect();
+    }
+    
+     return response()->json($ChartResponses);
+   }
 }
