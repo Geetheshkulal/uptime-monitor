@@ -36,7 +36,7 @@ class DnsController extends Controller
             'telegram_bot_token' => $request->telegram_bot_token,
         ]);
     
-        return redirect()->back()->with('success', 'DNS Monitor added successfully!');
+        return redirect()->route('monitoring.dashboard')->with('success', ucfirst($request->type) . ' monitoring added successfully!');
     
     }
 }

@@ -38,7 +38,7 @@ class PortMonitorController extends Controller
 
         Log::info('Monitor created:', $monitor->toArray());
 
-        return redirect()->route('monitoring.dashboard')->with('success', 'Port monitoring added successfully!');
+        return redirect()->route('monitoring.dashboard')->with('success', ucfirst($request->type) . ' monitoring added successfully!');
     }
 
     public function checkPort($host, $port)

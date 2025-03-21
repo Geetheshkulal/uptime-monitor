@@ -1,5 +1,10 @@
 @extends('dashboard')
 @section('content')
+<head>
+    <!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+</head>
 
 <h1 class="mb-4 mx-5">Add Monitoring</h1>
 
@@ -105,7 +110,7 @@
                         <input id="retries" class="form-control" name="retries" type="number" required>
                     </div>
                     <div class="mb-3">
-                        <label for="interval" class="form-label">Interval (in seconds)</label>
+                        <label for="interval" class="form-label">Interval (in minutes)</label>
                         <input id="interval" class="form-control" name="interval" type="number" required>
                     </div>
                 <h5 class="card-title">Notification</h5>
@@ -242,5 +247,16 @@
         `;
     }
 </script>
+<!-- jQuery (Required for Toastr) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    @if(session('success'))
+        toastr.success("{{ session('success') }}");
+    @endif
+</script>
+
 
 @endsection
