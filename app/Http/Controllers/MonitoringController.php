@@ -40,12 +40,12 @@ class MonitoringController extends Controller
 
 public function MonitoringDashboard()
 {
-    $totalMonitors = Monitors::count();
     
     // Get all monitors for the logged-in user
     $monitors = Monitors::where('user_id', auth()->id())->get();
-    $upCount = Monitors::where('status', 'up')->count();
-    $downCount = Monitors::where('status', 'down')->count();
+    $upCount = Monitors::where('user_id',auth()->id())->where('status', 'up')->count();
+    $downCount = Monitors::where('user_id',auth()->id())->where('status', 'down')->count();
+    $totalMonitors = $monitors->count();
 
 
     // Attach latest responses for each monitor
@@ -75,13 +75,24 @@ public function MonitoringDashboard()
                 ->get(['created_at', 'response_time']);
                 break;
             
-            case 'port':
-                $ChartResponses = PortResponse::where('monitor_id', $id)
+        case 'port':
+            $ChartResponses = PortResponse::where('monitor_id', $id)
+                ->orderBy('created_at', 'asc')
+                ->get(['created_at', 'response_time']);
+                break;
+        case 'ping':
+                  $ChartResponses = PingResponse::where('monitor_id', $id)
+                  ->orderBy('created_at', 'asc')
+                  ->get(['created_at', 'response_time']);
+                  break;
+
+        case 'http':
+                $ChartResponses = HttpResponse::where('monitor_id', $id)
                 ->orderBy('created_at', 'asc')
                 ->get(['created_at', 'response_time']);
                 break;
 
-            default:
+        default:
                 $ChartResponses = collect();
     }
     
