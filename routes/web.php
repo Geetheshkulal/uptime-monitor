@@ -43,7 +43,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->name('add.monitoring');
     
-    Route::get('/monitoring/display', [MonitoringController::class, 'MonitoringDisplay'])->name('display.monitoring');
+    Route::get('/monitoring/display/{id}/{type}', [MonitoringController::class, 'MonitoringDisplay'])->name('display.monitoring');
     
 
 
