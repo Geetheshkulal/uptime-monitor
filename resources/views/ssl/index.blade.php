@@ -1,6 +1,28 @@
 @extends('dashboard')
 
 @section('content')
+
+
+<!-- Styling -->
+<style>
+    body {
+        background: linear-gradient(135deg, #c3eaff, #f6f8ff);
+    }
+    .card {
+        background: #ffffff;
+        border-radius: 15px;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #4a90e2, #007bff);
+        border: none;
+        transition: 0.3s;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #007bff, #4a90e2);
+        box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
+    }
+</style>
+
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
@@ -26,7 +48,7 @@
                     @endif
 
                     <!-- Form -->
-                    <form action="{{ route('ssl.check.domain') }}" method="POST" class="mt-3">
+                    <form id="sslCheckForm" action="{{ route('ssl.check.domain') }}" method="POST" class="mt-3">
                         @csrf
                         <div class="mb-4">
                             <label for="domain" class="form-label fw-semibold">
@@ -35,8 +57,12 @@
                             <input type="url" id="domain" name="domain" class="form-control form-control-lg rounded-pill"
                                 placeholder="https://example.com" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill shadow">
+                        <button type="submit" id="submitButton" class="btn btn-primary btn-lg w-100 rounded-pill shadow">
                             🔍 Check SSL Expiry
+                        </button>
+                        <button id="loadingButton" class="btn btn-primary w-100 rounded-pill shadow mt-2" type="button" style="display:none;" disabled>
+                            <span class="spinner-border spinner-border-sm me-2"></span>
+                            Loading...
                         </button>
                     </form>
 
@@ -84,23 +110,11 @@
     </div>
 </div>
 
-<!-- Styling -->
-<style>
-    body {
-        background: linear-gradient(135deg, #c3eaff, #f6f8ff);
-    }
-    .card {
-        background: #ffffff;
-        border-radius: 15px;
-    }
-    .btn-primary {
-        background: linear-gradient(135deg, #4a90e2, #007bff);
-        border: none;
-        transition: 0.3s;
-    }
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #007bff, #4a90e2);
-        box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
-    }
-</style>
+<script>
+    document.getElementById('sslCheckForm').addEventListener('submit',function(){
+        document.getElementById('submitButton').style.display = 'none';
+        document.getElementById('loadingButton').style.display = 'block';
+    })
+    </script>
+
 @endsection
