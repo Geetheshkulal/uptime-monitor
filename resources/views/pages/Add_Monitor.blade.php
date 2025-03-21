@@ -261,6 +261,7 @@
         formContainer.innerHTML = `
             <h4 class="card-title">${forms[type].title}</h4>
             <form id="monitoringForm" method="POST" action="${forms[type].action}">
+                @csrf
                 ${forms[type].fields}
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
                 

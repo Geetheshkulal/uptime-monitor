@@ -96,7 +96,7 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-skull-crossbones fa-2x" style="color:#bb072b;"></i>
+                                        <i class="fas fa-dizzy fa-2x" style="color:#bb072b;"></i>
                                     </div>
                                 </div>
                             </div>
@@ -132,11 +132,11 @@
                         <table class="table" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
+                                    <th class=" text-gray-900">Name</th>
                                     <th class=" text-gray-900">Url</th>
-                                     <th class=" text-gray-900">Type</th>
+                                    <th class=" text-gray-900">Type</th>
                                     <th class=" text-gray-900">Status</th>
                                     <th class=" text-gray-900">Created Date</th>
-                                    <th class=" text-gray-900">Message</th>
                                     <th class=" text-gray-900">Last Calls Status</th>
                                     <th class=" text-gray-900">Action</th>
                                 </tr>
@@ -145,6 +145,7 @@
                                
                             @foreach ($monitors as $monitor)                           
                                 <tr class="tablerow">
+                                    <td class="sorting_1">{{ $monitor->name }}</td>
                                     <td class="sorting_1">{{ $monitor->url }}</td>
                                     <td>{{ $monitor->type }}{{ $monitor->type === 'port' ? '-' . $monitor->port : '' }}</td>
                                     <td>
@@ -159,8 +160,6 @@
                                         @endif
                                     </td>
                                     <td>{{ $monitor->created_at->format('Y-m-d') }}</td>
-                                    <td>N/A</td>
-
                                     <!-- Latest Responses (Bars) -->
                                     <td>
                                         @if ($monitor->latestResponses->isNotEmpty())  
