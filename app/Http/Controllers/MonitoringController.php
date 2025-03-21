@@ -62,9 +62,30 @@ public function MonitoringDashboard()
 
     return view('pages.Add_Monitor');
   }
-   public function MonitoringDisplay()
+   public function MonitoringDisplay($id, $type)
    {
-     return view('pages.DisplayMonitoring');
+
+    $details=Monitors::findOrFail($id);
+
+    switch($type) {
+
+        case 'dns':
+            $ChartResponses = DnsResponse::where('monitor_id', $id)
+                ->orderBy('created_at', 'asc')
+                ->get(['created_at', 'response_time']);
+                break;
+            
+            case 'port':
+                $ChartResponses = PortResponse::where('monitor_id', $id)
+                ->orderBy('created_at', 'asc')
+                ->get(['created_at', 'response_time']);
+                break;
+
+            default:
+                $ChartResponses = collect();
+    }
+    
+     return view('pages.DisplayMonitoring', compact('details','ChartResponses','type'));
    }
 
 }
