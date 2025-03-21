@@ -11,6 +11,8 @@ use App\Models\Monitors;
 use App\Models\DnsResponse;
 use App\Mail\MonitorDownAlert;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 use App\Models\PingResponse;
 
@@ -29,9 +31,33 @@ class MonitorJob
     private function sendAlert(Monitors $monitor, string $status)
     {
         if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null)) {
+
             Mail::to($monitor->email)->send(new MonitorDownAlert($monitor));
+
+            if($monitor->telegram_bot_token && $monitor->telegram_id )
+             {
+                $this->sendTelegramNotification($monitor);
+             }
         }
     }
+
+    private function sendTelegramNotification(Monitors $monitor)
+{
+    $botToken = $monitor->telegram_bot_token;
+    $chatId = $monitor->telegram_id;
+
+    $message = "🚨 *Monitor Down Alert!*
+    \n🔴 *URL:* {$monitor->url}
+    \n🛠 *Type:* {$monitor->type}
+    \n📅 *Detected At:* " . now()->toDateTimeString();
+
+    
+    Http::get("https://api.telegram.org/bot{$botToken}/sendMessage", [
+        'chat_id' => $chatId,
+        'text' => $message,
+        'parse_mode' => 'Markdown'
+    ]);
+}
 
     private function checkDnsRecords(Monitors $monitor)
     {
@@ -59,7 +85,7 @@ class MonitorJob
                     break; // Exit retry loop if records are found
                 }
             } catch (\Exception $e) {
-                \Log::error("DNS check failed for {$monitor->url}: " . $e->getMessage());
+               Log::error("DNS check failed for {$monitor->url}: " . $e->getMessage());
                 break; // Exit on failure
             }
     
@@ -78,7 +104,7 @@ class MonitorJob
                 'response_time' => $responseTime
             ]);
         } catch (\Exception $e) {
-            \Log::error("Failed to insert DNS response for {$monitor->url}: " . $e->getMessage());
+            Log::error("Failed to insert DNS response for {$monitor->url}: " . $e->getMessage());
         }
     
         $this->sendAlert($monitor,$status);
@@ -89,7 +115,7 @@ class MonitorJob
                 'status' => $status // Also update the monitor's last status
             ]);
         } catch (\Exception $e) {
-            \Log::error("Failed to update monitor status for {$monitor->url}: " . $e->getMessage());
+            Log::error("Failed to update monitor status for {$monitor->url}: " . $e->getMessage());
         }
 
         
