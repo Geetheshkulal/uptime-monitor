@@ -156,12 +156,16 @@
                     <input id="retries" class="form-control" name="retries" type="number" value="3" required>
                 </div>
                 <div class="mb-3">
-                    <label for="interval" class="form-label">Interval (seconds)</label>
-                    <input id="interval" class="form-control" name="interval" type="number" value="60" required>
+                    <label for="interval" class="form-label">Interval (minutes)</label>
+                    <input id="interval" class="form-control" name="interval" type="number" value="1" required>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email (notification)</label>
                     <input id="email" class="form-control" name="email" type="text" required>
+                </div>
+                 <div class="mb-3">
+                    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
                 </div>
             `
         },
