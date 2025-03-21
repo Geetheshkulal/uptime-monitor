@@ -1,14 +1,21 @@
 <?php
-
+use GuzzleHttp\Client;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MonitoringController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SslCheckController;
+<<<<<<< HEAD
 use App\Http\Controllers\DnsController;
 use App\Http\Controllers\PingMonitoringController;
 use App\Http\Controllers\PortMonitorController;
 
+=======
+use App\Http\Controllers\HttpMonitoringController;
+
+
+use Illuminate\Support\Facades\Http;
+>>>>>>> HTTP
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,6 +48,8 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/monitoring/display', [MonitoringController::class, 'MonitoringDisplay'])->name('display.monitoring');
     
+
+
 });
 
 Route::middleware('auth')->group(function () {
@@ -57,6 +66,7 @@ Route::middleware('auth')->group(function () {
     // for port 
     Route::post('/monitor/port',[PortMonitorController::class,'PortStore'])->name('monitor.port');
     
+    Route::post('/monitoring/http', [HttpMonitoringController::class, 'store'])->name('monitoring.http.store');
 });
 
 require __DIR__.'/auth.php';
