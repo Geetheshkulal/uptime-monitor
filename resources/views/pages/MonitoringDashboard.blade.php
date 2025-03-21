@@ -7,6 +7,18 @@
             .tablerow:hover{
                 background-color: #f0f0f0;
             }
+            @keyframes heartbeat {
+                0% { transform: scale(1); }
+                25% { transform: scale(1.2); }
+                50% { transform: scale(1); }
+                75% { transform: scale(1.2); }
+                100% { transform: scale(1); }
+            }
+
+            .pulse {
+                animation: heartbeat 1s infinite;
+            }
+
         </style>
         @endpush
 
@@ -52,7 +64,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                             Up</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $upCount }}</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-heart fa-2x pulse" style="color:#63E6BE"></i>
@@ -73,14 +85,7 @@
                                         </div>
                                         <div class="row no-gutters align-items-center">
                                             <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="progress progress-sm mr-2">
-                                                    <div class="progress-bar bg-info" role="progressbar"
-                                                        style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                        aria-valuemax="100"></div>
-                                                </div>
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $downCount }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -132,57 +137,58 @@
                             </thead>
                             <tbody>
                                
-                                @foreach ($monitors as $monitor)
-                                
-                                        <tr class="tablerow">
-                                            <td class="sorting_1">{{$monitor->url}}</td>
-                                            <td>{{$monitor->type}}-{{$monitor->port}}</td>
-                                            <td>
-                                                @if ($monitor->latestPortResponse)
-                                                    @if ($monitor->latestPortResponse->status === 'Open')
-                                                        <span class="badge badge-success">Open</span>
-                                                    @else
-                                                        <span class="badge badge-danger">Closed</span>
-                                                    @endif
-                                                @else
-                                                    <span class="badge badge-danger">Closed</span>
-                                                @endif
-                                            </td>
-                                            <td>{{$monitor->created_at->format('Y-m-d')}}</td>
-                                            <td>N/A</td>
+                            @foreach ($monitors as $monitor)                           
+                                <tr class="tablerow">
+                                    <td class="sorting_1">{{ $monitor->url }}</td>
+                                    <td>{{ $monitor->type }}{{ $monitor->type === 'port' ? '-' . $monitor->port : '' }}</td>
+                                    <td>
+                                        @if ($monitor)
+                                            @if ($monitor->status === 'up')
+                                                <span class="badge badge-success">Up</span>
+                                            @else
+                                                <span class="badge badge-danger">Down</span>
+                                            @endif
+                                        @else
+                                            <span class="badge badge-danger">Down</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $monitor->created_at->format('Y-m-d') }}</td>
+                                    <td>N/A</td>
 
-                                            <td>
-                                                @if ($monitor->latestResponseBar)
-                                                    @foreach ($monitor->latestResponseBar as $response)
-                                                        <div style="
-                                                            width: 6px; 
-                                                            height: 17px; 
-                                                            margin: 1px; 
-                                                            display: inline-block; 
-                                                            background-color: {{ $response->status === 'Open' ? '#5cdd8b' : '#ff4d4f' }}; 
-                                                            border-radius: 50rem;
-                                                        "></div>
-                                                    @endforeach
-                                                @else
+                                    <!-- Latest Responses (Bars) -->
+                                    <td>
+                                        @if ($monitor->latestResponses->isNotEmpty())  
+                                            @foreach ($monitor->latestResponses as $response)
                                                 <div style="
+                                                    width: 6px; 
+                                                    height: 17px; 
+                                                    margin: 1px; 
+                                                    display: inline-block; 
+                                                    background-color: {{ $response->status === 'up' ? '#5cdd8b' : '#ff4d4f' }}; 
+                                                    border-radius: 50rem;
+                                                "></div>
+                                            @endforeach
+                                        @else
+                                            <!-- Default when no responses are found -->
+                                            <div style="
                                                 width: 6px; 
                                                 height: 17px; 
                                                 margin: 1px; 
                                                 display: inline-block; 
-                                                background-color:  #ff4d4f; 
+                                                background-color: #ff4d4f; 
                                                 border-radius: 50rem;
                                             "></div>
-                                                @endif
-                                            </td>
-                                            
+                                        @endif
+                                    </td>
 
-                                            <td>
-                                                <a href="#" class="btn btn-success">
-                                                    <i class="fas fa-eye fa-sm"></i> View
-                                                </a>
-                                            </td>
-                                        </tr>
+                                    <td>
+                                        <a href="#" class="btn btn-success">
+                                            <i class="fas fa-eye fa-sm"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
                             @endforeach
+
                                 <!-- Add more rows as needed -->
                             </tbody>
                         </table>

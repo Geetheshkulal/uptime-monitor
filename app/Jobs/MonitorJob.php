@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\PortResponse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -96,10 +97,42 @@ class MonitorJob
         return $records ?: null;
     }
 
+    private function checkPort(Monitors $monitor)
+    {
+        $attempt = 0;
+        $status = 'down';
+        $responseTime = 0;
+        $startTime = microtime(true);
+        $retries = $monitor->retries ?? 3; // Default to 3 retries if not set
 
+        while ($attempt < $retries) {
+            $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, 5);
+            if ($connection) {
+                fclose($connection);
+                $status = 'up';
+                $responseTime = round((microtime(true) - $startTime) * 1000, 2); // Convert to ms
+                break;
+            }
 
+            $attempt++;
+            sleep(min(pow(2, $attempt), 5)); // Exponential backoff with a max wait of 5s
+        }
 
+        // Store response in the port_responses table
+        PortResponse::create([
+            'monitor_id' => $monitor->id,
+            'status' => $status,
+            'response_time' => $status === 'up' ? $responseTime : 0
+        ]);
 
+        // Update last_checked_at and status in the monitors table
+        $monitor->update([
+            'last_checked_at' => now(),
+            'status' => $status
+        ]);
+
+        return $status;
+    }
 
 
 
@@ -176,6 +209,8 @@ class MonitorJob
                 case 'ping':
                     $this->checkPing($monitor);
                     break;
+                case 'port':
+                    $this->checkPort($monitor);
             }
         }
     }

@@ -14,4 +14,12 @@ class Monitors extends Model
     {
         return $this->hasMany(PingResponse::class, 'monitor_id');
     }
+
+    public function latestPortResponse()
+    {
+    
+        return $this->hasOne(PortResponse::class,'monitor_id')->latest();
+    }
+
+    
 }

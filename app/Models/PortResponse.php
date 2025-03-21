@@ -14,6 +14,6 @@ class PortResponse extends Model
 
     public function monitor()
     {
-        return $this->belongsTo(Monitor::class);
+        return $this->belongsTo(Monitors::class);
     }
 }

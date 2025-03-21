@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Monitor;
+
+use App\Models\Monitors;
 use App\Models\PortResponse;
 use Illuminate\Support\Facades\Log;
 
@@ -23,9 +24,9 @@ class PortMonitorController extends Controller
             'email' => 'required|string',
         ]);
 
-        $monitor=Monitor::create([
+        $monitor=Monitors::create([
             'name'=>$request->name,
-            'status'=>'Null',
+            'status'=>null,
             'user_id'=>auth()->id(),
             'url'=>$request->url,
             'type'=>'port',
@@ -49,12 +50,12 @@ class PortMonitorController extends Controller
         if ($connection) {
             fclose($connection);
             return [
-                'status' => 'Open',
+                'status' => 'up',
                 'response_time' => round(($end - $start) * 1000) // Convert to ms
             ];
         } else {
             return [
-                'status' => 'Closed',
+                'status' => 'down',
                 'response_time' => 0
             ];
         }
@@ -64,7 +65,7 @@ class PortMonitorController extends Controller
     public function monitor()
     {
 
-        $monitors = Monitor::where('type', 'port')
+        $monitors = Monitors::where('type', 'port')
                            ->where('user_id', auth()->id())
                            ->get();
     
@@ -73,7 +74,7 @@ class PortMonitorController extends Controller
     
             PortResponse::create([
                 'monitor_id' => $monitor->id,
-                'response_time' => $result['status'] === 'Closed' ? 0 : $result['response_time'],
+                'response_time' => $result['status'] === 'down' ? 0 : $result['response_time'],
                 'status' => $result['status']
          ]);
         }

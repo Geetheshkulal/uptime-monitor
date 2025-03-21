@@ -10,8 +10,6 @@ use App\Models\DnsResponse;
 
 class DnsController extends Controller
 {
-
-
     public function AddDNS(Request $request){
 
         $request->validate([
