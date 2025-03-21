@@ -5,17 +5,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MonitoringController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SslCheckController;
-<<<<<<< HEAD
 use App\Http\Controllers\DnsController;
 use App\Http\Controllers\PingMonitoringController;
 use App\Http\Controllers\PortMonitorController;
 
-=======
 use App\Http\Controllers\HttpMonitoringController;
 
 
 use Illuminate\Support\Facades\Http;
->>>>>>> HTTP
 /*
 |--------------------------------------------------------------------------
 | Web Routes
