@@ -109,6 +109,7 @@
         </div>
     </div>
     <script src="{{ asset('frontend/assets/vendor/jquery/jquery.min.js') }}"></script>
+
     @stack('scripts')
     <!-- Bootstrap core JavaScript-->
     <script src="{{asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -121,10 +122,10 @@
 
     <!-- Page level plugins -->
     <script src="{{asset('frontend/assets/vendor/chart.js/Chart.min.js')}}"></script>
-
     <!-- Page level custom scripts -->
     <script src="{{asset('frontend/assets/js/demo/chart-area-demo.js')}}"></script>
-    <script src="{{asset('frontend/assets/js/demo/chart-pie-demo.js')}}"></script>
+    
+    {{-- <script src="{{asset('frontend/assets/js/demo/chart-pie-demo.js')}}"></script> --}}
 
 </body>
 
