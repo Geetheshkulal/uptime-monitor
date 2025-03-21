@@ -40,7 +40,7 @@ class HttpMonitoringController extends Controller
 
         Log::info('HTTP Monitor Created: ', $monitor->toArray());
 
-        return redirect()->back()->with('success', 'HTTP Monitor added successfully');
+        return redirect()->route('monitoring.dashboard')->with('success', 'HTTP Monitor added successfully');
     }
 
     // Method to check HTTP status of the monitor's URL
