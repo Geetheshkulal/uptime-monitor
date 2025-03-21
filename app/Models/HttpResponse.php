@@ -10,12 +10,10 @@ class HttpResponse extends Model
     use HasFactory;
 
     protected $table = 'http_response';
-    protected $fillable = [
-        'monitor_id', 'status', 'status_code', 'response_time'
-    ];
+    protected $guarded =  [];
 
     public function monitor()
     {
-        return $this->belongsTo(Monitor::class);
+        return $this->belongsTo(Monitors::class);
     }
 }
