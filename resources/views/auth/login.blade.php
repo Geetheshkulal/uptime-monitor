@@ -59,7 +59,10 @@
         </div>
 
         <!-- Login Button -->
-        <button type="submit" class="btn btn-primary w-100">Log In</button>
+        <button type="submit" class="btn btn-primary w-100" id="login-btn">
+            <span class="spinner-border spinner-border-sm d-none" id="login-spinner"></span>
+            Log In
+        </button>
 
         <!-- Forgot Password & Register -->
         <div class="text-center mt-3">
@@ -73,6 +76,20 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginForm = document.querySelector('form');
+        const loginBtn = document.getElementById('login-btn');
+        const loginSpinner = document.getElementById('login-spinner');
+
+        loginForm.addEventListener('submit', () => {
+            loginBtn.disabled = true;
+            loginSpinner.classList.remove('d-none');
+            loginBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Loading...`;
+        });
+    });
+</script>
 
 </body>
 </html>

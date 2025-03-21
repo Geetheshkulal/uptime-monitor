@@ -33,8 +33,8 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Total</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                            Total Records</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalMonitors }}</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-list fa-2x text-gray-300"></i>
@@ -121,30 +121,61 @@
                         <table class="table" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>DateTime</th>
-                                    <th>Message</th>
-                                    <th>Last Calls Status</th>
-                                    <th>Action</th>
+                                    <th class=" text-gray-900">Url</th>
+                                     <th class=" text-gray-900">Type</th>
+                                    <th class=" text-gray-900">Status</th>
+                                    <th class=" text-gray-900">Created Date</th>
+                                    <th class=" text-gray-900">Message</th>
+                                    <th class=" text-gray-900">Last Calls Status</th>
+                                    <th class=" text-gray-900">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach (range(1, 3) as $num)
-
+                               
+                                @foreach ($monitors as $monitor)
+                                
                                         <tr class="tablerow">
-                                            <td class="sorting_1">Airi Satou</td>
+                                            <td class="sorting_1">{{$monitor->url}}</td>
+                                            <td>{{$monitor->type}}-{{$monitor->port}}</td>
                                             <td>
-                                                <span class="badge badge-success">Up</span>
-                                                <span class="badge badge-danger">Down</span>
+                                                @if ($monitor->latestPortResponse)
+                                                    @if ($monitor->latestPortResponse->status === 'Open')
+                                                        <span class="badge badge-success">Open</span>
+                                                    @else
+                                                        <span class="badge badge-danger">Closed</span>
+                                                    @endif
+                                                @else
+                                                    <span class="badge badge-danger">Closed</span>
+                                                @endif
                                             </td>
-                                            <td>2008/11/28</td>
-                                            <td>200- OK</td>
+                                            <td>{{$monitor->created_at->format('Y-m-d')}}</td>
+                                            <td>N/A</td>
+
                                             <td>
-                                            @foreach (range(1, 13) as $number)
-                                                <div style="width: 4.8px; height: 16px; margin: 1px; --hover-scale: 1.5; display: inline-block; background-color: #5cdd8b; border-radius:50rem;"></div>                                                
-                                            @endforeach
+                                                @if ($monitor->latestResponseBar)
+                                                    @foreach ($monitor->latestResponseBar as $response)
+                                                        <div style="
+                                                            width: 6px; 
+                                                            height: 17px; 
+                                                            margin: 1px; 
+                                                            display: inline-block; 
+                                                            background-color: {{ $response->status === 'Open' ? '#5cdd8b' : '#ff4d4f' }}; 
+                                                            border-radius: 50rem;
+                                                        "></div>
+                                                    @endforeach
+                                                @else
+                                                <div style="
+                                                width: 6px; 
+                                                height: 17px; 
+                                                margin: 1px; 
+                                                display: inline-block; 
+                                                background-color:  #ff4d4f; 
+                                                border-radius: 50rem;
+                                            "></div>
+                                                @endif
                                             </td>
+                                            
+
                                             <td>
                                                 <a href="#" class="btn btn-success">
                                                     <i class="fas fa-eye fa-sm"></i> View

@@ -16,17 +16,15 @@
         <a class="dropdown-item fs-6" href="#" onclick="showForm('port')">Port Monitoring</a>
         <a class="dropdown-item fs-6" href="#" onclick="showForm('dns')">DNS Monitoring</a>
     </div>
-</div>
+</div> 
 
 {{-- Form Section --}}
-<div class="d-flex justify-content-center align-items-center">
+<div class="d-flex justify-content-center">
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body" id="formContainer">
                 <!-- Default Form (HTTP Monitoring) -->
                 <h4 class="card-title">HTTP Monitoring</h4>
-
-                {{-- // add action based on route --}}
                 <form id="monitoringForm" method="POST" action="">
                     @csrf
                     <div class="mb-3">
@@ -75,21 +73,19 @@
                     <label for="email" class="form-label">Email</label>
                     <input id="email" class="form-control" name="email" type="email" required>
                 </div>
-
                 <h5 class="card-title">Notification</h5>
-                    <div class="mb-3">
-                        <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                        <input id="telegram_id" class="form-control" name="telegram_id" type="text">
-                    </div>
-                    <div class="mb-3">
-                        <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                        <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
-                    </div>
+                <div class="mb-3">
+                    <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                    <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+                </div>
+                <div class="mb-3">
+                    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
+                </div>
             `
         },
         ping: {
             title: "Ping Monitoring",
-           
             fields: `
                 <div class="mb-3">
                     <label for="ip_address" class="form-label">IP Address</label>
@@ -99,21 +95,52 @@
         },
         port: {
             title: "Port Monitoring",
-          
+            action: "{{ route('monitor.port') }}",
             fields: `
+               <div class="mb-3">
+                    <label for="name" class="form-label">Friendly name</label>
+                    <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" required>
+                </div>
+
                 <div class="mb-3">
-                    <label for="host" class="form-label">Host</label>
-                    <input id="host" class="form-control" name="host" type="text" required>
+                    <label for="url" class="form-label">Host or URL</label>
+                    <input id="url" class="form-control" name="url" type="text" placeholder="E.g. www.google.com" required>
+                </div>
+               <div class="mb-3">
+    <label for="port" class="form-label">Port</label>
+    <select id="port" class="form-control" name="port" required>
+        <option value="" disabled selected>Select Port</option>
+        <option value="21">FTP - 21</option>
+        <option value="22">SSH / SFTP-22</option>
+        <option value="25">SMTP - 25</option>
+        <option value="53">DNS - 53</option>
+        <option value="80">HTTP - 80</option>
+        <option value="110">POP3 - 110</option>
+        <option value="143">IMAP-143</option>
+        <option value="443">HTTPS-443</option>
+        <option value="465">SMTP-465</option>
+         <option value="587">SMTP-587</option>
+         <option value="993">IMAP-993</option>
+         <option value="995">POP3-995</option>
+         <option value="3306">MYSQL-3306</option>
+    </select>
+</div>
+                <div class="mb-3">
+                    <label for="retries" class="form-label">Retries</label>
+                    <input id="retries" class="form-control" name="retries" type="number" value="3" required>
                 </div>
                 <div class="mb-3">
-                    <label for="port" class="form-label">Port</label>
-                    <input id="port" class="form-control" name="port" type="number" required>
+                    <label for="interval" class="form-label">Interval (seconds)</label>
+                    <input id="interval" class="form-control" name="interval" type="number" value="60" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email (notification)</label>
+                    <input id="email" class="form-control" name="email" type="text" required>
                 </div>
             `
         },
         dns: {
             title: "DNS Monitoring",
-           
             fields: `
                 <div class="mb-3">
                     <label for="domain" class="form-label">Domain</label>
@@ -128,7 +155,6 @@
     };
 
     function showForm(type) {
-        // Get the form container and update it dynamically
         const formContainer = document.getElementById('formContainer');
         formContainer.innerHTML = `
             <h4 class="card-title">${forms[type].title}</h4>
@@ -136,6 +162,7 @@
                 @csrf
                 ${forms[type].fields}
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
+                
             </form>
         `;
     }
