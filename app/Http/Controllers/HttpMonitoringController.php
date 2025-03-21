@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Monitor;
 use App\Models\HttpResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log; 
-use Illuminate\Support\Facades\Artisan; 
 
 class HttpMonitoringController extends Controller
 {
@@ -41,9 +39,6 @@ class HttpMonitoringController extends Controller
         ]);
 
         Log::info('HTTP Monitor Created: ', $monitor->toArray());
-
-        Artisan::call('monitor:check-http', ['user_id' => auth()->id()]);
-
 
         return redirect()->back()->with('success', 'HTTP Monitor added successfully');
     }

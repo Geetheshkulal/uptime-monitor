@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\HttpResponse;
 use App\Models\PortResponse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,7 +14,7 @@ use App\Mail\MonitorDownAlert;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Http\Client\RequestException;
 use App\Models\PingResponse;
 
 class MonitorJob
@@ -42,22 +43,107 @@ class MonitorJob
     }
 
     private function sendTelegramNotification(Monitors $monitor)
+    {
+        $botToken = $monitor->telegram_bot_token;
+        $chatId = $monitor->telegram_id;
+
+        $message = "🚨 *Monitor Down Alert!*
+        \n🔴 *URL:* {$monitor->url}
+        \n🛠 *Type:* {$monitor->type}
+        \n📅 *Detected At:* " . now()->toDateTimeString();
+
+        
+        Http::get("https://api.telegram.org/bot{$botToken}/sendMessage", [
+            'chat_id' => $chatId,
+            'text' => $message,
+            'parse_mode' => 'Markdown'
+        ]);
+    }
+
+
+private function checkHttp(Monitors $monitor)
 {
-    $botToken = $monitor->telegram_bot_token;
-    $chatId = $monitor->telegram_id;
+    $status = 'down';
+    $statusCode = 0;
+    $responseTime = 0;
+    Log::info("Checking HTTP Monitor: {$monitor->id} ({$monitor->url})");
 
-    $message = "🚨 *Monitor Down Alert!*
-    \n🔴 *URL:* {$monitor->url}
-    \n🛠 *Type:* {$monitor->type}
-    \n📅 *Detected At:* " . now()->toDateTimeString();
+    for ($attempt = 0; $attempt < $monitor->retries; $attempt++) {
+        try {
+            $startTime = microtime(true);
+            $response = Http::timeout(10)->get($monitor->url);
+            $endTime = microtime(true);
 
-    
-    Http::get("https://api.telegram.org/bot{$botToken}/sendMessage", [
-        'chat_id' => $chatId,
-        'text' => $message,
-        'parse_mode' => 'Markdown'
-    ]);
+            $statusCode = $response->status();
+            $responseTime = round(($endTime - $startTime) * 1000, 2);
+
+            Log::info("HTTP Response ({$monitor->id}): Status $statusCode, Time {$responseTime}ms");
+
+            // Determine status based on status code
+            if ($response->successful()) {
+                $status = 'up';
+            } else {
+                $status = 'down';
+                Log::warning("HTTP Monitor {$monitor->id} returned non-success status: {$statusCode}");
+            }
+
+            break; // Exit retry loop on success
+
+        } catch (RequestException $e) {
+            Log::error("HTTP RequestException (Monitor ID: {$monitor->id}): " . $e->getMessage());
+            $statusCode = $e->response ? $e->response->status() : 0;
+
+            // Handle specific HTTP errors
+            if ($statusCode === 403) {
+                Log::warning("HTTP Monitor {$monitor->id} returned 403 (Forbidden).");
+            }
+
+        } catch (\Exception $e) {
+            Log::error("General HTTP Exception (Monitor ID: {$monitor->id}): " . $e->getMessage());
+
+            // Handle timeouts and SSL errors
+            if (strpos($e->getMessage(), 'timed out') !== false) {
+                $statusCode = 408; // Request Timeout
+            } elseif (strpos($e->getMessage(), 'SSL') !== false) {
+                $statusCode = 495; // SSL Failure
+            }
+        }
+
+        // Exponential backoff (max 5s)
+        if ($attempt < $monitor->retries - 1) {
+            sleep(min(pow(2, $attempt), 5));
+        }
+    }
+
+    // Store response in the http_response table
+    try {
+        HttpResponse::create([
+            'monitor_id' => $monitor->id,
+            'status' => $status,
+            'status_code' => $statusCode,
+            'response_time' => $responseTime,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    } catch (\Exception $e) {
+        Log::error("Failed to insert HTTP response for {$monitor->id}: " . $e->getMessage());
+    }
+
+    // Send alert if status is down
+    $this->sendAlert($monitor, $status);
+
+    // Update monitor status
+    try {
+        $monitor->update([
+            'last_checked_at' => now(),
+            'status' => $status,
+        ]);
+    } catch (\Exception $e) {
+        Log::error("Failed to update monitor status for {$monitor->id}: " . $e->getMessage());
+    }
 }
+
+
 
     private function checkDnsRecords(Monitors $monitor)
     {
@@ -144,12 +230,16 @@ class MonitorJob
             sleep(min(pow(2, $attempt), 5)); // Exponential backoff with a max wait of 5s
         }
 
+        
         // Store response in the port_responses table
         PortResponse::create([
             'monitor_id' => $monitor->id,
             'status' => $status,
             'response_time' => $status === 'up' ? $responseTime : 0
         ]);
+
+        $this->sendAlert($monitor, $status);
+
 
         // Update last_checked_at and status in the monitors table
         $monitor->update([
@@ -237,6 +327,10 @@ class MonitorJob
                     break;
                 case 'port':
                     $this->checkPort($monitor);
+                    break;
+                case 'http':
+                    $this->checkHttp($monitor);
+                    break;
             }
         }
     }
