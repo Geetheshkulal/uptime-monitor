@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\DnsResponse;
+use App\Models\HttpResponse;
 use App\Models\Monitors;
 use App\Models\PingResponse;
 use App\Models\PortResponse;
@@ -25,6 +26,9 @@ class MonitoringController extends Controller
               break;
           case 'ping':
               $query = PingResponse::where('monitor_id', $monitor->id);
+              break;
+          case 'http':
+              $query = HttpResponse::where('monitor_id', $monitor->id);
               break;
           default:
               return collect(); // Return an empty collection if type is unknown
