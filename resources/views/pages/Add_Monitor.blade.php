@@ -27,7 +27,7 @@
                 <h4 class="card-title">HTTP Monitoring</h4>
 
                 {{-- // add action based on route --}}
-                <form id="monitoringForm" method="POST" action="">
+                <form id="monitoringForm" method="POST" action="{{ route('monitoring.http.store') }}">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
@@ -41,6 +41,15 @@
                         <label for="email" class="form-label">Email</label>
                         <input id="email" class="form-control" name="email" type="email" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="retries" class="form-label">Retries</label>
+                        <input id="retries" class="form-control" name="retries" type="number" value="2" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="interval" class="form-label">Interval</label>
+                        <input id="interval" class="form-control" name="interval" type="number" value="30" required>
+                    </div>
+                    
                     <h5 class="card-title">Notification</h5>
                     <div class="mb-3">
                         <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
@@ -62,6 +71,7 @@
     const forms = {
         http: {
             title: "HTTP Monitoring",
+            action:"{{route('monitoring.http.store')}}"
             fields: `
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
@@ -71,10 +81,19 @@
                     <label for="url" class="form-label">URL</label>
                     <input id="url" class="form-control" name="url" type="text" required>
                 </div>
+                
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input id="email" class="form-control" name="email" type="email" required>
                 </div>
+                <div class="mb-3">
+                        <label for="retries" class="form-label">Retries</label>
+                        <input id="retries" class="form-control" name="retries" type="number" value="2" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="interval" class="form-label">interval</label>
+                        <input id="interval" class="form-control" name="interval" type="number" value="30" required>
+                    </div>
 
                 <h5 class="card-title">Notification</h5>
                     <div class="mb-3">

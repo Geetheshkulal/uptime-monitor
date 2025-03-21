@@ -1,10 +1,14 @@
 <?php
-
+use GuzzleHttp\Client;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MonitoringController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SslCheckController;
+use App\Http\Controllers\HttpMonitoringController;
+
+
+use Illuminate\Support\Facades\Http;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,12 +40,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->name('add.monitoring');
     
     Route::get('/monitoring/display', [MonitoringController::class, 'MonitoringDisplay'])->name('display.monitoring');
+
+
 });
 Route::middleware('auth')->group(function () {
     Route::get('/ssl-check', [SslCheckController::class, 'index'])->name('ssl.check');
     Route::post('/ssl-check', [SslCheckController::class, 'check'])->name('ssl.check.domain');
 
     Route::get('/incidents', [IncidentController::class, 'incidents'])->name('incidents');
+
+    Route::post('/monitoring/http', [HttpMonitoringController::class, 'store'])->name('monitoring.http.store');
 });
 
 require __DIR__.'/auth.php';
