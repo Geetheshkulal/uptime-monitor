@@ -1,5 +1,11 @@
 @extends('dashboard')
 @section('content')
+<head>
+    @push('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+@endpush
+
+</head>
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         @push('styles')
@@ -221,3 +227,14 @@
 
     @endpush
 @endsection
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if(session('success'))
+                toastr.success("{{ session('success') }}");
+            @endif
+        });
+    </script>
+@endpush
