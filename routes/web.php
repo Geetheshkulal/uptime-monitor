@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SslCheckController;
 use App\Http\Controllers\DnsController;
 use App\Http\Controllers\PingMonitoringController;
+use App\Http\Controllers\PortMonitorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->name('add.monitoring');
     
     Route::get('/monitoring/display', [MonitoringController::class, 'MonitoringDisplay'])->name('display.monitoring');
+    
 });
 
 Route::middleware('auth')->group(function () {
@@ -52,6 +54,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/monitoring/ping', [PingMonitoringController::class, 'store'])->name('ping.monitoring.store');
 
 
+    // for port 
+    Route::post('/monitor/port',[PortMonitorController::class,'PortStore'])->name('monitor.port');
+    
 });
 
 require __DIR__.'/auth.php';
