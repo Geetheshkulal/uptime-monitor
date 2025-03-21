@@ -7,6 +7,8 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\MonitorJob;
 
+use Illuminate\Support\Facades\Artisan;
+use App\Models\User;
 
 class Kernel extends ConsoleKernel
 {
