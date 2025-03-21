@@ -26,7 +26,7 @@ class PingMonitoringController extends Controller
             'name' => $request->name,
             'url' => $request->url,
             'type' => 'ping',
-            'port' => 80,
+            'port' => null,
             'retries' => $request->retries,
             'dns_resource_type'=>'null',
             'interval' => $request->interval,

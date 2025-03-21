@@ -136,7 +136,7 @@
                                 
                                         <tr class="tablerow">
                                             <td class="sorting_1">{{$monitor->url}}</td>
-                                            <td>{{$monitor->type}}-{{$monitor->port}}</td>
+                                            <td>{{$monitor->type}}{{ $monitor->port ? "-".$monitor->port : "" }}</td>
                                             <td>
                                                 @if ($monitor->latestPortResponse)
                                                     @if ($monitor->latestPortResponse->status === 'Open')

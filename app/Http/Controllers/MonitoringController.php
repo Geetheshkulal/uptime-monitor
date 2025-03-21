@@ -10,6 +10,8 @@ class MonitoringController extends Controller
     public function MonitoringDashboard()
     {
         $totalMonitors = Monitor::count();
+
+        // for dashboard
         $monitors = Monitor::with('latestPortResponse')->where('user_id', auth()->id())->get();
         
         // for Bar symbol
