@@ -128,7 +128,7 @@
     </div>
 </div>
 
-<script src="{{asset('frontend/assets/vendor/chart.js/Chart.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -209,6 +209,28 @@
                 }
             }
         });
+
+        setInterval(function () {
+            $.ajax({
+                url: "{{ route('display.chart.update',[$details->id,$details->type]) }}", // Replace with your API endpoint
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    var responseTimes = response.map(item => item.response_time);
+                    var timestamps = response.map(item => new Date(item.created_at).toISOString());
+
+                    myLineChart.data.datasets[0].data = responseTimes;
+                    myLineChart.data.labels = timestamps;
+                    myLineChart.update();
+                    console.log('done')
+                },
+
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }, 5000); // Runs every 5000 milliseconds (5 seconds)
+
     });
 </script>
 

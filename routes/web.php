@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/monitoring/display/{id}/{type}', [MonitoringController::class, 'MonitoringDisplay'])->name('display.monitoring');
     
+    Route::get('/monitoring/chart/update/{id}/{type}', [MonitoringController::class, 'MonitoringChartUpdate'])->name('display.chart.update');
+
 
 
 });
