@@ -216,7 +216,7 @@
         $(document).ready(function() {
             $('#dataTable').DataTable({
                 columnDefs: [
-                    { targets: [5], searchable: false } // Exclude column index 5 (action button column) from search
+                    { targets: [5,6], searchable: false } // Exclude column index 5 (action button column) from search
                 ]
             });
         });
