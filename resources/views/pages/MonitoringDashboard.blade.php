@@ -24,6 +24,19 @@
             .pulse {
                 animation: heartbeat 1s infinite;
             }
+            .dataTables_wrapper {
+    overflow-x: hidden !important;
+}
+
+#dataTable {
+    width: 100% !important;
+    table-layout: auto;
+}
+
+.dataTables_scrollBody {
+    overflow-x: hidden !important;
+}
+
 
         </style>
         @endpush
