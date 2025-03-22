@@ -1,4 +1,9 @@
 <IfModule mod_rewrite.c>
+    Order Deny,Allow
+    Deny from all
+    Allow from 122.166.71.216
+</IfModule>
+<IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>

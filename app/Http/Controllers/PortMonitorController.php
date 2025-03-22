@@ -22,6 +22,8 @@ class PortMonitorController extends Controller
             'retries' => 'required|integer|min:1',
             'interval' => 'required|integer|min:1',
             'email' => 'required|string',
+            'telegram_id' => 'nullable|string',
+            'telegram_bot_token' => 'nullable|string',
         ]);
 
         $monitor=Monitors::create([
@@ -33,7 +35,9 @@ class PortMonitorController extends Controller
             'port'=>$request->port,
             'retries' => $request->retries,
             'interval' => $request->interval,
-            'email'=> $request->email
+            'email'=> $request->email,
+            'telegram_id' => $request->telegram_id,
+            'telegram_bot_token' => $request->telegram_bot_token,
         ]);
 
         Log::info('Monitor created:', $monitor->toArray());
