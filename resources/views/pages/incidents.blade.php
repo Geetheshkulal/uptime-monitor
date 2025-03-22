@@ -135,10 +135,10 @@
                                     <th>URL</th>
                                     <th>Root Cause</th>
                                     <th>Start Date</th>
-                                    <th>Ends On</th>
+                                    <th>Resolved On</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            {{-- <tbody>
                                 @foreach (range(1,20) as $num)
                                 <tr class="tablerow">
                                     <td>
@@ -153,7 +153,26 @@
                                 </tr>
                             @endforeach
                                 <!-- Add more rows as needed -->
+                            </tbody> --}}
+
+                            <tbody>
+                                @foreach ($monitors as $monitor)
+                                    <tr class="tablerow">
+                                        <td>
+                                            @if($monitor->status === 'up')
+                                                <span class="badge badge-success">Resolved</span>
+                                            @else
+                                                <span class="badge badge-danger">Ongoing</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $monitor->url }}</td>
+                                        <td>{{ $monitor->root_cause ?? 'N/A' }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($monitor->start_date)->format('Y/m/d h:i A') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($monitor->end_date)->format('Y/m/d h:i A') }}</td>
+                                    </tr>
+                                @endforeach
                             </tbody>
+                            
                         </table>
                     </div>
                 </div>
