@@ -65,7 +65,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             Total Records</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalMonitors }}</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalMonitors">{{ $totalMonitors }}</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-list fa-2x text-gray-300"></i>
@@ -83,7 +83,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                             Up</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $upCount }}</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="upCount" >{{ $upCount }}</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-heart fa-2x pulse" style="color:#63E6BE"></i>
@@ -104,7 +104,7 @@
                                         </div>
                                         <div class="row no-gutters align-items-center">
                                             <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $downCount }}</div>
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="downCount">{{ $downCount }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -124,7 +124,7 @@
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                             Pause</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-pause fa-2x " style="color:#b197fc"></i>
@@ -226,17 +226,76 @@
     <script src="{{ asset('frontend/assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            $('#dataTable').DataTable({
+         var total = document.getElementById('totalMonitors');
+         var upCount = document.getElementById('upCount');
+         var downCount = document.getElementById('downCount');
+         $(document).ready(function() {
+            var table = $('#dataTable').DataTable({
+                processing: false,
+                serverSide: true, // Enable server-side processing
+                ajax: {
+                    url: '{{ route('monitoring.dashboard.update') }}', // Your API endpoint
+                    method: 'GET',
+                    dataSrc: 'data' // The key in the JSON response that contains the data
+                },
+                columns: [
+                    { data: 'name', name: 'name' }, // Monitor name
+                    { data: 'url', name: 'url' }, // Monitor URL
+                    { data: 'type', name: 'type', render: function(data, type, row) {
+                        // Append port to type if it exists
+                        return data + (row.port ? '-' + row.port : '');
+                    }},
+                    { data: 'status', name: 'status', render: function(data) {
+                        // Render status badge (Up/Down)
+                        return data === 'up' ? 
+                            '<span class="badge badge-success">Up</span>' : 
+                            '<span class="badge badge-danger">Down</span>';
+                    }},
+                    { data: 'created_at', name: 'created_at', render: function(data) {
+                        // Format the created_at date
+                        return new Date(data).toISOString().split('T')[0];
+                    }},
+                    { data: 'latestResponses', name: 'latestResponses', render: function(data) {
+                        // Render status bars for latest responses
+                        if (data && data.length > 0) {
+                            return data.map(response => {
+                                return `<div style="width: 6px; height: 17px; margin: 1px; display: inline-block; 
+                                        background-color: ${response.status === 'up' ? '#5cdd8b' : '#ff4d4f'}; 
+                                        border-radius: 50rem;"></div>`;
+                            }).join('');
+                        } else {
+                            // Default bar when no responses are available
+                            return `<div style="width: 6px; height: 17px; margin: 1px; display: inline-block; 
+                                    background-color: #ff4d4f; border-radius: 50rem;"></div>`;
+                        }
+                    }},
+                    { data: null, render: function(data, type, row) {
+                        // Render the "View" button
+                        return `<a href="/monitoring/display/${row.id}/${row.type}" class="btn btn-success">
+                                    <i class="fas fa-eye fa-sm"></i> View
+                                </a>`;
+                    }}
+                ],
                 columnDefs: [
-                    { targets: [5,6], searchable: false } // Exclude column index 5 (action button column) from search
+                    { targets: [5, 6], searchable: false, orderable: false } // Disable search and sorting for status bars and actions
                 ]
             });
+
+            // Periodically reload the table data
+            setInterval(function() {
+                table.ajax.reload(null, false); // Reload data without resetting paging
+                $.ajax({
+                    url: '{{ route('monitoring.dashboard.update') }}',
+                    method: 'GET',
+                    success: function(response) {
+                        upCount.innerText = response.upCount;
+                        downCount.innerText = response.downCount;
+                        total.innerText = response.totalMonitors;
+                    }
+                });
+            }, 30000); // Refresh every 30 seconds
         });
-
     </script>
-
-
     @endpush
 @endsection
 @push('scripts')
