@@ -35,27 +35,27 @@
                 <form id="monitoringForm" method="POST" action="{{ route('monitoring.http.store') }}">
                     @csrf
                     <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input id="name" class="form-control" name="name" type="text" required>
+                        <label for="name" class="form-label">Friendly name</label>
+                        <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" required>
                     </div>
                     <div class="mb-3">
                         <label for="url" class="form-label">URL</label>
-                        <input id="url" class="form-control" name="url" type="text" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input id="email" class="form-control" name="email" type="email" required>
+                        <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" required>
                     </div>
                     <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
-                        <input id="retries" class="form-control" name="retries" type="number" value="2" required>
+                        <input id="retries" class="form-control" name="retries" type="number" value="3" required>
                     </div>
                     <div class="mb-3">
-                        <label for="interval" class="form-label">Interval</label>
-                        <input id="interval" class="form-control" name="interval" type="number" value="30" required>
+                        <label for="interval" class="form-label">Interval (in minutes)</label>
+                        <input id="interval" class="form-control" name="interval" type="number" value="1" required>
                     </div>
                     
                     <h5 class="card-title">Notification</h5>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" required>
+                    </div>
                     <div class="mb-3">
                         <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
                         <input id="telegram_id" class="form-control" name="telegram_id" type="text">
@@ -79,28 +79,29 @@
             action:"{{route('monitoring.http.store')}}",
             fields: `
                 <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input id="name" class="form-control" name="name" type="text" required>
+                    <label for="name" class="form-label">Friendly name</label>
+                    <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" required>
                 </div>
                 <div class="mb-3">
                     <label for="url" class="form-label">URL</label>
-                    <input id="url" class="form-control" name="url" type="text" required>
+                    <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" required>
                 </div>
                 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input id="email" class="form-control" name="email" type="email" required>
-                </div>
+                
                 <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
-                        <input id="retries" class="form-control" name="retries" type="number" value="2" required>
+                        <input id="retries" class="form-control" name="retries" type="number" value="3" required>
                     </div>
                     <div class="mb-3">
-                        <label for="interval" class="form-label">interval</label>
-                        <input id="interval" class="form-control" name="interval" type="number" value="30" required>
+                        <label for="interval" class="form-label">Interval (in minutes)</label>
+                        <input id="interval" class="form-control" name="interval" type="number" value="1" required>
                     </div>
 
                 <h5 class="card-title">Notification</h5>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" required>
+                </div>
                 <div class="mb-3">
                     <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
                     <input id="telegram_id" class="form-control" name="telegram_id" type="text">
@@ -116,26 +117,26 @@
             action: "{{ route('ping.monitoring.store') }}",
             fields: `
                 <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input id="name" class="form-control" name="name" type="text" required>
+                    <label for="name" class="form-label">Friendly name</label>
+                    <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" required>
                 </div>
                 <div class="mb-3">
                     <label for="url" class="form-label">URL</label>
-                    <input id="url" class="form-control" name="url" type="text" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input id="email" class="form-control" name="email" type="email" required>
+                    <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" required>
                 </div>
                 <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
-                        <input id="retries" class="form-control" name="retries" type="number" required>
+                        <input id="retries" class="form-control" name="retries" type="number" value="3" required>
                     </div>
                     <div class="mb-3">
                         <label for="interval" class="form-label">Interval (in minutes)</label>
-                        <input id="interval" class="form-control" name="interval" type="number" required>
+                        <input id="interval" class="form-control" name="interval" type="number" value="1" required>
                     </div>
                 <h5 class="card-title">Notification</h5>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" required>
+                </div>
                 <div class="mb-3">
                     <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
                     <input id="telegram_id" class="form-control" name="telegram_id" type="text">
@@ -183,14 +184,20 @@
                     <input id="retries" class="form-control" name="retries" type="number" value="3" required>
                 </div>
                 <div class="mb-3">
-                    <label for="interval" class="form-label">Interval (minutes)</label>
+                    <label for="interval" class="form-label">Interval (in minutes)</label>
                     <input id="interval" class="form-control" name="interval" type="number" value="1" required>
                 </div>
+                
+                <h5 class="card-title">Notification</h5>
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email (notification)</label>
-                    <input id="email" class="form-control" name="email" type="text" required>
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" required>
                 </div>
-                 <div class="mb-3">
+                <div class="mb-3">
+                    <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                    <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+                </div>
+                <div class="mb-3">
                     <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
                     <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
                 </div>
@@ -200,23 +207,18 @@
         title: "DNS Monitoring",
         fields: `
           <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input id="name" class="form-control" name="name" type="text" required>
+                <label for="name" class="form-label">Friendly name</label>
+                <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" required>
             </div>
 
             <div class="mb-3">
                 <label for="domain" class="form-label">Domain</label>
-                <input id="domain" class="form-control" name="domain" type="text" required>
+                <input id="domain" class="form-control" name="domain" type="text" placeholder="E.g. google.com"  required>
             </div>
 
             <div class="mb-3">
                 <label for="interval" class="form-label">Interval (in minutes)</label>
-                <input id="interval" class="form-control" name="interval" type="number" min="1" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input id="email" class="form-control" name="email" type="email" required>
+                <input id="interval" class="form-control" name="interval" type="number" min="1" placeholder="1" required>
             </div>
 
             <div class="mb-3">
@@ -240,6 +242,10 @@
             </div>
 
             <h5 class="card-title">Notification</h5>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" required>
+            </div>
 
             <div class="mb-3">
                 <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
