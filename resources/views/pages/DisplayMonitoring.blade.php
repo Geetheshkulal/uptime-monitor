@@ -10,6 +10,7 @@
 
 <!-- Page Heading -->
 <!-- Page Heading -->
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-xl-12">
@@ -133,8 +134,6 @@
             ->map(fn($date) => \Carbon\Carbon::parse($date)->format('j/n/Y h:i:s A'))
             ->toArray(), -20)) !!};
 
-
-
         var statusElement = document.getElementById('statusElement');
 
         var myLineChart = new Chart(ctx, {
@@ -158,13 +157,6 @@
                 }],
             },
             options: {
-                plugins: {
-                    decimation: {
-                        enabled: true,
-                        algorithm: 'lttb', // 'lttb' (Largest Triangle Three Buckets) maintains trends
-                        samples: 1// Displays only 50 points while preserving trends
-                    }
-                },
                 maintainAspectRatio: false,
                 layout: {
                     padding: { left: 10, right: 25, top: 25, bottom: 0 }
@@ -172,8 +164,8 @@
                 scales: {
                     xAxes: [{
                         time: { unit: 'date' },
-                        gridLines: { display: false, drawBorder: false },
-                        ticks: { maxTicksLimit: 7 }
+                        gridLines: { display: true, drawBorder: true },
+                        ticks: { maxTicksLimit: 10 }
                     }],
                     yAxes: [{
                         ticks: {
@@ -192,7 +184,7 @@
                         }
                     }],
                 },
-                legend: { display: false },
+                legend: { display: true },
                 tooltips: {
                     backgroundColor: "rgb(255,255,255)",
                     bodyFontColor: "#858796",
