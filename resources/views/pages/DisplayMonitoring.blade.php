@@ -218,7 +218,6 @@
                     myLineChart.data.datasets[0].data = responseTimes;
                     myLineChart.data.labels = timestamps;
                     myLineChart.update();
-                    console.log('done')
                 },
 
                 error: function (xhr, status, error) {
