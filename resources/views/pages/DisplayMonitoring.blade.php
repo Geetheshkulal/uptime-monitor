@@ -15,9 +15,9 @@
         <div class="col-xl-12">
             <div class="d-sm-flex align-items-center justify-content-between mb-3">
                 <h1 class="h3 mb-0 text-gray-800 font-weight-bold">{{$details->name}}</h1>
-                <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <div onclick="window.print()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                     <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
-                </a>
+                </div>
             </div>
         </div>
     </div>
@@ -128,8 +128,12 @@
     document.addEventListener("DOMContentLoaded", function () {
         var ctx = document.getElementById("myAreaChart").getContext('2d');
 
-        var responseTimes = {!! json_encode($ChartResponses->pluck('response_time')) !!};
-        var timestamps = {!! json_encode($ChartResponses->pluck('created_at')->map(fn($date) => \Carbon\Carbon::parse($date)->format('Y-m-d H:i:s'))) !!};
+        var responseTimes = {!! json_encode(array_slice($ChartResponses->pluck('response_time')->toArray(), -20)) !!};
+        var timestamps = {!! json_encode(array_slice($ChartResponses->pluck('created_at')
+            ->map(fn($date) => \Carbon\Carbon::parse($date)->format('j/n/Y h:i:s A'))
+            ->toArray(), -20)) !!};
+
+
 
         var statusElement = document.getElementById('statusElement');
 
@@ -154,6 +158,13 @@
                 }],
             },
             options: {
+                plugins: {
+                    decimation: {
+                        enabled: true,
+                        algorithm: 'lttb', // 'lttb' (Largest Triangle Three Buckets) maintains trends
+                        samples: 1// Displays only 50 points while preserving trends
+                    }
+                },
                 maintainAspectRatio: false,
                 layout: {
                     padding: { left: 10, right: 25, top: 25, bottom: 0 }
@@ -212,8 +223,9 @@
                 type: "GET",
                 dataType: "json",
                 success: function (response) {
-                    var responseTimes = response.map(item => item.response_time);
-                    var timestamps = response.map(item => new Date(item.created_at).toISOString());
+                    var maxDataPoints = 20;
+                    var responseTimes = response.map(item => item.response_time).slice(-maxDataPoints);;
+                    var timestamps = response.map(item => new Date(item.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })).slice(-maxDataPoints);;
 
                     myLineChart.data.datasets[0].data = responseTimes;
                     myLineChart.data.labels = timestamps;
