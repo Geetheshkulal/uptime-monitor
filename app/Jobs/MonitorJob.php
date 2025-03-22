@@ -130,11 +130,8 @@ private function checkHttp(Monitors $monitor)
     }
 
     // Send alert if status is down
-    try{
-        $this->sendAlert($monitor, $status);
-    }catch(\Exception $e) {
-        Log::error("Failed to Send Alert:". $e->getMessage());
-    }
+    $this->sendAlert($monitor, $status);
+
     // Update monitor status
     try {
         $monitor->update([
@@ -196,12 +193,8 @@ private function checkHttp(Monitors $monitor)
             Log::error("Failed to insert DNS response for {$monitor->url}: " . $e->getMessage());
         }
     
-        try{
-            $this->sendAlert($monitor, $status);
-        }catch(\Exception $e) {
-            Log::error("Failed to Send Alert:". $e->getMessage());
-        }
-                // Update last_checked_at in the monitors table
+        $this->sendAlert($monitor,$status);
+        // Update last_checked_at in the monitors table
         try {
             $monitor->update([
                 'last_checked_at' => now(),
@@ -217,48 +210,78 @@ private function checkHttp(Monitors $monitor)
     }
 
     private function checkPort(Monitors $monitor)
-    {
-        $attempt = 0;
-        $status = 'down';
-        $responseTime = 0;
-        $startTime = microtime(true);
-        $retries = $monitor->retries ?? 3; // Default to 3 retries if not set
+{
+    $attempt = 0;
+    $status = 'down';
+    $responseTime = 0;
+    $startTime = microtime(true);
+    $retries = $monitor->retries ?? 3; // Default to 3 retries if not set
+    $timeout = 5; // Timeout in seconds
 
-        while ($attempt < $retries) {
-            $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, 5);
+    // Log the start of the check
+    Log::info("Checking port {$monitor->port} on {$monitor->host} with {$retries} retries.");
+
+    while ($attempt < $retries) {
+        try {
+            // Attempt to open the socket connection
+            $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, $timeout);
+
             if ($connection) {
-                fclose($connection);
+                // Set a timeout for the socket
+                stream_set_timeout($connection, $timeout);
+
+                // Check if the connection is actually successful
                 $status = 'up';
                 $responseTime = round((microtime(true) - $startTime) * 1000, 2); // Convert to ms
+                fclose($connection);
                 break;
+            } else {
+                Log::warning("Port check attempt $attempt failed: {$monitor->host}:{$monitor->port} - Error: $errstr ($errno)");
             }
-
-            $attempt++;
-            sleep(min(pow(2, $attempt), 5)); // Exponential backoff with a max wait of 5s
+        } catch (\Exception $e) {
+            Log::error("Exception during port check attempt $attempt: " . $e->getMessage());
         }
 
-        
-        // Store response in the port_responses table
+        $attempt++;
+        if ($attempt < $retries) {
+            $waitTime = min(pow(2, $attempt), 5); // Exponential backoff with a max wait of 5s
+            Log::info("Waiting {$waitTime} seconds before next attempt.");
+            sleep($waitTime);
+        }
+    }
+
+    // Store response in the port_responses table
+    try {
         PortResponse::create([
             'monitor_id' => $monitor->id,
             'status' => $status,
             'response_time' => $status === 'up' ? $responseTime : 0
         ]);
+    } catch (\Exception $e) {
+        Log::error("Failed to store port response: " . $e->getMessage());
+    }
 
-        try{
-            $this->sendAlert($monitor, $status);
-        }catch(\Exception $e) {
-            Log::error("Failed to Send Alert:". $e->getMessage());
-        }
+    // Send alert if necessary
+    try {
+        $this->sendAlert($monitor, $status);
+    } catch (\Exception $e) {
+        Log::error("Failed to send alert: " . $e->getMessage());
+    }
 
-        // Update last_checked_at and status in the monitors table
+    // Update last_checked_at and status in the monitors table
+    try {
         $monitor->update([
             'last_checked_at' => now(),
             'status' => $status
         ]);
-
-        return $status;
+    } catch (\Exception $e) {
+        Log::error("Failed to update monitor: " . $e->getMessage());
     }
+
+    Log::info("Port check completed: {$monitor->host}:{$monitor->port} is $status.");
+
+    return $status;
+}
 
 
 
@@ -296,11 +319,7 @@ private function checkHttp(Monitors $monitor)
         ]);
 
 
-        try{
-            $this->sendAlert($monitor, $status);
-        }catch(\Exception $e) {
-            Log::error("Failed to Send Alert:". $e->getMessage());
-        }
+        $this->sendAlert($monitor, $status);
         // Update monitor status
         $monitor->update([
             'last_checked_at' => now(),

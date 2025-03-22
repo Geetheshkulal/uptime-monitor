@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-xl-12">
             <div class="d-sm-flex align-items-center justify-content-between mb-3">
-                <h1 class="h3 mb-0 text-gray-800 font-weight-bold">{{$details->name}}</h1>
+                <h1 class="h3 mb-0 text-gray-800 font-weight-bold">{{strtoupper($details->name)}}</h1>
                 <div onclick="window.print()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                     <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
                 </div>
@@ -122,7 +122,7 @@
     </div>
 </div>
 
-
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -228,9 +228,9 @@
                     console.error("Error fetching data:", error);
                 }
             });
-        }, 5000); // Runs every 5000 milliseconds (5 seconds)
+        }, 30000); // Runs every 5000 milliseconds (5 seconds)
 
     });
 </script>
-
+@endpush
 @endsection
