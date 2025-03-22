@@ -130,8 +130,11 @@ private function checkHttp(Monitors $monitor)
     }
 
     // Send alert if status is down
-    $this->sendAlert($monitor, $status);
-
+    try{
+        $this->sendAlert($monitor, $status);
+    }catch(\Exception $e) {
+        Log::error("Failed to Send Alert:". $e->getMessage());
+    }
     // Update monitor status
     try {
         $monitor->update([
@@ -193,8 +196,12 @@ private function checkHttp(Monitors $monitor)
             Log::error("Failed to insert DNS response for {$monitor->url}: " . $e->getMessage());
         }
     
-        $this->sendAlert($monitor,$status);
-        // Update last_checked_at in the monitors table
+        try{
+            $this->sendAlert($monitor, $status);
+        }catch(\Exception $e) {
+            Log::error("Failed to Send Alert:". $e->getMessage());
+        }
+                // Update last_checked_at in the monitors table
         try {
             $monitor->update([
                 'last_checked_at' => now(),
@@ -238,8 +245,11 @@ private function checkHttp(Monitors $monitor)
             'response_time' => $status === 'up' ? $responseTime : 0
         ]);
 
-        $this->sendAlert($monitor, $status);
-
+        try{
+            $this->sendAlert($monitor, $status);
+        }catch(\Exception $e) {
+            Log::error("Failed to Send Alert:". $e->getMessage());
+        }
 
         // Update last_checked_at and status in the monitors table
         $monitor->update([
@@ -286,7 +296,11 @@ private function checkHttp(Monitors $monitor)
         ]);
 
 
-        $this->sendAlert($monitor, $status);
+        try{
+            $this->sendAlert($monitor, $status);
+        }catch(\Exception $e) {
+            Log::error("Failed to Send Alert:". $e->getMessage());
+        }
         // Update monitor status
         $monitor->update([
             'last_checked_at' => now(),
