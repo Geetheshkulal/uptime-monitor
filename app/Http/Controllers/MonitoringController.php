@@ -56,6 +56,63 @@ public function MonitoringDashboard()
     return view('pages.MonitoringDashboard', compact('monitors', 'totalMonitors','upCount','downCount'));
 }
 
+
+public function MonitoringDashboardUpdate(Request $request)
+{
+    // Get the draw counter (required by DataTables)
+    $draw = $request->input('draw');
+
+    // Get the start and length parameters (for pagination)
+    $start = $request->input('start');
+    $length = $request->input('length');
+
+    // Get the search term (if any)
+    $searchValue = $request->input('search.value');
+
+    // Base query for monitors
+    $query = Monitors::where('user_id', auth()->id());
+
+    // Apply search filter
+    if (!empty($searchValue)) {
+        $query->where(function($q) use ($searchValue) {
+            $q->where('name', 'like', '%' . $searchValue . '%')
+              ->orWhere('url', 'like', '%' . $searchValue . '%')
+              ->orWhere('type', 'like', '%' . $searchValue . '%')
+              ->orWhere('status', 'like', '%' . $searchValue . '%');
+        });
+    }
+
+    // Get the total number of records (without filtering)
+    $totalMonitors = $query->count();
+
+    $length = $length ?? 10; // Default limit if null
+    $start = $start ?? 0; // Default offset if null
+
+$monitors = $query->limit($length)
+                  ->offset($start)
+                  ->get();
+
+    // Attach latest responses for each monitor
+    foreach ($monitors as $monitor) {
+        $monitor->latestResponses = $this->getLatestResponsesByType($monitor);
+    }
+
+    // Get the up and down counts
+    $upCount = Monitors::where('user_id', auth()->id())->where('status', 'up')->count();
+    $downCount = Monitors::where('user_id', auth()->id())->where('status', 'down')->count();
+
+    // Prepare the response
+    return response()->json([
+        'draw' => $draw, // Required by DataTables
+        'recordsTotal' => $totalMonitors, // Total number of records (without filtering)
+        'recordsFiltered' => $totalMonitors, // Total number of records after filtering
+        'data' => $monitors, // The actual data for the current page
+        'upCount' => $upCount, // Additional data for your cards
+        'downCount' => $downCount, // Additional data for your cards
+        'totalMonitors' => $totalMonitors // Additional data for your cards
+    ]);
+}
+
     
  public function AddMonitoring()
  {
