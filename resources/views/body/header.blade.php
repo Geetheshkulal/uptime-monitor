@@ -1,3 +1,129 @@
+
+
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+  
+    * { box-sizing: border-box; }
+  
+    body {
+      font-family: "Montserrat", sans-serif;
+      background-color: #fff;
+      transition: background 0.2s linear;
+    }
+  
+    body.dark { background-color: #292c35; color: white; }
+  
+    .checkbox {
+      opacity: 0;
+      position: absolute;
+    }
+  
+    .checkbox-label {
+      background-color: #111;
+      width: 50px;
+      height: 26px;
+      border-radius: 50px;
+      position: relative;
+      padding: 5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .fa-moon { color: #f1c40f; }
+    .fa-sun { color: #f39c12; }
+  
+    .checkbox-label .ball {
+      background-color: #fff;
+      width: 22px;
+      height: 22px;
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      border-radius: 50%;
+      transition: transform 0.2s linear;
+    }
+  
+    .checkbox:checked + .checkbox-label .ball {
+      transform: translateX(24px);
+    }
+
+    /* Ensure Bootstrap does not override dark mode */
+body.dark {
+  background-color: #292c35 !important; /* Force dark background */
+  color: white !important;
+}
+
+/* Override Bootstrap background */
+body.dark .bg-light {
+  background-color: #333 !important;
+  color: white !important;
+}
+
+body.dark .navbar, body.dark .card, body.dark .dropdown-menu {
+  background-color: #444 !important;
+  color: white !important;
+}
+
+body.dark .btn-primary {
+  background-color: #007bff !important;
+  border-color: #0056b3 !important;
+}
+
+body.dark .btn-secondary {
+  background-color: #6c757d !important;
+  border-color: #545b62 !important;
+}
+
+body.dark a {
+  color: #f8d210 !important;
+}
+
+/* Ensure Bootstrap table is styled in dark mode */
+body.dark .table {
+  background-color: #2c2f33 !important;
+  color: white !important;
+}
+
+body.dark .table thead {
+  background-color: #23272a !important;
+}
+
+body.dark .table tbody tr {
+  background-color: #2c2f33 !important;
+  border-color: #555 !important;
+}
+
+/* Form Inputs */
+body.dark input, body.dark textarea, body.dark select {
+  background-color: #333 !important;
+  color: white !important;
+  border: 1px solid #555 !important;
+}
+
+/* Bootstrap Dropdown */
+body.dark .dropdown-menu {
+  background-color: #333 !important;
+  border-color: #555 !important;
+}
+
+body.dark .dropdown-item {
+  color: white !important;
+}
+
+body.dark .dropdown-item:hover {
+  background-color: #444 !important;
+}
+
+
+  </style>
+
+
+
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
     <!-- Sidebar Toggle (Topbar) -->
@@ -18,6 +144,8 @@
             </div>
         </div>
     </form>
+
+ 
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
@@ -45,6 +173,18 @@
                 </form>
             </div>
         </li>
+
+        {{-- dark mode and light mode --}}
+
+        {{-- <div>
+            <input type="checkbox" class="checkbox" id="checkbox">
+            <label for="checkbox" class="checkbox-label">
+              <i class="fas fa-moon"></i>
+              <i class="fas fa-sun"></i>
+              <span class="ball"></span>
+            </label>
+          </div> --}}
+
 
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
@@ -97,6 +237,7 @@
             </div>
         </li>
 
+        
         <!-- Nav Item - Messages -->
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
@@ -199,3 +340,23 @@
     </ul>
 
 </nav>
+
+<script>
+const checkbox = document.getElementById("checkbox");
+
+// Check local storage for theme preference
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    checkbox.checked = true;
+}
+
+checkbox.addEventListener("change", () => {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+    } else {
+        localStorage.setItem("theme", "light");
+    }
+});
+</script>
