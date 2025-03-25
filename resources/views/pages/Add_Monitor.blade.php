@@ -110,6 +110,8 @@
                     <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
                     <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
                 </div>
+
+                <input id="submitBtn" class="btn btn-primary" type="submit" value="Submit">
             `
         },
         ping: {
@@ -145,6 +147,7 @@
                     <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
                     <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
                 </div>
+                
             `
         },
         port: {
@@ -262,6 +265,8 @@
     },
     };
 
+    
+
     function showForm(type) {
         const formContainer = document.getElementById('formContainer');
         formContainer.innerHTML = `
@@ -269,11 +274,12 @@
             <form id="monitoringForm" method="POST" action="${forms[type].action}">
                 @csrf
                 ${forms[type].fields}
+
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
-                
             </form>
         `;
     }
+
 </script>
 <!-- jQuery (Required for Toastr) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -285,6 +291,7 @@
         toastr.success("{{ session('success') }}");
     @endif
 </script>
+
 
 
 @endsection

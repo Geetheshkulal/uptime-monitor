@@ -1,27 +1,26 @@
 @extends('dashboard')
 @section('content')
 
-{{-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
-  
-    <h1 class="h3 mb-0 text-gray-800">DISPLAY</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-</div> --}}
-
-<!-- Page Heading -->
 <!-- Page Heading -->
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-xl-12">
             <div class="d-sm-flex align-items-center justify-content-between mb-3">
-                <h1 class="h3 mb-0 text-gray-800 font-weight-bold">{{strtoupper($details->name)}}</h1>
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="h3 mb-0 text-gray-800 font-weight-bold">{{strtoupper($details->name)}}</span>
+                    <button type="button" class="btn btn-primary mx-3" data-toggle="modal" data-target="#editModal" 
+                    onclick="setEditUrl({{ $details->id }})"> <i class="fas fa-pen fa-1x"></i> Edit</button>
+                    <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#deleteModal" 
+                    onclick="setDeleteUrl({{ $details->id }})"><i class="fas fa-trash fa-1x"></i> Delete</button>
+                </div>
                 <div onclick="window.print()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                     <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- URL Display -->
     <div class="row">
@@ -211,7 +210,7 @@
 
         setInterval(function () {
             $.ajax({
-                url: "{{ route('display.chart.update',[$details->id,$details->type]) }}", // Replace with your API endpoint
+                url: "{{ route('display.chart.update',[$details->id,$details->type]) }}",
                 type: "GET",
                 dataType: "json",
                 success: function (response) {
@@ -233,4 +232,153 @@
     });
 </script>
 @endpush
-@endsection
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this monitoring data?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <a href="#" id="deleteConfirmButton" class="btn btn-danger">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- edit Confirmation Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Monitoring</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <form action="{{ route('monitoring.update', $details->id)}}" id="editForm" method="POST">
+            @csrf
+            <input type="hidden" name="_method" value="POST"> 
+        <div class="modal-body">
+            <div class="mb-3">
+                <label for="name" class="form-label">Friendly name</label>
+                <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" value="{{$details->name}}" required>
+            </div>
+            <div class="mb-3">
+                <label for="url" class="form-label">URL</label>
+                <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" value="{{$details->url}}" required>
+            </div>
+
+            @if($details->type == 'port')
+            <div class="mb-3">
+                <label for="port" class="form-label">Port</label>
+                <select id="port" class="form-control" name="port" required>
+                    <option value="" disabled>Select Port</option>
+                    <option value="21" {{ $details->port == '21' ? 'selected' : '' }}>FTP - 21</option>
+                    <option value="22" {{ $details->port == '22' ? 'selected' : '' }}>SSH / SFTP - 22</option>
+                    <option value="25" {{ $details->port == '25' ? 'selected' : '' }}>SMTP - 25</option>
+                    <option value="53" {{ $details->port == '53' ? 'selected' : '' }}>DNS - 53</option>
+                    <option value="80" {{ $details->port == '80' ? 'selected' : '' }}>HTTP - 80</option>
+                    <option value="110" {{ $details->port == '110' ? 'selected' : '' }}>POP3 - 110</option>
+                    <option value="143" {{ $details->port == '143' ? 'selected' : '' }}>IMAP - 143</option>
+                    <option value="443" {{ $details->port == '443' ? 'selected' : '' }}>HTTPS - 443</option>
+                    <option value="443" {{ $details->port == '465' ? 'selected' : '' }}>SMTP - 465</option>
+                    <option value="443" {{ $details->port == '587' ? 'selected' : '' }}>SMTP - 587</option>
+                    <option value="143" {{ $details->port == '993' ? 'selected' : '' }}>IMAP - 993</option>
+                    <option value="110" {{ $details->port == '995' ? 'selected' : '' }}>POP3 - 995</option>
+                    <option value="3306" {{ $details->port == '3306' ? 'selected' : '' }}>MySQL - 3306</option>
+                </select>
+            </div>
+            @endif
+
+            <!-- Show DNS dropdown if type == 'dns' -->
+            @if($details->type == 'dns')
+            <div class="mb-3">
+                <label for="dns_resource_type" class="form-label">DNS Resource Type</label>
+                <select id="dns_resource_type" class="form-control" name="dns_resource_type" required>
+                    <option value="A" {{ $details->dns_resource_type == 'A' ? 'selected' : '' }}>A</option>
+                    <option value="AAAA" {{ $details->dns_resource_type == 'AAAA' ? 'selected' : '' }}>AAAA</option>
+                    <option value="CNAME" {{ $details->dns_resource_type == 'CNAME' ? 'selected' : '' }}>CNAME</option>
+                    <option value="MX" {{ $details->dns_resource_type == 'MX' ? 'selected' : '' }}>MX</option>
+                    <option value="NS" {{ $details->dns_resource_type == 'NS' ? 'selected' : '' }}>NS</option>
+                    <option value="SOA" {{ $details->dns_resource_type == 'SOA' ? 'selected' : '' }}>SOA</option>
+                    <option value="TXT" {{ $details->dns_resource_type == 'TXT' ? 'selected' : '' }}>TXT</option>
+                    <option value="SRV" {{ $details->dns_resource_type == 'SRV' ? 'selected' : '' }}>SRV</option>
+                    <option value="DNS_ALL" {{ $details->dns_resource_type == 'DNS_ALL' ? 'selected' : '' }}>DNS_ALL</option>
+                </select>
+            </div>
+            @endif
+
+            <div class="mb-3">
+                <label for="retries" class="form-label">Retries</label>
+                <input id="retries" class="form-control" name="retries" type="number" value="3" value="{{$details->retries}}" required>
+            </div>
+            <div class="mb-3">
+                <label for="interval" class="form-label">Interval (in minutes)</label>
+                <input id="interval" class="form-control" name="interval" type="number" value="1" value="{{$details->interval}}" required>
+            </div>
+            
+            <h5 class="card-title">Notification</h5>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" value="{{$details->email}}" required>
+            </div>
+            <div class="mb-3">
+                <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                <input id="telegram_id" class="form-control" name="telegram_id" type="text"  value="{{$details->telegram_id}}">
+            </div>
+            <div class="mb-3">
+                <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text" value="{{$details->telegram_bot_token}}">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" id="editConfirmButton" class="btn btn-primary">Update</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+
+       function setEditUrl(id) {
+        let editForm = document.getElementById('editForm');
+        if (editForm) {
+            editForm.action = "/monitoring/edit/"+id; // Set form action dynamically
+        } else {
+            console.error("Edit form not found!");
+        }
+    }
+    </script>
+
+ <script>
+    function setDeleteUrl(id) {
+        let deleteButton = document.getElementById("deleteConfirmButton");
+        deleteButton.href = "/monitoring/delete/" + id; // Sets the GET request URL
+    }
+</script>
+
+
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if(session('success'))
+                toastr.success("{{ session('success') }}");
+            @endif
+        });
+    </script>
+@endpush
+
+
+@endsection  

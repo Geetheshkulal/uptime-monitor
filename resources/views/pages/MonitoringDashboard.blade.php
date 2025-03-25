@@ -37,9 +37,26 @@
     overflow-x: hidden !important;
 }
 
-
         </style>
         @endpush
+
+ <style>
+  @keyframes rgbGradientBorder {
+    0% { border-image-source: linear-gradient(45deg, red, yellow, pink, cyan); }
+    25% { border-image-source: linear-gradient(45deg, yellow, cyan, yellow, red); }
+    50% { border-image-source: linear-gradient(45deg, blue, pink, red, yellow); }
+    75% { border-image-source: linear-gradient(45deg, pink, red, yellow, cyan); }
+    100% { border-image-source: linear-gradient(45deg, red, yellow, blue, white); }
+}
+
+.border-rgb {
+    border: 5px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(45deg, red, yellow, blue, green);
+    animation: rgbGradientBorder 3s infinite linear;
+}
+
+  </style>
 
         <!-- Main Content -->
         <div id="content">
@@ -77,7 +94,8 @@
 
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card border-rgb shadow h-100 py-2">
+                        {{-- <div class="card border-left-success shadow h-100 py-2"> --}}
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -298,9 +316,8 @@
     </script>
     @endpush
 @endsection
-@push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+@push('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             @if(session('success'))
