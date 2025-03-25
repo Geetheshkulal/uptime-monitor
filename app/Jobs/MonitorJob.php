@@ -28,53 +28,7 @@ class MonitorJob
     {
         //
     }
-    private function createIncident(Monitors $monitor, string $status, string $monitorType)
-    {
-       
-    // If the status is 'down', we create an incident
-    if ($status === 'down') {
-        // Check if there's an existing 'down' incident for the same monitor that's still open (no end_timestamp)
-        $existingIncident = Incident::where('monitor_id', $monitor->id)
-            ->where('status', 'down')  // Looking for incidents that are 'down'
-            ->whereNull('end_timestamp')  // Ensure that the incident is still open
-            ->first();
-        
-        // If no existing open incident, create a new one
-        if (!$existingIncident) {
-            Incident::create([
-                'monitor_id' => $monitor->id,
-                'status' => 'down',
-                'root_cause' => "{$monitorType} Monitoring Failed",  // Log the type of failure (e.g., Ping, DNS, HTTP)
-                'start_timestamp' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-    }
-
-    // If the status is 'up', we check and close any open incidents
-    elseif ($status === 'up') {
-        // Check for any open incidents (status = 'down' and no end_timestamp)
-        $incident = Incident::where('monitor_id', $monitor->id)
-            ->where('status', 'down')
-            ->whereNull('end_timestamp')  // Ensure it's open (still 'down')
-            ->first();
-
-        // If an open incident is found, mark it as resolved
-        if ($incident) {
-            $incident->update([
-                'status' => 'up',
-                'end_timestamp' => now(),  // Set the time the monitor came back up
-                'updated_at' => now(),
-            ]);
-        }
-    }
-}
-
-    
-    
-
-
-    private function sendAlert(Monitors $monitor, string $status)
+      private function sendAlert(Monitors $monitor, string $status)
     {
         if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null)) {
 
@@ -254,129 +208,79 @@ private function checkHttp(Monitors $monitor)
     
         return $records ?: null;
     }
-
-    // private function checkPort(Monitors $monitor)
-    // {
-    //     $attempt = 0;
-    //     $status = 'down';
-    //     $responseTime = 0;
-    //     $startTime = microtime(true);
-    //     $retries = $monitor->retries ?? 3; // Default to 3 retries if not set
-
-    //     while ($attempt < $retries) {
-    //         $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, 5);
-    //         if ($connection) {
-    //             fclose($connection);
-    //             $status = 'up';
-    //             $responseTime = round((microtime(true) - $startTime) * 1000, 2); // Convert to ms
-    //             break;
-    //         }
-
-    //         $attempt++;
-    //         sleep(min(pow(2, $attempt), 5)); // Exponential backoff with a max wait of 5s
-    //     }
-
-        
-    //     // Store response in the port_responses table
-    //     PortResponse::create([
-    //         'monitor_id' => $monitor->id,
-    //         'status' => $status,
-    //         'response_time' => $status === 'up' ? $responseTime : 0
-    //     ]);
-
-    //     $this->sendAlert($monitor, $status);
-    //     $this->createIncident($monitor, $status, 'PORT');
-
-    //     // Update last_checked_at and status in the monitors table
-    //     $monitor->update([
-    //         'last_checked_at' => now(),
-    //         'status' => $status
-    //     ]);
-
-    //     return $status;
-    // }
-
-private function checkPort(Monitors $monitor)
-{
-    $attempt = 0;
-    $status = 'down';
-    $responseTime = 0;
-    $startTime = microtime(true);
-    $retries = $monitor->retries ?? 3; // Default to 3 retries if not set
-    $timeout = 5; // Timeout in seconds
-
-    // Log the start of the check
-    Log::info("Checking port {$monitor->port} on {$monitor->host} with {$retries} retries.");
-
-    while ($attempt < $retries) {
-        try {
-            // Attempt to open the socket connection
-            $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, $timeout);
-
-            if ($connection) {
-                // Set a timeout for the socket
-                stream_set_timeout($connection, $timeout);
-
-                // Check if the connection is actually successful
-                $status = 'up';
-                $responseTime = round((microtime(true) - $startTime) * 1000, 2); // Convert to ms
-                fclose($connection);
-                break;
-            } else {
-                Log::warning("Port check attempt $attempt failed: {$monitor->host}:{$monitor->port} - Error: $errstr ($errno)");
+    private function checkPort(Monitors $monitor)
+    {
+        $attempt = 0;
+        $status = 'down';
+        $responseTime = 0;
+        $startTime = microtime(true);
+        $retries = $monitor->retries ?? 3; // Default to 3 retries if not set
+        $timeout = 5; // Timeout in seconds
+    
+        // Log the start of the check
+        Log::info("Checking port {$monitor->port} on {$monitor->host} with {$retries} retries.");
+    
+        while ($attempt < $retries) {
+            try {
+                // Attempt to open the socket connection
+                $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, $timeout);
+    
+                if ($connection) {
+                    // Set a timeout for the socket
+                    stream_set_timeout($connection, $timeout);
+    
+                    // Check if the connection is actually successful
+                    $status = 'up';
+                    $responseTime = round((microtime(true) - $startTime) * 1000, 2); // Convert to ms
+                    fclose($connection);
+                    break;
+                } else {
+                    Log::warning("Port check attempt $attempt failed: {$monitor->host}:{$monitor->port} - Error: $errstr ($errno)");
+                }
+            } catch (\Exception $e) {
+                Log::error("Exception during port check attempt $attempt: " . $e->getMessage());
             }
+    
+            $attempt++;
+            if ($attempt < $retries) {
+                $waitTime = min(pow(2, $attempt), 5); // Exponential backoff with a max wait of 5s
+                Log::info("Waiting {$waitTime} seconds before next attempt.");
+                sleep($waitTime);
+            }
+        }
+    
+        // Store response in the port_responses table
+        try {
+            PortResponse::create([
+                'monitor_id' => $monitor->id,
+                'status' => $status,
+                'response_time' => $status === 'up' ? $responseTime : 0
+            ]);
         } catch (\Exception $e) {
-            Log::error("Exception during port check attempt $attempt: " . $e->getMessage());
+            Log::error("Failed to store port response: " . $e->getMessage());
         }
-
-        $attempt++;
-        if ($attempt < $retries) {
-            $waitTime = min(pow(2, $attempt), 5); // Exponential backoff with a max wait of 5s
-            Log::info("Waiting {$waitTime} seconds before next attempt.");
-            sleep($waitTime);
+    
+        // Send alert if necessary
+        try {
+            $this->sendAlert($monitor, $status);
+        } catch (\Exception $e) {
+            Log::error("Failed to send alert: " . $e->getMessage());
         }
-    }
-
-    // If the status is 'down', create an incident
-    if ($status === 'down') {
         $this->createIncident($monitor, $status, 'PORT');
+        // Update last_checked_at and status in the monitors table
+        try {
+            $monitor->update([
+                'last_checked_at' => now(),
+                'status' => $status
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Failed to update monitor: " . $e->getMessage());
+        }
+    
+        Log::info("Port check completed: {$monitor->host}:{$monitor->port} is $status.");
+    
+        return $status;
     }
-
-    // Store response in the port_responses table
-    try {
-        PortResponse::create([
-            'monitor_id' => $monitor->id,
-            'status' => $status,
-            'response_time' => $status === 'up' ? $responseTime : 0
-        ]);
-    } catch (\Exception $e) {
-        Log::error("Failed to store port response: " . $e->getMessage());
-    }
-
-    // Send alert if necessary
-    try {
-        $this->sendAlert($monitor, $status);
-    } catch (\Exception $e) {
-        Log::error("Failed to send alert: " . $e->getMessage());
-    }
-
-    // Update last_checked_at and status in the monitors table
-    try {
-        $monitor->update([
-            'last_checked_at' => now(),
-            'status' => $status
-        ]);
-    } catch (\Exception $e) {
-        Log::error("Failed to update monitor: " . $e->getMessage());
-    }
-
-    Log::info("Port check completed: {$monitor->host}:{$monitor->port} is $status.");
-
-    return $status;
-}
-
-
-
     private function checkPing(Monitors $monitor)
     {
         try {
@@ -411,7 +315,7 @@ private function checkPort(Monitors $monitor)
     
             // Send alert and create incident
             $this->sendAlert($monitor, $status);
-           
+            $this->createIncident($monitor, $status, 'PING');
     
             // Update monitor status
             $monitor->update([
@@ -431,20 +335,49 @@ private function checkPort(Monitors $monitor)
             return false;
         }
     }
+//NEW INCIDENTS
+    private function createIncident(Monitors $monitor, string $status, string $monitorType)
+    {
+       
+    // If the status is 'down', we create an incident
+    if ($status === 'down') {
+        // Check if there's an existing 'down' incident for the same monitor that's still open (no end_timestamp)
+        $existingIncident = Incident::where('monitor_id', $monitor->id)
+            ->where('status', 'down')  // Looking for incidents that are 'down'
+            ->whereNull('end_timestamp')  // Ensure that the incident is still open
+            ->first();
+        
+        // If no existing open incident, create a new one
+        if (!$existingIncident) {
+            Incident::create([
+                'monitor_id' => $monitor->id,
+                'status' => 'down',
+                'root_cause' => "{$monitorType} Monitoring Failed",  // Log the type of failure (e.g., Ping, DNS, HTTP)
+                'start_timestamp' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    }
+
+    // If the status is 'up', we check and close any open incidents
+    elseif ($status === 'up') {
+        // Check for any open incidents (status = 'down' and no end_timestamp)
+        $incident = Incident::where('monitor_id', $monitor->id)
+            ->where('status', 'down')
+            ->whereNull('end_timestamp')  // Ensure it's open (still 'down')
+            ->first();
+
+        // If an open incident is found, mark it as resolved
+        if ($incident) {
+            $incident->update([
+                'status' => 'up',
+                'end_timestamp' => now(),  // Set the time the monitor came back up
+                'updated_at' => now(),
+            ]);
+        }
+    }
+}
     
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         try {
