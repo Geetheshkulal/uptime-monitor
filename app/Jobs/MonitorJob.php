@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\RequestException;
 use App\Models\PingResponse;
 
+//  for notifications
+use App\Models\User;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\MonitorAlertNotification;
+
+
 
 class MonitorJob
 {
@@ -39,6 +45,13 @@ class MonitorJob
              {
                 $this->sendTelegramNotification($monitor);
              }
+
+             // storing
+             if ($user = auth()->user()) {  
+                Notification::send($user, new MonitorAlertNotification($monitor));  
+                Log::info("Notification stored for user ID: " . auth()->id());
+            }
+            
         }
     }
 
