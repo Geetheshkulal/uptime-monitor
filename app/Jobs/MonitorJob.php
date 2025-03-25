@@ -210,78 +210,45 @@ private function checkHttp(Monitors $monitor)
     }
 
     private function checkPort(Monitors $monitor)
-{
-    $attempt = 0;
-    $status = 'down';
-    $responseTime = 0;
-    $startTime = microtime(true);
-    $retries = $monitor->retries ?? 3; // Default to 3 retries if not set
-    $timeout = 5; // Timeout in seconds
+    {
+        $attempt = 0;
+        $status = 'down';
+        $responseTime = 0;
+        $startTime = microtime(true);
+        $retries = $monitor->retries ?? 3; // Default to 3 retries if not set
 
-    // Log the start of the check
-    Log::info("Checking port {$monitor->port} on {$monitor->host} with {$retries} retries.");
-
-    while ($attempt < $retries) {
-        try {
-            // Attempt to open the socket connection
-            $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, $timeout);
-
+        while ($attempt < $retries) {
+            $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, 5);
             if ($connection) {
-                // Set a timeout for the socket
-                stream_set_timeout($connection, $timeout);
-
-                // Check if the connection is actually successful
+                fclose($connection);
                 $status = 'up';
                 $responseTime = round((microtime(true) - $startTime) * 1000, 2); // Convert to ms
-                fclose($connection);
                 break;
-            } else {
-                Log::warning("Port check attempt $attempt failed: {$monitor->host}:{$monitor->port} - Error: $errstr ($errno)");
             }
-        } catch (\Exception $e) {
-            Log::error("Exception during port check attempt $attempt: " . $e->getMessage());
+
+            $attempt++;
+            sleep(min(pow(2, $attempt), 5)); // Exponential backoff with a max wait of 5s
         }
 
-        $attempt++;
-        if ($attempt < $retries) {
-            $waitTime = min(pow(2, $attempt), 5); // Exponential backoff with a max wait of 5s
-            Log::info("Waiting {$waitTime} seconds before next attempt.");
-            sleep($waitTime);
-        }
-    }
-
-    // Store response in the port_responses table
-    try {
+        
+        // Store response in the port_responses table
         PortResponse::create([
             'monitor_id' => $monitor->id,
             'status' => $status,
             'response_time' => $status === 'up' ? $responseTime : 0
         ]);
-    } catch (\Exception $e) {
-        Log::error("Failed to store port response: " . $e->getMessage());
-    }
 
-    // Send alert if necessary
-    try {
         $this->sendAlert($monitor, $status);
-    } catch (\Exception $e) {
-        Log::error("Failed to send alert: " . $e->getMessage());
-    }
 
-    // Update last_checked_at and status in the monitors table
-    try {
+
+        // Update last_checked_at and status in the monitors table
         $monitor->update([
             'last_checked_at' => now(),
             'status' => $status
         ]);
-    } catch (\Exception $e) {
-        Log::error("Failed to update monitor: " . $e->getMessage());
+
+        return $status;
     }
-
-    Log::info("Port check completed: {$monitor->host}:{$monitor->port} is $status.");
-
-    return $status;
-}
 
 
 
