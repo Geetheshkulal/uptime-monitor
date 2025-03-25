@@ -109,6 +109,7 @@
         </div>
     </div>
     <script src="{{ asset('frontend/assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     @stack('scripts')
     <!-- Bootstrap core JavaScript-->
