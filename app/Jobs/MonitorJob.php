@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\RequestException;
 use App\Models\PingResponse;
 
+
 class MonitorJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
