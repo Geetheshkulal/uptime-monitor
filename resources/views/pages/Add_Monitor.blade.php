@@ -20,10 +20,10 @@
         <a class="dropdown-item fs-6" href="#" onclick="showForm('ping')">Ping Monitoring</a>
         <a class="dropdown-item fs-6" href="#" onclick="showForm('port')">Port Monitoring</a>
         <a class="dropdown-item fs-6" href="#" onclick="showForm('dns')">DNS Monitoring</a> --}}
-        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('HTTP Monitoring', 'http')">HTTP Monitoring</a>
-        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('Ping Monitoring', 'ping')">Ping Monitoring</a>
-        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('Port Monitoring', 'port')">Port Monitoring</a>
-        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('DNS Monitoring', 'dns')">DNS Monitoring</a>
+        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('HTTP Monitoring', 'http')">HTTP Monitoring🌐</a>
+        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('Ping Monitoring', 'ping')">Ping Monitoring📶</a>
+        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('Port Monitoring', 'port')">Port Monitoring🎛️</a>
+        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('DNS Monitoring', 'dns')">DNS Monitoring🔗</a>
     </div>
 </div> 
 
@@ -151,6 +151,8 @@
                     <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
                     <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
                 </div>
+
+                <input class="btn btn-primary w-100" type="submit" value="Submit">
                 
             `
         },
@@ -208,6 +210,8 @@
                     <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
                     <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
                 </div>
+
+                <input class="btn btn-primary w-100" type="submit" value="Submit">
             `
         },
          dns: {
@@ -263,6 +267,9 @@
                 <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
                 <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
             </div>
+            
+            <input class="btn btn-primary w-100" type="submit" value="Submit">
+            
 
             `,
             action:'/add/dns'
@@ -284,7 +291,7 @@
                 @csrf
                 ${forms[type].fields}
 
-                <input class="btn btn-primary w-100" type="submit" value="Submit">
+                
             </form>
         `;
     }

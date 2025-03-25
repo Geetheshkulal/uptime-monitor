@@ -37,6 +37,19 @@
     overflow-x: hidden !important;
 }
 
+    .floating-btn {
+        z-index: 1000;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 50px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .floating-btn:hover {
+        transform: scale(1.1);
+    }
+
         </style>
         @endpush
 
@@ -64,9 +77,12 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Overview</h1>
-                    <a href="{{route("add.monitoring")}}" class="btn btn-primary">
+            
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Overview</h1>
+                    
+                    <!-- Floating Add Button -->
+                    <a href="{{route('add.monitoring')}}" class="btn btn-primary floating-btn">
                         <i class="fas fa-plus-circle"></i> Add New Monitor
                     </a>
                 </div>
