@@ -126,7 +126,7 @@
                 </div>
 
                 <!-- Data Table -->
-                <div class="card-body">
+                {{-- <div class="card-body">
                     <div class="table-responsive">
                         <table class="table" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -156,7 +156,56 @@
                             </tbody>
                         </table>
                     </div>
+                </div> --}}
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th>URL</th>
+                                    <th>Root Cause</th>
+                                    <th>Start Date</th>
+                                    <th>Resolved On</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($incidents as $incident)
+                                    <tr class="tablerow">
+                                        <td>
+                                            <!-- Display the incident status (up or down) -->
+                                            <span class="badge 
+                                                @if($incident->status === 'down') badge-danger @else badge-success @endif">
+                                                {{ ucfirst($incident->status) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <!-- Display the URL of the monitor associated with the incident -->
+                                            {{ $incident->monitor->url }}
+                                        </td>
+                                        <td>
+                                            <!-- Display the root cause (monitor type) -->
+                                            {{ $incident->root_cause }}
+                                        </td>
+                                        <td>
+                                            <!-- Display the start timestamp -->
+                                            {{ $incident->start_timestamp->format('Y/m/d h:i A') }}
+                                        </td>
+                                        <td>
+                                            <!-- Display the end timestamp if available, otherwise show "Ongoing" -->
+                                            @if($incident->end_timestamp)
+                                                {{ $incident->end_timestamp->format('Y/m/d h:i A') }}
+                                            @else
+                                                Ongoing
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                
             </div>
             <!-- End of Main Content -->
         </div>

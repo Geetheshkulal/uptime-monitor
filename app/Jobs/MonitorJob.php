@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\RequestException;
 use App\Models\PingResponse;
-use App\Models\
 
 class MonitorJob
 {
@@ -48,10 +47,10 @@ class MonitorJob
         $botToken = $monitor->telegram_bot_token;
         $chatId = $monitor->telegram_id;
 
-        $message = "🚨 *Monitor Down Alert!*
-        \n🔴 *URL:* {$monitor->url}
-        \n🛠 *Type:* {$monitor->type}
-        \n📅 *Detected At:* " . now()->toDateTimeString();
+        $message = "🚨 Monitor Down Alert!
+        \n🔴 URL: {$monitor->url}
+        \n🛠 Type: {$monitor->type}
+        \n📅 Detected At: " . now()->toDateTimeString();
 
         
         Http::get("https://api.telegram.org/bot{$botToken}/sendMessage", [
@@ -132,7 +131,6 @@ private function checkHttp(Monitors $monitor)
 
     // Send alert if status is down
     $this->sendAlert($monitor, $status);
-    $this->createIncident($monitor, $status, 'HTTP');
 
     // Update monitor status
     try {
@@ -196,7 +194,6 @@ private function checkHttp(Monitors $monitor)
         }
     
         $this->sendAlert($monitor,$status);
-        $this->createIncident($monitor, $status, 'DNS');
         // Update last_checked_at in the monitors table
         try {
             $monitor->update([
@@ -212,7 +209,7 @@ private function checkHttp(Monitors $monitor)
         return $records ?: null;
     }
 
-private function checkPort(Monitors $monitor)
+    private function checkPort(Monitors $monitor)
 {
     $attempt = 0;
     $status = 'down';
@@ -270,7 +267,6 @@ private function checkPort(Monitors $monitor)
     } catch (\Exception $e) {
         Log::error("Failed to send alert: " . $e->getMessage());
     }
-    $this->createIncident($monitor, $status, 'PORT');
 
     // Update last_checked_at and status in the monitors table
     try {
@@ -324,7 +320,6 @@ private function checkPort(Monitors $monitor)
 
 
         $this->sendAlert($monitor, $status);
-        $this->createIncident($monitor, $status, 'PING');
         // Update monitor status
         $monitor->update([
             'last_checked_at' => now(),
@@ -334,58 +329,12 @@ private function checkPort(Monitors $monitor)
         return $status === 'up';
     }
 
-
-    // new added incident
-
-    private function createIncident(Monitors $monitor, string $status, string $monitorType)
-    {
-       
-    // If the status is 'down', we create an incident
-    if ($status === 'down') {
-        // Check if there's an existing 'down' incident for the same monitor that's still open (no end_timestamp)
-        $existingIncident = Incident::where('monitor_id', $monitor->id)
-            ->where('status', 'down')  // Looking for incidents that are 'down'
-            ->whereNull('end_timestamp')  // Ensure that the incident is still open
-            ->first();
-        
-        // If no existing open incident, create a new one
-        if (!$existingIncident) {
-            Incident::create([
-                'monitor_id' => $monitor->id,
-                'status' => 'down',
-                'root_cause' => "{$monitorType} Monitoring Failed",  // Log the type of failure (e.g., Ping, DNS, HTTP)
-                'start_timestamp' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-    }
-
-    // If the status is 'up', we check and close any open incidents
-    elseif ($status === 'up') {
-        // Check for any open incidents (status = 'down' and no end_timestamp)
-        $incident = Incident::where('monitor_id', $monitor->id)
-            ->where('status', 'down')
-            ->whereNull('end_timestamp')  // Ensure it's open (still 'down')
-            ->first();
-
-        // If an open incident is found, mark it as resolved
-        if ($incident) {
-            $incident->update([
-                'status' => 'up',
-                'end_timestamp' => now(),  // Set the time the monitor came back up
-                'updated_at' => now(),
-            ]);
-        }
-    }
-}
-
-
     /**
      * Execute the job.
      */
     public function handle(): void
     {
-        $monitors = Monitors::whereRaw('? >= DATE_ADD(last_checked_at, INTERVAL `interval` MINUTE)', [now()])
+        $monitors = Monitors::whereRaw('? >= DATE_ADD(last_checked_at, INTERVAL interval MINUTE)', [now()])
                     ->orWhereNull('last_checked_at')
                     ->get();
         
