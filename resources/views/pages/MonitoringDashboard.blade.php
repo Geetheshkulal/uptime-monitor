@@ -1,5 +1,6 @@
 @extends('dashboard')
 @section('content')
+
 <head>
     @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -37,7 +38,7 @@
     overflow-x: hidden !important;
 }
 
-        </style>
+    </style>
         @endpush
 
  <style>
@@ -54,6 +55,7 @@
     border-image-slice: 1;
     border-image-source: linear-gradient(45deg, red, yellow, blue, green);
     animation: rgbGradientBorder 3s infinite linear;
+    border-radius: 6px;
 }
 
   </style>

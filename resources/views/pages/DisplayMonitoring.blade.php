@@ -83,7 +83,7 @@
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">
                                 Average Response
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="averageResponse">0 ms</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-hourglass-half fa-2x text-warning"></i>
@@ -126,6 +126,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+
         var ctx = document.getElementById("myAreaChart").getContext('2d');
 
         var responseTimes = {!! json_encode(array_slice($ChartResponses->pluck('response_time')->toArray(), -20)) !!};
@@ -208,7 +209,21 @@
             }
         });
 
-        setInterval(function () {
+ function updateAverageResponse() {
+
+    if (responseTimes.length > 0) {
+        let sum = responseTimes.reduce((a, b) => a + b, 0);
+        let average = (sum / responseTimes.length).toFixed(2); // Round to 2 decimal places
+        document.getElementById("averageResponse").textContent = average + " ms";
+    } else {
+        document.getElementById("averageResponse").textContent = "No Data";
+    }
+}
+
+    // Call the function initially
+    updateAverageResponse();
+
+     setInterval(function () {
             $.ajax({
                 url: "{{ route('display.chart.update',[$details->id,$details->type]) }}",
                 type: "GET",
@@ -221,13 +236,15 @@
                     myLineChart.data.datasets[0].data = responseTimes;
                     myLineChart.data.labels = timestamps;
                     myLineChart.update();
+
+                    updateAverageResponse();
                 },
 
                 error: function (xhr, status, error) {
                     console.error("Error fetching data:", error);
                 }
             });
-        }, 30000); // Runs every 5000 milliseconds (5 seconds)
+        }, 30000); // Runs every 3000 milliseconds (3 seconds)
 
     });
 </script>
