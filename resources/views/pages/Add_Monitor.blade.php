@@ -18,12 +18,12 @@
         aria-labelledby="dropdownMenuButton">
         {{-- <a class="dropdown-item fs-6" href="#" onclick="showForm('http')">HTTP Monitoring</a>
         <a class="dropdown-item fs-6" href="#" onclick="showForm('ping')">Ping Monitoring</a>
-        <a class="dropdown-item fs-6" href="#" onclick="showForm('port')">Port Monitoring</a>
+        <a class="dropdown-item fs-6" href="#" onclick="showForm('port')">Port Monitoring</a> 
         <a class="dropdown-item fs-6" href="#" onclick="showForm('dns')">DNS Monitoring</a> --}}
-        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('HTTP Monitoring', 'http')">HTTP Monitoring🌐</a>
-        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('Ping Monitoring', 'ping')">Ping Monitoring📶</a>
-        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('Port Monitoring', 'port')">Port Monitoring🎛️</a>
-        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('DNS Monitoring', 'dns')">DNS Monitoring🔗</a>
+        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('HTTP Monitoring', 'http')">HTTP Monitoring 🌐</a>
+        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('Ping Monitoring', 'ping')">Ping Monitoring 📶</a>
+        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('Port Monitoring', 'port')">Port Monitoring 🎛️</a>
+        <a class="dropdown-item fs-6" href="#" onclick="updateDropdown('DNS Monitoring', 'dns')">DNS Monitoring 🔗</a>
     </div>
 </div> 
 
