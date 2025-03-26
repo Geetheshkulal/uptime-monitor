@@ -86,5 +86,6 @@ Route::middleware('auth')->group(function () {
     Route::get('premium',function(){return view('pages.premium');})->name('premium.page');
 });
 
+
 require __DIR__.'/auth.php';
 

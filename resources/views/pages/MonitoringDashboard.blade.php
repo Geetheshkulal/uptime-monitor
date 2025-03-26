@@ -96,7 +96,7 @@
                         title="Free Monitors">
                             Add New Monitor
                         </a>
-                    @endif
+                        @endif
                 </div>
 
                 <!-- Content Row -->
