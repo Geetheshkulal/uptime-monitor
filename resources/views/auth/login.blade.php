@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Your App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
         body {
             background-color: #f8f9fa;
@@ -26,10 +27,10 @@
     <h3 class="text-center fw-bold mb-4">Login</h3>
 
     @if(session('status'))
-        <div class="alert alert-success">
-            {{ session('status') }}
-        </div>
-    @endif
+    <div class="alert alert-success">
+        {{ session('status') }}
+    </div>
+@endif
 
     <form method="POST" action="{{ route('login') }}">
         @csrf
@@ -90,6 +91,9 @@
         });
     });
 </script>
+
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 </body>
 </html>
