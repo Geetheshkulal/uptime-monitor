@@ -83,5 +83,6 @@ Route::middleware('auth')->group(function () {
     Route::any('cashfree/payments/success', [CashFreePaymentController::class, 'success'])->name('success');
 });
 
+
 require __DIR__.'/auth.php';
 
