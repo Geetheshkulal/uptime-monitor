@@ -10,7 +10,7 @@ use App\Http\Controllers\PingMonitoringController;
 use App\Http\Controllers\PortMonitorController;
 
 use App\Http\Controllers\HttpMonitoringController;
-
+use App\Http\Controllers\CashFreePaymentController;
 
 use Illuminate\Support\Facades\Http;
 /*
@@ -68,6 +68,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/monitor/port',[PortMonitorController::class,'PortStore'])->name('monitor.port');
     
     Route::post('/monitoring/http', [HttpMonitoringController::class, 'store'])->name('monitoring.http.store');
+
+    
+    Route::get('cashfree/payments/create', [CashFreePaymentController::class, 'create'])->name('callback');
+    Route::post('cashfree/payments/store', [CashFreePaymentController::class, 'store'])->name('store');
+    Route::any('cashfree/payments/success', [CashFreePaymentController::class, 'success'])->name('success');
 });
 
 require __DIR__.'/auth.php';
