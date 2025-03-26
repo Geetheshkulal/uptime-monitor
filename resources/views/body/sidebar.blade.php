@@ -34,6 +34,7 @@
     </li>
 
 
+    @if (auth()->user()->status === 'paid')
     <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}" 
         style="{{ request()->routeIs('ssl.check') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
         <a class="nav-link text-white" href="{{ route('ssl.check') }}">
@@ -41,6 +42,18 @@
             <span>SSL Check</span>
         </a>
     </li>
+    @elseif(auth()->user()->status === 'free')
+    <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}" 
+        style="{{ request()->routeIs('ssl.check') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white d-flex justify-content-between align-items-center" href="{{ route('premium.page') }}">
+            <div>
+                <i style="color: yellow;" class="fas fa-lock"></i>
+                <span style="color: yellow;">SSL Check</span>
+            </div>
+            <i class="fas fa-crown fa-lg" style="color: gold; animation: glow 1.5s infinite alternate;"></i>
+        </a>
+    </li>
+    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

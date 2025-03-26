@@ -81,6 +81,8 @@ Route::middleware('auth')->group(function () {
     Route::get('cashfree/payments/create', [CashFreePaymentController::class, 'create'])->name('callback');
     Route::post('cashfree/payments/store', [CashFreePaymentController::class, 'store'])->name('store');
     Route::any('cashfree/payments/success', [CashFreePaymentController::class, 'success'])->name('success');
+
+    Route::get('premium',function(){return view('pages.premium');})->name('premium.page');
 });
 
 require __DIR__.'/auth.php';
