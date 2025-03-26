@@ -193,4 +193,41 @@ $monitors = $query->limit($length)
     
      return response()->json($ChartResponses);
    }
+
+   public function MonitorDelete($id)
+   {
+
+    $DeleteMonitor=Monitors::findOrFail($id);
+
+    if(!$DeleteMonitor)
+    {
+        return redirect()->back()->with('error','Monitoring data not found.');
+    }
+
+    $DeleteMonitor->delete();
+
+    return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring data deleted successfully.');
+
+   }
+
+   public function MonitorEdit(Request $request, $id)
+   {
+    $request->validate([
+        'name'=>'required|string|max:255',
+        'url'=>'required|url',
+        'retries' => 'required|integer|min:1',
+        'interval' => 'required|integer|min:1',
+        'email' => 'required|email',
+        'port' => 'nullable|integer', 
+        'dns_resource_type' => 'nullable|string', 
+        'telegram_id' => 'nullable|string',
+        'telegram_bot_token' => 'nullable|string',
+    ]);
+
+    $EditMonitoring=Monitors::findOrFail($id);
+
+    $EditMonitoring->update($request->all());
+
+    return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring details updated successfully.');
+   }
 }

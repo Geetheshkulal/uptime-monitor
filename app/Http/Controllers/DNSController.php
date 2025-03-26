@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DnsResponse;
 
 
-class DnsController extends Controller
+class DNSController extends Controller
 {
     public function AddDNS(Request $request){
 

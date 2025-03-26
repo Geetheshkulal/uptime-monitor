@@ -37,9 +37,40 @@
     overflow-x: hidden !important;
 }
 
+    .floating-btn {
+        z-index: 1000;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 50px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .floating-btn:hover {
+        transform: scale(1.1);
+    }
 
         </style>
         @endpush
+
+ <style>
+  @keyframes rgbGradientBorder {
+    0% { border-image-source: linear-gradient(45deg, red, yellow, pink, cyan); }
+    25% { border-image-source: linear-gradient(45deg, yellow, cyan, yellow, red); }
+    50% { border-image-source: linear-gradient(45deg, blue, pink, red, yellow); }
+    75% { border-image-source: linear-gradient(45deg, pink, red, yellow, cyan); }
+    100% { border-image-source: linear-gradient(45deg, red, yellow, blue, white); }
+}
+
+.border-rgb {
+    border: 5px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(45deg, red, yellow, blue, green);
+    animation: rgbGradientBorder 3s infinite linear;
+    border-radius: 6px;
+}
+
+  </style>
 
         <!-- Main Content -->
         <div id="content">
@@ -47,9 +78,12 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Overview</h1>
-                    <a href="{{route("add.monitoring")}}" class="btn btn-primary">
+            
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Overview</h1>
+                    
+                    <!-- Floating Add Button -->
+                    <a href="{{route('add.monitoring')}}" class="btn btn-primary floating-btn">
                         <i class="fas fa-plus-circle"></i> Add New Monitor
                     </a>
                 </div>
@@ -77,7 +111,8 @@
 
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card border-rgb shadow h-100 py-2">
+                        {{-- <div class="card border-left-success shadow h-100 py-2"> --}}
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
@@ -298,9 +333,8 @@
     </script>
     @endpush
 @endsection
-@push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+@push('scripts')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             @if(session('success'))
