@@ -83,9 +83,20 @@
                         <h1 class="h3 mb-0 text-gray-800">Overview</h1>
                     
                     <!-- Floating Add Button -->
-                    <a href="{{route('add.monitoring')}}" class="btn btn-primary floating-btn">
-                        <i class="fas fa-plus-circle"></i> Add New Monitor
-                    </a>
+                   @if($totalMonitors>=5)
+                    <a class=" bg-primary btn btn-secondary position-relative" 
+                        href="{{ route('premium.page') }}"
+                        title="Premium feature - Upgrade to unlock">
+                            <i class="fas fa-crown fa-sm me-1" style="color: gold; animation: glow 1.5s infinite alternate;"></i>
+                            Add New Monitor
+                        </a>
+                    @else
+                        <a class=" bg-primary btn btn-secondary position-relative" 
+                        href="{{ route('add.monitoring') }}"
+                        title="Free Monitors">
+                            Add New Monitor
+                        </a>
+                    @endif
                 </div>
 
                 <!-- Content Row -->
