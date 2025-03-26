@@ -46,6 +46,14 @@
             @enderror
         </div>
 
+        <div class="mb-3">
+            <label for="phone" class="form-label fw-bold">Phone</label>
+            <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter your phone" required>
+            @error('phone') 
+                <small class="text-danger">{{ $message }}</small> 
+            @enderror
+        </div>
+
         <!-- Password -->
         <div class="mb-3">
             <label for="password" class="form-label fw-bold">Password</label>
