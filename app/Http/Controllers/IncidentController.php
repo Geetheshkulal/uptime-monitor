@@ -11,7 +11,6 @@ class IncidentController extends Controller
 {
     public function incidents()
     {
-        return view("pages.incidents");
         // Get the logged-in user's ID
         $userId = Auth::id();
 
