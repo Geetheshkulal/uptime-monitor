@@ -83,7 +83,7 @@
                         <h1 class="h3 mb-0 text-gray-800">Overview</h1>
                     
                     <!-- Floating Add Button -->
-                   @if($totalMonitors>=5)
+                   @if($totalMonitors>=5 && auth()->user()->status=='free')
                     <a class=" bg-primary btn btn-secondary position-relative" 
                         href="{{ route('premium.page') }}"
                         title="Premium feature - Upgrade to unlock">
@@ -202,9 +202,8 @@
                             </thead>
                             <tbody>
                                
-                            @foreach ($monitors as $monitor)                           
-                                <tr class="tablerow">
-                                    <td class="sorting_1">{{ $monitor->name }}</td>
+                            @foreach ($monitors as $key=>$monitor)                           
+                            <tr class="tablerow" style="{{ (auth()->user()->status === 'free' && $loop->index >= 5) ? 'background-color: #000000; color: #999;' : '' }}">                                    <td class="sorting_1">{{ $monitor->name }}</td>
                                     <td class="sorting_1">{{ $monitor->url }}</td>
                                     <td>{{ $monitor->type }}{{ $monitor->type === 'port' ? '-' . $monitor->port : '' }}</td>
                                     <td>

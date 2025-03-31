@@ -143,8 +143,13 @@ private function checkHttp(Monitors $monitor)
     }
 
     // Send alert if status is down
-    $this->sendAlert($monitor, $status);
+    try{
+        $this->sendAlert($monitor, $status);
+    }catch (\Exception $e) {
+        Log::error(''. $e->getMessage());
+    }
     $this->createIncident($monitor, $status, 'HTTP');
+
     // Update monitor status
     try {
         $monitor->update([
@@ -206,8 +211,14 @@ private function checkHttp(Monitors $monitor)
             Log::error("Failed to insert DNS response for {$monitor->url}: " . $e->getMessage());
         }
     
-        $this->sendAlert($monitor,$status);
+        try{
+            $this->sendAlert($monitor,$status);
+        }catch(\Exception $e){
+            Log::error(''. $e->getMessage());
+        }
+
         $this->createIncident($monitor, $status, 'DNS');
+
         // Update last_checked_at in the monitors table
         try {
             $monitor->update([
@@ -329,9 +340,14 @@ private function checkHttp(Monitors $monitor)
             ]);
     
             // Send alert and create incident
-            $this->sendAlert($monitor, $status);
-            $this->createIncident($monitor, $status, 'PING');
-    
+           try{ 
+                $this->sendAlert($monitor, $status);
+            }catch (\Exception $e){
+                \Log::error($e->getMessage());
+            }
+
+            $this->createIncident($monitor, $status, monitorType: 'PING');
+
             // Update monitor status
             $monitor->update([
                 'last_checked_at' => now(),
