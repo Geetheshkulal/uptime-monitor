@@ -70,6 +70,22 @@
     border-radius: 6px;
 }
 
+/* Target the default DataTables search bar */
+#dataTable_filter input {
+    width: 250px !important; 
+    height: 40px !important;
+    padding: 8px; 
+    font-size: 14px; 
+    border-radius: 30px; 
+    border: 1px solid #ccc; 
+    outline: none; 
+}
+
+
+#dataTable_filter input::placeholder {
+    color: #999;
+    font-style: italic;
+}
   </style>
 
         <!-- Main Content -->
@@ -274,7 +290,10 @@
          var total = document.getElementById('totalMonitors');
          var upCount = document.getElementById('upCount');
          var downCount = document.getElementById('downCount');
+
          $(document).ready(function() {
+
+
             var table = $('#dataTable').DataTable({
                 processing: false,
                 serverSide: true, // Enable server-side processing
@@ -340,6 +359,7 @@
                 });
             }, 30000); // Refresh every 30 seconds
         });
+
     </script>
     @endpush
 @endsection
