@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Models\Payment;
 
 class CashFreePaymentController extends Controller
 {
@@ -58,20 +57,42 @@ class CashFreePaymentController extends Controller
 
          curl_close($curl);
 
+
+
          return redirect()->to(json_decode($resp)->payment_link);
     }
 
     public function success(Request $request)
     {
-        // Force Laravel to reload the session
+     
+        $orderId = $request->query('order_id');
         $user = auth()->user();
         
-        if ($user) {
-            $user->update(['status' => 'paid','premium_end_date' => now()->addMonth()]);
-        }
+        if (!$user) {
+          return redirect()->route('login')->with('error', 'You must be logged in to complete the payment.');
+      }
+  
+      Payment::create([
+          'status' => 'paid',
+          'user_id' => $user->id,
+          'amount' => 399, // Replace with actual amount from CashFree API
+          'payment_status' => 'paid',
+          'transaction_id' => $orderId,
+          'payment_type' => 'upi',
+          'start_date' => now(),
+          'end_date' => now()->addMonth(),
+          
+      ]);
+  
+      // Update User Status
+      $user->update([
+          'status' => 'paid',
+          'premium_end_date' => now()->addMonth(),
+      ]);
+  
+      return redirect()->route('monitoring.dashboard')->with('success', 'Payment successful! Features unlocked.');
 
-        return redirect()->route('monitoring.dashboard')->with('success', 'Payment successful! Features unlocked.');
     }
-}
+} 
 
 
