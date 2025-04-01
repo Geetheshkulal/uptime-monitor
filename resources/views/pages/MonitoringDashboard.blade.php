@@ -200,6 +200,39 @@
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">My Monitors</h1>
                 </div>
+<!-- Premium Alert for Free Users with More Monitors -->
+@if(auth()->user()->status === 'free' && $hasMoreMonitors)
+    <div class="premium-alert text-center mb-4 p-4" style="
+        background: linear-gradient(180deg, blue,lightblue);
+        color: white;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        animation: pulseGlow 1.5s infinite alternate;
+    ">
+        <h2 style="font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);">
+            Unlock All Your Monitors!
+        </h2>
+        <p style="font-size: 16px; font-weight: 500;">
+            Upgrade to the premium plan to monitor all your services.
+        </p>
+        <a href="{{ route('premium.page') }}" class="btn btn-light text-dark px-4 py-2" style="
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 30px;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+        ">
+            <i class="fas fa-crown fa-sm me-1" style="color: gold; animation: glow 1.5s infinite alternate;"></i>
+            Upgrade Now
+        </a>
+    </div>
+
+    <style>
+        @keyframes pulseGlow {
+            0% { box-shadow: 0px 0px 10px rgba(255, 204, 0, 0.6); }
+            100% { box-shadow: 0px 0px 20px rgba(255, 204, 0, 1); }
+        }
+    </style>
+@endif
 
                 <!-- Data Table -->
                 <div class="card-body">
