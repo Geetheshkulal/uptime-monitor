@@ -214,7 +214,6 @@
                                     <th class=" text-gray-900">Created Date</th>
                                     <th class=" text-gray-900">Last Calls Status</th>
                                     <th class=" text-gray-900">Action</th>
-                                    <th class=" text-gray-900">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
