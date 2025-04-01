@@ -185,8 +185,9 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                            Pause</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                            Pause
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800" id="pausedCount">{{ $pausedCount }}</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-pause fa-2x " style="color:#b197fc"></i>
@@ -214,6 +215,7 @@
                                     <th class=" text-gray-900">Created Date</th>
                                     <th class=" text-gray-900">Last Calls Status</th>
                                     <th class=" text-gray-900">Action</th>
+                            
                                 </tr>
                             </thead>
                             <tbody>
@@ -235,7 +237,7 @@
                                     </td>
                                     <td>{{ $monitor->created_at->format('Y-m-d') }}</td>
                                     <!-- Latest Responses (Bars) -->
-                                    <td>
+                                    <td>                    
                                         @if ($monitor->latestResponses->isNotEmpty())  
                                             @foreach ($monitor->latestResponses as $response)
                                                 <div style="
@@ -265,6 +267,7 @@
                                             <i class="fas fa-eye fa-sm"></i> View
                                         </a>
                                     </td>
+                
                                 </tr>
                             @endforeach
 
@@ -296,7 +299,7 @@
 
             var table = $('#dataTable').DataTable({
                 processing: false,
-                serverSide: true, // Enable server-side processing
+                serverSide: false, // Enable server-side processing
                 ajax: {
                     url: '{{ route('monitoring.dashboard.update') }}', // Your API endpoint
                     method: 'GET',
@@ -340,6 +343,7 @@
                                 </a>`;
                     }}
                 ],
+
                 columnDefs: [
                     { targets: [5, 6], searchable: false, orderable: false } // Disable search and sorting for status bars and actions
                 ]
@@ -372,4 +376,6 @@
             @endif
         });
     </script>
+    
+    
 @endpush

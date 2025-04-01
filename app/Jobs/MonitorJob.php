@@ -343,7 +343,7 @@ private function checkHttp(Monitors $monitor)
            try{ 
                 $this->sendAlert($monitor, $status);
             }catch (\Exception $e){
-                \Log::error($e->getMessage());
+                Log::error($e->getMessage());
             }
 
             $this->createIncident($monitor, $status, monitorType: 'PING');
@@ -412,9 +412,10 @@ private function checkHttp(Monitors $monitor)
     public function handle(): void
     {
         try {
-            $monitors = Monitors::whereRaw('? >= DATE_ADD(last_checked_at, INTERVAL `interval` MINUTE)', [now()])
-                ->orWhereNull('last_checked_at')
-                ->get();
+            $monitors = Monitors::where('paused', false) // Skip paused monitors
+            ->whereRaw('? >= DATE_ADD(last_checked_at, INTERVAL `interval` MINUTE)', [now()])
+            ->orWhereNull('last_checked_at')
+            ->get();
     
             foreach ($monitors as $monitor) {
                 switch ($monitor->type) {

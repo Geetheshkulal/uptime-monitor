@@ -1,5 +1,3 @@
-
-
 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
 
@@ -119,6 +117,36 @@ body.dark .dropdown-item:hover {
   background-color: #444 !important;
 }
 
+.scrolling-text-container {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    padding: 5px 0; /* Add some padding for better spacing */
+}
+
+.scrolling-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-text 15s linear infinite; /* Slower animation for smoother scrolling */
+    font-weight: bold;
+    font-size: 1.1rem; /* Slightly larger text */
+    background: linear-gradient(90deg, #007bff, #00c851, #ffbb33, #ff4444); /* Gradient text */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for better visibility */
+}
+
+@keyframes scroll-text {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
 
   </style>
 
@@ -131,8 +159,43 @@ body.dark .dropdown-item:hover {
         <i class="fa fa-bars"></i>
     </button>
 
+    {{-- filepath: c:\xampp\htdocs\uptime-monitor\resources\views\body\header.blade.php --}}
+{{-- <a 
+href="{{ url()->previous() }}" 
+class="btn btn-primary d-flex align-items-center justify-content-center back-button {{ request()->is('monitoring/dashboard') ? 'disabled' : '' }}" 
+style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitoring/dashboard') ? 'pointer-events: none; opacity: 0.6;' : '' }}">
+<i class="fas fa-arrow-left"></i>
+</a> --}}
+
+
+@if (!request()->is('monitoring/dashboard') && !request()->is('incidents') && !request()->is('ssl-check') && !request()->is('profile'))
+    <a 
+        href="javascript:void(0)" 
+        class="btn btn-primary d-flex align-items-center justify-content-center back-button" 
+        style="width: 40px; height: 40px; border-radius: 50%;"
+        onclick="
+            const currentUrl = window.location.pathname;
+            if (currentUrl === '/monitoring/add') {
+                window.location.href = '/monitoring/dashboard';
+            } else if (currentUrl.startsWith('/monitoring/display')) {
+                window.location.href = '/monitoring/dashboard';
+            }
+        ">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+@endif
+
+
+<!-- Scrolling Text -->
+<div class="scrolling-text-container mx-3">
+  <p class="scrolling-text">
+      🌐 Monitor your website's health, uptime, and performance with real-time alerts – because every second counts! ⏱💻 Stay ahead with HTTP, Ping, Port, and DNS monitoring – all for free! 🚀
+  </p>
+</div>
+
+
     <!-- Topbar Search -->
-    <form
+    {{-- <form
         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
@@ -143,7 +206,7 @@ body.dark .dropdown-item:hover {
                 </button>
             </div>
         </div>
-    </form>
+    </form> --}}
 
  
 
@@ -241,14 +304,14 @@ body.dark .dropdown-item:hover {
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
-                <a class="dropdown-item" href="#">
+                {{-- <a class="dropdown-item" href="#">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Settings
-                </a>
-                <a class="dropdown-item" href="#">
+                </a> --}}
+                {{-- <a class="dropdown-item" href="#">
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
-                </a>
+                </a> --}}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -279,4 +342,17 @@ checkbox.addEventListener("change", () => {
         localStorage.setItem("theme", "light");
     }
 });
+
+document.querySelector('.back-button').addEventListener('click', function (e) {
+    const currentUrl = window.location.pathname;
+
+    if (currentUrl === '/monitoring/dashboard' || currentUrl === '/incidents' || || currentUrl === '/profile' || currentUrl === '/ssl-check') {
+        e.preventDefault(); // Disable back button on dashboard
+    } else if (currentUrl === '/monitoring/add') {
+        window.location.href = '/monitoring/dashboard'; // Go to dashboard
+    } else if (currentUrl.startsWith('/monitoring/display')) {
+        window.location.href = '/monitoring/dashboard'; // Go to add page
+    }
+});
+
 </script>
