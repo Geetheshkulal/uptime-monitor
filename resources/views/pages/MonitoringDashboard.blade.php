@@ -214,6 +214,7 @@
                                     <th class=" text-gray-900">Created Date</th>
                                     <th class=" text-gray-900">Last Calls Status</th>
                                     <th class=" text-gray-900">Action</th>
+                                    <th class=" text-gray-900">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -265,11 +266,15 @@
                                             <i class="fas fa-eye fa-sm"></i> View
                                         </a>
                                     </td>
+
+                                    <td>
+                                        <button href="{{ route('display.monitoring', ['id'=>$monitor->id, 'type'=>$monitor->type]) }}" class="btn btn-success">
+                                            <i class="fas fa-eye fa-sm"></i> View
+                                        </button>
+                                    </td>
                                 </tr>
                             @endforeach
-
-                                <!-- Add more rows as needed -->
-                            </tbody>
+                         </tbody>
                         </table>
                     </div>
                 </div>

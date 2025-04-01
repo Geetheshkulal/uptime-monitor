@@ -11,6 +11,7 @@ use App\Http\Controllers\PortMonitorController;
 
 use App\Http\Controllers\HttpMonitoringController;
 use App\Http\Controllers\CashFreePaymentController;
+use App\Http\Controllers\PlanSubscriptionController;
 
 use Illuminate\Support\Facades\Http;
 /*
@@ -66,6 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/ssl-check', [SslCheckController::class, 'index'])->middleware('premium_middleware')->name('ssl.check');
     Route::post('/ssl-check', [SslCheckController::class, 'check'])->middleware('premium_middleware')->name('ssl.check.domain');
     Route::get('/incidents', [IncidentController::class, 'incidents'])->name('incidents');
+    Route::get('/plan-subscription', [PlanSubscriptionController::class, 'planSubscription'])->name('planSubscription');
 
     Route::post('/dns-check', [DnsController::class, 'checkDnsRecords']);
     Route::post('/add/dns', [DnsController::class,'AddDNS'])->name('add.dns');

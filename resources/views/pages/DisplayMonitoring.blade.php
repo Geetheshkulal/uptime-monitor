@@ -11,8 +11,10 @@
                     <span class="h3 mb-0 text-gray-800 font-weight-bold">{{strtoupper($details->name)}}</span>
                     <button type="button" class="btn btn-primary mx-3" data-toggle="modal" data-target="#editModal" 
                     onclick="setEditUrl({{ $details->id }})"> <i class="fas fa-pen fa-1x"></i> Edit</button>
+
                     <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#deleteModal" 
                     onclick="setDeleteUrl({{ $details->id }})"><i class="fas fa-trash fa-1x"></i> Delete</button>
+
                 </div>
                 <div onclick="window.print()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                     <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
@@ -364,6 +366,7 @@
       </div>
     </div>
   </div>
+
   
   <script>
 
