@@ -38,81 +38,83 @@ class MonitoringController extends Controller
       return $query->orderByDesc('created_at')->limit(10)->get()->reverse()->values();
   }
 
-public function MonitoringDashboard()
-{
-    
-    // Get all monitors for the logged-in user
-    $monitors = Monitors::where('user_id', auth()->id())->get();
-    $upCount = Monitors::where('user_id',auth()->id())->where('status', 'up')->count();
-    $downCount = Monitors::where('user_id',auth()->id())->where('status', 'down')->count();
-    $totalMonitors = $monitors->count();
-    $pausedCount = Monitors::where('user_id',auth()->id())->where('paused', 1)->count();
+  public function MonitoringDashboard()
+  {
+      $user = auth()->user();
+      
+      // Get all monitors for the user
+      $monitors = Monitors::where('user_id', $user->id)->get();
+  
+      // Check if user has more than 5 monitors
+      $hasMoreMonitors = $monitors->count() > 5;
+  
+      // If user is free, limit to 5 monitors
+      if ($user->status === 'free') {
+          $monitors = $monitors->take(5);
+      }
+  
+      $upCount = $monitors->where('status', 'up')->count();
+      $downCount = $monitors->where('status', 'down')->count();
+      $totalMonitors = $monitors->count();
+  
+      // Attach latest responses
+      foreach ($monitors as $monitor) {
+          $monitor->latestResponses = $this->getLatestResponsesByType($monitor);
+      }
+  
+      return view('pages.MonitoringDashboard', compact('monitors', 'totalMonitors', 'upCount', 'downCount', 'hasMoreMonitors'));
+  }
+  
 
 
-    // Attach latest responses for each monitor
-    foreach ($monitors as $monitor) {
-        $monitor->latestResponses = $this->getLatestResponsesByType($monitor);
-    }
-
-    return view('pages.MonitoringDashboard', compact('monitors', 'totalMonitors','upCount','downCount','pausedCount'));
-}
-
-
-public function MonitoringDashboardUpdate(Request $request)
-{
-    // Get the draw counter (required by DataTables)
-    $draw = $request->input('draw');
-
-    // Get the start and length parameters (for pagination)
-    $start = $request->input('start');
-    $length = $request->input('length');
-
-    // Get the search term (if any)
-    $searchValue = $request->input('search.value');
-
-    // Base query for monitors
-    $query = Monitors::where('user_id', auth()->id());
-
-    // Apply search filter
-    if (!empty($searchValue)) {
-        $query->where(function($q) use ($searchValue) {
-            $q->where('name', 'like', '%' . $searchValue . '%')
-              ->orWhere('url', 'like', '%' . $searchValue . '%')
-              ->orWhere('type', 'like', '%' . $searchValue . '%')
-              ->orWhere('status', 'like', '%' . $searchValue . '%');
-        });
-    }
-
-    // Get the total number of records (without filtering)
-    $totalMonitors = $query->count();
-
-    $length = $length ?? 10; // Default limit if null
-    $start = $start ?? 0; // Default offset if null
-
-$monitors = $query->limit($length)
-                  ->offset($start)
-                  ->get();
-
-    // Attach latest responses for each monitor
-    foreach ($monitors as $monitor) {
-        $monitor->latestResponses = $this->getLatestResponsesByType($monitor);
-    }
-
-    // Get the up and down counts
-    $upCount = Monitors::where('user_id', auth()->id())->where('status', 'up')->count();
-    $downCount = Monitors::where('user_id', auth()->id())->where('status', 'down')->count();
-
-    // Prepare the response
-    return response()->json([
-        'draw' => $draw, // Required by DataTables
-        'recordsTotal' => $totalMonitors, // Total number of records (without filtering)
-        'recordsFiltered' => $totalMonitors, // Total number of records after filtering
-        'data' => $monitors, // The actual data for the current page
-        'upCount' => $upCount, // Additional data for your cards
-        'downCount' => $downCount, // Additional data for your cards
-        'totalMonitors' => $totalMonitors // Additional data for your cards
-    ]);
-}
+  public function MonitoringDashboardUpdate(Request $request)
+  {
+      $user = auth()->user();
+      $draw = $request->input('draw');
+      $start = $request->input('start');
+      $length = $request->input('length');
+      $searchValue = $request->input('search.value');
+  
+      // Base query
+      $query = Monitors::where('user_id', $user->id);
+  
+      if (!empty($searchValue)) {
+          $query->where(function ($q) use ($searchValue) {
+              $q->where('name', 'like', "%{$searchValue}%")
+                ->orWhere('url', 'like', "%{$searchValue}%")
+                ->orWhere('type', 'like', "%{$searchValue}%")
+                ->orWhere('status', 'like', "%{$searchValue}%");
+          });
+      }
+  
+      // Get monitors
+      $monitors = $query->get();
+  
+      // Apply limit for free users
+      if ($user->status === 'free') {
+          $monitors = $monitors->take(5);
+      }
+  
+      $totalMonitors = $monitors->count();
+      $monitors = $monitors->slice($start ?? 0, $length ?? 10);
+  
+      foreach ($monitors as $monitor) {
+          $monitor->latestResponses = $this->getLatestResponsesByType($monitor);
+      }
+  
+      $upCount = $monitors->where('status', 'up')->count();
+      $downCount = $monitors->where('status', 'down')->count();
+  
+      return response()->json([
+          'draw' => $draw,
+          'recordsTotal' => $totalMonitors,
+          'recordsFiltered' => $totalMonitors,
+          'data' => $monitors->values(), // Reset keys
+          'upCount' => $upCount,
+          'downCount' => $downCount,
+          'totalMonitors' => $totalMonitors
+      ]);
+  }
 
     
  public function AddMonitoring()
@@ -211,22 +213,6 @@ $monitors = $query->limit($length)
 
    }
 
-public function pauseMonitor(Request $request, $id)
-{
-    $monitor = Monitors::findOrFail($id);
-
-    // Toggle the paused status
-    $monitor->paused = !$monitor->paused;
-    $monitor->save();
-
-    $status = $monitor->paused ? 'paused' : 'resumed';
-
-    return response()->json([
-        'success' => true,
-        'message' => "Monitor has been {$status} successfully.",
-        'paused' => $monitor->paused,
-    ]);
-}
 
    public function MonitorEdit(Request $request, $id)
    {
