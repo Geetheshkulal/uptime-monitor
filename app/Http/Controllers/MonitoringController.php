@@ -56,13 +56,14 @@ class MonitoringController extends Controller
       $upCount = $monitors->where('status', 'up')->count();
       $downCount = $monitors->where('status', 'down')->count();
       $totalMonitors = $monitors->count();
+      $pausedCount = Monitors::where('user_id',auth()->id())->where('paused', 1)->count();
   
       // Attach latest responses
       foreach ($monitors as $monitor) {
           $monitor->latestResponses = $this->getLatestResponsesByType($monitor);
       }
   
-      return view('pages.MonitoringDashboard', compact('monitors', 'totalMonitors', 'upCount', 'downCount', 'hasMoreMonitors'));
+      return view('pages.MonitoringDashboard', compact('monitors', 'totalMonitors', 'upCount', 'downCount', 'hasMoreMonitors','pausedCount'));
   }
   
 
@@ -212,6 +213,22 @@ class MonitoringController extends Controller
     return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring data deleted successfully.');
 
    }
+   public function pauseMonitor(Request $request, $id)
+{
+    $monitor = Monitors::findOrFail($id);
+
+    // Toggle the paused status
+    $monitor->paused = !$monitor->paused;
+    $monitor->save();
+
+    $status = $monitor->paused ? 'paused' : 'resumed';
+
+    return response()->json([
+        'success' => true,
+        'message' => "Monitor has been {$status} successfully.",
+        'paused' => $monitor->paused,
+    ]);
+}
 
 
    public function MonitorEdit(Request $request, $id)
