@@ -267,11 +267,6 @@
                                         </a>
                                     </td>
 
-                                    <td>
-                                        <button href="{{ route('display.monitoring', ['id'=>$monitor->id, 'type'=>$monitor->type]) }}" class="btn btn-success">
-                                            <i class="fas fa-eye fa-sm"></i> View
-                                        </button>
-                                    </td>
                                 </tr>
                             @endforeach
                          </tbody>
