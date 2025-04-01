@@ -46,6 +46,7 @@ public function MonitoringDashboard()
     $upCount = Monitors::where('user_id',auth()->id())->where('status', 'up')->count();
     $downCount = Monitors::where('user_id',auth()->id())->where('status', 'down')->count();
     $totalMonitors = $monitors->count();
+    $pausedCount = Monitors::where('user_id',auth()->id())->where('paused', 1)->count();
 
 
     // Attach latest responses for each monitor
@@ -53,7 +54,7 @@ public function MonitoringDashboard()
         $monitor->latestResponses = $this->getLatestResponsesByType($monitor);
     }
 
-    return view('pages.MonitoringDashboard', compact('monitors', 'totalMonitors','upCount','downCount'));
+    return view('pages.MonitoringDashboard', compact('monitors', 'totalMonitors','upCount','downCount','pausedCount'));
 }
 
 
@@ -209,6 +210,23 @@ $monitors = $query->limit($length)
     return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring data deleted successfully.');
 
    }
+
+public function pauseMonitor(Request $request, $id)
+{
+    $monitor = Monitors::findOrFail($id);
+
+    // Toggle the paused status
+    $monitor->paused = !$monitor->paused;
+    $monitor->save();
+
+    $status = $monitor->paused ? 'paused' : 'resumed';
+
+    return response()->json([
+        'success' => true,
+        'message' => "Monitor has been {$status} successfully.",
+        'paused' => $monitor->paused,
+    ]);
+}
 
    public function MonitorEdit(Request $request, $id)
    {

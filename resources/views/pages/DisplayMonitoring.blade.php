@@ -1,6 +1,10 @@
 @extends('dashboard')
 @section('content')
 
+<head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+</head>
 <!-- Page Heading -->
 
 <div class="container-fluid">
@@ -14,6 +18,17 @@
 
                     <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#deleteModal" 
                     onclick="setDeleteUrl({{ $details->id }})"><i class="fas fa-trash fa-1x"></i> Delete</button>
+
+                            
+                    @if($details->paused)
+                    <button type="button" class="btn btn-warning mx-2" onclick="pauseMonitor({{ $details->id }}, this)">
+                        <i class="fas fa-play fa-1x"></i> Resume
+                    </button>
+                @else
+                    <button type="button" class="btn btn-success mx-2" onclick="pauseMonitor({{ $details->id }}, this)">
+                        <i class="fas fa-pause fa-1x"></i> Pause
+                    </button>
+                @endif
 
                 </div>
                 <div onclick="window.print()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
@@ -368,6 +383,41 @@
   </div>
 
   
+<script>
+function pauseMonitor(monitorId, button) {
+    // Send AJAX request to toggle pause/resume
+    fetch(`/monitor/pause/${monitorId}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update button classes and icon
+            button.innerHTML = data.paused 
+                ? '<i class="fas fa-play fa-1x"></i> Resume' 
+                : '<i class="fas fa-pause fa-1x"></i> Pause';
+            
+            // Toggle button classes
+            button.classList.toggle('btn-success', !data.paused);
+            button.classList.toggle('btn-warning', data.paused);
+
+            // Show success message
+            toastr.success(data.message);
+        } else {
+            toastr.error('Failed to update monitor status.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        toastr.error('An error occurred.');
+    });
+}
+</script>
+
   <script>
 
        function setEditUrl(id) {
@@ -386,6 +436,7 @@
         deleteButton.href = "/monitoring/delete/" + id; // Sets the GET request URL
     }
 </script>
+
 
 
 @push('scripts')
