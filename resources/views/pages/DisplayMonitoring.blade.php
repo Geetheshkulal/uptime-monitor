@@ -4,6 +4,17 @@
 <!-- Page Heading -->
 
 <div class="container-fluid">
+    @push('styles')
+    <style>
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+    }
+</style>
+    @endpush
     <div class="row">
         <div class="col-xl-12">
             <div class="d-sm-flex align-items-center justify-content-between mb-3">
@@ -44,7 +55,12 @@
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800" id="statusElement">
                                 {{$details->status}}
-                            </div>
+                                @if($details->status === 'up')
+                                    <span class="text-success">●</span>
+                                @else
+                                    <span class="text-danger">●</span>
+                                @endif
+                                </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-bolt fa-2x text-primary"></i>
@@ -228,21 +244,33 @@
                 dataType: "json",
                 success: function (response) {
                     var maxDataPoints = 20;
-                    var responseTimes = response.map(item => item.response_time).slice(-maxDataPoints);;
-                    var timestamps = response.map(item => new Date(item.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })).slice(-maxDataPoints);;
+                    var responseTimes = response.chartResponses.map(item => item.response_time).slice(-maxDataPoints);
+                    var timestamps = response.chartResponses.map(item => new Date(item.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })).slice(-maxDataPoints);
 
                     myLineChart.data.datasets[0].data = responseTimes;
                     myLineChart.data.labels = timestamps;
                     myLineChart.update();
 
                     updateAverageResponse();
-                },
+
+                    // Update the status element with the current status from the response
+                    document.getElementById('statusElement').textContent = response.currentStatus;
+
+                    // Optional: Change color based on status
+                    if (response.currentStatus === 'UP') {
+                        document.getElementById('statusElement').classList.remove('text-danger');
+                        document.getElementById('statusElement').classList.add('text-success');
+                    } else {
+                        document.getElementById('statusElement').classList.remove('text-success');
+                        document.getElementById('statusElement').classList.add('text-danger');
+                    }
+                    },
 
                 error: function (xhr, status, error) {
                     console.error("Error fetching data:", error);
                 }
             });
-        }, 30000); // Runs every 3000 milliseconds (3 seconds)
+        }, 1000); // Runs every 3000 milliseconds (3 seconds)
 
     });
 </script>

@@ -191,7 +191,10 @@ $monitors = $query->limit($length)
                 $ChartResponses = collect();
     }
     
-     return response()->json($ChartResponses);
+     return response()->json([
+        'chartResponses' => $ChartResponses,
+        'currentStatus' => $details->status
+     ]);
    }
 
    public function MonitorDelete($id)
