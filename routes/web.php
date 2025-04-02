@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/ssl-check', [SslCheckController::class, 'index'])->middleware('premium_middleware')->name('ssl.check');
     Route::post('/ssl-check', [SslCheckController::class, 'check'])->middleware('premium_middleware')->name('ssl.check.domain');
     Route::get('/incidents', [IncidentController::class, 'incidents'])->name('incidents');
+    Route::get('/incidents/fetch', [IncidentController::class, 'fetchIncidents'])->name('incidents.fetch'); // Add this for AJAX
     Route::get('/plan-subscription', [PlanSubscriptionController::class, 'planSubscription'])->name('planSubscription');
 
     Route::post('/dns-check', [DnsController::class, 'checkDnsRecords']);
