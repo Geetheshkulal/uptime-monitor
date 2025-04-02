@@ -258,16 +258,15 @@
                                     <td class="sorting_1">{{ $monitor->url }}</td>
                                     <td>{{ $monitor->type }}{{ $monitor->type === 'port' ? '-' . $monitor->port : '' }}</td>
                                     <td>
-                                        @if ($monitor)
-                                            @if ($monitor->status === 'up')
-                                                <span class="badge badge-success">Up</span>
-                                            @else
-                                                <span class="badge badge-danger">Down</span>
-                                            @endif
+                                        @if ($monitor->paused == 1)
+                                            <span class="badge" style="background-color: purple; color: white;">Paused</span>
+                                        @elseif ($monitor->status === 'up')
+                                            <span class="badge badge-success">Up</span>
                                         @else
                                             <span class="badge badge-danger">Down</span>
                                         @endif
                                     </td>
+                                    
                                     <td>{{ $monitor->created_at->format('Y-m-d') }}</td>
                                     <!-- Latest Responses (Bars) -->
                                     <td>                    
@@ -343,12 +342,17 @@
                         // Append port to type if it exists
                         return data + (row.port ? '-' + row.port : '');
                     }},
-                    { data: 'status', name: 'status', render: function(data) {
-                        // Render status badge (Up/Down)
-                        return data === 'up' ? 
-                            '<span class="badge badge-success">Up</span>' : 
-                            '<span class="badge badge-danger">Down</span>';
-                    }},
+                    { data: null, name: 'status', render: function(data) {
+    if (data.paused === 1) {
+        return '<span class="badge" style="background-color: purple; color: white;">Paused</span>';
+    } else if (data.status === 'up') {
+        return '<span class="badge badge-success">Up</span>';
+    } else {
+        return '<span class="badge badge-danger">Down</span>';
+    }
+}},
+
+
                     { data: 'created_at', name: 'created_at', render: function(data) {
                         // Format the created_at date
                         return new Date(data).toISOString().split('T')[0];
