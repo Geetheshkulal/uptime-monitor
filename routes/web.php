@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->middleware('premium_middleware')->name('add.monitoring');
     
-    Route::get('/monitoring/display/{id}/{type}', [MonitoringController::class, 'MonitoringDisplay'])->name('display.monitoring');
+    Route::get('/monitoring/display/{id}/{type}', [MonitoringController::class, 'MonitoringDisplay'])->middleware('monitor.access')->name('display.monitoring');
     
     Route::get('/monitoring/chart/update/{id}/{type}', [MonitoringController::class, 'MonitoringChartUpdate'])->name('display.chart.update');
 
