@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/monitoring/dashboard/update', [MonitoringController::class, 'MonitoringDashboardUpdate'])->name('monitoring.dashboard.update');
 
 
-    Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->name('add.monitoring');
+    Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->middleware('premium_middleware')->name('add.monitoring');
     
     Route::get('/monitoring/display/{id}/{type}', [MonitoringController::class, 'MonitoringDisplay'])->name('display.monitoring');
     
