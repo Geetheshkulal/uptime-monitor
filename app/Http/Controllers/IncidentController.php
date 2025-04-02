@@ -24,4 +24,19 @@ class IncidentController extends Controller
 
         return view('pages.incidents', compact('incidents'));
     }
+    public function fetchIncidents()
+{
+    $userId = Auth::id();
+
+    // Get the monitor IDs associated with the logged-in user
+    $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
+
+    // Fetch incidents with related monitor data
+    $incidents = Incident::with('monitor')
+        ->whereIn('monitor_id', $userMonitors)
+        ->get();
+
+    return response()->json(['incidents' => $incidents]);
+}
+
 }

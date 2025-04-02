@@ -136,11 +136,13 @@
                                         <th>Duration</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="incidentTableBody">
                                     @foreach ($incidents as $incident)
                                         <tr class="tablerow">
                                             <td data-label="Status">
-                                                @if($incident->status === 'down')
+                                                @if ($incident->monitor->paused == 1)
+                                                    <span class="badge" style="background-color: purple; color: white;">Paused</span>
+                                                @elseif ($incident->status === 'down')
                                                     <span class="badge badge-danger">
                                                         <i class="fas fa-times-circle mr-1"></i> Down
                                                     </span>
@@ -157,18 +159,18 @@
                                                 <small class="d-block text-muted">{{ $incident->monitor->name }}</small>
                                             </td>
                                             <td data-label="Root Cause">{{ $incident->root_cause }}</td>
-                                            <td data-label="Start Time" data-order="{{ $incident->start_timestamp->timestamp }}">
+                                            <td data-label="Start Time">
                                                 {{ $incident->start_timestamp->format('M d, Y h:i A') }}
                                             </td>
-                                            <td data-label="Resolved" data-order="{{ $incident->end_timestamp ? $incident->end_timestamp->timestamp : 0 }}">
-                                                @if($incident->end_timestamp)
+                                            <td data-label="Resolved">
+                                                @if ($incident->end_timestamp)
                                                     {{ $incident->end_timestamp->format('M d, Y h:i A') }}
                                                 @else
                                                     <span class="badge badge-warning">Ongoing</span>
                                                 @endif
                                             </td>
                                             <td data-label="Duration">
-                                                @if($incident->end_timestamp)
+                                                @if ($incident->end_timestamp)
                                                     {{ $incident->start_timestamp->diffForHumans($incident->end_timestamp, true) }}
                                                 @else
                                                     {{ $incident->start_timestamp->diffForHumans(null, true) }}
@@ -177,6 +179,7 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                
                             </table>
                         </div>
                     </div>
@@ -198,4 +201,62 @@
     
    
     @endpush
+    @push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    function fetchIncidents() {
+        $.ajax({
+            url: "{{ route('incidents.fetch') }}",
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                let incidents = response.incidents;
+                let html = '';
+
+                incidents.forEach(function(incident) {
+                    let statusBadge = '';
+
+                    if (incident.monitor.paused === 1) {
+                        statusBadge = '<span class="badge" style="background-color: purple; color: white;">Paused</span>';
+                    } else if (incident.status === 'down') {
+                        statusBadge = '<span class="badge badge-danger"><i class="fas fa-times-circle mr-1"></i> Down</span>';
+                    } else {
+                        statusBadge = '<span class="badge badge-success"><i class="fas fa-check-circle mr-1"></i> Up</span>';
+                    }
+
+                    html += `
+                        <tr class="tablerow">
+                            <td data-label="Status">${statusBadge}</td>
+                            <td data-label="Monitor">
+                                <a href="${incident.monitor.url}" target="_blank" class="text-primary">
+                                    ${incident.monitor.url.substring(0, 30)}
+                                </a>
+                                <small class="d-block text-muted">${incident.monitor.name}</small>
+                            </td>
+                            <td data-label="Root Cause">${incident.root_cause}</td>
+                            <td data-label="Start Time">${new Date(incident.start_timestamp).toLocaleString()}</td>
+                            <td data-label="Resolved">
+                                ${incident.end_timestamp ? new Date(incident.end_timestamp).toLocaleString() : '<span class="badge badge-warning">Ongoing</span>'}
+                            </td>
+                            <td data-label="Duration">
+                                ${incident.end_timestamp ? moment(incident.start_timestamp).from(incident.end_timestamp, true) : moment(incident.start_timestamp).fromNow(true)}
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                $('#incidentTableBody').html(html);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching incidents:", error);
+            }
+        });
+    }
+
+    // Auto-refresh the incidents table every 10 seconds
+    setInterval(fetchIncidents, 10000);
+</script>
+@endpush
+
 @endsection
