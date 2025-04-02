@@ -34,7 +34,7 @@
     </li>
 
     <li class="nav-item {{ request()->routeIs('planSubscription') ? 'active' : '' }}" 
-        style="{{ request()->routeIs('incidents') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        style="{{ request()->routeIs('planSubscription') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
         <a class="nav-link text-white" href="{{ route('planSubscription') }}">
             <i class="fas fa-credit-card"></i>
             <span>Plan & subscription</span>

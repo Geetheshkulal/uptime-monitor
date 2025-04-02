@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Incident;
-use App\Models\Monitor;
+use App\Models\Monitors;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class IncidentController extends Controller
         $userId = Auth::id();
 
         // Get the monitor IDs associated with the logged-in user
-        $userMonitors = Monitor::where('user_id', $userId)->pluck('id');  // Fetch monitor IDs for the logged-in user
+        $userMonitors = Monitors::where('user_id', $userId)->pluck('id');  // Fetch monitor IDs for the logged-in user
 
         // Fetch incidents that belong to the logged-in user's monitors only
         $incidents = Incident::with('monitor') // Load incidents with associated monitors

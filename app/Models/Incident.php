@@ -30,7 +30,7 @@ class Incident extends Model
 
     public function monitor()
     {
-        return $this->belongsTo(Monitor::class, 'monitor_id');
+        return $this->belongsTo(Monitors::class, 'monitor_id');
     }
 
     public function isOngoing()
