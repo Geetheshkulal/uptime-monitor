@@ -407,7 +407,7 @@ private function checkHttp(Monitors $monitor)
             ]);
         }
     }
-}Log::info("Checking Monitor: {$monitor->id} ({$monitor->url})");
+}
     
     public function handle(): void
     {
