@@ -8,10 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class User extends Authenticatable
 {
 
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, LogsActivity;
+
 
     /**
      * The attributes that are mass assignable.
@@ -48,8 +51,15 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'role','status','type']);
+        // Chain fluent methods for configuration options
+    }
     public function monitors()
-{
-    return $this->hasMany(Monitors::class);
-}
+    {
+     return $this->hasMany(Monitors::class);
+    }
 }

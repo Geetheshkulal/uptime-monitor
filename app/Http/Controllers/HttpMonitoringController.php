@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Monitor;
+use App\Models\Monitors;
 use App\Models\HttpResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; 
@@ -24,7 +24,7 @@ class HttpMonitoringController extends Controller
         ]);
 
         // Create a new HTTP monitor entry
-        $monitor = Monitor::create([
+        $monitor = Monitors::create([
             'user_id' => auth()->id(),
             'name' => $request->name,
             'url' => $request->url,
