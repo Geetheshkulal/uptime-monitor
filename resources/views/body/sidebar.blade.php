@@ -1,6 +1,3 @@
-
-
-
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -14,7 +11,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-
+    @role('user')
     <li class="nav-item {{ request()->is('monitoring*') ? 'active' : '' }}" 
         style="{{ request()->is('monitoring*') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
         <a class="nav-link text-white" href="{{ route('monitoring.dashboard') }}">
@@ -62,6 +59,33 @@
         </a>
     </li>
     @endif
+    @endrole
+
+    @role('superadmin')
+    <li class="nav-item {{ request()->routeIs('display.users') ? 'active' : '' }}" 
+        style="{{ request()->routeIs('display.users') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white" href="{{ route('display.users') }}">
+            <i class="fas fa-user"></i>
+            <span>Users</span>
+        </a>
+    </li>
+
+    <li class="nav-item {{ request()->routeIs('display.roles') ? 'active' : '' }}" 
+        style="{{ request()->routeIs('display.roles') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white" href="{{ route('display.roles') }}">
+            <i class="fas fa-user-tag"></i>
+            <span>Roles</span>
+        </a>
+    </li>
+
+    <li class="nav-item {{ request()->routeIs('display.permissions') ? 'active' : '' }}" 
+        style="{{ request()->routeIs('display.permissions') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white" href="{{ route('display.permissions') }}">
+            <i class="fas fa-door-open"></i>
+            <span>Permissions</span>
+        </a>
+    </li>
+    @endrole
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
@@ -71,6 +95,7 @@
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 
+    @role('user')
     <!-- Sidebar Message -->
      @if(auth()->user()->status === 'free')
         <div class="sidebar-card d-none d-lg-flex">
@@ -79,5 +104,5 @@
             <a class="btn btn-success btn-sm" href="{{route('premium.page')}}">Upgrade to Pro!</a>
         </div>
     @endif
-
+    @endrole
 </ul>

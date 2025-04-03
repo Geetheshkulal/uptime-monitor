@@ -274,15 +274,16 @@
                                     <td class="sorting_1">{{ $monitor->url }}</td>
                                     <td>{{ $monitor->type }}{{ $monitor->type === 'port' ? '-' . $monitor->port : '' }}</td>
                                     <td>
-                                        @if ($monitor->paused == 1)
-                                            <span class="badge" style="background-color: purple; color: white;">Paused</span>
-                                        @elseif ($monitor->status === 'up')
-                                            <span class="badge badge-success">Up</span>
+                                        @if ($monitor)
+                                            @if ($monitor->status === 'up')
+                                                <span class="badge badge-success">Up</span>
+                                            @else
+                                                <span class="badge badge-danger">Down</span>
+                                            @endif
                                         @else
                                             <span class="badge badge-danger">Down</span>
                                         @endif
                                     </td>
-                                    
                                     <td>{{ $monitor->created_at->format('Y-m-d') }}</td>
                                     <!-- Latest Responses (Bars) -->
                                     <td>                    
