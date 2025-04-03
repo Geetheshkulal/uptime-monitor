@@ -98,8 +98,7 @@ Route::group(['middleware' => ['role:superadmin']], function () {
 
     Route::get('/admin/display/users', action: [AdminController::class,'DisplayUsers'])->name('display.users');
     Route::get('/admin/display/roles', [AdminController::class,'DisplayRoles'])->name('display.roles');
-    Route::get('/admin/display/permissions', function(){return view('');})->name('display.permissions');
-    
+    Route::get('/admin/display/permissions', [AdminController::class, 'DisplayPermissions'])->name('display.permissions');
     Route::get('/admin/display/user/{id}', action: [AdminController::class,'ShowUser'])->name('show.user');
 
 
@@ -113,6 +112,17 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::get('/admin/delete/role/{id}', [AdminController::class, 'DeleteRole'])->name('delete.role');
     Route::get('/admin/edit/role/{id}', [AdminController::class, 'EditRole'])->name('edit.role');
     Route::put('/admin/update/role/{id}', [AdminController::class, 'UpdateRole'])->name('update.role');
+
+
+    Route::get('admin/add/permission', [AdminController::class, 'AddPermission'])->name('add.permission');
+    Route::post('admin/store/permission', [AdminController::class, 'StorePermission'])->name('store.permission');
+
+
+    Route::get('/admin/delete/permission/{id}', [AdminController::class, 'DeletePermission'])->name('delete.permission');
+
+
+    Route::get('/admin/edit/permissions/{id}', [AdminController::class, 'EditPermission'])->name('edit.permission');
+    Route::put('/admin/update/permissions/{id}', [AdminController::class, 'UpdatePermission'])->name('update.permission');
 
 });
 

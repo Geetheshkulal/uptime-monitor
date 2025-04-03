@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class AdminController extends Controller
@@ -173,4 +174,69 @@ class AdminController extends Controller
                ->with('success', 'Role updated successfully!');
     }
 
+
+    public function DisplayPermissions()
+    {
+        $permissions = Permission::latest()->paginate(10);
+        return view('pages.admin.DisplayPermissions', compact('permissions'));
+    }
+
+    public function AddPermission()
+    {
+        return view('pages.admin.AddPermission');
+    }
+
+    public function StorePermission(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:permissions,name',
+            'group_name' => 'required|string|in:user,role,permission,monitor'
+        ]);
+
+        Permission::create($validated);
+
+        return redirect()->route('display.permissions')
+               ->with('success', 'Permission added successfully!');
+    }
+
+    public function DeletePermission($id)
+    {
+        try {
+            $permission = Permission::findOrFail($id);
+            $permission->delete();
+
+            return redirect()->route('display.permissions')
+                   ->with('success', 'Permission deleted successfully!');
+                   
+        } catch (\Exception $e) {
+            return redirect()->route('display.permissions')
+                   ->with('error', 'Failed to delete permission: ' . $e->getMessage());
+        }
+    }
+
+
+    public function EditPermission($id)
+{
+    $permission = Permission::findOrFail($id);
+    return view('pages.admin.EditPermission', compact('permission'));
+}
+
+public function UpdatePermission(Request $request, $id)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255|unique:permissions,name,'.$id,
+        'group_name' => 'required|string|max:255'
+    ]);
+
+    try {
+        $permission = Permission::findOrFail($id);
+        $permission->update($validated);
+
+        return redirect()->route('display.permissions')
+               ->with('success', 'Permission updated successfully!');
+               
+    } catch (\Exception $e) {
+        return back()->with('error', 'Error updating permission: '.$e->getMessage());
+    }
+}
 }
