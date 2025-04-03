@@ -26,17 +26,31 @@
             .pulse {
                 animation: heartbeat 1s infinite;
             }
-         .dataTables_wrapper {
-     overflow-x: hidden !important;
-}
+    
 
 #dataTable {
     width: 100% !important;
     table-layout: auto;
 }
 
-.dataTables_scrollBody {
-    overflow-x: hidden !important;
+@media (max-width: 992px) {
+    .dataTables_wrapper {
+        overflow-x: auto;
+    }
+    .dataTables_scroll {
+        display: block; /* Ensure it's visible */
+        overflow-x: scroll !important;
+        width: 100%;
+    }
+}
+
+@media (min-width: 993px) {
+    .dataTables_wrapper {
+        overflow-x: hidden !important; /* Prevents any scrolling */
+    }
+    .dataTables_scroll {
+        display: none !important;
+    }
 }
 
     .floating-btn {
@@ -52,8 +66,8 @@
         transform: scale(1.1);
     }
 
-        </style>
-        @endpush
+     </style>
+    @endpush
 
  <style>
   @keyframes rgbGradientBorder {
@@ -102,14 +116,14 @@
                     
                     <!-- Floating Add Button -->
                    @if($totalMonitors>=5 && auth()->user()->status=='free')
-                    <a class=" bg-primary btn btn-secondary position-relative" 
+                    <a class=" bg-primary btn btn-secondary position-relative rounded-pill border-none" 
                         href="{{ route('premium.page') }}"
                         title="Premium feature - Upgrade to unlock">
                             <i class="fas fa-crown fa-sm me-1" style="color: gold; animation: glow 1.5s infinite alternate;"></i>
                             Add New Monitor
                         </a>
                     @else
-                        <a class=" bg-primary btn btn-secondary position-relative" 
+                        <a class=" bg-primary btn btn-secondary  position-relative rounded-pill" 
                         href="{{ route('add.monitoring') }}"
                         title="Free Monitors">
                             Add New Monitor
@@ -322,6 +336,7 @@
     <script src="{{ asset('frontend/assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
     <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
+
     <script>
          var total = document.getElementById('totalMonitors');
          var upCount = document.getElementById('upCount');
@@ -346,14 +361,14 @@
                         return data + (row.port ? '-' + row.port : '');
                     }},
                     { data: null, name: 'status', render: function(data) {
-    if (data.paused === 1) {
-        return '<span class="badge" style="background-color: purple; color: white;">Paused</span>';
-    } else if (data.status === 'up') {
-        return '<span class="badge badge-success">Up</span>';
-    } else {
-        return '<span class="badge badge-danger">Down</span>';
-    }
-}},
+                    if (data.paused === 1) {
+                            return '<span class="badge" style="background-color: purple; color: white;">Paused</span>';
+                         } else if (data.status === 'up') {
+                             return '<span class="badge badge-success">Up</span>';
+                         } else {
+                              return '<span class="badge badge-danger">Down</span>';
+                         }
+                    }},
 
 
                     { data: 'created_at', name: 'created_at', render: function(data) {

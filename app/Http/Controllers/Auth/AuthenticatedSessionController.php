@@ -29,7 +29,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         /** @var User $user */
-    $user = Auth::user(); // Ensure $user is the logged-in user
+        $user = Auth::user(); // Ensure $user is the logged-in user
 
     if ($user instanceof User) {
         $user->update(['last_login_ip' => $request->ip()]);
@@ -40,9 +40,7 @@ class AuthenticatedSessionController extends Controller
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
+   
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
