@@ -27,9 +27,22 @@ class MonitorAccessMiddleware
         // Get the requested monitor ID
         $monitorId = $request->route('id');
 
+        // Check if user is superadmin - grant full access if true
+        if ($user->hasRole('superadmin')) {
+            return $next($request);
+        }
+
+        // Check if monitor belongs to the user
+        $monitorExists = $user->monitors()->where('id', $monitorId)->exists();
+
+        if (!$monitorExists) {
+            return redirect()->route('monitoring.dashboard')
+                ->with('error', 'You do not have access to this monitor.');
+        }
+
         // If user is unpaid, only allow access to the first 5 monitors
         if ($user->status !== 'paid') {
-            $allowedMonitorIds = $user->monitors()->limit(5)->pluck('id')->toArray();
+            $allowedMonitorIds = $user->monitors()->orderBy('id')->limit(5)->pluck('id')->toArray();
 
             if (!in_array($monitorId, $allowedMonitorIds)) {
                 return redirect()->route('premium.page')

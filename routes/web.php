@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\AdminController;
 use GuzzleHttp\Client;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
@@ -51,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/monitoring/dashboard/update', [MonitoringController::class, 'MonitoringDashboardUpdate'])->name('monitoring.dashboard.update');
 
 
-    Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->middleware('premium_middleware')->name('add.monitoring');
+    Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->middleware('monitor.limit')->name('add.monitoring');
     
     Route::get('/monitoring/display/{id}/{type}', [MonitoringController::class, 'MonitoringDisplay'])->middleware('monitor.access')->name('display.monitoring');
     
@@ -89,6 +90,30 @@ Route::middleware('auth')->group(function () {
     Route::get('premium',function(){return view('pages.premium');})->name('premium.page');
 });
 
+
+
+Route::group(['middleware' => ['role:superadmin']], function () {
+    // Routes accessible only by superadmin
+
+    Route::get('/admin/display/users', action: [AdminController::class,'DisplayUsers'])->name('display.users');
+    Route::get('/admin/display/roles', [AdminController::class,'DisplayRoles'])->name('display.roles');
+    Route::get('/admin/display/permissions', function(){return view('');})->name('display.permissions');
+    
+    Route::get('/admin/display/user/{id}', action: [AdminController::class,'ShowUser'])->name('show.user');
+
+
+    Route::get('/admin/edit/user/{id}', [AdminController::class, 'EditUsers'])->name('edit.user');
+    Route::put('/admin/edit/user/{id}', [AdminController::class, 'UpdateUsers'])->name('update.user');
+    Route::delete('/admin/delete/user/{id}', [AdminController::class, 'DeleteUser'])->name('delete.user');
+
+    Route::get('/admin/add/roles', [AdminController::class, 'AddRole'])->name('add.role');
+    Route::post('/roles', [AdminController::class, 'StoreRole'])->name('store.role');
+
+    Route::get('/admin/delete/role/{id}', [AdminController::class, 'DeleteRole'])->name('delete.role');
+    Route::get('/admin/edit/role/{id}', [AdminController::class, 'EditRole'])->name('edit.role');
+    Route::put('/admin/update/role/{id}', [AdminController::class, 'UpdateRole'])->name('update.role');
+
+});
 
 require __DIR__.'/auth.php';
 
