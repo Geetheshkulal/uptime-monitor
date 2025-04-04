@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Activitylog\Models\Activity;
+
 
 class AdminController extends Controller
 {
@@ -239,4 +241,10 @@ public function UpdatePermission(Request $request, $id)
         return back()->with('error', 'Error updating permission: '.$e->getMessage());
     }
 }
+    public function DisplayActivity()
+    {
+        $logs = Activity::latest()->get(); // Fetch all activity logs
+        return view('pages.admin.DisplayActivity', compact('logs'));
+    }
+
 }

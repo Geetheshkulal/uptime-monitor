@@ -99,6 +99,9 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::get('/admin/display/users', action: [AdminController::class,'DisplayUsers'])->name('display.users');
     Route::get('/admin/display/roles', [AdminController::class,'DisplayRoles'])->name('display.roles');
     Route::get('/admin/display/permissions', [AdminController::class, 'DisplayPermissions'])->name('display.permissions');
+    Route::get('/admin/display/permissions', function(){return view('');})->name('display.permissions');
+    Route::get('/admin/display/activity', [AdminController::class,'DisplayActivity'])->name('display.activity');
+    
     Route::get('/admin/display/user/{id}', action: [AdminController::class,'ShowUser'])->name('show.user');
 
 
