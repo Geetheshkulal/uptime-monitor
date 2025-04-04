@@ -7,9 +7,11 @@
             <div class="col-12">
                 <div class="page-title-box d-flex align-items-center justify-content-between">
                     <h4 class="mb-0">Edit Role</h4>
-                    <a href="{{ route('display.roles') }}" class="btn btn-secondary btn-sm">
-                        <i class="fas fa-arrow-left"></i> Back
-                    </a>
+                    <div>
+                        <a href="{{ route('display.roles') }}" class="btn btn-secondary btn-sm m-1">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
