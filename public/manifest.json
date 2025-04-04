@@ -1,15 +1,15 @@
 {
     "name": "CheckMySite",
-    "short_name": "",
+    "short_name": "LPT",
     "start_url": "/",
     "scope": "/",
     "background_color": "#6777ef",
-    "description": "",
+    "description": "CheckMySite",
     "display": "fullscreen",
     "theme_color": "#6777ef",
     "icons": [
         {
-            "src": "build/assets/mainlogo.png",
+            "src": "mainlogo.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
