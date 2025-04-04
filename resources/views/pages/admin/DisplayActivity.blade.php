@@ -13,14 +13,6 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                @can('create users')
-                <a class="btn btn-primary" href="{{ route('users.create') }}">
-                    <i class="fas fa-plus fa-sm"></i> Add User
-                </a>
-                @endcan
-            </div>
-
             <!-- Activity Log Table -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
