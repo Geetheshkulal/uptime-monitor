@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('role')->default('user');
             $table->string('status')->default('free');
             $table->string('password');
             $table->timestamp('created_at')->nullable();
