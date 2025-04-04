@@ -18,6 +18,11 @@
 @endpush
 
 <div class="page-content">
+    <a href="{{ route('display.roles') }}" class="btn btn-secondary btn-sm ">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+
+    
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
