@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 @endpush
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
 </head>
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -111,7 +113,7 @@
 
                 <!-- Page Heading -->
             
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <div data-aos="fade-up" class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Overview</h1>
                     
                     <!-- Floating Add Button -->
@@ -132,7 +134,7 @@
                 </div>
 
                 <!-- Content Row -->
-                <div class="row">
+                <div data-aos="fade-up" class="row">
 
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
@@ -214,12 +216,12 @@
                     </div>
                 </div>
 
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <div data-aos="fade-up" class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">My Monitors</h1>
                 </div>
 <!-- Premium Alert for Free Users with More Monitors -->
 @if(auth()->user()->status === 'free' && $hasMoreMonitors)
-    <div class="premium-alert text-center mb-4 p-4" style="
+    <div data-aos="fade-up" class="premium-alert text-center mb-4 p-4" style="
         background: linear-gradient(180deg, blue,lightblue);
         color: white;
         border-radius: 12px;
@@ -252,7 +254,7 @@
 @endif
 
                 <!-- Data Table -->
-                <div class="card-body">
+                <div data-aos="fade-up" class="card-body">
                     <div class="table-responsive">
                         <table class="table" id="dataTable" width="100%" cellspacing="0">
                             <thead>
@@ -328,6 +330,16 @@
         </div>
         <!-- End of Content Wrapper -->
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <script>
+        AOS.init({
+            duration: 1000, // Animation duration (1 second)
+            easing: 'ease-in-out',
+            once: true // Only animate once
+        });
+    </script>
 
     <!-- Scripts -->
     @push('scripts')
