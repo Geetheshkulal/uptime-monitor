@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 
 class AdminController extends Controller
@@ -14,8 +16,53 @@ class AdminController extends Controller
     /**
      * Display all users in the admin panel with pagination
      */
+    public function storeUser(Request $request)
+{
+    // Validate input
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:3',
+        'phone' => 'nullable|string',
+        'role' => 'required|exists:roles,id',  // Ensure role exists
+        'status' => 'required|in:free,paid',
+        'premium_end_date' => 'nullable|date'
+    ]);
+
+    try {
+        // Create user
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'phone' => $validated['phone'] ?? null,
+            'status' => $validated['status'],
+            'premium_end_date' => $validated['premium_end_date'] ?? null,
+            'last_login_ip' => $request->ip()
+        ]);
+
+        // Find role and attach to user
+        $role = Role::find($validated['role']);
+        if ($role) {
+            $user->roles()->attach($role->id);
+        } else {
+            Log::warning("Role not found: " . $validated['role']);
+        }
+
+        Log::info("User created successfully: ", $user->toArray());
+
+        return redirect()->route('display.users')->with('success', 'User created successfully');
+    } catch (\Exception $e) {
+        Log::error("User creation error: " . $e->getMessage());
+
+        return back()->with('error', 'User creation failed. Please try again.');
+    }
+}
+
     public function DisplayUsers(Request $request)
     {
+        $roles = Role::all();
+
         // Basic search functionality
         $search = $request->input('search');
         
@@ -28,7 +75,7 @@ class AdminController extends Controller
                     ->orderBy('name')
                     ->paginate(10); // 10 users per page
 
-        return view('pages.admin.DisplayUsers', compact('users'));
+        return view('pages.admin.DisplayUsers', compact('users','roles'));
     }
 
     public function ShowUser($id)
@@ -108,7 +155,7 @@ class AdminController extends Controller
             
         } catch (\Exception $e) {
             // Log error and show friendly message
-            \Log::error('Error displaying roles: ' . $e->getMessage());
+            Log::error('Error displaying roles: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to load roles. Please try again.');
         }
     }
