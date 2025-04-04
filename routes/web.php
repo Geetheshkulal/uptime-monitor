@@ -101,7 +101,8 @@ Route::group(['middleware' => ['role:superadmin']], function () {
     Route::get('/admin/display/permissions', [AdminController::class, 'DisplayPermissions'])->name('display.permissions');
     Route::get('/admin/display/user/{id}', action: [AdminController::class,'ShowUser'])->name('show.user');
 
-
+    // Route::get('/admin/users', [AdminController::class, 'AddUser'])->name('add.user.form');
+    Route::post('/admin/add/users', [AdminController::class, 'storeUser'])->name('add.user');
     Route::get('/admin/edit/user/{id}', [AdminController::class, 'EditUsers'])->name('edit.user');
     Route::put('/admin/edit/user/{id}', [AdminController::class, 'UpdateUsers'])->name('update.user');
     Route::delete('/admin/delete/user/{id}', [AdminController::class, 'DeleteUser'])->name('delete.user');
