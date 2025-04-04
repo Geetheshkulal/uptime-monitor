@@ -31,6 +31,18 @@
     <title>@yield('title', 'CheckMySite')</title>
     <link rel="manifest" href="{{ asset('/manifest.json') }}">
     <meta name="theme-color" content="#6777ef">
+    <link rel="apple-touch-icon" href="{{ asset('mainlogo.png') }}">
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(function (registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(function (error) {
+                console.error('Service Worker registration failed:', error);
+            });
+    }
+</script>
     <!-- Custom fonts for this template-->
     <link href="{{asset('frontend/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
