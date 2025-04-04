@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Spatie\Activitylog\Models\Activity;
+
 
 class AdminController extends Controller
 {
@@ -171,6 +173,12 @@ class AdminController extends Controller
 
         return redirect()->route('display.roles')
                ->with('success', 'Role updated successfully!');
+    }
+
+    public function DisplayActivity()
+    {
+        $logs = Activity::latest()->get(); // Fetch all activity logs
+        return view('pages.admin.DisplayActivity', compact('logs'));
     }
 
 }

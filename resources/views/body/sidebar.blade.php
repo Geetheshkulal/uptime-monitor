@@ -85,6 +85,14 @@
             <span>Permissions</span>
         </a>
     </li>
+
+    <li class="nav-item {{ request()->routeIs('display.activity') ? 'active' : '' }}" 
+        style="{{ request()->routeIs('display.activity') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white" href="{{ route('display.activity') }}">
+            <i class="fas fa-chart-line"></i>
+            <span>Activity Log</span>
+        </a>
+    </li>
     @endrole
 
     <!-- Divider -->
