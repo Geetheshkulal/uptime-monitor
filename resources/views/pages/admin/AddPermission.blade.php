@@ -44,6 +44,7 @@
                                     <option value="role">Role</option>
                                     <option value="permission">Permission</option>
                                     <option value="monitor">Monitor</option>
+                                    <option value="activity">Activity</option>
                                 </select>
                                 @error('group_name')
                                     <div class="invalid-feedback">{{ $message }}</div>

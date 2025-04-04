@@ -102,7 +102,7 @@ class AdminController extends Controller
     {
         try {
             // Get paginated roles (10 per page)
-            $roles = Role::orderBy('name')->paginate(10);
+            $roles = Role::orderBy('name')->get();
             
             return view('pages.admin.DisplayRoles', compact('roles'));
             
@@ -179,7 +179,7 @@ class AdminController extends Controller
 
     public function DisplayPermissions()
     {
-        $permissions = Permission::latest()->paginate(10);
+        $permissions = Permission::latest()->get();
         return view('pages.admin.DisplayPermissions', compact('permissions'));
     }
 
@@ -192,7 +192,7 @@ class AdminController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:permissions,name',
-            'group_name' => 'required|string|in:user,role,permission,monitor'
+            'group_name' => 'required|string|in:user,role,permission,monitor,activity'
         ]);
 
         Permission::create($validated);
@@ -218,33 +218,69 @@ class AdminController extends Controller
 
 
     public function EditPermission($id)
-{
-    $permission = Permission::findOrFail($id);
-    return view('pages.admin.EditPermission', compact('permission'));
-}
-
-public function UpdatePermission(Request $request, $id)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255|unique:permissions,name,'.$id,
-        'group_name' => 'required|string|max:255'
-    ]);
-
-    try {
+    {
         $permission = Permission::findOrFail($id);
-        $permission->update($validated);
-
-        return redirect()->route('display.permissions')
-               ->with('success', 'Permission updated successfully!');
-               
-    } catch (\Exception $e) {
-        return back()->with('error', 'Error updating permission: '.$e->getMessage());
+        return view('pages.admin.EditPermission', compact('permission'));
     }
-}
+
+    public function UpdatePermission(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:permissions,name,'.$id,
+            'group_name' => 'required|string|max:255'
+        ]);
+
+        try {
+            $permission = Permission::findOrFail($id);
+            $permission->update($validated);
+
+            return redirect()->route('display.permissions')
+                ->with('success', 'Permission updated successfully!');
+                
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error updating permission: '.$e->getMessage());
+        }
+    }
     public function DisplayActivity()
     {
         $logs = Activity::latest()->get(); // Fetch all activity logs
         return view('pages.admin.DisplayActivity', compact('logs'));
     }
 
+
+    public function EditRolePermissions($id)
+    {
+        $role = Role::findOrFail($id);
+        $permission_groups = Permission::select('group_name')->groupBy('group_name')->get();
+        
+        // Get all permissions grouped by group_name
+        $groupedPermissions = [];
+        foreach ($permission_groups as $group) {
+            $groupedPermissions[$group->group_name] = Permission::where('group_name', $group->group_name)->get();
+        }    
+        
+        return view('pages.admin.EditRolePermissions', compact('role', 'permission_groups', 'groupedPermissions'));
+    }
+
+    
+    public function UpdateRolePermissions(Request $request, $id)
+    {
+        $role = Role::findOrFail($id);
+        
+        $request->validate([
+            'permission' => 'nullable|array',
+            'permission.*' => 'exists:permissions,id'
+        ]);
+
+        try {
+            $permissions = $request->permission ? Permission::whereIn('id', $request->permission)->get() : [];
+            $role->syncPermissions($permissions);
+
+            return redirect()->route('roles.index')
+                   ->with('success', 'Permissions updated successfully!');
+                   
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error updating permissions: '.$e->getMessage());
+        }
+    }
 }
