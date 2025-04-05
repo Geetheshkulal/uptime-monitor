@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <!-- Styling -->
 <style>
     body {
@@ -24,6 +23,14 @@
 </style>
 
 <div class="container my-5">
+    <!-- Right aligned button -->
+    <div class="d-flex justify-content-end">
+        <a href="{{ route('ssl.history') }}" class="btn btn-outline-secondary rounded-pill mt-3 shadow-sm">
+            📜 View SSL Check History
+        </a>
+    </div>
+
+    
     <div class="row justify-content-center">
         <div class="col-lg-6 col-md-8">
             <div class="card shadow-lg border-0 rounded-4">
@@ -57,6 +64,8 @@
                             <input type="url" id="domain" name="domain" class="form-control form-control-lg rounded-pill"
                                 placeholder="https://example.com" required>
                         </div>
+
+                        <!-- Submit Buttons -->
                         <button type="submit" id="submitButton" class="btn btn-primary btn-lg w-100 rounded-pill shadow">
                             🔍 Check SSL Expiry
                         </button>
@@ -64,6 +73,9 @@
                             <span class="spinner-border spinner-border-sm me-2"></span>
                             Loading...
                         </button>
+
+                        <!-- View History Button -->
+                      
                     </form>
 
                     <!-- SSL Details -->
@@ -77,11 +89,12 @@
                                     <li class="list-group-item">
                                         <strong>🛡 Status:</strong> 
                                         <span 
-                                            {{ session('ssl_details')['days_remaining'] <= 0 ? 'bg-danger' : 
-                                               (session('ssl_details')['days_remaining'] <= 30 ? 'bg-warning' : 'bg-success') }}">
+                                            class="badge 
+                                                {{ session('ssl_details')['days_remaining'] <= 0 ? 'bg-danger' : 
+                                                   (session('ssl_details')['days_remaining'] <= 30 ? 'bg-warning text-dark' : 'bg-success') }}">
                                             {{ session('ssl_details')['status'] }}
                                         </span>
-                                </li>
+                                    </li>
                                     <li class="list-group-item bg-light">
                                         <strong>🌍 Domain:</strong> {{ session('ssl_details')['domain'] }}
                                     </li>
@@ -93,7 +106,7 @@
                                     </li>
                                     <li class="list-group-item">
                                         <strong>⏳ Valid To:</strong> 
-                                        <span
+                                        <span class="badge 
                                             {{ session('ssl_details')['days_remaining'] < 10 ? 'bg-danger' : 'bg-success' }}">
                                             {{ session('ssl_details')['valid_to'] }} 
                                             ({{ session('ssl_details')['days_remaining'] }} days left)
@@ -111,10 +124,10 @@
 </div>
 
 <script>
-    document.getElementById('sslCheckForm').addEventListener('submit',function(){
+    document.getElementById('sslCheckForm').addEventListener('submit', function() {
         document.getElementById('submitButton').style.display = 'none';
         document.getElementById('loadingButton').style.display = 'block';
-    })
-    </script>
+    });
+</script>
 
 @endsection
