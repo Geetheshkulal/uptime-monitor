@@ -26,7 +26,7 @@
                                     <th>ID</th>
                                     <th>Log Name</th>
                                     <th>Description</th>
-                                    <th>Subject Type</th>
+                                    {{-- <th>Subject Type</th> --}}
                                     <th>Event</th>
                                     <th>Causer Type</th>
                                     <th>User Id</th>
@@ -41,7 +41,7 @@
                                     <td>{{ $log->id }}</td>
                                     <td>{{ $log->log_name }}</td>
                                     <td>{{ $log->description }}</td>
-                                    <td>{{ $log->subject_type }}</td>
+                                    {{-- <td>{{ $log->subject_type }}</td> --}}
                                     <td>{{ $log->event }}</td>
                                     <td>{{ $log->causer_type }}</td>
                                     <td>{{ $log->causer_id }}</td>
