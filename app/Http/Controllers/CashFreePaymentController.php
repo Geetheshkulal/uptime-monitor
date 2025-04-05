@@ -72,7 +72,7 @@ class CashFreePaymentController extends Controller
           return redirect()->route('login')->with('error', 'You must be logged in to complete the payment.');
       }
   
-      Payment::create([
+      $payment=Payment::create([
           'status' => 'paid',
           'user_id' => $user->id,
           'amount' => 399, // Replace with actual amount from CashFree API
@@ -89,6 +89,20 @@ class CashFreePaymentController extends Controller
           'status' => 'paid',
           'premium_end_date' => now()->addMonth(),
       ]);
+
+      activity()
+      ->performedOn($payment)
+      ->causedBy(auth()->user())
+      ->event('payment-success')
+      ->withProperties([
+          'user_name' => $user->name,
+          'email' => $user->email,
+          'amount' => $payment->amount,
+          'transaction_id' => $payment->transaction_id,
+          'payment_type' => $payment->payment_type,
+          'premium_until' => $user->premium_end_date,
+      ])
+      ->log('User completed a premium payment successfully');
   
       return redirect()->route('monitoring.dashboard')->with('success', 'Payment successful! Features unlocked.');
 

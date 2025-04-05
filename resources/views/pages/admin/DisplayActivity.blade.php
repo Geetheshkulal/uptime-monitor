@@ -45,7 +45,7 @@
                                     <td>{{ $log->event }}</td>
                                     <td>{{ $log->causer_type }}</td>
                                     <td>{{ $log->causer_id }}</td>
-                                    <td>{{ $log->causer ? $log->causer->name : 'System' }}</td>
+                                    <td>{{ $log->causer->name}}</td>
                                     <td>{{ $log->created_at->format('d M Y, h:i A') }}</td>
                                     <td>
                                         <button class="btn btn-success btn-sm" onclick="showPropertiesModal({{ json_encode($log->properties) }})">

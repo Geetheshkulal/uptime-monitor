@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
+
 class ProfileController extends Controller
 {
     /**
@@ -16,6 +20,18 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user(); 
+
+        activity()
+        ->causedBy($user)
+        ->performedOn($user)
+        ->event('viewed')
+        ->withProperties([
+            'name' => $user->name,
+            'email' => $user->email,
+        ])
+        ->log('Viewed profile edit form');
+
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
@@ -26,13 +42,37 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $originalData = $user->getOriginal();
+
+        $validated = $request->validated();
+
+        $user->fill($validated);
+
+        // $request->user()->fill($request->validated());
+
+        $changes = [];
+        foreach ($validated as $key => $newValue) {
+            if ($user->isDirty($key)) {
+                $changes[$key] = [
+                    'old' => $originalData[$key] ?? null,
+                    'new' => $newValue
+                ];
+            }
+        }
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
 
         $request->user()->save();
+
+        activity()
+        ->performedOn($user)
+        ->causedBy($user)
+        ->event('updated profile')
+        ->withProperties(['changes' => $changes])
+        ->log('Updated profile');
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -47,6 +87,16 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        activity()
+        ->performedOn($user)
+        ->causedBy($user)
+        ->event('account deleted')
+        ->withProperties([
+            'name' => $user->name,
+            'email' => $user->email,
+        ])
+        ->log('Deleted account');
 
         Auth::logout();
 

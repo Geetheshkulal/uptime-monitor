@@ -38,6 +38,18 @@ class HttpMonitoringController extends Controller
             'updated_at' => now(),
         ]);
 
+        activity()
+        ->performedOn($monitor)
+        ->causedBy(auth()->user())
+        ->event('created')
+        ->withProperties([
+            'user_name' => auth()->user()->name,
+            'monitor_name' => $monitor->name,
+            'monitor_url' => $monitor->url,
+            'monitor_type' => $monitor->type
+        ])
+        ->log("Created {$monitor->type} monitor");
+
         Log::info('HTTP Monitor Created: ', $monitor->toArray());
 
         return redirect()->route('monitoring.dashboard')->with('success', 'HTTP Monitor added successfully');

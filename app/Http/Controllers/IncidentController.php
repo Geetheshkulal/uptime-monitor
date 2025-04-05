@@ -21,6 +21,19 @@ class IncidentController extends Controller
         $incidents = Incident::with('monitor') // Load incidents with associated monitors
             ->whereIn('monitor_id', $userMonitors) // Filter incidents by the monitor IDs of the logged-in user
             ->get();
+        
+        $tempMonitor= Monitors::where('user_id', $userId)->first();
+
+            activity()
+            ->performedOn($tempMonitor)
+            ->causedBy(auth()->user())
+            ->event('visited')
+            ->withProperties([
+                'name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+                'page' => 'Incidents Page'
+            ])
+            ->log('Visited the incidents page');
 
         return view('pages.incidents', compact('incidents'));
     }
