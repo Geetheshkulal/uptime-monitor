@@ -137,6 +137,11 @@
                                     </tr>
                                 </thead>
                                 <tbody id="incidentTableBody">
+                                    @if ($incidents->isEmpty())
+                                        <tr>
+                                            <td colspan="6" class=" text-center text-muted">No incidents are available</td>
+                                        </tr>
+                                    @else
                                     @foreach ($incidents as $incident)
                                         <tr class="tablerow">
                                             <td data-label="Status">
@@ -178,6 +183,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
+                                    @endif
                                 </tbody>
                                 
                             </table>
@@ -213,7 +219,17 @@
             success: function(response) {
                 let incidents = response.incidents;
                 let html = '';
-
+                
+            if (incidents.length === 0) {
+                // Display "No incidents are available" message if the incidents array is empty
+                html = `
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No incidents are available</td>
+                    </tr>
+                `;
+            }
+            else 
+            {
                 incidents.forEach(function(incident) {
                     let statusBadge = '';
 
@@ -245,7 +261,7 @@
                         </tr>
                     `;
                 });
-
+            }
                 $('#incidentTableBody').html(html);
             },
             error: function(xhr, status, error) {
