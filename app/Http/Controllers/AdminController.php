@@ -61,7 +61,7 @@ class AdminController extends Controller
 
     public function DisplayUsers(Request $request)
     {
-        $roles = Role::all();
+        $roles = Role::whereNot('name','superadmin')->get();
 
         // Basic search functionality
         $search = $request->input('search');
@@ -329,5 +329,9 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Error updating permissions: '.$e->getMessage());
         }
+    }
+
+    public function AdminDashboard(){
+        return view('pages.admin.AdminDashboard');
     }
 }

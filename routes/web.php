@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/monitoring/dashboard', [MonitoringController::class, 'MonitoringDashboard'])->name('monitoring.dashboard');
+    Route::get('/monitoring/dashboard', [MonitoringController::class, 'MonitoringDashboard'])->middleware('role:user')->name('monitoring.dashboard');
     // notification
     Route::get('/notifications/read', function() {
         auth()->user()->unreadNotifications->markAsRead();
@@ -96,6 +96,7 @@ Route::middleware('auth')->group(function () {
 Route::group(['middleware' => ['auth']], function () {
     // Routes accessible only by superadmin
 
+    Route::get('/admin/dashboard',[AdminController::class,'AdminDashboard'])->name('admin.dashboard');
     Route::get('/admin/display/users', action: [AdminController::class,'DisplayUsers'])->middleware('permission:see.users')->name('display.users');
     Route::get('/admin/display/roles', [AdminController::class,'DisplayRoles'])->middleware('permission:see.roles')->name('display.roles');
     Route::get('/admin/display/permissions', [AdminController::class, 'DisplayPermissions'])->middleware('role:superadmin')->name('display.permissions');

@@ -105,7 +105,12 @@
       @if (Route::has('login'))      
       <div class="d-flex">
       @auth 
-      <a href="{{ url('/monitoring/dashboard') }}" class="btn btn-primary">Dashboard</a>
+        @hasrole('superadmin')
+          <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary">Dashboard</a>
+        @else
+          <a href="{{ url('/monitoring/dashboard') }}" class="btn btn-primary">Dashboard</a>
+        @endhasrole
+      
       @else  
       <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
       &nbsp;
@@ -131,14 +136,20 @@
             {{-- <a href="{{ route('login') }}" class="btn btn-light btn-lg text-primary fw-bold">Start Monitoring</a>
              --}}
              @if(auth()->check())
-    <a href="{{ route('monitoring.dashboard') }}" class="btn btn-light btn-lg text-primary fw-bold">
-        Start Monitoring
-    </a>
-@else
-    <a href="{{ route('login') }}" class="btn btn-light btn-lg text-primary fw-bold">
-        Start Monitoring
-    </a>
-@endif
+                @hasrole('superadmin')
+                  <a href="{{ route('admin.dashboard') }}" class="btn btn-light btn-lg text-primary fw-bold">
+                      Start Monitoring
+                  </a>
+                @else
+                  <a href="{{ route('monitoring.dashboard') }}" class="btn btn-light btn-lg text-primary fw-bold">
+                      Start Monitoring
+                  </a>
+                @endhasrole
+            @else
+                <a href="{{ route('login') }}" class="btn btn-light btn-lg text-primary fw-bold">
+                    Start Monitoring
+                </a>
+            @endif
 
           </div>
         </div>

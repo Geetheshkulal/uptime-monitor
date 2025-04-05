@@ -122,15 +122,16 @@
                                 <input type="password" class="form-control" id="password" name="password" required>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="phone">Phone Number</label>
                                 <input type="text" class="form-control" id="phone" name="phone">
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="role">User Role*</label>
@@ -142,9 +143,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="row">
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="status">Account Status*</label>
@@ -154,6 +153,9 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="premium_end_date">Premium End Date</label>
