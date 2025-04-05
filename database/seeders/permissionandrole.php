@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Permission;
 
 
 
-class superadminpermissions extends Seeder
+class permissionandrole extends Seeder
 {
     /**
      * Run the database seeds.
@@ -34,10 +34,10 @@ class superadminpermissions extends Seeder
             'add.role' => 'role',
             
             // Permission permissions
-            'see.permissions' => 'permission',
-            'edit.permission' => 'permission',
-            'delete.permission' => 'permission',
-            'add.permission' => 'permission',
+            // 'see.permissions' => 'permission',
+            // 'edit.permission' => 'permission',
+            // 'delete.permission' => 'permission',
+            // 'add.permission' => 'permission',
             
             // Monitor permissions
             'see.monitors' => 'monitor',
@@ -55,18 +55,6 @@ class superadminpermissions extends Seeder
             ]);
         }
 
-        // Create superadmin role and assign all permissions
-        $superadmin = Role::where(['name' => 'superadmin'])->first();
-        $superadmin->givePermissionTo(Permission::all());
-
-        // Create other roles if needed (example)
-        $admin = Role::create(['name' => 'admin']);
-        $admin->givePermissionTo([
-            'see.users',
-            'see.roles',
-            'see.permissions',
-            'see.monitors',
-            'see.activity'
-        ]);
+        // Create superadmin role and assign all permissions       
     }
 }

@@ -14,7 +14,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    @role('user')
+    @hasrole('user')
     <li class="nav-item {{ request()->is('monitoring*') ? 'active' : '' }}" 
         style="{{ request()->is('monitoring*') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
         <a class="nav-link text-white" href="{{ route('monitoring.dashboard') }}">
@@ -62,7 +62,7 @@
         </a>
     </li>
     @endif
-    @endrole
+    @endhasrole
 
     @can('see.users')
     <li class="nav-item {{ request()->routeIs('display.users') ? 'active' : '' }}" 
@@ -84,7 +84,7 @@
     </li>
     @endcan
 
-    @can('see.permissions')
+    @hasrole('superadmin')
     <li class="nav-item {{ request()->routeIs('display.permissions') ? 'active' : '' }}" 
         style="{{ request()->routeIs('display.permissions') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
         <a class="nav-link text-white" href="{{ route('display.permissions') }}">
@@ -92,7 +92,7 @@
             <span>Permissions</span>
         </a>
     </li>
-    @endcan
+    @endhasrole
 
     @can('see.activity')
     <li class="nav-item {{ request()->routeIs('display.activity') ? 'active' : '' }}" 

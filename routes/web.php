@@ -98,7 +98,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/admin/display/users', action: [AdminController::class,'DisplayUsers'])->middleware('permission:see.users')->name('display.users');
     Route::get('/admin/display/roles', [AdminController::class,'DisplayRoles'])->middleware('permission:see.roles')->name('display.roles');
-    Route::get('/admin/display/permissions', [AdminController::class, 'DisplayPermissions'])->middleware('permission:see.permissions')->name('display.permissions');
+    Route::get('/admin/display/permissions', [AdminController::class, 'DisplayPermissions'])->middleware('role:superadmin')->name('display.permissions');
     Route::get('/admin/display/user/{id}', action: [AdminController::class,'ShowUser'])->middleware('permission:see.users')->name('show.user');
 
     // Route::get('/admin/users', [AdminController::class, 'AddUser'])->name('add.user.form');
@@ -115,16 +115,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/admin/update/role/{id}', [AdminController::class, 'UpdateRole'])->middleware('permission:edit.role')->name('update.role');
 
 
-    Route::get('admin/add/permission', [AdminController::class, 'AddPermission'])->middleware('permission:add.permission')->name('add.permission');
-    Route::post('admin/store/permission', [AdminController::class, 'StorePermission'])->middleware('permission:add.permission')->name('store.permission');
+    Route::get('admin/add/permission', [AdminController::class, 'AddPermission'])->middleware('role:superadmin')->name('add.permission');
+    Route::post('admin/store/permission', [AdminController::class, 'StorePermission'])->middleware('role:superadmin')->name('store.permission');
 
-    Route::get('/admin/delete/permission/{id}', [AdminController::class, 'DeletePermission'])->middleware('permission:delete.permission')->name('delete.permission');
+    Route::get('/admin/delete/permission/{id}', [AdminController::class, 'DeletePermission'])->middleware('role:superadmin')->name('delete.permission');
 
     Route::get('/admin/display/activity', [AdminController::class,'DisplayActivity'])->middleware('permission:see.activity')->name('display.activity');
 
     
-    Route::get('/admin/edit/permissions/{id}', [AdminController::class, 'EditPermission'])->middleware('permission:edit.permission')->name('edit.permission');
-    Route::put('/admin/update/permissions/{id}', [AdminController::class, 'UpdatePermission'])->middleware('permission:edit.permission')->name('update.permission');
+    Route::get('/admin/edit/permissions/{id}', [AdminController::class, 'EditPermission'])->middleware('role:superadmin')->name('edit.permission');
+    Route::put('/admin/update/permissions/{id}', [AdminController::class, 'UpdatePermission'])->middleware('role:superadmin')->name('update.permission');
 
     Route::get('/roles/{id}/permissions', [AdminController::class, 'EditRolePermissions'])->middleware('permission:edit.role.permissions')->name('edit.role.permissions');
     Route::post('/roles/{id}/permissions', [AdminController::class, 'UpdateRolePermissions'])->middleware('permission:edit.role.permissions')->name('update.role.permissions');

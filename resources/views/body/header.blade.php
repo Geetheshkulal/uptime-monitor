@@ -168,22 +168,6 @@ style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitori
 </a> --}}
 
 
-@if (!request()->is('monitoring/dashboard') && !request()->is('incidents') && !request()->is('ssl-check') && !request()->is('profile'))
-    <a 
-        href="javascript:void(0)" 
-        class="btn btn-primary d-flex align-items-center justify-content-center back-button" 
-        style="width: 40px; height: 40px; border-radius: 50%;"
-        onclick="
-            const currentUrl = window.location.pathname;
-            if (currentUrl === '/monitoring/add') {
-                window.location.href = '/monitoring/dashboard';
-            } else if (currentUrl.startsWith('/monitoring/display')) {
-                window.location.href = '/monitoring/dashboard';
-            }
-        ">
-        <i class="fas fa-arrow-left"></i>
-    </a>
-@endif
 
 
 <!-- Scrolling Text -->
@@ -343,16 +327,6 @@ checkbox.addEventListener("change", () => {
     }
 });
 
-document.querySelector('.back-button').addEventListener('click', function (e) {
-    const currentUrl = window.location.pathname;
 
-    if (currentUrl === '/monitoring/dashboard' || currentUrl === '/incidents' || || currentUrl === '/profile' || currentUrl === '/ssl-check') {
-        e.preventDefault(); // Disable back button on dashboard
-    } else if (currentUrl === '/monitoring/add') {
-        window.location.href = '/monitoring/dashboard'; // Go to dashboard
-    } else if (currentUrl.startsWith('/monitoring/display')) {
-        window.location.href = '/monitoring/dashboard'; // Go to add page
-    }
-});
 
 </script>

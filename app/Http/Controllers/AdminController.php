@@ -149,7 +149,7 @@ class AdminController extends Controller
     {
         try {
             // Get paginated roles (10 per page)
-            $roles = Role::orderBy('name')->get();
+            $roles = Role::whereNot('name', 'superadmin')->orderBy('name')->get();
             
             return view('pages.admin.DisplayRoles', compact('roles'));
             
