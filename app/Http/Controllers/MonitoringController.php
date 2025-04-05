@@ -120,7 +120,7 @@ class MonitoringController extends Controller
     
  public function AddMonitoring()
  {
-
+    
     return view('pages.Add_Monitor');
   }
    public function MonitoringDisplay($id, $type)
@@ -156,6 +156,18 @@ class MonitoringController extends Controller
         default:
                 $ChartResponses = collect();
     }
+
+    activity()
+    ->performedOn($details)
+    ->causedBy(auth()->user())
+    ->event('viewed specific monitor')
+    ->withProperties([
+        'monitor_name' => $details->name,
+        'monitor_type' => $type,
+        'user_id' => auth()->id(),
+        'ip' => request()->ip(),
+    ])
+    ->log("User viewed {$type} monitor dashboard");
     
      return view('pages.DisplayMonitoring', compact('details','ChartResponses','type'));
    }
@@ -210,11 +222,25 @@ class MonitoringController extends Controller
 
     $DeleteMonitor->delete();
 
+    activity()
+    ->performedOn($DeleteMonitor)
+    ->causedBy(auth()->user())
+    ->event('monitor deleted')
+    ->withProperties([
+        'monitor_name' => $DeleteMonitor->name,
+        'monitor_type' => $DeleteMonitor->type,
+        'user_id' => auth()->id(),
+        'ip' => request()->ip(),
+    ])
+    ->log("User deleted {$DeleteMonitor->type} monitor ");
+
     return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring data deleted successfully.');
 
    }
    public function pauseMonitor(Request $request, $id)
-{
+    {
+    $user = auth()->user();
+
     $monitor = Monitors::findOrFail($id);
 
     // Toggle the paused status
@@ -222,6 +248,18 @@ class MonitoringController extends Controller
     $monitor->save();
 
     $status = $monitor->paused ? 'paused' : 'resumed';
+
+    activity()
+    ->performedOn($monitor)
+    ->causedBy(auth()->user())
+    ->event($status)
+    ->withProperties([
+        'name' => $user->name,
+        'monitor_id' => $monitor->id,
+        'monitor_name' => $monitor->name,
+        'status' => $status,
+    ])
+    ->log("Monitor {$monitor->name} has been {$status}");
 
     return response()->json([
         'success' => true,
@@ -247,7 +285,29 @@ class MonitoringController extends Controller
 
     $EditMonitoring=Monitors::findOrFail($id);
 
+    $original = $EditMonitoring->getOriginal(); // Old values
+
     $EditMonitoring->update($request->all());
+
+    $changes = [
+        'old' => [],
+        'new' => [],
+    ];
+
+    foreach ($request->all() as $key => $value) {
+        if (array_key_exists($key, $original) && $original[$key] != $value) {
+            $changes['old'][$key] = $original[$key];
+            $changes['new'][$key] = $value;
+        }
+    }
+
+    // Log activity
+    activity()
+        ->performedOn($EditMonitoring)
+        ->causedBy(auth()->user())
+        ->event('updated monitor')
+        ->withProperties($changes)
+        ->log('Monitoring details updated');
 
     return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring details updated successfully.');
    }

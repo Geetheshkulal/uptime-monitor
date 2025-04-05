@@ -9,12 +9,12 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+// use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\LogOptions;
 class User extends Authenticatable
 {
 
-    use HasApiTokens, HasFactory, Notifiable, LogsActivity;
+    use HasApiTokens, HasFactory, Notifiable;
 
 
     use HasRoles;
@@ -56,12 +56,12 @@ class User extends Authenticatable
     ];
 
     
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-        ->logOnly(['name', 'role','status','type']);
-        // Chain fluent methods for configuration options
-    }
+    // public function getActivitylogOptions(): LogOptions
+    // {
+    //     return LogOptions::defaults()
+    //     ->logOnly(['name', 'role','status','type']);
+    //     // Chain fluent methods for configuration options
+    // }
     public function monitors()
     {
      return $this->hasMany(Monitors::class);

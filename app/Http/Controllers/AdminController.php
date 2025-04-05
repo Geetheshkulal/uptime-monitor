@@ -16,7 +16,7 @@ class AdminController extends Controller
     /**
      * Display all users in the admin panel with pagination
      */
-    public function storeUser(Request $request)
+public function storeUser(Request $request)
 {
     // Validate input
     $validated = $request->validate([

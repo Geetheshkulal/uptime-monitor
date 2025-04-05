@@ -35,6 +35,19 @@ class DNSController extends Controller
             'telegram_id' => $request->telegram_id,
             'telegram_bot_token' => $request->telegram_bot_token,
         ]);
+
+        activity()
+        ->performedOn($monitor)
+        ->causedBy(auth()->user())
+        ->event('created')
+        ->withProperties([
+            'user_name' => auth()->user()->name,
+            'monitor_name' => $monitor->name,
+            'monitor_url' => $monitor->url,
+            'dns_resource_type'=>$request->dns_resource_type,
+            'monitor_type' => $monitor->type
+        ])
+        ->log("Created {$monitor->type} monitor");
     
         return redirect()->route('monitoring.dashboard')->with('success', ucfirst($request->type) . ' monitoring added successfully!');
     

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Monitors;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PingMonitoringController extends Controller
 {
@@ -37,9 +38,19 @@ class PingMonitoringController extends Controller
             // Default to DOWN until the cron job updates it
         ]);
         
+        activity()
+        ->causedBy(auth()->user())
+        ->performedOn($monitor)
+        ->event('created')
+        ->withProperties([
+            'email'=> $request->email,
+            'url' => $request->url,
+            'type' => $request->type
+        ])
+        ->log('ping Monitor created');
+
         return redirect()->route('monitoring.dashboard')->with('success', ucfirst($request->type) . ' monitoring added successfully!');
 
 
-        
     }
 }

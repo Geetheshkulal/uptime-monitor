@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+// use Spatie\Activitylog\Traits\LogsActivity;
+// use Spatie\Activitylog\LogOptions;
 
 class Monitors extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory;
     protected $guarded = [];
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-        ->logOnly(['name', 'user_id','url','type','email']);
-        // Chain fluent methods for configuration options
-    }
+    // public function getActivitylogOptions(): LogOptions
+    // {
+    //     return LogOptions::defaults()
+    //     ->logOnly(['name', 'user_id','url','type','email']);
+    //     // Chain fluent methods for configuration options
+    // }
 
     public function pingResponses()
     {

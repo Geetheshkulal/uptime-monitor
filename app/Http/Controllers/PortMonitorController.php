@@ -42,6 +42,17 @@ class PortMonitorController extends Controller
 
         Log::info('Monitor created:', $monitor->toArray());
 
+        activity()
+        ->causedBy(auth()->user())
+        ->performedOn($monitor)
+        ->event('created')
+        ->withProperties([
+            'email'=> $request->email,
+            'url' => $request->url,
+            'type' => $request->port
+        ])
+        ->log('port Monitor created');
+
         return redirect()->route('monitoring.dashboard')->with('success', ucfirst($request->type) . ' monitoring added successfully!');
     }
 
