@@ -98,7 +98,7 @@ Route::middleware('auth')->group(function () {
 Route::group(['middleware' => ['auth']], function () {
     // Routes accessible only by superadmin
 
-    Route::get('/admin/dashboard',[AdminController::class,'AdminDashboard'])->name('admin.dashboard');
+    Route::get('/admin/dashboard',[AdminController::class,'AdminDashboard'])->middleware('role:superadmin')->name('admin.dashboard');
     Route::get('/admin/display/users', action: [AdminController::class,'DisplayUsers'])->middleware('permission:see.users')->name('display.users');
     Route::get('/admin/display/roles', [AdminController::class,'DisplayRoles'])->middleware('permission:see.roles')->name('display.roles');
     Route::get('/admin/display/permissions', [AdminController::class, 'DisplayPermissions'])->middleware('role:superadmin')->name('display.permissions');
