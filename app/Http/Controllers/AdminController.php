@@ -49,6 +49,19 @@ public function storeUser(Request $request)
             Log::warning("Role not found: " . $validated['role']);
         }
 
+        activity()
+            ->causedBy(auth()->user()) // the super admin
+            ->performedOn($user)
+            ->event('user-created')
+            ->withProperties([
+                'created_user_name' => $user->name,
+                'created_user_email' => $user->email,
+                'created_by' => auth()->user()->name,
+                'role_assigned' => $role ? $role->name : 'None',
+                'status' => $user->status,
+            ])
+            ->log('Super Admin created a new user');
+
         Log::info("User created successfully: ", $user->toArray());
 
         return redirect()->route('display.users')->with('success', 'User created successfully');
@@ -81,6 +94,20 @@ public function storeUser(Request $request)
     public function ShowUser($id)
     {
         $user = User::with('roles')->findOrFail($id);
+
+        activity()
+        ->causedBy(auth()->user()) // super admin
+        ->performedOn($user)       // the user being viewed
+        ->event('viewed')
+        ->withProperties([
+            'viewed_by' => auth()->user()->name,
+            'viewed_by_email' => auth()->user()->email,
+            'viewed_user_id' => $user->id,
+            'viewed_user_name' => $user->name,
+            'viewed_user_email' => $user->email,
+        ])
+        ->log('Super Admin viewed user details');
+
         return view('pages.admin.ViewUserDetails', compact('user'));
     }
 
@@ -96,7 +123,14 @@ public function storeUser(Request $request)
     public function UpdateUsers(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        
+
+        $oldValues = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'role' => $user->roles->pluck('name')->first() ?? 'none',
+        ];
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,'.$user->id,
@@ -115,6 +149,25 @@ public function storeUser(Request $request)
             // Update role
             $role = Role::findById($validated['role']);
             $user->syncRoles([$role->name]);
+
+            $newValues = [
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'role' => $role->name,
+            ];
+
+            activity()
+            ->causedBy(auth()->user()) // Who made the change
+            ->performedOn($user)       // Which user was updated
+            ->event('user updated')
+            ->withProperties([
+                'edited_by' => auth()->user()->name,
+                'edited_by_email'=>auth()->user()->email,
+                'old' => $oldValues,
+                'new' => $newValues,
+            ])
+            ->log('User details updated');
     
             return redirect()->route('display.users', $user->id)
                    ->with('success', 'User updated successfully!');
@@ -134,7 +187,26 @@ public function storeUser(Request $request)
             }
 
             $user = User::findOrFail($id);
+
+            $deletedUserInfo = [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ];
+
             $user->delete();
+
+            activity()
+            ->causedBy(auth()->user())       // who deleted
+            ->performedOn($user)             // which user was deleted
+            ->event('user deleted')
+            ->withProperties([
+                'deleted_by' => auth()->user()->name,
+                'deleted_by_email' => auth()->user()->email,
+                'deleted_user' => $deletedUserInfo,
+            ])
+            ->log('A user account was deleted');
+
 
             return redirect()->route('display.users')
                    ->with('success', 'User deleted successfully!');
@@ -150,6 +222,16 @@ public function storeUser(Request $request)
         try {
             // Get paginated roles (10 per page)
             $roles = Role::whereNot('name', 'superadmin')->orderBy('name')->get();
+
+            activity()
+            ->causedBy(auth()->user())       // who deleted         
+            ->event('viewed')
+            ->withProperties([
+                'page' => 'Roles List',
+                'user_name' => auth()->user()->name,
+                'user_email' => auth()->user()->email,
+            ])
+            ->log('visited roles page');
             
             return view('pages.admin.DisplayRoles', compact('roles'));
             
@@ -171,7 +253,18 @@ public function storeUser(Request $request)
             'name' => 'required|string|max:255|unique:roles,name'
         ]);
 
-        Role::create(['name' => $request->name]);
+        $role=Role::create(['name' => $request->name]);
+
+        activity()
+        ->causedBy(auth()->user())
+        ->performedOn($role)
+        ->event('created')
+        ->withProperties([
+            'role_name' => $role->name,
+            'created_by' => auth()->user()->name,
+            'created_user_email' => auth()->user()->email,
+        ])
+        ->log('A new role was created.');
 
         return redirect()->route('display.roles')
                ->with('success', 'Role added successfully!');
@@ -188,7 +281,23 @@ public function storeUser(Request $request)
                 return redirect()->back()
                        ->with('error', 'Cannot delete Admin role!');
             }
-            
+
+        $roleName = $role->name; // Store role name before deletion
+        $roleId = $role->id;
+
+        // Log activity before deletion
+        activity()
+            ->causedBy(auth()->user())
+            ->performedOn($role)
+            ->event('deleted')
+            ->withProperties([
+                'role_id' => $roleId,
+                'role_name' => $roleName,
+                'deleted_by' => auth()->user()->name,
+                'deleted_user_email' => auth()->user()->email,
+            ])
+            ->log("Role deleted");
+
             $role->delete();
             
             return redirect()->route('display.roles')
@@ -217,7 +326,24 @@ public function storeUser(Request $request)
         ]);
 
         $role = Role::findOrFail($id);
+
+        $oldName = $role->name; 
+        $newName = $request->name;
+
         $role->update(['name' => $request->name]);
+
+        activity()
+        ->causedBy(auth()->user())
+        ->performedOn($role)
+        ->event('updated')
+        ->withProperties([
+            'role_id' => $role->id,
+            'old_name' => $oldName,
+            'new_name' => $newName,
+            'updated_by' => auth()->user()->name,
+            'updated_user_email' => auth()->user()->email,
+        ])
+        ->log('Role name updated');
 
         return redirect()->route('display.roles')
                ->with('success', 'Role updated successfully!');
@@ -242,7 +368,20 @@ public function storeUser(Request $request)
             'group_name' => 'required|string|in:user,role,permission,monitor,activity'
         ]);
 
-        Permission::create($validated);
+        $permission=Permission::create($validated);
+
+        activity()
+        ->causedBy(auth()->user())
+        ->performedOn($permission)
+        ->event('created')
+        ->withProperties([
+            'permission_id' => $permission->id,
+            'name' => $permission->name,
+            'group' => $permission->group_name,
+            'created_by' => auth()->user()->name,
+            'created_user_email' => auth()->user()->email
+        ])
+        ->log('Created a new permission');
 
         return redirect()->route('display.permissions')
                ->with('success', 'Permission added successfully!');
@@ -251,8 +390,23 @@ public function storeUser(Request $request)
     public function DeletePermission($id)
     {
         try {
+
             $permission = Permission::findOrFail($id);
+
+            $deletedData = $permission->toArray();
+
             $permission->delete();
+
+            activity()
+            ->causedBy(auth()->user())
+            ->performedOn($permission)
+            ->event('deleted')
+            ->withProperties([
+                'deleted_permission' => $deletedData,
+                'deleted_by' => auth()->user()->name,
+                'deleted_user_email' => auth()->user()->email
+            ])
+            ->log('Deleted a permission');
 
             return redirect()->route('display.permissions')
                    ->with('success', 'Permission deleted successfully!');
@@ -279,7 +433,22 @@ public function storeUser(Request $request)
 
         try {
             $permission = Permission::findOrFail($id);
+
+            $oldValues = $permission->getOriginal();
+
             $permission->update($validated);
+
+            activity()
+            ->causedBy(auth()->user())
+            ->performedOn($permission)
+            ->event('updated')
+            ->withProperties([
+                'old_values' => $oldValues,
+                'new_values' => $validated,
+                'updated_by' => auth()->user()->name,
+                'user_email' => auth()->user()->email
+            ])
+            ->log('Updated a permission');
 
             return redirect()->route('display.permissions')
                 ->with('success', 'Permission updated successfully!');
@@ -320,8 +489,24 @@ public function storeUser(Request $request)
         ]);
 
         try {
+            $oldPermissions = $role->permissions->pluck('name')->toArray();
+
             $permissions = $request->permission ? Permission::whereIn('id', $request->permission)->get() : [];
             $role->syncPermissions($permissions);
+
+            $newPermissions = $role->permissions->pluck('name')->toArray();
+
+            activity()
+            ->causedBy(auth()->user())
+            ->performedOn($role)
+            ->withProperties([
+                'updated_by' => auth()->user()->name,
+                'updated_by_email' => auth()->user()->email,
+                'role' => $role->name,
+                'old_permissions' => $oldPermissions,
+                'new_permissions' => $newPermissions
+            ])
+            ->log('Updated role permissions');
 
             return redirect()->route('roles.index')
                    ->with('success', 'Permissions updated successfully!');
