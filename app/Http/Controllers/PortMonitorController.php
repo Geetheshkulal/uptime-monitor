@@ -45,6 +45,7 @@ class PortMonitorController extends Controller
         activity()
         ->causedBy(auth()->user())
         ->performedOn($monitor)
+        ->inLog('port_monitoring')
         ->event('created')
         ->withProperties([
             'email'=> $request->email,

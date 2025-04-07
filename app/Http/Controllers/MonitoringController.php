@@ -160,6 +160,7 @@ class MonitoringController extends Controller
     activity()
     ->performedOn($details)
     ->causedBy(auth()->user())
+    ->inLog('monitor_management') 
     ->event('viewed specific monitor')
     ->withProperties([
         'monitor_name' => $details->name,
@@ -225,6 +226,7 @@ class MonitoringController extends Controller
     activity()
     ->performedOn($DeleteMonitor)
     ->causedBy(auth()->user())
+    ->inLog('monitor_management') 
     ->event('monitor deleted')
     ->withProperties([
         'monitor_name' => $DeleteMonitor->name,
@@ -252,6 +254,7 @@ class MonitoringController extends Controller
     activity()
     ->performedOn($monitor)
     ->causedBy(auth()->user())
+    ->inLog('monitor_management') 
     ->event($status)
     ->withProperties([
         'name' => $user->name,
@@ -305,6 +308,7 @@ class MonitoringController extends Controller
     activity()
         ->performedOn($EditMonitoring)
         ->causedBy(auth()->user())
+        ->inLog('monitor_management') 
         ->event('updated monitor')
         ->withProperties($changes)
         ->log('Monitoring details updated');

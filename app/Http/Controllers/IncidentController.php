@@ -27,6 +27,7 @@ class IncidentController extends Controller
             activity()
             ->performedOn($tempMonitor)
             ->causedBy(auth()->user())
+            ->inLog('incident monitoring') 
             ->event('visited')
             ->withProperties([
                 'name' => auth()->user()->name,

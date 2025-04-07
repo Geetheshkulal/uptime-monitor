@@ -52,6 +52,7 @@ public function storeUser(Request $request)
         activity()
             ->causedBy(auth()->user()) // the super admin
             ->performedOn($user)
+            ->inLog('user_management')
             ->event('user-created')
             ->withProperties([
                 'created_user_name' => $user->name,
@@ -60,7 +61,7 @@ public function storeUser(Request $request)
                 'role_assigned' => $role ? $role->name : 'None',
                 'status' => $user->status,
             ])
-            ->log('Super Admin created a new user');
+            ->log(" {$user->name} created a new user");
 
         Log::info("User created successfully: ", $user->toArray());
 
@@ -98,6 +99,7 @@ public function storeUser(Request $request)
         activity()
         ->causedBy(auth()->user()) // super admin
         ->performedOn($user)       // the user being viewed
+        ->inLog('user_management')
         ->event('viewed')
         ->withProperties([
             'viewed_by' => auth()->user()->name,
@@ -106,7 +108,7 @@ public function storeUser(Request $request)
             'viewed_user_name' => $user->name,
             'viewed_user_email' => $user->email,
         ])
-        ->log('Super Admin viewed user details');
+        ->log("viewed user details");
 
         return view('pages.admin.ViewUserDetails', compact('user'));
     }
@@ -160,6 +162,7 @@ public function storeUser(Request $request)
             activity()
             ->causedBy(auth()->user()) // Who made the change
             ->performedOn($user)       // Which user was updated
+            ->inLog('user_update')
             ->event('user updated')
             ->withProperties([
                 'edited_by' => auth()->user()->name,
@@ -199,6 +202,7 @@ public function storeUser(Request $request)
             activity()
             ->causedBy(auth()->user())       // who deleted
             ->performedOn($user)             // which user was deleted
+            ->inLog('user_update')
             ->event('user deleted')
             ->withProperties([
                 'deleted_by' => auth()->user()->name,
@@ -224,7 +228,8 @@ public function storeUser(Request $request)
             $roles = Role::whereNot('name', 'superadmin')->orderBy('name')->get();
 
             activity()
-            ->causedBy(auth()->user())       // who deleted         
+            ->causedBy(auth()->user())       // who deleted    
+            ->inLog('role_management')     
             ->event('viewed')
             ->withProperties([
                 'page' => 'Roles List',
@@ -258,6 +263,7 @@ public function storeUser(Request $request)
         activity()
         ->causedBy(auth()->user())
         ->performedOn($role)
+        ->inLog('role_management')
         ->event('created')
         ->withProperties([
             'role_name' => $role->name,
@@ -289,6 +295,7 @@ public function storeUser(Request $request)
         activity()
             ->causedBy(auth()->user())
             ->performedOn($role)
+            ->inLog('role_management')
             ->event('deleted')
             ->withProperties([
                 'role_id' => $roleId,
@@ -335,6 +342,7 @@ public function storeUser(Request $request)
         activity()
         ->causedBy(auth()->user())
         ->performedOn($role)
+        ->inLog('role_management')
         ->event('updated')
         ->withProperties([
             'role_id' => $role->id,
@@ -373,6 +381,7 @@ public function storeUser(Request $request)
         activity()
         ->causedBy(auth()->user())
         ->performedOn($permission)
+        ->inLog('permission_management')
         ->event('created')
         ->withProperties([
             'permission_id' => $permission->id,
@@ -400,6 +409,7 @@ public function storeUser(Request $request)
             activity()
             ->causedBy(auth()->user())
             ->performedOn($permission)
+            ->inLog('permission_management')
             ->event('deleted')
             ->withProperties([
                 'deleted_permission' => $deletedData,
@@ -441,6 +451,7 @@ public function storeUser(Request $request)
             activity()
             ->causedBy(auth()->user())
             ->performedOn($permission)
+            ->inLog('permission_management')
             ->event('updated')
             ->withProperties([
                 'old_values' => $oldValues,
@@ -504,6 +515,7 @@ public function storeUser(Request $request)
             activity()
             ->causedBy(auth()->user())
             ->performedOn($role)
+            ->inLog('permission_role_management')
             ->withProperties([
                 'updated_by' => auth()->user()->name,
                 'updated_by_email' => auth()->user()->email,

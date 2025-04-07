@@ -41,6 +41,7 @@ class PingMonitoringController extends Controller
         activity()
         ->causedBy(auth()->user())
         ->performedOn($monitor)
+        ->inLog('ping_monitoring')
         ->event('created')
         ->withProperties([
             'email'=> $request->email,

@@ -93,6 +93,7 @@ class CashFreePaymentController extends Controller
       activity()
       ->performedOn($payment)
       ->causedBy(auth()->user())
+      ->inLog('payment')
       ->event('payment-success')
       ->withProperties([
           'user_name' => $user->name,
