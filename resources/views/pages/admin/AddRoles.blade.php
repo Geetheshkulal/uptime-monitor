@@ -10,7 +10,7 @@
             <div class="col-12">
                 <div class="page-title-box d-flex align-items-center justify-content-between">
                     <h4 class="mb-0">Add New Role</h4>
-                    <a href="{{ route('display.roles') }}" class="btn btn-secondary btn-sm">
+                    <a href="{{ route('display.roles') }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left"></i> Back
                     </a>
                 </div>
