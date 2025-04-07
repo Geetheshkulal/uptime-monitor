@@ -177,13 +177,15 @@
         document.addEventListener("DOMContentLoaded", function() {
             // User Growth Chart
             const userCtx = document.getElementById('userGrowthChart').getContext('2d');
+            const month_labels = @json($month_labels);
+            const user_data = @json($user_data);
             const userGrowthChart = new Chart(userCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: month_labels, // e.g., ['Apr', 'May', ..., 'Mar']
                     datasets: [{
                         label: 'New Users',
-                        data: [120, 190, 170, 220, 250, 280, 310, 290, 330, 380, 410, 450],
+                        data: user_data,    // e.g., [12, 23, 45, ..., 89]
                         backgroundColor: 'rgba(78, 115, 223, 0.05)',
                         borderColor: 'rgba(78, 115, 223, 1)',
                         pointBackgroundColor: 'rgba(78, 115, 223, 1)',
@@ -213,16 +215,18 @@
                     }
                 }
             });
+        
 
             // Revenue Growth Chart
             const revenueCtx = document.getElementById('revenueGrowthChart').getContext('2d');
+            const revenue_by_month = @json($monthly_revenue);
             const revenueGrowthChart = new Chart(revenueCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: month_labels,
                     datasets: [{
                         label: 'Revenue ($)',
-                        data: [1850, 2200, 1950, 2400, 2800, 3200, 3500, 3800, 4100, 4500, 4900, 5200],
+                        data: revenue_by_month,
                         backgroundColor: 'rgba(54, 185, 204, 0.5)',
                         borderColor: 'rgba(54, 185, 204, 1)',
                         borderWidth: 1

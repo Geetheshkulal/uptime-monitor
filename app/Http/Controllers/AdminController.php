@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\User;
+use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Activitylog\Models\Activity;
+use Spatie\Health\Facades\Health;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\Monitors;
@@ -547,11 +550,58 @@ public function storeUser(Request $request)
 
         $total_revenue = Payment::all('amount')->sum('amount');
 
+       
+
+        //user growth data over the past year.
+        $now = Carbon::now();
+        $oneYearAgo = $now->copy()->subYear()->startOfMonth();
+
+        $userCountsByMonth = User::role('user')
+            ->where('created_at', '>=', $oneYearAgo)
+            ->selectRaw('DATE_FORMAT(created_at, "%b") as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderByRaw('MIN(created_at)')
+            ->pluck('count', 'month');
+
+        // Initialize months
+        $allMonths = collect(range(0, 11))->map(function ($i) use ($now) {
+            return $now->copy()->subMonths(11 - $i)->format('M');
+        });
+
+        // Fill missing months with 0
+        $finalData = $allMonths->map(function ($month) use ($userCountsByMonth) {
+            return $userCountsByMonth[$month] ?? 0;
+        });
+
+        // Output to use in chart
+        $month_labels = $allMonths->toArray(); // ['Apr', 'May', ..., 'Mar']
+        $user_data = $finalData->toArray();   // [10, 23, 0, 5, ...]
+
+
+        //PAYMENTS TABLE
+
+        $revenue = Payment::where('created_at', '>=', $oneYearAgo)
+        ->selectRaw('DATE_FORMAT(created_at, "%b") as month, SUM(amount) as total')
+        ->groupBy('month')
+        ->orderByRaw('MIN(created_at)')
+        ->pluck('total', 'month');
+
+        $monthly_revenue = $allMonths->map(function ($month) use ($revenue) {
+            return $revenue[$month] ?? 0;
+        })->toArray();
+
+        
+
+
+        
         return view('pages.admin.AdminDashboard',compact(
             'total_user_count',
             'paid_user_count',
             'monitor_count',
-            'total_revenue'
+            'total_revenue',
+            'month_labels',
+            'user_data',
+            'monthly_revenue'
         ));
     }
 }
