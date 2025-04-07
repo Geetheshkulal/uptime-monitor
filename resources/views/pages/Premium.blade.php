@@ -56,9 +56,9 @@
                                 <span class="display-6 fw-bold">₹0</span>
                             </div>
                             <ul class="list-unstyled mb-4">
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 10 websites</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 5-minute checks</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email alerts</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 5 websites</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-minute checks</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email & Telegram Bot alerts</li>
                                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-day history</li>
                             </ul>
                             <button class="btn btn-secondary d-block" disabled>Current Plan</button>
@@ -77,10 +77,10 @@
                             </div>
                             <ul class="list-unstyled mb-4">
                                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited websites</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 30-second checks</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> All alert channels</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-minute checks</li>
+                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email & Telegram Bot alerts</li>
                                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> SSL expiry check</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom integrations</li>
+                                {{-- <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom integrations</li> --}}
                             </ul>
                             <form action="{{ route('store') }}" method="POST">
                                 @csrf
