@@ -7,7 +7,6 @@
         text-transform: capitalize;
     }
     .permission-group {
-        border-bottom: 1px solid #eee;
         padding-bottom: 15px;
         margin-bottom: 15px;
     }
@@ -18,12 +17,6 @@
 @endpush
 
 <div class="page-content">
-    
-    
-    
-    
-
-    
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -37,10 +30,10 @@
                                 <i class="fas fa-arrow-left"></i> Back
                             </a>
                         </div>
-                        
+
                         <form method="POST" action="{{ route('update.role.permissions', $role->id) }}">
                             @csrf
-                            
+
                             <div class="form-check mb-3">
                                 <input type="checkbox" class="form-check-input" id="selectAll">
                                 <label class="form-check-label" for="selectAll">
@@ -48,34 +41,37 @@
                                 </label>
                             </div>
 
-                            @foreach($permission_groups as $group)
-                                <div class="permission-group">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input group-checkbox" 
-                                            id="group-{{ $group->group_name }}" 
-                                            data-group="{{ $group->group_name }}">
-                                        <label class="form-check-label" for="group-{{ $group->group_name }}">
-                                            <strong>{{ ucfirst($group->group_name) }}</strong>
-                                        </label>
-                                    </div>
+                            <div class="row">
+                                @foreach($permission_groups as $group)
+                                    <div class="col-md-4">
+                                        <div class="permission-group">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input group-checkbox"
+                                                    id="group-{{ $group->group_name }}"
+                                                    data-group="{{ $group->group_name }}">
+                                                <label class="form-check-label" for="group-{{ $group->group_name }}">
+                                                    <strong>{{ ucfirst($group->group_name) }}</strong>
+                                                </label>
+                                            </div>
 
-                                    <div class="permission-item">
-                                        @foreach($groupedPermissions[$group->group_name] as $permission)
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input permission-checkbox {{ $group->group_name }}" 
-                                                name="permission[]" 
-                                                id="permission-{{ $permission->id }}" 
-                                                value="{{ $permission->id }}"
-                                                {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="permission-{{ $permission->id }}">
-                                                {{ $permission->name }}
-                                            </label>
+                                            <div class="permission-item">
+                                                @foreach($groupedPermissions[$group->group_name] as $permission)
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input permission-checkbox {{ $group->group_name }}"
+                                                            name="permission[]"
+                                                            id="permission-{{ $permission->id }}"
+                                                            value="{{ $permission->id }}"
+                                                            {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="permission-{{ $permission->id }}">
+                                                            {{ $permission->name }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
-                                        @endforeach
                                     </div>
-                                </div>
-
-                            @endforeach
+                                @endforeach
+                            </div>
 
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-primary">Update Permissions</button>
@@ -109,7 +105,7 @@ $(document).ready(function() {
         var group = $(this).attr('class').split(' ').find(c => c !== 'form-check-input' && c !== 'permission-checkbox');
         var allChecked = $(`.permission-checkbox.${group}:checked`).length === $(`.permission-checkbox.${group}`).length;
         $(`#group-${group}`).prop('checked', allChecked);
-        
+
         // Update select all checkbox
         var allGroupsChecked = $('.group-checkbox:checked').length === $('.group-checkbox').length;
         $('#selectAll').prop('checked', allGroupsChecked);
