@@ -18,9 +18,10 @@
 @endpush
 
 <div class="page-content">
-    <a href="{{ route('display.roles') }}" class="btn btn-secondary btn-sm ">
-        <i class="fas fa-arrow-left"></i> Back
-    </a>
+    
+    
+    
+    
 
     
     <div class="container-fluid">
@@ -28,8 +29,15 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Modify Permissions for Role: <strong>{{ $role->name }}</strong></h4>
-
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="card-title mb-0">
+                                Modify Permissions for Role: <strong>{{ $role->name }}</strong>
+                            </h4>
+                            <a href="{{ route('display.roles') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+                        
                         <form method="POST" action="{{ route('update.role.permissions', $role->id) }}">
                             @csrf
                             
