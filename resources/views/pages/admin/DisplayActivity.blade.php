@@ -1,29 +1,57 @@
-
 @extends('dashboard')
 @section('content')
 
-
-    @push('styles')
+@push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    @endpush
+    <style>
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            border: 1px solid #d1d3e2;
+            border-radius: 0.35rem;
+            padding: 6px 12px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 24px;
+        }
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .filter-container label {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: #6e707e;
+        }
+    </style>
+@endpush
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
             <!-- Activity Log Table -->
             <div class="card shadow mb-4">
-                <div class="card-header py-3">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">Activity Log</h6>
-                    <!-- <select class="js-example-basic-single" name="state">
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->id }}-{{ $user->name }}</option>
-                        @endforeach
-                    </select> -->
                 </div>
                 <div class="card-body">
+                    <div class="filter-container">
+                        <label for="userFilter">Filter by User:</label>
+                        <select class="js-example-basic-single form-control" id="userFilter" style="width: 300px;">
+                            <option value="">All Users</option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }} (ID: {{ $user->id }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
                     <div class="table-responsive">
                         <table class="table table-bordered" id="activityTable" width="100%" cellspacing="0">
                             <thead>
@@ -31,7 +59,6 @@
                                     <th>ID</th>
                                     <th>Log Name</th>
                                     <th>Description</th>
-                                    {{-- <th>Subject Type</th> --}}
                                     <th>Event</th>
                                     <th>Causer Type</th>
                                     <th>User Id</th>
@@ -46,7 +73,6 @@
                                     <td>{{ $log->id }}</td>
                                     <td>{{ $log->log_name }}</td>
                                     <td>{{ $log->description }}</td>
-                                    {{-- <td>{{ $log->subject_type }}</td> --}}
                                     <td>{{ $log->event }}</td>
                                     <td>{{ $log->causer_type }}</td>
                                     <td>{{ $log->causer_id }}</td>
@@ -68,10 +94,9 @@
     </div>
 </div>
 
-
 <!-- Bootstrap 4 Modal -->
 <div class="modal fade" id="propertiesModal" tabindex="-1" role="dialog" aria-labelledby="propertiesModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="propertiesModalLabel">Activity Properties</h5>
@@ -80,12 +105,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <pre id="propertiesContent" class="bg-light p-3 border"></pre> <!-- JSON will be displayed here -->
+                <pre id="propertiesContent" class="bg-light p-3 border rounded" style="max-height: 500px; overflow: auto;"></pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-
 
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -96,25 +123,35 @@
 
 <script>
     $(document).ready(function() {
-        $('#activityTable').DataTable({ 
+        // Initialize DataTable
+        var table = $('#activityTable').DataTable({ 
             "paging": true,
             "searching": true,
             "ordering": true,
-            "info": false,
-            "order": [[3, "desc"]]
+            "info": true,
+            "order": [[7, "desc"]],
+            "columnDefs": [
+                { "orderable": false, "targets": [8] } // Disable sorting for action column
+            ]
+            
         });
 
-    });
-    $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-    });
-</script>
+        // Initialize Select2 with search and placeholder
+        $('.js-example-basic-single').select2({
+            placeholder: "Select a user",
+            allowClear: true
+        });
 
-<script>
+        // Filter table when user is selected
+        $('#userFilter').change(function() {
+            var userId = $(this).val();
+            table.column(5).search(userId).draw();
+        });
+    });
+
     function showPropertiesModal(properties) {
         // Format JSON and display inside <pre> tag
         document.getElementById("propertiesContent").textContent = JSON.stringify(properties, null, 4);
-        
         $('#propertiesModal').modal('show');
     }
 </script>
