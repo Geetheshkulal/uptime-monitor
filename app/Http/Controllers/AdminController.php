@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
@@ -9,6 +10,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use App\Models\Monitors;
 
 
 class AdminController extends Controller
@@ -522,6 +524,22 @@ public function storeUser(Request $request)
     }
 
     public function AdminDashboard(){
-        return view('pages.admin.AdminDashboard');
+        $role = Role::where('name', 'user')->first();
+
+        $total_user_count = $role->users()
+                    ->count();
+        
+        $paid_user_count = $role->users()->where('status','paid')->count();
+
+        $monitor_count = Monitors::all()->count();
+
+        $total_revenue = Payment::all('amount')->sum('amount');
+
+        return view('pages.admin.AdminDashboard',compact(
+            'total_user_count',
+            'paid_user_count',
+            'monitor_count',
+            'total_revenue'
+        ));
     }
 }

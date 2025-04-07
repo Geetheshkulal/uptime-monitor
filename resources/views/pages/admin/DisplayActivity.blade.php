@@ -131,7 +131,7 @@
             "info": true,
             "order": [[7, "desc"]],
             "columnDefs": [
-                { "orderable": false, "targets": [8] } // Disable sorting for action column
+                { "searchable": false, "targets": [8] } // Disable sorting for action column
             ]
             
         });
