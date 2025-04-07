@@ -290,8 +290,13 @@ public function storeUser(Request $request)
     }
     public function DisplayActivity()
     {
-        $logs = Activity::latest()->get(); // Fetch all activity logs
-        return view('pages.admin.DisplayActivity', compact('logs'));
+        // Fetch all activity logs
+        $logs = Activity::latest()->get();
+        
+        // Fetch all users with only id and name
+        $users = User::select('id', 'name')->get();
+        
+        return view('pages.admin.DisplayActivity', compact('logs', 'users'));
     }
 
 

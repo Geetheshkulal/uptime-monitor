@@ -2,13 +2,13 @@
 @extends('dashboard')
 @section('content')
 
-<head>
+
     @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @endpush
-</head>
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
@@ -17,6 +17,11 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Activity Log</h6>
+                    <!-- <select class="js-example-basic-single" name="state">
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->id }}-{{ $user->name }}</option>
+                        @endforeach
+                    </select> -->
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -87,10 +92,11 @@
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        $('#activityTable').DataTable({
+        $('#activityTable').DataTable({ 
             "paging": true,
             "searching": true,
             "ordering": true,
@@ -98,6 +104,9 @@
             "order": [[3, "desc"]]
         });
 
+    });
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2();
     });
 </script>
 
