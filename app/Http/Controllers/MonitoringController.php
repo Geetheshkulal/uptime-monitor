@@ -10,6 +10,9 @@ use App\Models\PingResponse;
 use App\Models\PortResponse;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+
 class MonitoringController extends Controller
 {
   private function getLatestResponsesByType(Monitors $monitor)
@@ -284,11 +287,12 @@ class MonitoringController extends Controller
         'dns_resource_type' => 'nullable|string', 
         'telegram_id' => 'nullable|string',
         'telegram_bot_token' => 'nullable|string',
+        'type' => 'string'
     ]);
 
     $EditMonitoring=Monitors::findOrFail($id);
 
-    $original = $EditMonitoring->getOriginal(); // Old values
+    $original = $EditMonitoring->getOriginal(); 
 
     $EditMonitoring->update($request->all());
 
@@ -304,7 +308,6 @@ class MonitoringController extends Controller
         }
     }
 
-    // Log activity
     activity()
         ->performedOn($EditMonitoring)
         ->causedBy(auth()->user())
@@ -315,4 +318,6 @@ class MonitoringController extends Controller
 
     return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring details updated successfully.');
    }
+
+
 }

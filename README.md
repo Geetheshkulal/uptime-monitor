@@ -86,16 +86,22 @@ CASHFREE_API_SECRET=
 ## 📸 Snapshots  
 
 ### 📍 **Dashboard**  
-![Dashboard](your-screenshot-path/dashboard.png)  
+<!-- ![Dashboard](your-screenshot-path/dashboard.png)   -->
+![alt text](dashbpeoard.png)
 
 ### 🔍 **Monitor List**  
-![Monitor List](your-screenshot-path/monitor-list.png)  
+<!-- ![Monitor List](your-screenshot-path/monitor-list.png)   -->
+![alt text](list.png)
 
 ### 📉 **Historical Uptime Graph**  
-![Uptime Graph](your-screenshot-path/uptime-graph.png)  
+<!-- ![Uptime Graph](your-screenshot-path/uptime-graph.png)   -->
+![alt text](historical.png)
 
 ### 💳 **Cashfree Payment Integration**  
-![Payment](your-screenshot-path/payment.png)  
+<!-- ![Payment](your-screenshot-path/payment.png)   -->
+![alt text](preimum.png)
+
+![alt text](payemtt222.png)
 
 ---
 
