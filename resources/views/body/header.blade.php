@@ -116,38 +116,6 @@ body.dark .dropdown-item {
 body.dark .dropdown-item:hover {
   background-color: #444 !important;
 }
-
-.scrolling-text-container {
-    flex-grow: 1;
-    overflow: hidden;
-    white-space: nowrap;
-    position: relative;
-    padding: 5px 0; /* Add some padding for better spacing */
-}
-
-.scrolling-text {
-    display: inline-block;
-    white-space: nowrap;
-    animation: scroll-text 15s linear infinite; /* Slower animation for smoother scrolling */
-    font-weight: bold;
-    font-size: 1.1rem; /* Slightly larger text */
-    background: linear-gradient(90deg, #007bff, #00c851, #ffbb33, #ff4444); /* Gradient text */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for better visibility */
-}
-
-@keyframes scroll-text {
-    0% {
-        transform: translateX(100%);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
-}
-
-
-
   </style>
 
 
@@ -170,12 +138,6 @@ style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitori
 
 
 
-<!-- Scrolling Text -->
-<div class="scrolling-text-container mx-3">
-  <p class="scrolling-text">
-      🌐 Monitor your website's health, uptime, and performance with real-time alerts – because every second counts! ⏱💻 Stay ahead with HTTP, Ping, Port, and DNS monitoring – all for free! 🚀
-  </p>
-</div>
 
 
     <!-- Topbar Search -->
