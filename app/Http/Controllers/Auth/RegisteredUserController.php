@@ -51,6 +51,19 @@ class RegisteredUserController extends Controller
 
         $user->assignRole('user');
 
+        activity()
+        ->causedBy($user)
+        ->inLog('auth')
+        ->event('register')
+        ->withProperties([
+            'name'        => $user->name,
+            'email'       => $user->email,
+            'ip'          => $request->ip(),
+            'user_agent'  => $request->userAgent()
+        ])
+        ->log('New user registered');
+        
+
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
