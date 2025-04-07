@@ -73,7 +73,10 @@
         </div>
 
         <!-- Register Button -->
-        <button type="submit" class="btn btn-primary w-100">Register</button>
+        <button type="submit" class="btn btn-primary w-100" id="register-btn">
+            <span class="spinner-border spinner-border-sm d-none" id="register-spinner"></span>
+            Register
+        </button>
 
         <!-- Already have an account? -->
         <div class="text-center mt-3">
@@ -81,6 +84,20 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginForm = document.querySelector('form');
+        const loginBtn = document.getElementById('register-btn');
+        const loginSpinner = document.getElementById('register-spinner');
+
+        loginForm.addEventListener('submit', () => {
+            loginBtn.disabled = true;
+            loginSpinner.classList.remove('d-none');
+            loginBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Loading...`;
+        });
+    });
+</script>
 
 </body>
 </html>

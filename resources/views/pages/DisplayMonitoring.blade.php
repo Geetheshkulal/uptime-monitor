@@ -299,7 +299,10 @@
 
         <form action="{{ route('monitoring.update', $details->id)}}" id="editForm" method="POST">
             @csrf
-            <input type="hidden" name="_method" value="POST"> 
+            @method('PUT')
+            {{-- <input type="hidden" name="_method" value="POST">  --}}
+            <input type="hidden" name="type" value="{{ $details->type }}">
+
         <div class="modal-body">
             <div class="mb-3">
                 <label for="name" class="form-label">Friendly name</label>
@@ -323,10 +326,10 @@
                     <option value="110" {{ $details->port == '110' ? 'selected' : '' }}>POP3 - 110</option>
                     <option value="143" {{ $details->port == '143' ? 'selected' : '' }}>IMAP - 143</option>
                     <option value="443" {{ $details->port == '443' ? 'selected' : '' }}>HTTPS - 443</option>
-                    <option value="443" {{ $details->port == '465' ? 'selected' : '' }}>SMTP - 465</option>
-                    <option value="443" {{ $details->port == '587' ? 'selected' : '' }}>SMTP - 587</option>
-                    <option value="143" {{ $details->port == '993' ? 'selected' : '' }}>IMAP - 993</option>
-                    <option value="110" {{ $details->port == '995' ? 'selected' : '' }}>POP3 - 995</option>
+                    <option value="465" {{ $details->port == '465' ? 'selected' : '' }}>SMTP - 465</option>
+                    <option value="587" {{ $details->port == '587' ? 'selected' : '' }}>SMTP - 587</option>
+                    <option value="993" {{ $details->port == '993' ? 'selected' : '' }}>IMAP - 993</option>
+                    <option value="995" {{ $details->port == '995' ? 'selected' : '' }}>POP3 - 995</option>
                     <option value="3306" {{ $details->port == '3306' ? 'selected' : '' }}>MySQL - 3306</option>
                 </select>
             </div>
@@ -352,11 +355,11 @@
 
             <div class="mb-3">
                 <label for="retries" class="form-label">Retries</label>
-                <input id="retries" class="form-control" name="retries" type="number" value="3" value="{{$details->retries}}" required>
+                <input id="retries" class="form-control" name="retries" type="number"  value="{{$details->retries}}" required>
             </div>
             <div class="mb-3">
                 <label for="interval" class="form-label">Interval (in minutes)</label>
-                <input id="interval" class="form-control" name="interval" type="number" value="1" value="{{$details->interval}}" required>
+                <input id="interval" class="form-control" name="interval" type="number" value="{{$details->interval}}" required>
             </div>
             
             <h5 class="card-title">Notification</h5>
