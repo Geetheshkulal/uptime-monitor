@@ -110,7 +110,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/admin/edit/user/{id}', [AdminController::class, 'UpdateUsers'])->middleware('permission:edit.user')->name('update.user');
     Route::delete('/admin/delete/user/{id}', [AdminController::class, 'DeleteUser'])->middleware('permission:delete.user')->name('delete.user');
 
-    Route::get('/admin/add/roles', [AdminController::class, 'AddRole'])->middleware('permission:add.role')->name('add.role');
+    Route::get('/admin/add/roles', [AdminController::class, 'AddRole'])->middleware(middleware: 'permission:add.role')->name('add.role');
     Route::post('/roles', [AdminController::class, 'StoreRole'])->middleware('permission:add.role')->name('store.role');
 
     Route::get('/admin/delete/role/{id}', [AdminController::class, 'DeleteRole'])->middleware('permission:delete.role')->name('delete.role');

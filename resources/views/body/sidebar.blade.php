@@ -64,6 +64,16 @@
     @endif
     @endhasrole
 
+    @hasrole('superadmin')
+    <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" 
+        style="{{ request()->routeIs('admin.dashboard') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white" href="{{ route('admin.dashboard') }}">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
+    @endhasrole
+
     @can('see.users')
     <li class="nav-item {{ request()->routeIs('display.users') ? 'active' : '' }}" 
         style="{{ request()->routeIs('display.users') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
