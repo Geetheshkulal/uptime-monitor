@@ -44,7 +44,7 @@ class SslCheckController extends Controller
             $daysRemaining = Carbon::now()->diffInDays($validTo, false);
             $status = $daysRemaining <= 0 ? 'Expired' : 'Valid';
 
-            Ssl::create([
+            $ssl=Ssl::create([
                 'user_id'        => Auth::id(),
                 'url'            => $host,
                 'issuer'         => $cert['issuer']['CN'] ?? 'Unknown',
@@ -53,6 +53,19 @@ class SslCheckController extends Controller
                 'days_remaining' => $daysRemaining,
                 'status'         => $status
             ]);
+
+            activity()
+            ->causedBy(auth()->user())
+            ->performedOn($ssl)
+            ->inLog('ssl_monitoring')
+            ->event('created')
+            ->withProperties([
+                'url' => $host,
+                'issuer' => $cert['issuer']['CN'] ?? 'Unknown',
+                'valid_to' => $validTo->toDateString(),
+                'status' => $status
+            ])
+            ->log('SSL certificate monitored and logged.');
 
             return redirect()->back()->with([
                 'success' => 'SSL check successful!',

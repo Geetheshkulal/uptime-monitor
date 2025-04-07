@@ -25,6 +25,7 @@ class ProfileController extends Controller
         activity()
         ->causedBy($user)
         ->performedOn($user)
+        ->inLog('profile_activity')
         ->event('viewed')
         ->withProperties([
             'name' => $user->name,
@@ -68,6 +69,7 @@ class ProfileController extends Controller
         activity()
         ->performedOn($user)
         ->causedBy($user)
+        ->inLog('profile_activity')
         ->event('updated profile')
         ->withProperties(['changes' => $changes])
         ->log('Updated profile');
@@ -89,6 +91,7 @@ class ProfileController extends Controller
         activity()
         ->performedOn($user)
         ->causedBy($user)
+        ->inLog('profile_activity')
         ->event('account deleted')
         ->withProperties([
             'name' => $user->name,

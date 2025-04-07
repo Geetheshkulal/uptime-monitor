@@ -39,6 +39,7 @@ class DNSController extends Controller
         activity()
         ->performedOn($monitor)
         ->causedBy(auth()->user())
+        ->inLog('DNS monitoring') 
         ->event('created')
         ->withProperties([
             'user_name' => auth()->user()->name,

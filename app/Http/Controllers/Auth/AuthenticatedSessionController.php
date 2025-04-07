@@ -35,6 +35,19 @@ class AuthenticatedSessionController extends Controller
         $user->update(['last_login_ip' => $request->ip()]);
     }
 
+    activity()
+            ->causedBy($user)
+            ->inLog('auth')
+            ->event('login')
+            ->withProperties([
+                'name'       => $user->name,
+                'email'      => $user->email,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent()
+            ])
+            ->log('User logged in');
+
+
         $request->session()->regenerate();
 
         $redirectRoute=($user->hasRole('superadmin'))?RouteServiceProvider::ADMIN_DASHBOARD:RouteServiceProvider::HOME;
@@ -45,6 +58,24 @@ class AuthenticatedSessionController extends Controller
    
     public function destroy(Request $request): RedirectResponse
     {
+        /** @var User $user */
+        $user = Auth::user();
+
+    if ($user) {
+        activity()
+            ->causedBy($user)
+            ->inLog('auth')
+            ->event('logout')
+            ->withProperties([
+                'name'       => $user->name,
+                'email'      => $user->email,
+                'ip'         => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'logout_at'  => now()
+            ])
+            ->log('User logged out');
+    }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
