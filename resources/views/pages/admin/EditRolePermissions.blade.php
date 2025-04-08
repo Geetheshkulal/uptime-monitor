@@ -88,41 +88,51 @@
 
 @push('scripts')
 <script>
-$(document).ready(function() {
-    // Select all permissions
-    $('#selectAll').click(function() {
-        $('.permission-checkbox').prop('checked', $(this).prop('checked'));
-        $('.group-checkbox').prop('checked', $(this).prop('checked'));
-    });
-
-    // Group checkbox functionality
-    $('.group-checkbox').click(function() {
-        var group = $(this).data('group');
-        $(.permission-checkbox.${group}).prop('checked', $(this).prop('checked'));
-    });
-
-    // Individual permission checkbox functionality
-    $('.permission-checkbox').click(function() {
-        var group = $(this).attr('class').split(' ').find(c => c !== 'form-check-input' && c !== 'permission-checkbox');
-        var allChecked = $(.permission-checkbox.${group}:checked).length === $(.permission-checkbox.${group}).length;
-        $(#group-${group}).prop('checked', allChecked);
-
-        // Update select all checkbox
+    $(document).ready(function() {
+        // Select all permissions
+        $('#selectAll').click(function() {
+            const checked = $(this).prop('checked');
+            $('.permission-checkbox').prop('checked', checked);
+            $('.group-checkbox').prop('checked', checked);
+        });
+    
+        // Group checkbox functionality
+        $('.group-checkbox').click(function() {
+            var group = $(this).data('group');
+            $('.permission-checkbox.' + group).prop('checked', $(this).prop('checked'));
+    
+            // Update "Select All" checkbox
+            $('#selectAll').prop('checked', $('.group-checkbox:checked').length === $('.group-checkbox').length);
+        });
+    
+        // Individual permission checkbox functionality
+        $('.permission-checkbox').click(function() {
+            var classes = $(this).attr('class').split(' ');
+            var group = classes.find(c => c !== 'form-check-input' && c !== 'permission-checkbox');
+    
+            var total = $('.permission-checkbox.' + group).length;
+            var checked = $('.permission-checkbox.' + group + ':checked').length;
+    
+            $('#group-' + group).prop('checked', total === checked);
+    
+            // Update "Select All" checkbox
+            var allGroupsChecked = $('.group-checkbox:checked').length === $('.group-checkbox').length;
+            $('#selectAll').prop('checked', allGroupsChecked);
+        });
+    
+        // Initialize group checkboxes on load
+        $('.group-checkbox').each(function() {
+            var group = $(this).data('group');
+            var total = $('.permission-checkbox.' + group).length;
+            var checked = $('.permission-checkbox.' + group + ':checked').length;
+            $(this).prop('checked', total === checked);
+        });
+    
+        // Initialize "Select All" checkbox on load
         var allGroupsChecked = $('.group-checkbox:checked').length === $('.group-checkbox').length;
         $('#selectAll').prop('checked', allGroupsChecked);
     });
-
-    // Initialize group checkboxes
-    $('.group-checkbox').each(function() {
-        var group = $(this).data('group');
-        var allChecked = $(.permission-checkbox.${group}:checked).length === $(.permission-checkbox.${group}).length;
-        $(this).prop('checked', allChecked);
-    });
-
-    // Initialize select all checkbox
-    var allGroupsChecked = $('.group-checkbox:checked').length === $('.group-checkbox').length;
-    $('#selectAll').prop('checked', allGroupsChecked);
-});
-</script>
+    </script>
+    
 @endpush
 @endsection
