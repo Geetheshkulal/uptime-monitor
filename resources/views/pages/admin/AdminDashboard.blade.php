@@ -110,7 +110,7 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                 Active Users (30d)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">892</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $active_users }}</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-user-clock text-danger"></i>

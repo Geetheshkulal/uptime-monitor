@@ -591,6 +591,18 @@ public function storeUser(Request $request)
         })->toArray();
 
         
+        //Count of active users in the last month.
+
+        $thirtyDaysAgo = Carbon::now()->subDays(30);
+
+        $activeUserIds = Activity::where('created_at', '>=', $thirtyDaysAgo)
+            ->whereHas('causer.roles', function ($query) {
+                $query->where('name', 'user'); // Spatie role name
+            })
+            ->distinct()
+            ->pluck('causer_id');
+
+        $active_users = $activeUserIds->count();
 
 
         
@@ -601,7 +613,8 @@ public function storeUser(Request $request)
             'total_revenue',
             'month_labels',
             'user_data',
-            'monthly_revenue'
+            'monthly_revenue',
+            'active_users'
         ));
     }
 }
