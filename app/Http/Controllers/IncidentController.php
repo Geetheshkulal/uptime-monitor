@@ -23,17 +23,19 @@ class IncidentController extends Controller
         
         $tempMonitor= Monitors::where('user_id', $userId)->first();
 
+        if ($tempMonitor) {
             activity()
-            ->performedOn($tempMonitor)
-            ->causedBy(auth()->user())
-            ->inLog('incident monitoring') 
-            ->event('visited')
-            ->withProperties([
-                'name' => auth()->user()->name,
-                'email' => auth()->user()->email,
-                'page' => 'Incidents Page'
-            ])
-            ->log('Visited the incidents page');
+                ->performedOn($tempMonitor)
+                ->causedBy(auth()->user())
+                ->inLog('incident monitoring') 
+                ->event('visited')
+                ->withProperties([
+                    'name' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                    'page' => 'Incidents Page'
+                ])
+                ->log('Visited the incidents page');
+        }
 
         return view('pages.incidents', compact('incidents'));
     }

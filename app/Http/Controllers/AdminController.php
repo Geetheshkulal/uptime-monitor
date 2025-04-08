@@ -476,10 +476,20 @@ public function storeUser(Request $request)
     public function DisplayActivity()
     {
         // Fetch all activity logs
-        $logs = Activity::latest()->get();
+        $query = Activity::latest();
         
+        if(!auth()->user()->hasRole('superadmin')) {
+            $superadminIds = User::role('superadmin')->pluck('id');
+
+            // Exclude logs where causer_id is a superadmin
+            $query->whereNotIn('causer_id', $superadminIds);
+        }
+
+        $logs = $query->get();
+
         // Fetch all users with only id and name
         $users = User::select('id', 'name')->get();
+
         
         return view('pages.admin.DisplayActivity', compact('logs', 'users'));
     }

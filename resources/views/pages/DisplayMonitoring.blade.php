@@ -299,7 +299,7 @@
 
         <form action="{{ route('monitoring.update', $details->id)}}" id="editForm" method="POST">
             @csrf
-            @method('PUT')
+            @method('POST')
             {{-- <input type="hidden" name="_method" value="POST">  --}}
             <input type="hidden" name="type" value="{{ $details->type }}">
 

@@ -68,21 +68,18 @@ class CashFreePaymentController extends Controller
         $orderId = $request->query('order_id');
         $user = auth()->user();
         
-        if (!$user) {
-          return redirect()->route('login')->with('error', 'You must be logged in to complete the payment.');
-      }
-  
-      $payment=Payment::create([
-          'status' => 'paid',
-          'user_id' => $user->id,
-          'amount' => 399, // Replace with actual amount from CashFree API
-          'payment_status' => 'paid',
-          'transaction_id' => $orderId,
-          'payment_type' => 'upi',
-          'start_date' => now(),
-          'end_date' => now()->addMonth(),
-          
-      ]);
+        
+        $payment=Payment::create([
+            'status' => 'paid',
+            'user_id' => $user->id,
+            'amount' => 399, // Replace with actual amount from CashFree API
+            'payment_status' => 'paid',
+            'transaction_id' => $orderId,
+            'payment_type' => 'upi',
+            'start_date' => now(),
+            'end_date' => now()->addMonth(),
+            
+        ]);
   
       // Update User Status
       $user->update([
