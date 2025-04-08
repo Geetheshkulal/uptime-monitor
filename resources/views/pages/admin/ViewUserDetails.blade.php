@@ -3,11 +3,13 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap4.min.css">
 @endpush
 
 <div class="container-fluid">
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">User Details</h1>
         <div>
             <a href="{{ route('display.users') }}" class="btn btn-secondary">
@@ -112,8 +114,6 @@
             </div>
         </div>
     </div>
-
-    <!-- User Monitors Section -->
     @can('see.monitors')
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -122,8 +122,8 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="monitorsTable" width="100%" cellspacing="0">
-                        <thead>
+                    <table class="table table-bordered table-hover" id="monitorsTable" width="100%" cellspacing="0">
+                        <thead class="thead-light">
                             <tr>
                                 <th>Name</th>
                                 <th>URL</th>
@@ -139,8 +139,14 @@
                             @foreach($user->monitors as $monitor)
                             <tr>
                                 <td>{{ $monitor->name }}</td>
-                                <td>{{ $monitor->url }}</td>
-                                <td>{{ $monitor->type }}{{ $monitor->type === 'port' ? '-' . $monitor->port : '' }}</td>
+                                <td>{{ Str::limit($monitor->url, 30) }}</td>
+                                <td>
+                                    @if($monitor->type === 'port')
+                                        {{ $monitor->type }} ({{ $monitor->port }})
+                                    @else
+                                        {{ $monitor->type }}
+                                    @endif
+                                </td>
                                 <td>
                                     @if ($monitor->status === 'up')
                                         <span class="badge badge-success">Up</span>
@@ -148,12 +154,14 @@
                                         <span class="badge badge-danger">Down</span>
                                     @endif
                                 </td>
-                                <td>{{ $monitor->created_at->format('Y-m-d') }}</td>
+                                <td data-order="{{ $monitor->created_at->timestamp }}">
+                                    {{ $monitor->created_at->format('M d, Y') }}
+                                </td>
                                 @can('see.monitor.details')
                                     <td>
                                         <a href="{{ route('display.monitoring', ['id' => $monitor->id, 'type' => $monitor->type]) }}" 
-                                        class="btn btn-sm btn-primary">
-                                            <i class="fas fa-eye"></i> View
+                                        class="btn btn-sm btn-primary" title="View Monitor">
+                                            <i class="fas fa-eye"></i>
                                         </a>
                                     </td>
                                 @endcan
@@ -168,18 +176,44 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/responsive.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <script>
     $(document).ready(function() {
         $('#monitorsTable').DataTable({
-            "pageLength": 10,
-            "order": [[4, "desc"]]
+            responsive: true,
+            dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                 "<'row'<'col-sm-12'tr>>" +
+                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search monitors...",
+                lengthMenu: "Show _MENU_ monitors per page",
+                info: "Showing _START_ to _END_ of _TOTAL_ monitors",
+                infoEmpty: "No monitors available",
+                infoFiltered: "(filtered from _MAX_ total monitors)",
+                paginate: {
+                    first: "First",
+                    last: "Last",
+                    next: "Next",
+                    previous: "Previous"
+                }
+            },
+            columnDefs: [
+                { responsivePriority: 1, targets: 0 }, // Name column
+                { responsivePriority: 2, targets: -1 }, // Action column if exists
+                { orderable: false, targets: -1 } // Make action column not orderable
+            ],
+            order: [[4, "desc"]], // Default sort by Created Date descending
+            pageLength: 10,
+            lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
         });
     });
-</script>
-@endpush
-@push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script>
+
     @if(Session::has('success'))
         toastr.success("{{ Session::get('success') }}");
     @endif

@@ -121,7 +121,7 @@ public function storeUser(Request $request)
     public function EditUsers($id)
     {
         $user = User::findOrFail($id);
-        $roles = Role::all();
+        $roles = Role::whereNot('name','superadmin')->get();
         
         return view('pages.admin.EditUsers', compact('user', 'roles'));
     }
@@ -478,17 +478,21 @@ public function storeUser(Request $request)
         // Fetch all activity logs
         $query = Activity::latest();
         
+        $userQuery = User::select('id', 'name');
+
         if(!auth()->user()->hasRole('superadmin')) {
             $superadminIds = User::role('superadmin')->pluck('id');
 
             // Exclude logs where causer_id is a superadmin
             $query->whereNotIn('causer_id', $superadminIds);
+
+            $userQuery->whereNotIn('id',$superadminIds );
         }
 
         $logs = $query->get();
 
         // Fetch all users with only id and name
-        $users = User::select('id', 'name')->get();
+        $users = $userQuery->get();
 
         
         return view('pages.admin.DisplayActivity', compact('logs', 'users'));
