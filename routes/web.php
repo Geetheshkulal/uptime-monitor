@@ -13,7 +13,6 @@ use App\Http\Controllers\PortMonitorController;
 use App\Http\Controllers\HttpMonitoringController;
 use App\Http\Controllers\CashFreePaymentController;
 use App\Http\Controllers\PlanSubscriptionController;
-use App\Http\Controllers\ServerHealthController;
 use Illuminate\Support\Facades\Http;
 /*
 |--------------------------------------------------------------------------
@@ -97,7 +96,6 @@ Route::middleware('auth')->group(function () {
 
 Route::group(['middleware' => ['auth']], function () {
     // Routes accessible only by superadmin
-    Route::get('/server-health', [ServerHealthController::class, 'check'])->name('server.health');
     Route::get('/admin/dashboard',[AdminController::class,'AdminDashboard'])->middleware('role:superadmin')->name('admin.dashboard');
     Route::get('/admin/display/users', action: [AdminController::class,'DisplayUsers'])->middleware('permission:see.users')->name('display.users');
     Route::get('/admin/display/roles', [AdminController::class,'DisplayRoles'])->middleware('permission:see.roles')->name('display.roles');
