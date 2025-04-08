@@ -139,6 +139,32 @@
         </div>
     </div>
 
+    {{-- cpu and memory --}}
+
+    {{-- <div class="col-xl-2 col-md-6 mb-4">
+        <div class="card card-counter border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                             CPU usage</div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800">{{ $cpuUsage }}</div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Memory Usage</div>
+                        <div class="h6 mb-0 font-weight-bold text-gray-800">{{$memUsage }}</div>
+
+                        <h2>CPU Usage</h2>
+                        <p>{{ $cpuPercent }}%</p>
+                        
+                        <h2>Memory Usage</h2>
+                        <p>{{ $usedMemoryMB }} MB / {{ $totalMemoryMB }} MB ({{ $memoryPercent }}%)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+
+
     <!-- Graphs Row -->
     <div class="row">
         <!-- User Growth Chart -->

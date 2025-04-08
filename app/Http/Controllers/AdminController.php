@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\Monitors;
 
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+
 
 class AdminController extends Controller
 {
@@ -590,8 +593,29 @@ public function storeUser(Request $request)
             return $revenue[$month] ?? 0;
         })->toArray();
 
-        
+        // $cpuUsage = shell_exec('wmic cpu get loadpercentage /value');
 
+        // // Memory stats
+        // $memUsage = shell_exec('wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /value');
+
+
+           // CPU
+    $cpuRaw = shell_exec('wmic cpu get loadpercentage /value');
+    preg_match('/LoadPercentage=(\d+)/', $cpuRaw, $cpuMatches);
+    $cpuPercent = $cpuMatches[1] ?? 'N/A';
+
+    // Memory
+    // $memRaw = shell_exec('wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /value');
+    // preg_match('/FreePhysicalMemory=(\d+)/', $memRaw, $freeMatch);
+    // preg_match('/TotalVisibleMemorySize=(\d+)/', $memRaw, $totalMatch);
+
+    // $free = $freeMatch[1] ?? 0;
+    // $total = $totalMatch[1] ?? 1; // prevent division by zero
+    // $used = $total - $free;
+
+    // $memoryPercent = round(($used / $total) * 100, 2);
+    // $usedMemoryMB = round($used / 1024);
+    // $totalMemoryMB = round($total / 1024);
 
         
         return view('pages.admin.AdminDashboard',compact(
