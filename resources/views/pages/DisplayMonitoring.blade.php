@@ -8,35 +8,51 @@
 <!-- Page Heading -->
 
 <div class="container-fluid">
+
+   
     <div class="row">
         <div class="col-xl-12">
-            <div class="d-sm-flex align-items-center justify-content-between mb-3">
-                <div class="d-flex align-items-center justify-content-between">
-                    <span class="h3 mb-0 text-gray-800 font-weight-bold">{{strtoupper($details->name)}}</span>
-                    <button type="button" class="btn btn-primary mx-3" data-toggle="modal" data-target="#editModal" 
-                    onclick="setEditUrl({{ $details->id }})"> <i class="fas fa-pen fa-1x"></i> Edit</button>
-
-                    <button type="button" class="btn btn-danger mx-2" data-toggle="modal" data-target="#deleteModal" 
-                    onclick="setDeleteUrl({{ $details->id }})"><i class="fas fa-trash fa-1x"></i> Delete</button>
-
-                            
-                    @if($details->paused)
-                    <button type="button" class="btn btn-warning mx-2" onclick="pauseMonitor({{ $details->id }}, this)">
-                        <i class="fas fa-play fa-1x"></i> Resume
-                    </button>
-                @else
-                    <button type="button" class="btn btn-success mx-2" onclick="pauseMonitor({{ $details->id }}, this)">
-                        <i class="fas fa-pause fa-1x"></i> Pause
-                    </button>
-                @endif
-
+            <div class="row justify-content-between align-items-center mb-3">
+                
+                {{-- Left section: Monitor name and action buttons --}}
+                <div class="col-md-8 col-12">
+                    <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
+                        <span class="h4 text-gray-800 font-weight-bold mr-md-3">{{ strtoupper($details->name) }}</span>
+                        
+                        <div class="d-flex flex-wrap mt-2 mt-md-0">
+                            <button type="button" class="btn btn-primary mx-1 mb-2" data-toggle="modal" data-target="#editModal" onclick="setEditUrl({{ $details->id }})">
+                                <i class="fas fa-pen fa-1x"></i> Edit
+                            </button>
+    
+                            <button type="button" class="btn btn-danger mx-1 mb-2" data-toggle="modal" data-target="#deleteModal" onclick="setDeleteUrl({{ $details->id }})">
+                                <i class="fas fa-trash fa-1x"></i> Delete
+                            </button>
+    
+                            @if($details->paused)
+                                <button type="button" class="btn btn-warning mx-1 mb-2" onclick="pauseMonitor({{ $details->id }}, this)">
+                                    <i class="fas fa-play fa-1x"></i> Resume
+                                </button>
+                            @else
+                                <button type="button" class="btn btn-success mx-1 mb-2" onclick="pauseMonitor({{ $details->id }}, this)">
+                                    <i class="fas fa-pause fa-1x"></i> Pause
+                                </button>
+                            @endif
+                        </div>
+                    </div>
                 </div>
-                <div onclick="window.print()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                    <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+    
+                {{-- Right section: Back button --}}
+                <div class="col-md-4 col-12 text-md-right text-left mt-3 mt-md-0">
+                    <a href="{{ route('monitoring.dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i> Back
+                    </a>
                 </div>
+    
             </div>
         </div>
     </div>
+    
+    
 
     <!-- URL Display -->
     <div class="row">
