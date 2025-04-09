@@ -188,7 +188,7 @@
                     <div class="card-body p-0">
                         {{-- back button --}}
                         <div class="custom-back-button position-absolute">
-                            <a href="{{ route('/') }}" class="btn btn-circle btn-light custom-btn-lg">
+                            <a href="/" class="btn btn-circle btn-light custom-btn-lg">
                                 <i class="fa-solid fa-arrow-left text-primary"></i>
                             </a>
                         </div>
