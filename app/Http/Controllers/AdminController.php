@@ -620,14 +620,14 @@ public function storeUser(Request $request)
             ->pluck('causer_id');
 
         $active_users = $activeUserIds->count();
-        
+
         // $cpuUsage = shell_exec('wmic cpu get loadpercentage /value');
 
         // // Memory stats
         // $memUsage = shell_exec('wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /value');
 
 
-           // CPU
+        // CPU
     $cpuRaw = shell_exec('wmic cpu get loadpercentage /value');
     preg_match('/LoadPercentage=(\d+)/', $cpuRaw, $cpuMatches);
     $cpuPercent = $cpuMatches[1] ?? 'N/A';

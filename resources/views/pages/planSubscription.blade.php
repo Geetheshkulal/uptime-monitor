@@ -1,91 +1,96 @@
 @extends('dashboard')
 @section('content')
-  
 
-<div class="container-fluid">
-    <div class="row justify-content-center">
+@push('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
 
-        @if (auth()->user()->status === 'paid')
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <div class="card border-left-primary shadow py-2 h-100">
+
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <div class="container-fluid">
+            <!-- Payments Table -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">My Payment History</h6>
+                </div>
                 <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-2">
-                                Current Plan</div>
-                            <div class="h6 mb-3 font-weight-bold text-gray-600">Status: {{$subscription->status}}</div>
-                            <div class="h6 mb-3 font-weight-bold text-gray-600">Amount: {{$subscription->amount}}</div>
-                            <div class="h6 mb-0 font-weight-bold text-gray-600">Payment Type: {{ strtoupper($subscription->payment_type) }}</div> 
-                            
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            Start Date</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"> 
-                                            {{ \Carbon\Carbon::parse($subscription->start_date)->format('d F Y') }}
-                                        </div>
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mt-3 mb-1">
-                                            End Date</div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800"> 
-                                            {{ \Carbon\Carbon::parse($subscription->end_date)->format('d F Y') }}
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="paymentsTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Payment Type</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($subscriptions as $subscription)
+                                <tr>
+                                    <td>{{ $subscription->id }}</td>
+                                    <td>₹{{ number_format($subscription->amount, 2) }}</td>
+                                    <td>
+                                        @if($subscription->status === 'active')
+                                            <span class="badge badge-success">Active</span>
+                                        @elseif($subscription->status === 'expired')
+                                            <span class="badge badge-danger">Expired</span>
+                                        @else
+                                            <span class="badge badge-warning">{{ ucfirst($subscription->status) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ strtoupper($subscription->payment_type) }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($subscription->start_date)->format('d M Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($subscription->end_date)->format('d M Y') }}</td>
+                                    <td>{{ $subscription->created_at->format('d M Y, h:i A') }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="7" class="text-center">No payment history found.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
+                    
                 </div>
             </div>
         </div>
-        @elseif(auth()->user()->status === 'free')
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <div class="card border-left-warning shadow h-100 py-2 ">
-                <div class="card-body text-center">
-                    <h5 class="text-warning font-weight-bold mb-3">Upgrade to Premium</h5>
-                    <p>Unlock more features and monitoring capabilities.</p>
-                    <a href="{{route('premium.page')}}" class="btn btn-warning">Upgrade Now</a>
-                </div>
-            </div>
-        </div>
-        @endif
-
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                    <div class="text-xs font-weight-bold text-success text-uppercase mb-2 text-center">
-                        Benefits of Premium</div>
-                    <ul class="list-unstyled text-center">
-                        <li><i class="fas fa-check-circle text-success"></i> Unlimited Monitors</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Faster Check Intervals</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Email & SMS Alerts</li>
-                        <li><i class="fas fa-check-circle text-success"></i> Advanced Analytics</li>
-                    </ul>
-                </div>
-
-                <div class="card-body text-center">
-                    <h5 class="text-dark font-weight-bold mb-3">Need Help?</h5>
-                    <p>Our support team is available 24/7.</p>
-                    <a href="mailto:support@example.com" class="btn btn-dark">Contact Support</a>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
-    <!-- Scripts -->
-    @push('scripts')
-    <script src="{{ asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    
-   
-    @endpush
+
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#paymentsTable').DataTable({
+            "order": [[6, "desc"]], // Order by created_at (7th column, index 6)
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "responsive": true,
+            "columnDefs": [
+                { "orderable": false, "targets": [2, 3] } // Make status and payment type columns non-orderable
+            ]
+        });
+    });
+
+</script>
+@endpush
+
 @endsection

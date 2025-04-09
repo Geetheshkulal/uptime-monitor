@@ -1,0 +1,11 @@
+  @elseif(auth()->user()->status === 'free')
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2 ">
+                <div class="card-body text-center">
+                    <h5 class="text-warning font-weight-bold mb-3">Upgrade to Premium</h5>
+                    <p>Unlock more features and monitoring capabilities.</p>
+                    <a href="{{route('premium.page')}}" class="btn btn-warning">Upgrade Now</a>
+                </div>
+            </div>
+        </div>
+        @endif

@@ -9,11 +9,26 @@ class PlanSubscriptionController extends Controller
 {
  public function planSubscription()
  {
-    $userId=Auth::id();
+   //  $userId=Auth::id();
 
-    $subscription=Payment::where("user_id",$userId)->latest()->first();
+    // to get newest first
+   //  $subscriptions=Payment::where("user_id",$userId)->latest()->first();
 
-    return view('pages.planSubscription',compact('subscription'));
+   //  return view('pages.planSubscription',compact('subscriptions'));
+        $userId = Auth::id();
+        $subscriptions = Payment::where("user_id", $userId)
+                               ->orderBy('created_at', 'desc')
+                               ->get();
+       $count=$subscriptions->count();
+
+       if($count>0)
+       {
+         return view('pages.planSubscription', compact('subscriptions'));
+       }
+       else{
+         return view('pages.Premium');
+       }
+
     
  }
 }

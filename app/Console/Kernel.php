@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();\
         $schedule->job(new MonitorJob())->everyMinute();
+        $schedule->command('payments:expire-check')->daily();
     }
 
     /**
