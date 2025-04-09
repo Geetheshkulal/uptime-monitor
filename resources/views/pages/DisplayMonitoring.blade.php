@@ -1,10 +1,10 @@
 @extends('dashboard')
 @section('content')
 
-<head>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-</head>
+@push('styles')
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+@endpush
 <!-- Page Heading -->
 
 <div class="container-fluid">
@@ -307,10 +307,14 @@
             <div class="mb-3">
                 <label for="name" class="form-label">Friendly name</label>
                 <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" value="{{$details->name}}" required>
+                
             </div>
             <div class="mb-3">
                 <label for="url" class="form-label">URL</label>
                 <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" value="{{$details->url}}" required>
+                @error('url')
+                    <p style="color: red; font-size: 14px;">{{ $message }}</p>                
+                @enderror        
             </div>
 
             @if($details->type == 'port')
@@ -385,70 +389,70 @@
     </div>
   </div>
 
-  
-<script>
-function pauseMonitor(monitorId, button) {
-    // Send AJAX request to toggle pause/resume
-    fetch(`/monitor/pause/${monitorId}`, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update button classes and icon
-            button.innerHTML = data.paused 
-                ? '<i class="fas fa-play fa-1x"></i> Resume' 
-                : '<i class="fas fa-pause fa-1x"></i> Pause';
-            
-            // Toggle button classes
-            button.classList.toggle('btn-success', !data.paused);
-            button.classList.toggle('btn-warning', data.paused);
+@push('scripts')
 
-            // Show success message
-            toastr.success(data.message);
-        } else {
-            toastr.error('Failed to update monitor status.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        toastr.error('An error occurred.');
-    });
-}
-</script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>  
+    <script>
+    function pauseMonitor(monitorId, button) {
+        // Send AJAX request to toggle pause/resume
+        fetch(`/monitor/pause/${monitorId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update button classes and icon
+                button.innerHTML = data.paused 
+                    ? '<i class="fas fa-play fa-1x"></i> Resume' 
+                    : '<i class="fas fa-pause fa-1x"></i> Pause';
+                
+                // Toggle button classes
+                button.classList.toggle('btn-success', !data.paused);
+                button.classList.toggle('btn-warning', data.paused);
 
-  <script>
-
-       function setEditUrl(id) {
-        let editForm = document.getElementById('editForm');
-        if (editForm) {
-            editForm.action = "/monitoring/edit/"+id; // Set form action dynamically
-        } else {
-            console.error("Edit form not found!");
-        }
+                // Show success message
+                toastr.success(data.message);
+            } else {
+                toastr.error('Failed to update monitor status.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            toastr.error('An error occurred.');
+        });
     }
     </script>
 
- <script>
-    function setDeleteUrl(id) {
-        let deleteButton = document.getElementById("deleteConfirmButton");
-        deleteButton.href = "/monitoring/delete/" + id; // Sets the GET request URL
-    }
-</script>
-
-
-
-@push('scripts')
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+
+        function setEditUrl(id) {
+            let editForm = document.getElementById('editForm');
+            if (editForm) {
+                editForm.action = "/monitoring/edit/"+id; // Set form action dynamically
+            } else {
+                console.error("Edit form not found!");
+            }
+        }
+        </script>
+
+    <script>
+        function setDeleteUrl(id) {
+            let deleteButton = document.getElementById("deleteConfirmButton");
+            deleteButton.href = "/monitoring/delete/" + id; // Sets the GET request URL
+        }
+    </script>
+
+    <script>
+        
             @if(session('success'))
                 toastr.success("{{ session('success') }}");
             @endif
-        });
+        
     </script>
 @endpush
 

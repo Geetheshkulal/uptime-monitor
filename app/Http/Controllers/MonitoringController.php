@@ -316,7 +316,7 @@ class MonitoringController extends Controller
         ->withProperties($changes)
         ->log('Monitoring details updated');
 
-    return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring details updated successfully.');
+    return redirect()->back()->with('success', 'Monitoring details updated successfully.');
    }
 
 

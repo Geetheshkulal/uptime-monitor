@@ -501,6 +501,11 @@ public function storeUser(Request $request)
 
     public function EditRolePermissions($id)
     {
+        $superadminIds = User::role('superadmin')->pluck('id');
+
+        if($superadminIds->contains($id)) {
+            abort(404);
+        }
         $role = Role::findOrFail($id);
         $permission_groups = Permission::select('group_name')->groupBy('group_name')->get();
         

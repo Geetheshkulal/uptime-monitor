@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/monitoring/dashboard', [MonitoringController::class, 'MonitoringDashboard'])->middleware('role:user')->name('monitoring.dashboard');
+    Route::get('/dashboard', [MonitoringController::class, 'MonitoringDashboard'])->middleware('role:user')->name('monitoring.dashboard');
     // notification
     Route::get('/notifications/read', function() {
         auth()->user()->unreadNotifications->markAsRead();

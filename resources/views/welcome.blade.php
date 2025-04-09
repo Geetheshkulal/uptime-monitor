@@ -106,9 +106,9 @@
       <div class="d-flex">
       @auth 
         @hasrole('superadmin')
-          <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary">Dashboard</a>
+          <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Dashboard</a>
         @else
-          <a href="{{ url('/monitoring/dashboard') }}" class="btn btn-primary">Dashboard</a>
+          <a href="{{ route('monitoring.dashboard') }}" class="btn btn-primary">Dashboard</a>
         @endhasrole
       
       @else  
