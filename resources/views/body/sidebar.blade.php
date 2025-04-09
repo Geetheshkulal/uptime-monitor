@@ -15,8 +15,8 @@
     <hr class="sidebar-divider my-0">
 
     @hasrole('user')
-    <li class="nav-item {{ request()->is('monitoring*') ? 'active' : '' }}" 
-        style="{{ request()->is('monitoring*') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+    <li class="nav-item {{ request()->is('dashboard*') ? 'active' : '' }}" 
+        style="{{ request()->is('dashboard*') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
         <a class="nav-link text-white" href="{{ route('monitoring.dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>

@@ -1,103 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Register for an account">
+    <meta name="author" content="Your App">
+
     <title>Register | Your App</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts -->
+    <link href="{{asset('frontend/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="{{asset('frontend/assets/css/sb-admin-2.min.css')}}" rel="stylesheet">
+
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     <style>
-        body {
-            background-color: #f8f9fa;
+        .bg-register-image {
+            background: url('{{ asset('frontend/assets/img/register-bg.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            min-height: 300px;
         }
-        .register-container {
-            max-width: 400px;
-            margin: auto;
-            margin-top: 5%;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        
+        .card {
+            border: 0;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 2rem auto;
+        }
+        
+        .btn-primary {
+            background-color: #4e73df;
+            border-color: #4e73df;
+            border-radius: 10rem;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2e59d9;
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary:focus {
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.5);
+        }
+        
+        .form-control-user {
+            border-radius: 10rem;
+            padding: 1rem 1.25rem;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control-user:focus {
+            box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+        }
+        
+        .register-text {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #4e73df;
+            font-weight: 700;
+        }
+        
+        .register-subtext {
+            color: #858796;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        
+        .register-footer {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #858796;
+        }
+        
+        .register-footer a {
+            color: #4e73df;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .register-footer a:hover {
+            color: #2e59d9;
+            text-decoration: underline;
+        }
+        
+        .password-input-container {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6e707e;
+        }
+        
+        .password-strength {
+            height: 4px;
+            width: 100%;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+        
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: 1.5rem 0;
+            font-size: 0.8rem;
+            color: #b7b9cc;
+        }
+        
+        .divider:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e3e6f0;
+            z-index: 0;
+        }
+        
+        .divider span {
+            position: relative;
+            display: inline-block;
+            padding: 0 12px;
+            background: white;
+            z-index: 1;
+        }
+        
+        .password-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .password-col {
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .bg-register-image {
+                min-height: 200px;
+                border-radius: 1rem 1rem 0 0;
+            }
+            
+            .card {
+                margin: 1rem;
+            }
+            
+            .form-control-user {
+                padding: 0.8rem 1.1rem;
+            }
+            
+            .password-row {
+                flex-direction: column;
+                gap: 0;
+            }
         }
     </style>
 </head>
-<body>
 
-<div class="register-container">
-    <h3 class="text-center fw-bold mb-4">Create an Account</h3>
+<body class="bg-gradient-primary">
 
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                            <div class="col-lg-7">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="register-text">Create an Account!</h1>
+                                        <p class="register-subtext">Fill in your details to get started</p>
+                                    </div>
 
-        <!-- Name -->
-        <div class="mb-3">
-            <label for="name" class="form-label fw-bold">Full Name</label>
-            <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name" required autofocus>
-            @error('name') 
-                <small class="text-danger">{{ $message }}</small> 
-            @enderror
+                                    <form class="user" method="POST" action="{{ route('register') }}">
+                                        @csrf
+                                        
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" 
+                                                id="name" name="name" placeholder="Full Name" 
+                                                value="{{ old('name') }}" required autofocus>
+                                            @error('name')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user" 
+                                                id="email" name="email" placeholder="Email Address" 
+                                                value="{{ old('email') }}" required>
+                                            @error('email')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <input type="text" class="form-control form-control-user" 
+                                                id="phone" name="phone" placeholder="Phone Number" 
+                                                value="{{ old('phone') }}" required>
+                                            @error('phone')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <div class="password-row">
+                                                <div class="password-col">
+                                                    <div class="password-input-container">
+                                                        <input type="password" class="form-control form-control-user"
+                                                            id="password" name="password" placeholder="Password" required
+                                                            onkeyup="checkPasswordStrength(this.value)">
+                                                        <span class="password-toggle" onclick="togglePassword('password')">
+                                                            <i class="far fa-eye"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div class="password-strength">
+                                                        <div class="password-strength-bar" id="password-strength-bar"></div>
+                                                    </div>
+                                                    <small id="password-strength-text" class="text-muted"></small>
+                                                    @error('password')
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                                <div class="password-col">
+                                                    <div class="password-input-container">
+                                                        <input type="password" class="form-control form-control-user"
+                                                            id="password_confirmation" name="password_confirmation" 
+                                                            placeholder="Confirm Password" required>
+                                                        <span class="password-toggle" onclick="togglePassword('password_confirmation')">
+                                                            <i class="far fa-eye"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-primary btn-user btn-block" id="register-btn">
+                                            <span class="spinner-border spinner-border-sm d-none" id="register-spinner"></span>
+                                            <span id="register-text">Register Account</span>
+                                        </button>
+
+                                        <div class="divider">
+                                            <span>OR</span>
+                                        </div>
+
+                                        <div class="text-center register-footer">
+                                            <a href="{{ route('login') }}">Already have an account? Login!</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <!-- Email Address -->
-        <div class="mb-3">
-            <label for="email" class="form-label fw-bold">Email Address</label>
-            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
-            @error('email') 
-                <small class="text-danger">{{ $message }}</small> 
-            @enderror
-        </div>
+    <!-- Scripts -->
+    <script src="{{asset('frontend/assets/vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/sb-admin-2.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-        <div class="mb-3">
-            <label for="phone" class="form-label fw-bold">Phone</label>
-            <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter your phone" required>
-            @error('phone') 
-                <small class="text-danger">{{ $message }}</small> 
-            @enderror
-        </div>
+    <script>
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = field.nextElementSibling.querySelector('i');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
 
-        <!-- Password -->
-        <div class="mb-3">
-            <label for="password" class="form-label fw-bold">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
-            @error('password') 
-                <small class="text-danger">{{ $message }}</small> 
-            @enderror
-        </div>
+        function checkPasswordStrength(password) {
+            const strengthBar = document.getElementById('password-strength-bar');
+            const strengthText = document.getElementById('password-strength-text');
+            let strength = 0;
+    
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[\W]/.test(password)) strength++;
+    
+            const width = (strength / 4) * 100;
+            strengthBar.style.width = width + '%';
+            
+            if (password.length === 0) {
+                strengthBar.style.background = 'transparent';
+                strengthText.textContent = '';
+            } else if (strength <= 1) {
+                strengthBar.style.background = '#dc3545';
+                strengthText.textContent = 'Weak';
+                strengthText.className = 'text-danger';
+            } else if (strength <= 2) {
+                strengthBar.style.background = '#fd7e14';
+                strengthText.textContent = 'Moderate';
+                strengthText.className = 'text-warning';
+            } else if (strength <= 3) {
+                strengthBar.style.background = '#ffc107';
+                strengthText.textContent = 'Good';
+                strengthText.className = 'text-info';
+            } else {
+                strengthBar.style.background = '#28a745';
+                strengthText.textContent = 'Strong';
+                strengthText.className = 'text-success';
+            }
+        }
 
-        <!-- Confirm Password -->
-        <div class="mb-3">
-            <label for="password_confirmation" class="form-label fw-bold">Confirm Password</label>
-            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Confirm your password" required>
-            @error('password_confirmation') 
-                <small class="text-danger">{{ $message }}</small> 
-            @enderror
-        </div>
+        document.addEventListener('DOMContentLoaded', () => {
+            const registerForm = document.querySelector('form');
+            const registerBtn = document.getElementById('register-btn');
+            const registerText = document.getElementById('register-text');
+            const registerSpinner = document.getElementById('register-spinner');
 
-        <!-- Register Button -->
-        <button type="submit" class="btn btn-primary w-100" id="register-btn">
-            <span class="spinner-border spinner-border-sm d-none" id="register-spinner"></span>
-            Register
-        </button>
-
-        <!-- Already have an account? -->
-        <div class="text-center mt-3">
-            <a href="{{ route('login') }}" class="text-decoration-none">Already registered? Log in</a>
-        </div>
-    </form>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const loginForm = document.querySelector('form');
-        const loginBtn = document.getElementById('register-btn');
-        const loginSpinner = document.getElementById('register-spinner');
-
-        loginForm.addEventListener('submit', () => {
-            loginBtn.disabled = true;
-            loginSpinner.classList.remove('d-none');
-            loginBtn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Loading...`;
+            registerForm.addEventListener('submit', () => {
+                registerBtn.disabled = true;
+                registerSpinner.classList.remove('d-none');
+                registerText.textContent = 'Creating Account...';
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
 </html>

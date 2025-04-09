@@ -81,15 +81,18 @@
                                     </a>
                                 @endcan
                                 
-                                @can('delete.user')
-                                    <form action="{{ route('delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to delete this user?')">
-                                            <i class="fas fa-trash"></i> Delete User
-                                        </button>
-                                    </form>
-                                @endcan
+                               
+                                @if(!$user->hasRole('superadmin'))
+                                    @can('delete.user')
+                                        <form action="{{ route('delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to delete this user?')">
+                                                <i class="fas fa-trash"></i> Delete User
+                                            </button>
+                                        </form>
+                                    @endcan
+                                @endif
                             </div>
                         </div>
                     @endcanany

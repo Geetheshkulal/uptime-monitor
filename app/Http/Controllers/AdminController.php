@@ -199,6 +199,11 @@ public function storeUser(Request $request)
 
             $user = User::findOrFail($id);
 
+            if($user->hasRole('superadmin')){
+                return redirect()->back()->with('error', 'Superadmin cannot be deleted.');
+
+            }
+
             $deletedUserInfo = [
                 'id' => $user->id,
                 'name' => $user->name,
