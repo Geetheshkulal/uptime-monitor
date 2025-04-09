@@ -3,12 +3,26 @@
 <head>
     <!-- Toastr CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+<style>
+
+    </style>
 </head>
 
-<h1 class="mb-4 mx-5">Add Monitoring</h1>
 
-<div class="dropdown mb-4 mx-5">
+<div class="row mb-4 px-3 px-lg-4">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h1 class="mb-0 ml-lg-3">Add Monitoring</h1>
+            <a href="{{ route('monitoring.dashboard') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left mr-1"></i> Back
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="dropdown mb-4 mx-3 mx-lg-5">
     <button class="btn btn-primary dropdown-toggle" type="button"
         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
         aria-expanded="false">
