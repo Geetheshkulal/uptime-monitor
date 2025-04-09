@@ -8,6 +8,7 @@
     <meta name="author" content="Your App">
 
     <title>Login</title>
+    <script async src="https://www.google.com/recaptcha/api.js"></script>
 
     <!-- Custom fonts -->
     <link href="{{asset('frontend/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -236,6 +237,12 @@
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
+
+                                        <div class="g-recaptcha mt-4" data-sitekey={{config('services.recaptcha.key')}}></div>
+                                        @if ($errors->has('g-recaptcha-response'))
+                                            <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                                        @endif
+
 
                                         <div class="form-group d-flex justify-content-between align-items-center">
                                             <div class="custom-control custom-checkbox">
