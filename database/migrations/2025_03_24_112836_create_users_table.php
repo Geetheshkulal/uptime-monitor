@@ -20,6 +20,8 @@ return new class extends Migration
             $table->timestamp('updated_at')->nullable();
             $table->string('email');
             $table->date('premium_end_date')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+
         });
     }
 
