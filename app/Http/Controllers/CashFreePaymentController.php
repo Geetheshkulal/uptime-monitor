@@ -58,7 +58,7 @@ class CashFreePaymentController extends Controller
          curl_close($curl);
 
 
-
+     //     dd(json_decode($resp));
          return redirect()->to(json_decode($resp)->payment_link);
     }
 
@@ -70,9 +70,9 @@ class CashFreePaymentController extends Controller
         
         
         $payment=Payment::create([
-            'status' => 'paid',
+            'status' => 'active',
             'user_id' => $user->id,
-            'amount' => 399, // Replace with actual amount from CashFree API
+            'amount' => 399, 
             'payment_status' => 'paid',
             'transaction_id' => $orderId,
             'payment_type' => 'upi',
