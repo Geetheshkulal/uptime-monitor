@@ -11,6 +11,7 @@
 
     <!-- Custom fonts -->
     <link href="{{asset('frontend/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
 
     <!-- Custom styles -->
@@ -136,6 +137,30 @@
             background: white;
             z-index: 1;
         }
+
+        .login-image {
+        height: 70%;
+        min-height: 400px;
+        object-fit: cover;
+        padding-left: 23px;
+        margin-top: 53px;
+        }
+        
+        .custom-back-button {
+        top: 15px;
+        left: 20px;
+        z-index: 1;
+        position: absolute;
+    }
+
+.custom-btn-lg {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
         
         @media (max-width: 768px) {
             .bg-login-image {
@@ -161,8 +186,17 @@
             <div class="col-xl-10 col-lg-12 col-md-9">
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
+                        {{-- back button --}}
+                        <div class="custom-back-button position-absolute">
+                            <a href="{{ route('/') }}" class="btn btn-circle btn-light custom-btn-lg">
+                                <i class="fa-solid fa-arrow-left text-primary"></i>
+                            </a>
+                        </div>
+
                         <div class="row">
-                            <div class="col-lg-5 d-none d-lg-block bg-login-image"></div>
+                            <div class="col-lg-5 d-none d-lg-block p-0">
+                                <img src="{{ asset('frontend/assets/img/login.jpg') }}" alt="Login Image" class="img-fluid login-image" />
+                            </div>
                             <div class="col-lg-7">
                                 <div class="p-5">
                                     <div class="text-center">

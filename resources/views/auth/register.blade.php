@@ -161,6 +161,9 @@
         .password-col {
             flex: 1;
         }
+        .regsiter-image{
+            margin-top: 80px;
+        }
         
         @media (max-width: 768px) {
             .bg-register-image {
@@ -192,7 +195,9 @@
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <div class="row">
-                            <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                            <div class="col-lg-5 d-none d-lg-block bg-register-image">
+                                <img src="{{ asset('frontend/assets/img/register.jpg') }}" alt="Login Image" class="img-fluid regsiter-image" />
+                            </div>
                             <div class="col-lg-7">
                                 <div class="p-5">
                                     <div class="text-center">
