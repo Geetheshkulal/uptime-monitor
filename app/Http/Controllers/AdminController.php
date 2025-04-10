@@ -567,96 +567,98 @@ public function storeUser(Request $request)
 
     public function AdminDashboard(){
         $role = Role::where('name', 'user')->first();
-
-        $total_user_count = $role->users()
-                    ->count();
+    
+        $total_user_count = $role->users()->count();
         
-        $paid_user_count = $role->users()->where('status','paid')->count();
-
-        $monitor_count = Monitors::all()->count();
-
-        $total_revenue = Payment::all('amount')->sum('amount');
-
-       
-
-        //user growth data over the past year.
+        $paid_user_count = $role->users()->where('status', 'paid')->count();
+    
+        $monitor_count = Monitors::count();
+    
+        // Total revenue from subscriptions linked to payments
+        $total_revenue = Payment::with('subscription')
+            ->get()
+            ->sum(function ($payment) {
+                return $payment->subscription->amount ?? 0;
+            });
+    
+        // user growth data over the past year.
         $now = Carbon::now();
         $oneYearAgo = $now->copy()->subYear()->startOfMonth();
-
+    
         $userCountsByMonth = User::role('user')
             ->where('created_at', '>=', $oneYearAgo)
             ->selectRaw('DATE_FORMAT(created_at, "%b") as month, COUNT(*) as count')
             ->groupBy('month')
             ->orderByRaw('MIN(created_at)')
             ->pluck('count', 'month');
-
+    
         // Initialize months
         $allMonths = collect(range(0, 11))->map(function ($i) use ($now) {
             return $now->copy()->subMonths(11 - $i)->format('M');
         });
-
+    
         // Fill missing months with 0
         $finalData = $allMonths->map(function ($month) use ($userCountsByMonth) {
             return $userCountsByMonth[$month] ?? 0;
         });
-
+    
         // Output to use in chart
         $month_labels = $allMonths->toArray(); // ['Apr', 'May', ..., 'Mar']
         $user_data = $finalData->toArray();   // [10, 23, 0, 5, ...]
-
-
-        //PAYMENTS TABLE
-
-        $revenue = Payment::where('created_at', '>=', $oneYearAgo)
-        ->selectRaw('DATE_FORMAT(created_at, "%b") as month, SUM(amount) as total')
-        ->groupBy('month')
-        ->orderByRaw('MIN(created_at)')
-        ->pluck('total', 'month');
-
+    
+        // PAYMENTS TABLE - Monthly revenue based on subscriptions
+        $revenue = Payment::with('subscription')
+            ->where('created_at', '>=', $oneYearAgo)
+            ->get()
+            ->groupBy(function ($payment) {
+                return $payment->created_at->format('M');
+            })
+            ->map(function ($group) {
+                return $group->sum(function ($payment) {
+                    return $payment->subscription->amount ?? 0;
+                });
+            });
+    
         $monthly_revenue = $allMonths->map(function ($month) use ($revenue) {
             return $revenue[$month] ?? 0;
         })->toArray();
-
-        
-        //Count of active users in the last month.
-
+    
+        // Count of active users in the last month.
         $thirtyDaysAgo = Carbon::now()->subDays(30);
-
+    
         $activeUserIds = Activity::where('created_at', '>=', $thirtyDaysAgo)
             ->whereHas('causer.roles', function ($query) {
                 $query->where('name', 'user'); // Spatie role name
             })
             ->distinct()
             ->pluck('causer_id');
-
+    
         $active_users = $activeUserIds->count();
-
-        // $cpuUsage = shell_exec('wmic cpu get loadpercentage /value');
-
+    
+        //$cpuUsage = shell_exec('wmic cpu get loadpercentage /value');
+    
         // // Memory stats
         // $memUsage = shell_exec('wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /value');
-
-
+    
         // CPU
-    $cpuRaw = shell_exec('wmic cpu get loadpercentage /value');
-    preg_match('/LoadPercentage=(\d+)/', $cpuRaw, $cpuMatches);
-    $cpuPercent = $cpuMatches[1] ?? 'N/A';
-
-    // Memory
-    // $memRaw = shell_exec('wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /value');
-    // preg_match('/FreePhysicalMemory=(\d+)/', $memRaw, $freeMatch);
-    // preg_match('/TotalVisibleMemorySize=(\d+)/', $memRaw, $totalMatch);
-
-    // $free = $freeMatch[1] ?? 0;
-    // $total = $totalMatch[1] ?? 1; // prevent division by zero
-    // $used = $total - $free;
-
-    // $memoryPercent = round(($used / $total) * 100, 2);
-    // $usedMemoryMB = round($used / 1024);
-    // $totalMemoryMB = round($total / 1024);
-
-        
-        return view('pages.admin.AdminDashboard',compact(
+        $cpuRaw = shell_exec('wmic cpu get loadpercentage /value');
+        preg_match('/LoadPercentage=(\d+)/', $cpuRaw, $cpuMatches);
+        $cpuPercent = $cpuMatches[1] ?? 'N/A';
+    
+        // Memory
+        // $memRaw = shell_exec('wmic OS get FreePhysicalMemory,TotalVisibleMemorySize /value');
+        // preg_match('/FreePhysicalMemory=(\d+)/', $memRaw, $freeMatch);
+        // preg_match('/TotalVisibleMemorySize=(\d+)/', $memRaw, $totalMatch);
+    
+        // $free = $freeMatch[1] ?? 0;
+        // $total = $totalMatch[1] ?? 1; // prevent division by zero
+        // $used = $total - $free;
+    
+        // $memoryPercent = round(($used / $total) * 100, 2);
+        // $usedMemoryMB = round($used / 1024);
+        // $totalMemoryMB = round($total / 1024);
+    
+        return view('pages.admin.AdminDashboard', compact(
             'total_user_count',
             'paid_user_count',
             'monitor_count',
@@ -664,7 +666,11 @@ public function storeUser(Request $request)
             'month_labels',
             'user_data',
             'monthly_revenue',
-            'active_users'
+            'active_users',
+            'cpuPercent'
         ));
     }
+    
+
+    
 }

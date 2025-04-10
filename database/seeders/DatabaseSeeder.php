@@ -15,5 +15,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SubscriptionsTableSeeder::class,
         ]);
+        $this->call([
+            SuperAdmin::class
+        ]);
+
+        $this->call([
+            permissionandrole::class,
+        ]);
     }
 }

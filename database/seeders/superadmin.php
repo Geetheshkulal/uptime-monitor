@@ -22,7 +22,8 @@ class SuperAdmin extends Seeder
             [
                 'name' => 'Super Admin',
                 'password' => Hash::make('123'), // Using simple password for development
-                'phone'=>'1234567890'
+                'phone'=>'1234567890',
+                'email_verified_at'=>now()
             ]
         );
 
