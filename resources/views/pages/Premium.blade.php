@@ -67,32 +67,34 @@
                 </div>
                 
                 <!-- Premium Plan (Highlighted) -->
-                <div class="col-lg-4">
-                    <div class="card h-100 border-warning shadow-lg premium-highlight">
-                        <div class="card-body p-4">
-                            <h3 class="fw-bold mb-2 text-warning">Premium</h3>
-                            <div class="text-warning mb-4">
-                                <span class="display-6 fw-bold">₹399</span>
-                                <span class="text-muted">/month</span>
+                @foreach($plans as $plan)
+                    <div class="col-lg-4">
+                        <div class="card h-100 border-warning shadow-lg premium-highlight">
+                            <div class="card-body p-4">
+                                <h3 class="fw-bold mb-2 text-warning">{{$plan->name}}</h3>
+                                <div class="text-warning mb-4">
+                                    <span class="display-6 fw-bold">₹399</span>
+                                    <span class="text-muted">/month</span>
+                                </div>
+                                <ul class="list-unstyled mb-4">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited websites</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-minute checks</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email & Telegram Bot alerts</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> SSL expiry check</li>
+                                    {{-- <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom integrations</li> --}}
+                                </ul>
+                                <form action="{{ route('store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="name" value="{{ auth()->user()->name }}">
+                                    <input type="hidden" name="email" value="{{ auth()->user()->email }}">
+                                    <input type="hidden" name="mobile" value="{{ auth()->user()->phone }}">
+                                    <input type="hidden" name="subscription_id" value="{{$plan->id}}">
+                                    <button type="submit" class="btn btn-warning d-block fw-bold">Upgrade Now</button>
+                                </form>
                             </div>
-                            <ul class="list-unstyled mb-4">
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited websites</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-minute checks</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email & Telegram Bot alerts</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> SSL expiry check</li>
-                                {{-- <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom integrations</li> --}}
-                            </ul>
-                            <form action="{{ route('store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="name" value="{{ auth()->user()->name }}">
-                                <input type="hidden" name="email" value="{{ auth()->user()->email }}">
-                                <input type="hidden" name="mobile" value="{{ auth()->user()->phone }}">
-                                <input type="hidden" name="amount" value="399">
-                                <button type="submit" class="btn btn-warning d-block fw-bold">Upgrade Now</button>
-                            </form>
                         </div>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>

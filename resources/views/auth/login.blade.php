@@ -239,9 +239,9 @@
                                         </div>
 
                                         <div class="g-recaptcha mt-4" data-sitekey={{config('services.recaptcha.key')}}></div>
-                                        @if ($errors->has('g-recaptcha-response'))
+                                        @error('g-recaptcha-response')
                                             <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
-                                        @endif
+                                        @enderror
 
 
                                         <div class="form-group d-flex justify-content-between align-items-center">

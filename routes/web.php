@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PremiumPageController;
 use GuzzleHttp\Client;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
@@ -96,7 +97,7 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('cashfree/payments/store', [CashFreePaymentController::class, 'store'])->name('store');
     Route::any('cashfree/payments/success', [CashFreePaymentController::class, 'success'])->name('success');
 
-    Route::get('premium',function(){return view('pages.premium');})->name('premium.page');
+    Route::get('premium',[PremiumPageController::class,'PremiumPage'])->name('premium.page');
 });
 
 
