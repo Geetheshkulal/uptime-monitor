@@ -74,8 +74,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         if ($request->has('remember')) {
-            Cookie::queue('remember_email', $request->email, 10080); // 7 days
-            Cookie::queue('remember_password', $request->password, 10080); 
+            Cookie::queue('remember_email', $request->email, 1440); // for 1 days
+            Cookie::queue('remember_password', $request->password, 1440); 
         } else {
             Cookie::queue(Cookie::forget('remember_email'));
             Cookie::queue(Cookie::forget('remember_password'));

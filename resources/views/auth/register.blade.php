@@ -8,7 +8,7 @@
     <meta name="description" content="Register for an account">
     <meta name="author" content="Your App">
 
-    <title>Register | Your App</title>
+    <title>Register </title>
 
     <!-- Custom fonts -->
     <link href="{{asset('frontend/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -201,6 +201,9 @@
                 gap: 0;
             }
         }
+        * {
+    border-radius: 0 !important;
+}
     </style>
 </head>
 
@@ -335,55 +338,81 @@
                 icon.classList.add('fa-eye');
             }
         }
-
+    
         function checkPasswordStrength(password) {
             const strengthBar = document.getElementById('password-strength-bar');
             const strengthText = document.getElementById('password-strength-text');
             let strength = 0;
+            let missingRequirements = [];
+            
+            // Check requirements
+            const hasMinLength = password.length >= 8;
+            const hasLowercase = /[a-z]/.test(password);
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSpecialChar = /[\W_]/.test(password);
+            
+            if (!hasMinLength) missingRequirements.push("8+ characters");
+            if (!hasLowercase) missingRequirements.push("lowercase letter");
+            if (!hasUppercase) missingRequirements.push("uppercase letter");
+            if (!hasNumber) missingRequirements.push("number");
+            if (!hasSpecialChar) missingRequirements.push("special character");
     
-            if (password.length >= 8) strength++;
-            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
-            if (/\d/.test(password)) strength++;
-            if (/[\W]/.test(password)) strength++;
-    
+            // Only count strength if minimum length is met
+            if (hasMinLength) {
+                if (hasLowercase) strength++;
+                if (hasUppercase) strength++;
+                if (hasNumber) strength++;
+                if (hasSpecialChar) strength++;
+            } else {
+                strengthBar.style.width = '0%';
+                strengthBar.style.background = 'transparent';
+                strengthText.textContent = 'Missing: ' + missingRequirements.join(', ');
+                strengthText.className = 'text-danger';
+                return;
+            }
+            
             const width = (strength / 4) * 100;
             strengthBar.style.width = width + '%';
             
             if (password.length === 0) {
                 strengthBar.style.background = 'transparent';
                 strengthText.textContent = '';
-            } else if (strength <= 1) {
+            } else if (missingRequirements.length > 0) {
                 strengthBar.style.background = '#dc3545';
-                strengthText.textContent = 'Weak';
+                strengthText.textContent = 'Missing: ' + missingRequirements.join(', ');
                 strengthText.className = 'text-danger';
-            } else if (strength <= 2) {
-                strengthBar.style.background = '#fd7e14';
-                strengthText.textContent = 'Moderate';
-                strengthText.className = 'text-warning';
-            } else if (strength <= 3) {
-                strengthBar.style.background = '#ffc107';
-                strengthText.textContent = 'Good';
-                strengthText.className = 'text-info';
             } else {
                 strengthBar.style.background = '#28a745';
-                strengthText.textContent = 'Strong';
+                strengthText.textContent = 'Strong password';
                 strengthText.className = 'text-success';
             }
         }
-
+    
         document.addEventListener('DOMContentLoaded', () => {
             const registerForm = document.querySelector('form');
             const registerBtn = document.getElementById('register-btn');
             const registerText = document.getElementById('register-text');
             const registerSpinner = document.getElementById('register-spinner');
-
-            registerForm.addEventListener('submit', () => {
+    
+            registerForm.addEventListener('submit', function(e) {
+                const password = document.getElementById('password').value;
+                const hasMinLength = password.length >= 8;
+                const hasLowercase = /[a-z]/.test(password);
+                const hasUppercase = /[A-Z]/.test(password);
+                const hasNumber = /\d/.test(password);
+                const hasSpecialChar = /[\W_]/.test(password);
+                
+                if (!hasMinLength || !hasLowercase || !hasUppercase || !hasNumber || !hasSpecialChar) {
+                    e.preventDefault();
+                    return false;
+                }
+                
                 registerBtn.disabled = true;
                 registerSpinner.classList.remove('d-none');
                 registerText.textContent = 'Creating Account...';
             });
         });
     </script>
-
 </body>
 </html>

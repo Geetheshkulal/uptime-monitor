@@ -140,9 +140,15 @@
         }
 
         .login-image {
-        height: 70%;
+        /* height: 70%;
         min-height: 400px;
         object-fit: cover;
+        padding-left: 23px;
+        margin-top: 53px;
+        font-size: large; */
+        width: 381px;       
+        height: 376px;       
+        object-fit: cover;   
         padding-left: 23px;
         margin-top: 53px;
         }
@@ -162,7 +168,9 @@
     align-items: center;
     justify-content: center;
 }
-        
+* {
+    border-radius: 0 !important;
+}
         @media (max-width: 768px) {
             .bg-login-image {
                 min-height: 200px;

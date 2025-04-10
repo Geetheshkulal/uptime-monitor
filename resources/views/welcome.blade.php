@@ -72,6 +72,10 @@
       font-size: 1.5rem;
       font-weight: bold;
     }
+    .btn {
+  border-radius: 0 !important;
+}
+    
   </style>
   <!-- PWA  -->
   <link rel="manifest" href="{{ asset('manifest.json') }}">
@@ -632,7 +636,7 @@
          console.log("Service worker registration succeeded:", registration);
       },
       (error) => {
-         console.error(`Service worker registration failed: ${error}`);
+         console.error(Service worker registration failed: ${error});
       },
     );
   } else {

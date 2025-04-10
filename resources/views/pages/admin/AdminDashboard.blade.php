@@ -16,6 +16,9 @@
             font-size: 2.5rem;
             opacity: 0.3;
         }
+        * {
+    border-radius: 0 !important;
+}
     </style>
 @endpush
 
