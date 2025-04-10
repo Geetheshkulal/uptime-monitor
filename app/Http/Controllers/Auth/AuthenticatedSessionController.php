@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Models\User;
+use Illuminate\Support\Facades\Cookie;
+
 
 class AuthenticatedSessionController extends Controller
 {
@@ -70,6 +72,14 @@ class AuthenticatedSessionController extends Controller
 
 
         $request->session()->regenerate();
+
+        if ($request->has('remember')) {
+            Cookie::queue('remember_email', $request->email, 10080); // 7 days
+            Cookie::queue('remember_password', $request->password, 10080); 
+        } else {
+            Cookie::queue(Cookie::forget('remember_email'));
+            Cookie::queue(Cookie::forget('remember_password'));
+        }
 
         $redirectRoute=($user->hasRole('superadmin'))?RouteServiceProvider::ADMIN_DASHBOARD:RouteServiceProvider::HOME;
 

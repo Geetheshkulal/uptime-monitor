@@ -219,7 +219,7 @@
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user" 
                                                 id="email" name="email" placeholder="Email Address" 
-                                                value="{{ old('email') }}" required autofocus>
+                                                value="{{ old('email', request()->cookie('remember_email')) }}" required autofocus>
                                             @error('email')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
@@ -228,7 +228,7 @@
                                         <div class="form-group">
                                             <div class="password-input-container">
                                                 <input type="password" class="form-control form-control-user"
-                                                    id="password" name="password" placeholder="Password" required>
+                                                    id="password" name="password" placeholder="Password" value="{{ request()->cookie('remember_password') }}" required>
                                                 <span class="password-toggle" onclick="togglePassword('password')">
                                                     <i class="far fa-eye"></i>
                                                 </span>
@@ -246,7 +246,7 @@
 
                                         <div class="form-group d-flex justify-content-between align-items-center">
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="remember_me" name="remember">
+                                                <input type="checkbox" class="custom-control-input" id="remember_me" name="remember" {{ request()->cookie('remember_email') ? 'checked' : '' }}>
                                                 <label class="custom-control-label" for="remember_me">Remember Me</label>
                                             </div>
                                             @if (Route::has('password.request'))
