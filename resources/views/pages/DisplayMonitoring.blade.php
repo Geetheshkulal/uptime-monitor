@@ -10,11 +10,10 @@
 <div class="container-fluid">
 
    
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-xl-12">
             <div class="row justify-content-between align-items-center mb-3">
                 
-                {{-- Left section: Monitor name and action buttons --}}
                 <div class="col-md-8 col-12">
                     <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center">
                         <span class="h4 text-gray-800 font-weight-bold mr-md-3">{{ strtoupper($details->name) }}</span>
@@ -41,7 +40,6 @@
                     </div>
                 </div>
     
-                {{-- Right section: Back button --}}
                 <div class="col-md-4 col-12 text-md-right text-left mt-3 mt-md-0">
                     <a href="{{ route('monitoring.dashboard') }}" class="btn btn-secondary">
                         <i class="fas fa-arrow-left mr-1"></i> Back
@@ -50,11 +48,103 @@
     
             </div>
         </div>
+    </div> --}}
+{{-- 
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between mb-3">
+            
+                <div class="d-flex flex-column w-100">
+                   
+                    <div class="d-flex justify-content-between align-items-center mb-2 mb-md-0">
+                        <span class="h4 text-gray-800 font-weight-bold">{{ strtoupper($details->name) }}</span>
+                        <a href="{{ route('monitoring.dashboard') }}" class="btn btn-secondary d-md-none">
+                            <i class="fas fa-arrow-left mr-1"></i> 
+                        </a>
+                    </div>
+                    
+                 
+                    <div class="d-flex flex-wrap">
+                        <button type="button" class="btn btn-primary mr-2 mb-2" data-toggle="modal" data-target="#editModal"
+                            onclick="setEditUrl({{ $details->id }})">
+                            <i class="fas fa-pen fa-1x"></i> Edit
+                        </button>
+    
+                        <button type="button" class="btn btn-danger mr-2 mb-2" data-toggle="modal" data-target="#deleteModal"
+                            onclick="setDeleteUrl({{ $details->id }})">
+                            <i class="fas fa-trash fa-1x"></i> Delete
+                        </button>
+    
+                        @if($details->paused)
+                            <button type="button" class="btn btn-warning mr-2 mb-2" onclick="pauseMonitor({{ $details->id }}, this)">
+                                <i class="fas fa-play fa-1x"></i> Resume
+                            </button>
+                        @else
+                            <button type="button" class="btn btn-success mr-2 mb-2" onclick="pauseMonitor({{ $details->id }}, this)">
+                                <i class="fas fa-pause fa-1x"></i> Pause
+                            </button>
+                        @endif
+                    </div>
+                </div>
+    
+            
+                <div class="d-none d-md-block ml-md-3">
+                    <a href="{{ route('monitoring.dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+    
+    <div class="row  p-2">
+        <div class="col-12">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                <!-- Name and buttons container -->
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center w-100 ">
+
+                    <!-- Name -->
+                    <div class="mb-2 mb-md-0 mr-md-3">
+                        <span class="h4 text-gray-800 font-weight-bold">{{ strtoupper($details->name) }}</span>
+                    </div>
+                    
+                    <!-- Buttons - will wrap under name on small screens -->
+                    <div class="d-flex flex-wrap flex-md-nowrap">
+                        <button type="button" class="btn btn-primary mr-2 mb-2" data-toggle="modal" data-target="#editModal"
+                            onclick="setEditUrl({{ $details->id }})">
+                            <i class="fas fa-pen fa-1x"></i> Edit
+                        </button>
+    
+                        <button type="button" class="btn btn-danger mr-2 mb-2" data-toggle="modal" data-target="#deleteModal"
+                            onclick="setDeleteUrl({{ $details->id }})">
+                            <i class="fas fa-trash fa-1x"></i> Delete
+                        </button>
+    
+                        @if($details->paused)
+                            <button type="button" class="btn btn-warning mr-2 mb-2" onclick="pauseMonitor({{ $details->id }}, this)">
+                                <i class="fas fa-play fa-1x"></i> Resume
+                            </button>
+                        @else
+                            <button type="button" class="btn btn-success mr-2 mb-2" onclick="pauseMonitor({{ $details->id }}, this)">
+                                <i class="fas fa-pause fa-1x"></i> Pause
+                            </button>
+                        @endif
+                    </div>
+                </div>
+                
+                <!-- Back button - always on the right -->
+                <div class="ml-md-3 mt-2 mt-md-0 d-flex ">
+                    <a href="{{ route('monitoring.dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     
-    
 
-    <!-- URL Display -->
+
+      
     <div class="row">
         <div class="col-xl-12">
             <h5 class="text-gray-800 font-weight-bold mb-3">
