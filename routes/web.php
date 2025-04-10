@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Http;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('documentation',function(){return view('pages.documentation');})->name('documentation.page');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

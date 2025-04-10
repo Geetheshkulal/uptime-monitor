@@ -100,6 +100,10 @@
         <li class="nav-item">
           <a class="nav-link" href="#pricing">Pricing</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('documentation.page')}}">Documentation</a>
+        </li>
+        
         
       </ul>
       @if (Route::has('login'))      
