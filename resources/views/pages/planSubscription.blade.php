@@ -36,7 +36,7 @@
                                 @forelse($subscriptions as $subscription)
                                 <tr>
                                     <td>{{ $subscription->id }}</td>
-                                    <td>₹{{ number_format($subscription->amount, 2) }}</td>
+                                    <td>₹{{ number_format($subscription->subscription->amount, 2) }}</td>
                                     <td>
                                         @if($subscription->status === 'active')
                                             <span class="badge badge-success">Active</span>
