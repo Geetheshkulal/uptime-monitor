@@ -12,19 +12,18 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
-            <!-- Page Heading -->
             <div data-aos="fade-up" class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Overview</h1>
                 
                 @if($totalMonitors>=5 && auth()->user()->status=='free')
-                <a class="bg-primary btn btn-secondary position-relative rounded-pill border-none" 
+                <a class="bg-primary btn btn-secondary position-relative border-none" 
                     href="{{ route('premium.page') }}"
                     title="Premium feature - Upgrade to unlock">
                     <i class="fas fa-crown fa-sm me-1" style="color: gold; animation: glow 1.5s infinite alternate;"></i>
                     Add New Monitor
                 </a>
                 @else
-                <a class="bg-primary btn btn-secondary position-relative rounded-pill" 
+                <a class="bg-primary btn btn-secondary position-relative" 
                     href="{{ route('add.monitoring') }}"
                     title="Free Monitors">
                     Add New Monitor
