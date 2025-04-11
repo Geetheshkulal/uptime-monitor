@@ -195,19 +195,14 @@ style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitori
           </div> --}}
 
 
-          @php
-                 $notifications = auth()->user()->unreadNotifications;
-                 $notificationCount = $notifications->count();
-          @endphp
+        
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                @if($notificationCount > 0)
-                <span class="badge badge-danger badge-counter">{{ $notificationCount }}</span>
-            @endif
+             
             </a>
             <!-- Dropdown - Alerts -->
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -215,17 +210,6 @@ style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitori
                 <h6 class="dropdown-header">
                     Alerts Center
                 </h6>
-                
-                @forelse($notifications as $notification)
-                <a class="dropdown-item d-flex align-items-center" href="{{ $notification->data['url'] }}">
-                    <div>
-                        <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
-                    </div>
-                </a>
-            @empty
-                <a class="dropdown-item text-center small text-gray-500">No new notifications</a>
-            @endforelse
-            <a class="dropdown-item text-center small text-gray-500" href="{{ route('notifications.read') }}">Mark all as read</a>
 
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
             </div>

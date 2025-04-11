@@ -365,7 +365,7 @@
                     console.error("Error fetching data:", error);
                 }
             });
-        }, 30000); // Runs every 3000 milliseconds (3 seconds)
+        }, 10000); // Runs every 3000 milliseconds (3 seconds)
 
     });
 </script>

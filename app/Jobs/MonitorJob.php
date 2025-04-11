@@ -3,6 +3,8 @@
 namespace App\Jobs;
 use App\Models\Incident;
 use App\Models\HttpResponse;
+use App\Models\Notification;
+use App\Models\Payment;
 use App\Models\PortResponse;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -19,9 +21,6 @@ use App\Models\PingResponse;
 
 //  for notifications
 use App\Models\User;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\MonitorAlertNotification;
-
 
 
 class MonitorJob
@@ -35,21 +34,23 @@ class MonitorJob
     {
         //
     }
-      private function sendAlert(Monitors $monitor, string $status)
+    private function sendAlert(Monitors $monitor, string $status)
     {
+       
+
         if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null)) {
 
             Mail::to($monitor->email)->send(new MonitorDownAlert($monitor));
+            
+            Notification::create([
+                'monitor_id'=> $monitor->id,
+                'status'=> 'unread',
+            ]);
+
 
             if($monitor->telegram_bot_token && $monitor->telegram_id )
-             {
+            {
                 $this->sendTelegramNotification($monitor);
-             }
-
-             // storing
-             if ($user = auth()->user()) {  
-                Notification::send($user, new MonitorAlertNotification($monitor));  
-                Log::info("Notification stored for user ID: " . auth()->id());
             }
             
         }
