@@ -15,18 +15,14 @@ class MonitorDownAlert extends Mailable
     use Queueable, SerializesModels;
 
     public $monitor;
+    public $token;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(Monitors $monitor)
+    public function __construct(Monitors $monitor, string $token)
     {
         $this->monitor = $monitor;
+        $this->token = $token;
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -34,24 +30,20 @@ class MonitorDownAlert extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
             view: 'emails.monitor_down',
-            with: ['monitor' => $this->monitor]
+            with: [
+                'monitor' => $this->monitor,
+                'token' => $this->token
+            ]
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
     public function attachments(): array
     {
         return [];
     }
 }
+

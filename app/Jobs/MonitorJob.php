@@ -21,6 +21,7 @@ use App\Models\PingResponse;
 
 //  for notifications
 use App\Models\User;
+use Str;
 
 
 class MonitorJob
@@ -39,14 +40,17 @@ class MonitorJob
        
 
         if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null)) {
+            $token = Str::random(32);
 
-            Mail::to($monitor->email)->send(new MonitorDownAlert($monitor));
+            
             
             Notification::create([
                 'monitor_id'=> $monitor->id,
                 'status'=> 'unread',
+                'token'=> $token
             ]);
-
+            
+            Mail::to($monitor->email)->send(new MonitorDownAlert($monitor,$token));
 
             if($monitor->telegram_bot_token && $monitor->telegram_id )
             {

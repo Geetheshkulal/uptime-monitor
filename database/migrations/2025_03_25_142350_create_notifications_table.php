@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('monitor_id');
-            
+            $table->string('token',32);
             $table->string('status');
             $table->timestamps();
 

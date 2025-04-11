@@ -10,6 +10,7 @@ class Notification extends Model
     use HasFactory;
     protected $fillable = [
         'monitor_id',
-        'status'
+        'status',
+        'token'
     ];
 }

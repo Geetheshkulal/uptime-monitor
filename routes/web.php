@@ -141,5 +141,8 @@ Route::group(['middleware' => ['auth']], function () {
     
 });
 
+Route::get('/track/{token}', [App\Http\Controllers\TrackingController::class, 'pixel']);
+
+
 require __DIR__.'/auth.php';
 
