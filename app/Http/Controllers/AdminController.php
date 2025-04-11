@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Subscriptions;
 use App\Models\User;
 use Carbon\Carbon;
 use DB;
@@ -670,7 +671,22 @@ public function storeUser(Request $request)
             'cpuPercent'
         ));
     }
-    
 
-    
+    public function Billing(){
+        $subscriptions = Subscriptions::all();
+        return view('pages.admin.Billing', compact('subscriptions'));
+    }
+
+    public function EditBilling(Request $request,$id){
+        $vaildated = $request->validate([
+            'name'=>'required',
+            'amount'=> 'required'
+        ]);
+        $subscription = Subscriptions::find($id);
+        $subscription->update($vaildated);
+
+        return redirect()->back()->with('success','Subscription edited successfully');
+
+
+    }
 }

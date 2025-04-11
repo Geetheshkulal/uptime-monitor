@@ -73,7 +73,7 @@
                             <div class="card-body p-4">
                                 <h3 class="fw-bold mb-2 text-warning">{{$plan->name}}</h3>
                                 <div class="text-warning mb-4">
-                                    <span class="display-6 fw-bold">₹399</span>
+                                    <span class="display-6 fw-bold">₹{{$plan->amount}}</span>
                                     <span class="text-muted">/month</span>
                                 </div>
                                 <ul class="list-unstyled mb-4">

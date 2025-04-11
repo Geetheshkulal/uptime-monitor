@@ -102,6 +102,13 @@
             <span>Permissions</span>
         </a>
     </li>
+    <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}" 
+        style="{{ request()->routeIs('billing') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
+        <a class="nav-link text-white" href="{{ route('billing') }}">
+            <i class="fas fa-money-bill"></i>
+            <span>Billing</span>
+        </a>
+    </li>
     @endhasrole
 
     @can('see.activity')

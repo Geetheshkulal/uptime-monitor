@@ -139,6 +139,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/roles/{id}/permissions', [AdminController::class, 'EditRolePermissions'])->middleware('permission:edit.role.permissions')->name('edit.role.permissions');
     Route::post('/roles/{id}/permissions', [AdminController::class, 'UpdateRolePermissions'])->middleware('permission:edit.role.permissions')->name('update.role.permissions');
 
+
+    Route::get('/billing',[AdminController::class,'Billing'])->middleware('role:superadmin')->name('billing');
+    Route::post('/edit/billing/{id}',[AdminController::class,'EditBilling'])->middleware('role:superadmin')->name('edit.billing');
+
+    
 });
 
 require __DIR__.'/auth.php';

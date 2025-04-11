@@ -66,41 +66,52 @@ class CashFreePaymentController extends Controller
     }
 
     public function success(Request $request)
-    {
-        $orderId = $request->query('order_id');
-        $user = auth()->user();
+{
+    $orderId = $request->query('order_id');
+    $user = auth()->user();
 
-        // Fetch order details from Cashfree
-        $headers = [
-            "Content-Type: application/json",
-            "x-api-version: 2022-01-01",
-            "x-client-id: " . env('CASHFREE_API_KEY'),
-            "x-client-secret: ". env('CASHFREE_API_SECRET'),
-        ];
+    // First check if we already processed this payment
+    $existingPayment = Payment::where('transaction_id', $orderId)->first();
+    if ($existingPayment) {
+        return redirect()->route('monitoring.dashboard')->with('info', 'Payment was already processed successfully.');
+    }
 
-        $curl = curl_init("https://sandbox.cashfree.com/pg/orders/{$orderId}");
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    // Fetch order details from Cashfree
+    $headers = [
+        "Content-Type: application/json",
+        "x-api-version: 2022-01-01",
+        "x-client-id: " . env('CASHFREE_API_KEY'),
+        "x-client-secret: ". env('CASHFREE_API_SECRET'),
+    ];
 
-        $response = curl_exec($curl);
-        curl_close($curl);
+    $curl = curl_init("https://sandbox.cashfree.com/pg/orders/{$orderId}");
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
-        $orderDetails = json_decode($response, true);
-        Log::info(["Order Details: ", $orderDetails]);
+    $response = curl_exec($curl);
+    curl_close($curl);
 
-        // Extract subscription_id from order_note
-        $orderNote = $orderDetails['order_note'] ?? '';
-        $subscriptionId = null; // default value
-        if (Str::startsWith($orderNote, 'subscription_id:')) {
-            $subscriptionId = str_replace('subscription_id:', '', $orderNote);
-        }
+    $orderDetails = json_decode($response, true);
+    Log::info(["Order Details: ", $orderDetails]);
 
-        $orderAmount = $orderDetails['order_amount'] ?? 0;
+    // Verify the payment status with Cashfree
+    if (($orderDetails['order_status'] ?? '') !== 'PAID') {
+        return redirect()->route('monitoring.dashboard')->with('error', 'Payment not confirmed by Cashfree.');
+    }
 
-        if (!$subscriptionId) {
-            return redirect()->route('monitoring.dashboard')->with('error', 'Unable to verify subscription. Please contact support.');
-        }
+    // Extract subscription_id from order_note
+    $orderNote = $orderDetails['order_note'] ?? '';
+    $subscriptionId = null;
+    if (Str::startsWith($orderNote, 'subscription_id:')) {
+        $subscriptionId = str_replace('subscription_id:', '', $orderNote);
+    }
 
+    if (!$subscriptionId) {
+        return redirect()->route('monitoring.dashboard')->with('error', 'Unable to verify subscription. Please contact support.');
+    }
+
+    // Use transaction to ensure atomic operation
+    \DB::transaction(function () use ($orderId, $user, $subscriptionId, $orderDetails) {
         // Create payment record
         $payment = Payment::create([
             'status' => 'active',
@@ -111,6 +122,7 @@ class CashFreePaymentController extends Controller
             'start_date' => now(),
             'end_date' => now()->addMonth(),
             'subscription_id' => $subscriptionId,
+      
         ]);
 
         // Update user status
@@ -128,13 +140,14 @@ class CashFreePaymentController extends Controller
             ->withProperties([
                 'user_name' => $user->name,
                 'email' => $user->email,
-                'amount' => $payment->amount ?? $orderAmount,
+                'amount' => $payment->amount,
                 'transaction_id' => $payment->transaction_id,
                 'payment_type' => $payment->payment_type,
                 'premium_until' => $user->premium_end_date,
             ])
             ->log('User completed a premium payment successfully');
+    });
 
-        return redirect()->route('monitoring.dashboard')->with('success', 'Payment successful! Features unlocked.');
-    }
+    return redirect()->route('monitoring.dashboard')->with('success', 'Payment successful! Features unlocked.');
+}
 }
