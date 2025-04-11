@@ -85,3 +85,17 @@ self.addEventListener("fetch", function(event) {
         }).catch(() => {})
     );
 });
+
+
+self.addEventListener('push', function(event) {
+    if (event.data) {
+        const data = event.data.json();
+        const title = data.title || "New Notification";
+        const options = {
+            body: data.body || "You've got a new message!",
+            icon: data.icon || '/logo.png',
+        };
+        event.waitUntil(self.registration.showNotification(title, options));
+    }
+});
+

@@ -21,7 +21,7 @@
 
     <style>
         .bg-password-image {
-            background: url('{{ asset('frontend/assets/img/login-bg.jpg') }}');
+            /* background: url('{{ asset('frontend/assets/img/login-bg.jpg') }}'); */
             background-size: cover;
             background-position: center;
             min-height: 300px;
@@ -29,7 +29,6 @@
         
         .card {
             border: 0;
-            border-radius: 1rem;
             box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
             max-width: 900px;
             margin: 2rem auto;
@@ -38,7 +37,6 @@
         .btn-primary {
             background-color: #4e73df;
             border-color: #4e73df;
-            border-radius: 10rem;
             padding: 0.75rem 1rem;
             font-weight: 600;
             letter-spacing: 0.5px;
@@ -56,7 +54,6 @@
         }
         
         .form-control-user {
-            border-radius: 10rem;
             padding: 1rem 1.25rem;
             font-size: 0.9rem;
             transition: all 0.3s;
@@ -123,11 +120,11 @@
             background: white;
             z-index: 1;
         }
-        
+
         @media (max-width: 768px) {
             .bg-password-image {
                 min-height: 200px;
-                border-radius: 1rem 1rem 0 0;
+                /* border-radius: 1rem 1rem 0 0; */
             }
             
             .card {
@@ -149,7 +146,9 @@
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <div class="row">
-                            <div class="col-lg-5 d-none d-lg-block bg-password-image"></div>
+                            <div class="col-lg-5 d-none d-lg-block p-0">
+                                <img src="{{ asset('frontend/assets/img/forgot.png') }}" alt="Login Image" class="img-fluid login-image" />
+                            </div>
                             <div class="col-lg-7">
                                 <div class="p-5">
                                     <div class="text-center">
@@ -169,7 +168,7 @@
                                     <form class="user" method="POST" action="{{ route('password.email') }}">
                                         @csrf
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user" 
+                                            <input type="email" style="border-radius: 0%" class="form-control form-control-user" 
                                                 id="email" name="email" placeholder="Email Address" 
                                                 value="{{ old('email') }}" required autofocus>
                                             @error('email')
@@ -177,7 +176,7 @@
                                             @enderror
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary btn-user btn-block mt-4" id="reset-btn">
+                                        <button type="submit" style="border-radius: 0%" class="btn btn-primary btn-user btn-block mt-4" id="reset-btn">
                                             <span class="spinner-border spinner-border-sm d-none" id="reset-spinner"></span>
                                             <span id="reset-text">Send Reset Link</span>
                                         </button>

@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <title>CheckMySite - Website Monitoring Service</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -83,6 +85,8 @@
   <link rel="apple-touch-icon" href="{{ asset('mainlogo.png') }}">
 </head>
 <body>
+
+  <script src="{{ asset('js/notification.js') }}"></script>
   <!-- Navigation -->
   <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
@@ -107,7 +111,8 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('documentation.page')}}">Documentation</a>
         </li>
-        
+        <button onclick="subscribeUser()">Subscribe</button> 
+        <button onclick="sendNotification()">Send Push Notification</button>    
         
       </ul>
       @if (Route::has('login'))      
@@ -282,29 +287,7 @@
     </div>
   </section>
 
-  {{-- <!-- Stats Section -->
-  <section class="py-5 gradient-bg text-white">
-    <div class="container">
-      <div class="row text-center">
-        <div class="col-6 col-md-3 mb-3 mb-md-0">
-          <h3 class="display-6 fw-bold mb-1">99.9%</h3>
-          <p class="text-light">Uptime Guarantee</p>
-        </div>
-        <div class="col-6 col-md-3 mb-3 mb-md-0">
-          <h3 class="display-6 fw-bold mb-1">60s</h3>
-          <p class="text-light">Check Interval</p>
-        </div>
-        <div class="col-6 col-md-3">
-          <h3 class="display-6 fw-bold mb-1">5,000+</h3>
-          <p class="text-light">Happy Customers</p>
-        </div>
-        <div class="col-6 col-md-3">
-          <h3 class="display-6 fw-bold mb-1">1M+</h3>
-          <p class="text-light">Websites Monitored</p>
-        </div>
-      </div>
-    </div>
-  </section> --}}
+
 
   <!-- Pricing Section -->
   <section id="pricing" class="py-5">
@@ -367,170 +350,7 @@
     </div>
   </section>
 
-  {{-- <!-- Testimonials Section -->
-  <section id="testimonials" class="py-5 bg-light">
-    <div class="container">
-      <div class="text-center mb-5">
-        <h2 class="fw-bold mb-3">What Our Customers Say</h2>
-        <p class="text-muted mx-auto" style="max-width: 600px;">Thousands of businesses trust CheckMySite to keep their websites running smoothly.</p>
-      </div>
-      
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body p-4">
-              <div class="d-flex align-items-center mb-3">
-                <div class="testimonial-avatar bg-primary bg-opacity-10">
-                  <span class="text-primary fw-bold">J</span>
-                </div>
-                <div class="ms-3">
-                  <h4 class="h6 fw-bold mb-0">Jason Miller</h4>
-                  <p class="small text-muted mb-0">CTO, TechStart Inc.</p>
-                </div>
-              </div>
-              <div class="text-warning mb-3">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <p class="text-muted">"CheckMySite has been a game-changer for our business. We were alerted to an outage within seconds and resolved it before most of our customers even noticed. The detailed reporting helps us optimize our infrastructure."</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body p-4">
-              <div class="d-flex align-items-center mb-3">
-                <div class="testimonial-avatar bg-primary bg-opacity-10">
-                  <span class="text-primary fw-bold">S</span>
-                </div>
-                <div class="ms-3">
-                  <h4 class="h6 fw-bold mb-0">Sarah Johnson</h4>
-                  <p class="small text-muted mb-0">Owner, Johnson E-commerce</p>
-                </div>
-              </div>
-              <div class="text-warning mb-3">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-              </div>
-              <p class="text-muted">"As a small business owner, I don't have time to constantly check if my online store is up. CheckMySite gives me peace of mind knowing I'll be alerted immediately if there's an issue with my website."</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-md-6 col-lg-4">
-          <div class="card h-100 border-0 shadow-sm">
-            <div class="card-body p-4">
-              <div class="d-flex align-items-center mb-3">
-                <div class="testimonial-avatar bg-primary bg-opacity-10">
-                  <span class="text-primary fw-bold">M</span>
-                </div>
-                <div class="ms-3">
-                  <h4 class="h6 fw-bold mb-0">Michael Chang</h4>
-                  <p class="small text-muted mb-0">IT Director, Global Solutions</p>
-                </div>
-              </div>
-              <div class="text-warning mb-3">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-              </div>
-              <p class="text-muted">"We monitor over 200 websites across multiple regions with CheckMySite. The global monitoring network gives us confidence that our services are accessible to customers worldwide. Great value for the price."</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- FAQ Section -->
-  <section class="py-5">
-    <div class="container">
-      <div class="text-center mb-5">
-        <h2 class="fw-bold mb-3">Frequently Asked Questions</h2>
-        <p class="text-muted mx-auto" style="max-width: 600px;">Find answers to common questions about our uptime monitoring service.</p>
-      </div>
-      
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="accordion" id="faqAccordion">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  How often do you check my websites?
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  Depending on your plan, we check your websites as frequently as every 30 seconds. Our Professional plan includes 1-minute checks, while our Enterprise plan offers 30-second monitoring intervals.
-                </div>
-              </div>
-            </div>
-            
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  What happens when my site goes down?
-                </button>
-              </h2>
-              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  We'll immediately verify the outage from multiple locations to prevent false positives. Once confirmed, we'll send you alerts through your configured notification channels. We'll continue monitoring and notify you when your site is back up.
-                </div>
-              </div>
-            </div>
-            
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  Can I monitor internal services or APIs?
-                </button>
-              </h2>
-              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  Yes! In addition to monitoring public websites, you can monitor internal services, APIs, and endpoints. We support HTTP/HTTPS, TCP/UDP, ICMP, and custom request monitoring.
-                </div>
-              </div>
-            </div>
-            
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingFour">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                  Do you offer a free trial?
-                </button>
-              </h2>
-              <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  Yes, we offer a 14-day free trial on all plans with no credit card required. You can try out all features before making a decision.
-                </div>
-              </div>
-            </div>
-            
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingFive">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                  How do I get started?
-                </button>
-              </h2>
-              <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
-                <div class="accordion-body">
-                  Simply sign up for an account, add your websites or services, configure your alert preferences, and you're all set! The setup process takes less than 2 minutes.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> --}}
 
   <!-- CTA Section -->
   <section class="py-5 gradient-bg text-white">
@@ -585,30 +405,7 @@
           <a href="#" class="text-light text-decoration-none">Status</a>
         </div>
       </div>
-      <!-- Future Sections (Currently Commented Out) -->
-      {{-- 
-      <div class="col-lg-3 col-md-6">
-        <h3 class="h5 fw-bold mb-3">Resources</h3>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Documentation</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Blog</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Knowledge Base</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Uptime Calculator</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Community</a></li>
-        </ul>
-      </div>
-
-      <div class="col-lg-3 col-md-6">
-        <h3 class="h5 fw-bold mb-3">Company</h3>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">About Us</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Careers</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Contact</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Privacy Policy</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Terms of Service</a></li>
-        </ul>
-      </div>
-      --}}
+     
 
     </div>
 
@@ -647,5 +444,87 @@
      console.error("Service workers are not supported.");
   }
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      async function subscribeUser() {
+          if ('serviceWorker' in navigator && 'PushManager' in window) {
+              try {
+                  // ✅ Register service worker
+                  const register = await navigator.serviceWorker.register('/sw.js');
+
+                  // ✅ Subscribe for push notifications
+                  const subscription = await register.pushManager.subscribe({
+                      userVisibleOnly: true,
+                      applicationServerKey: urlBase64ToUint8Array("{{ env('VAPID_PUBLIC_KEY') }}")
+                  });
+
+                  // ✅ Send subscription to backend
+                  await fetch('/subscribe', {
+                      method: 'POST',
+                      body: JSON.stringify(subscription),
+                      headers: {
+                          'Content-Type': 'application/json',
+                          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                      }
+                  });
+
+                  alert('Subscribed to Push Notifications!');
+              } catch (error) {
+                  console.error('Subscription failed:', error);
+              }
+          } else {
+              alert("Your browser does not support push notifications.");
+          }
+      }
+
+      // Utility function to convert base64 to Uint8Array
+      function urlBase64ToUint8Array(base64String) {
+          const padding = '='.repeat((4 - base64String.length % 4) % 4);
+          const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+          const rawData = window.atob(base64);
+          const outputArray = new Uint8Array(rawData.length);
+          for (let i = 0; i < rawData.length; ++i) {
+              outputArray[i] = rawData.charCodeAt(i);
+          }
+          return outputArray;
+      }
+
+      window.subscribeUser = subscribeUser; // Expose to global scope
+  });
+</script>
+
+<script>
+  function sendNotification() {
+      fetch('/send-notification', {
+          method: 'POST',
+          headers: {
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+       }
+      })
+      .then(async res => {
+          const isJson = res.headers.get("content-type")?.includes("application/json");
+          const data = isJson ? await res.json() : null;
+
+          if (!res.ok) {
+              console.error('Server returned error:', data);
+              alert("Notification failed. Server error.");
+              return;
+          }
+
+          if (data?.success) {
+              alert("Notification sent successfully!");
+          } else {
+              alert("Failed: " + (data?.error ?? "Unknown error"));
+          }
+      })
+      .catch(err => {
+          console.error('Fetch failed:', err);
+          alert("Something went wrong.");
+      });
+  }
+</script>
+
+
   </body>
 </html>

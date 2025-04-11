@@ -11,12 +11,12 @@ use App\Http\Controllers\SslCheckController;
 use App\Http\Controllers\DnsController;
 use App\Http\Controllers\PingMonitoringController;
 use App\Http\Controllers\PortMonitorController;
-
 use App\Http\Controllers\HttpMonitoringController;
 use App\Http\Controllers\CashFreePaymentController;
 use App\Http\Controllers\PlanSubscriptionController;
 use Illuminate\Support\Facades\Http;
-
+use Minishlink\WebPush\Subscription;
+use Minishlink\WebPush\WebPush;
 use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +142,54 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 Route::get('/track/{token}', [App\Http\Controllers\TrackingController::class, 'pixel']);
+
+
+Route::post('/subscribe', function (Request $request) {
+    session(['subscription' => $request->all()]); // Temporarily store subscription
+    return response()->json(['success' => true]);
+});
+
+Route::post('/send-notification', function (Request $request) {
+    $subscription = session('subscription');
+
+    if (!$subscription) {
+        return response()->json(['success' => false, 'error' => 'No subscription saved yet!']);
+    }
+
+    // ✅ Prepare the subscription object
+    $sub = Subscription::create([
+        'endpoint' => $subscription['endpoint'],
+        'publicKey' => $subscription['keys']['p256dh'],
+        'authToken' => $subscription['keys']['auth'],
+        'contentEncoding' => 'aes128gcm',
+    ]);
+
+    // ✅ Prepare the payload for the push notification
+    $payload = json_encode([
+        'title' => 'Push Alert! 🚀',
+        'body' => 'This is a test push notification from Laravel.',
+        'icon' => '/logo.png' // Optional icon (must exist in public folder)
+    ]);
+
+    // ✅ Send using WebPush
+    $webPush = new WebPush([
+        'VAPID' => [
+            'subject' => 'mailto:example@example.com', // Your email here
+            'publicKey' => env('VAPID_PUBLIC_KEY'),
+            'privateKey' => env('VAPID_PRIVATE_KEY'),
+        ],
+    ]);
+
+    $webPush->queueNotification($sub, $payload);
+
+    foreach ($webPush->flush() as $report) {
+        if (!$report->isSuccess()) {
+            return response()->json(['success' => false, 'error' => 'Notification failed to deliver.']);
+        }
+    }
+
+    return response()->json(['success' => true]);
+});
 
 
 require __DIR__.'/auth.php';
