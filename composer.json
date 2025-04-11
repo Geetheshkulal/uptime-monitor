@@ -7,10 +7,12 @@
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.9",
+        "laravel-notification-channels/webpush": "^9.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravolt/avatar": "^6.1",
+        "minishlink/web-push": "^9.0",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-permission": "^6.16",
         "spatie/laravel-server-monitor": "^1.10"
