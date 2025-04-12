@@ -3,6 +3,11 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+<style>
+    * {
+        border-radius: 0 !important;
+    }
+    </style>    
 @endpush
 
 <div class="page-content">
