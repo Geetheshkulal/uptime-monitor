@@ -619,12 +619,14 @@
         
         <div class="col-lg-6">
           <div class="card h-100 border-primary">
+            @foreach($plans as $plan) 
             <div class="card-header bg-primary text-white">
-              <h5 class="mb-0"><i class="fas fa-crown me-2"></i> Premium Plan</h5>
+              <h5 class="mb-0"><i class="fas fa-crown me-2"></i>{{$plan->name }}</h5>
             </div>
             <div class="card-body">
-              <h4 class="card-title pricing-card-title">₹399<small class="text-muted fw-light">/month</small></h4>
+              <h4 class="card-title pricing-card-title">₹{{$plan->amount}}<small class="text-muted fw-light">/month</small></h4>
               <ul class="list-unstyled mt-3 mb-4">
+                @endforeach
                 <li><i class="fas fa-check text-success me-2"></i> Unlimited monitors</li>
                 <li><i class="fas fa-check text-success me-2"></i> All basic features</li>
                 <li><i class="fas fa-check text-success me-2"></i> SSL certificate monitoring</li>

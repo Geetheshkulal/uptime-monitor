@@ -29,10 +29,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('documentation',function(){return view('pages.documentation');})->name('documentation.page');
+Route::get('/', [AdminController::class, 'welcome']);
+Route::get('documentation', [App\Http\Controllers\AdminController::class, 'documentation'])->name('documentation.page');
 
 
 Route::post('/email/verification-notification',function (Request $request) {

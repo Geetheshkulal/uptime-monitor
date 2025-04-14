@@ -326,15 +326,17 @@
         </div>
         
        
-        
+      
         <div class="col-lg-4">
           <div class="card h-100 border-light shadow-sm">
             <div class="card-body p-4">
-            <h3 class="fw-bold mb-2">Premium</h3>
+              @foreach($plans as $plan) 
+            <h3 class="fw-bold mb-2">{{ $plan->name }}</h3>
               <div class="text-primary mb-4">
-                <span class="display-6 fw-bold">₹399</span>
+                <span class="display-6 fw-bold">₹{{ $plan->amount }}</span>
                 <span class="text-muted">/month</span>
               </div>
+              @endforeach
               <ul class="list-unstyled mb-4">
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited websites</li>
                 <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 30-second checks</li>

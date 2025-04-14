@@ -686,7 +686,17 @@ public function storeUser(Request $request)
         $subscription->update($vaildated);
 
         return redirect()->back()->with('success','Subscription edited successfully');
+    }
 
+    public function welcome()
+    {
+        $plans = Subscriptions::all();
+        return view('welcome', compact('plans'));
+    }
 
+    public function documentation()
+    {
+        $plans = Subscriptions::all();
+        return view('pages.documentation', compact('plans'));
     }
 }
