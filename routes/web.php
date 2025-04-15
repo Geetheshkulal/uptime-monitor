@@ -31,17 +31,12 @@ use Illuminate\Http\Request;
 |
 */
 
-<<<<<<< HEAD
-Route::get('/', [AdminController::class, 'welcome']);
-Route::get('documentation', [App\Http\Controllers\AdminController::class, 'documentation'])->name('documentation.page');
-=======
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('latestUpdates',function(){return view('pages.latestUpdates');})->name('latest.page');
 Route::get('documentation',function(){return view('pages.documentation');})->name('documentation.page');
->>>>>>> day3
 
 
 Route::post('/email/verification-notification',function (Request $request) {
@@ -150,11 +145,7 @@ Route::group(['middleware' => ['auth']], function () {
     
 });
 
-<<<<<<< HEAD
-
-=======
 // Route::get('/track/{token}', [App\Http\Controllers\TrackingController::class, 'pixel']);
->>>>>>> day3
 
 
 Route::post('/subscribe', function (Request $request) {
