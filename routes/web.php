@@ -31,9 +31,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AdminController::class, 'welcome']);
 
 Route::get('latestUpdates',function(){return view('pages.latestUpdates');})->name('latest.page');
 Route::get('documentation',function(){return view('pages.documentation');})->name('documentation.page');
