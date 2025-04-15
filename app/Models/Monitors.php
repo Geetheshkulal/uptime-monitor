@@ -31,5 +31,10 @@ class Monitors extends Model
         return $this->hasOne(PortResponse::class,'monitor_id')->latest();
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'monitor_id');
+    }
+
     
 }

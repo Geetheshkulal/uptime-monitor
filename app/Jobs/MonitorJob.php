@@ -6,6 +6,7 @@ use App\Models\HttpResponse;
 use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\PortResponse;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\RequestException;
 use App\Models\PingResponse;
+use App\Mail\FollowUpMail;
 
 //  for notifications
 use App\Models\User;
@@ -414,7 +416,25 @@ private function checkHttp(Monitors $monitor)
 }
 
 public function sendFollowUpEmail(){
-    
+    try {
+        $fiveMinutesAgo = Carbon::now()->subMinutes(5);
+
+        $notifications = Notification::where('status', 'unread')
+            ->where('created_at', '<=', $fiveMinutesAgo)
+            ->get();
+
+        foreach ($notifications as $notification) {
+            // Send the follow-up email (customize with your logic/view)
+            Mail::to($notification->monitor->email)->send(new FollowUpMail($notification->monitor));
+
+            // Optionally, log or update status
+            Log::info("Follow-up email sent to: {$notification->monitor->email}");
+            $notification->delete();
+        }
+
+    } catch (\Exception $e) {
+        Log::error("sendFollowUpEmail failed: " . $e->getMessage());
+    }
 }
     
     public function handle(): void
@@ -441,7 +461,8 @@ public function sendFollowUpEmail(){
                         break;
                     }
             }
-        
+            
+            $this->sendFollowUpEmail();
         
         } catch (\Exception $e) {
             Log::error("MonitorJob failed: " . $e->getMessage());
