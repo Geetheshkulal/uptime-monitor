@@ -175,15 +175,13 @@
                                     <td>{{ $monitor->url }}</td>
                                     <td>{{ $monitor->type }}{{ $monitor->type === 'port' ? '-' . $monitor->port : '' }}</td>
                                     <td>
-                                        @if ($monitor)
-                                            @if ($monitor->status === 'up')
-                                                <span class="badge badge-success">Up</span>
-                                            @else
-                                                <span class="badge badge-danger">Down</span>
-                                            @endif
-                                        @else
-                                            <span class="badge badge-danger">Down</span>
-                                        @endif
+                                        @if ($monitor->paused == 1)
+                                        <span class="badge" style="background-color:purple; color: white;">Paused</span>
+                                    @elseif ($monitor->status === 'up')
+                                        <span class="badge badge-success">Up</span>
+                                    @else
+                                        <span class="badge badge-danger">Down</span>
+                                    @endif
                                     </td>
                                     <td>{{ $monitor->created_at->format('Y-m-d') }}</td>
                                     <td>                    

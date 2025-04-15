@@ -45,7 +45,7 @@
                                     <tr>
                                         <td>
                                             @if ($incident->monitor->paused == 1)
-                                                <span class="badge" style="background-color: purple; color: white;">Paused</span>
+                                                <span class="badge" style="background-color:purple; color: white;">Paused</span>
                                             @elseif ($incident->status === 'down')
                                                 <span class="badge badge-danger">
                                                     <i class="fas fa-times-circle mr-1"></i> Down

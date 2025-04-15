@@ -362,7 +362,7 @@
           <h2 class="display-5 fw-bold mb-4">Ready to Monitor Your Websites?</h2>
           <p class="lead mb-5">Join thousands of businesses that trust CheckMySite to keep their websites and services running smoothly.</p>
           <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-            <a href="" class="btn btn-light btn-lg text-primary fw-bold px-4">Start Your Free Trial</a>
+            <a href="{{ route('login') }}" class="btn btn-light btn-lg text-primary fw-bold px-4">Start Your Free Trial</a>
             {{-- <a href="#" class="btn btn-outline-light btn-lg px-4">Schedule a Demo</a> --}}
           </div>
         </div>

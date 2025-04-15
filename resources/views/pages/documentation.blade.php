@@ -262,7 +262,7 @@
   <!-- Sidebar Navigation -->
   <div class="sidebar">
     <div class="sidebar-header">
-      <h4><i class="fas fa-book-open me-2"></i>UP_TIME Docs</h4>
+      <h4><i class="fas fa-heartbeat me-2"></i>CheckMySite</h4>
     </div>
     <div class="nav-menu">
       <a href="#" onclick="showTab('tab1')" class="active">
@@ -609,9 +609,9 @@
                 <li><i class="fas fa-check text-success me-2"></i> HTTP/Ping/Port/DNS checks</li>
                 <li><i class="fas fa-check text-success me-2"></i> Email notifications</li>
                 <li><i class="fas fa-check text-success me-2"></i> Incident tracking</li>
+                <li><i class="fas fa-check text-success me-2"></i> Telegram notifications</li>
                 <li><i class="fas fa-times text-danger me-2"></i> SSL monitoring</li>
-                <li><i class="fas fa-times text-danger me-2"></i> Telegram notifications</li>
-                <li><i class="fas fa-times text-danger me-2"></i> Historical data</li>
+                <li><i class="fas fa-times text-danger me-2"></i>Unlimited monitors</li>
               </ul>
             </div>
           </div>
@@ -628,12 +628,8 @@
               <ul class="list-unstyled mt-3 mb-4">
                 @endforeach
                 <li><i class="fas fa-check text-success me-2"></i> Unlimited monitors</li>
-                <li><i class="fas fa-check text-success me-2"></i> All basic features</li>
+                <li><i class="fas fa-check text-success me-2"></i> All features included in Basic plan</li>
                 <li><i class="fas fa-check text-success me-2"></i> SSL certificate monitoring</li>
-                <li><i class="fas fa-check text-success me-2"></i> Telegram notifications</li>
-                <li><i class="fas fa-check text-success me-2"></i> Extended history (90 days)</li>
-                <li><i class="fas fa-check text-success me-2"></i> Priority support</li>
-                <li><i class="fas fa-check text-success me-2"></i> Advanced reporting</li>
               </ul>
             </div>
           </div>
