@@ -4,38 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Response;
 
 class TrackingController extends Controller
 {
-    //
+    // Bypass ALL middleware for this controller
+    public function __construct()
+    {
+        $this->middleware('disable_cookies');
+    }
 
     public function pixel(Request $request, $token)
     {
-        // You can log or store the tracking hit here
-        Log::info("Tracking pixel hit for ID: $token from IP: " . $request->ip());
-
-        $notification = Notification::where('token', $token)->first();
-
-        if ($notification) {
-            $notification->status = 'read'; // or whatever status you use
-            $notification->save();
-        }
-
+        header_remove('X-Powered-By');
+        Notification::where('token', $token)->update(['status' => 'read']);
         
-        $gif = base64_decode(
-            
-            'R0lGODlhZABkAKECAAAAAP8AAP///yH5BAEAAAIALAAAAABkAGQAAAJDlI+py+0Po5y02ouz3rz7D4biSJbmiabqyrbuC8fyrBu33gvH8grrcXs8hzv9oHADs='
-
-        );
-
-        return Response::make($gif, 200, [
-            'Content-Type' => 'image/gif',
-            'Content-Length' => strlen($gif),
-            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
-            'Pragma' => 'no-cache',
-            'Expires' => '0',
+        $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=');
+        
+        return response($png, 200, [
+            'Content-Type' => 'image/png',
+            'Cache-Control' => 'max-age=60, private',
+            'X-Frame-Options' => 'deny',
+            'X-Robots-Tag' => 'noindex, nofollow',
         ]);
     }
 }

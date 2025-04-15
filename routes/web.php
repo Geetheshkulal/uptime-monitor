@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PremiumPageController;
+use App\Http\Controllers\TrackingController;
 use GuzzleHttp\Client;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
@@ -141,7 +142,7 @@ Route::group(['middleware' => ['auth']], function () {
     
 });
 
-Route::get('/track/{token}', [App\Http\Controllers\TrackingController::class, 'pixel']);
+
 
 
 Route::post('/subscribe', function (Request $request) {
@@ -191,6 +192,7 @@ Route::post('/send-notification', function (Request $request) {
     return response()->json(['success' => true]);
 });
 
+Route::get('/track/{token}.png', [TrackingController::class, 'pixel'])->withoutMiddleware(['web', 'verified', 'auth', \App\Http\Middleware\VerifyCsrfToken::class]);
 
 require __DIR__.'/auth.php';
 

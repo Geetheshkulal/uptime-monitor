@@ -42,8 +42,7 @@ class MonitorJob
         if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null)) {
             $token = Str::random(32);
 
-            
-            
+        
             Notification::create([
                 'monitor_id'=> $monitor->id,
                 'status'=> 'unread',
