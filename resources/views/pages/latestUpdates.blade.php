@@ -24,7 +24,7 @@
 <body>
 
     <div class="updates-container">
-        <iframe src="https://check-my-site.feedbear.com/updates?embed=true"></iframe>
+        <iframe src="https://check-my-site.feedbear.com/updates"></iframe>
     </div>
 
 </body>
