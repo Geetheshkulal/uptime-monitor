@@ -5,21 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Latest Updates</title>
     <style>
-        /* body {
-            font-family: Arial, sans-serif;
-            padding: 0;
+        html, body {
             margin: 0;
-            background-color: #f8f9fa;
+            padding: 0;
+            height: 100%;
         }
         .updates-container {
-            padding: 20px;
-        } */
+            height: 100%;
+            width: 100%;
+        }
         iframe {
             border: none;
             width: 100%;
-            height: 600px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            height: 100%;
         }
     </style>
 </head>
@@ -28,5 +26,6 @@
     <div class="updates-container">
         <iframe src="https://check-my-site.feedbear.com/updates?embed=true"></iframe>
     </div>
+
 </body>
 </html>
