@@ -113,12 +113,12 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('latest.page')}}">Latest updates</a>
-           {{-- <a class="nav-link" href="https://check-my-site.feedbear.com/updates?embed=true">Latest updates</a> --}}
+        </li>
+        <li class="nav-item">
+          <button class="nav-link"  data-feedbear-button>Give Feedback</button>
         </li>
         <button onclick="subscribeUser()">Subscribe</button> 
         <button onclick="sendNotification()">Send Push Notification</button>    
-
-        <button data-feedbear-button>Give Feedback</button>
         
       </ul>
       @if (Route::has('login'))      
