@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Http;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
 use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,8 +31,17 @@ use Illuminate\Http\Request;
 |
 */
 
+<<<<<<< HEAD
 Route::get('/', [AdminController::class, 'welcome']);
 Route::get('documentation', [App\Http\Controllers\AdminController::class, 'documentation'])->name('documentation.page');
+=======
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('latestUpdates',function(){return view('pages.latestUpdates');})->name('latest.page');
+Route::get('documentation',function(){return view('pages.documentation');})->name('documentation.page');
+>>>>>>> day3
 
 
 Route::post('/email/verification-notification',function (Request $request) {
@@ -140,7 +150,11 @@ Route::group(['middleware' => ['auth']], function () {
     
 });
 
+<<<<<<< HEAD
 
+=======
+// Route::get('/track/{token}', [App\Http\Controllers\TrackingController::class, 'pixel']);
+>>>>>>> day3
 
 
 Route::post('/subscribe', function (Request $request) {
@@ -167,7 +181,7 @@ Route::post('/send-notification', function (Request $request) {
     $payload = json_encode([
         'title' => 'Push Alert! 🚀',
         'body' => 'This is a test push notification from Laravel.',
-        'icon' => '/logo.png' // Optional icon (must exist in public folder)
+        'icon' => '/logo.png' // Optional icon
     ]);
 
     // ✅ Send using WebPush
@@ -191,6 +205,7 @@ Route::post('/send-notification', function (Request $request) {
 });
 
 Route::get('/track/{token}.png', [TrackingController::class, 'pixel'])->withoutMiddleware(['web', 'verified', 'auth', \App\Http\Middleware\VerifyCsrfToken::class]);
+
 
 require __DIR__.'/auth.php';
 
