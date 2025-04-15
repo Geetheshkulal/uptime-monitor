@@ -412,6 +412,10 @@ private function checkHttp(Monitors $monitor)
         }
     }
 }
+
+public function sendFollowUpEmail(){
+    
+}
     
     public function handle(): void
     {
@@ -435,12 +439,12 @@ private function checkHttp(Monitors $monitor)
                     case 'http':
                         $this->checkHttp($monitor);
                         break;
-                }
+                    }
             }
+        
+        
         } catch (\Exception $e) {
             Log::error("MonitorJob failed: " . $e->getMessage());
         }
     }
-
-
 }
