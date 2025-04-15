@@ -111,8 +111,14 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ route('documentation.page')}}">Documentation</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('latest.page')}}">Latest updates</a>
+           {{-- <a class="nav-link" href="https://check-my-site.feedbear.com/updates?embed=true">Latest updates</a> --}}
+        </li>
         <button onclick="subscribeUser()">Subscribe</button> 
         <button onclick="sendNotification()">Send Push Notification</button>    
+
+        <button data-feedbear-button>Give Feedback</button>
         
       </ul>
       @if (Route::has('login'))      
@@ -367,6 +373,8 @@
       </div>
     </div>
   </section>
+
+  <iframe src="https://check-my-site.feedbear.com/updates?embed=true" width="100%" height="300"></iframe>
   <!-- Footer -->
 <footer class="bg-dark text-light py-5">
   <div class="container">
@@ -524,6 +532,28 @@
       });
   }
 </script>
+
+
+ {{-- for feedbear --}}
+<script>
+  (function (w, d, s, o, f, js, fjs) { w[o] = w[o] || function () { (w[o].q = w[o].q || []).push(arguments) }; js = d.createElement(s), fjs = d.getElementsByTagName(s)[0]; js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs); }(window, document, 'script', 'FeedBear', 'https://sdk.feedbear.com/widget.js'));
+  FeedBear("button", {
+  element: document.querySelector("[data-feedbear-button]"),
+  project: "check-my-site",
+  board: "feature-requests",
+  jwt: null // see step 3,
+  });
+</script>
+
+<script>
+  (function (w, d, s, o, f, js, fjs) { w[o] = w[o] || function () { (w[o].q = w[o].q || []).push(arguments) }; js = d.createElement(s), fjs = d.getElementsByTagName(s)[0]; js.id = o; js.src = f; js.async = 1; fjs.parentNode.insertBefore(js, fjs); }(window, document, 'script', 'FeedBear', 'https://sdk.feedbear.com/widget.js'));
+  FeedBear("button", {
+  element: document.querySelector("[data-feedbear-button]"),
+  project: "check-my-site",
+  boards: "feature-requests",
+  jwt: null // see step 3,
+  });
+ </script>
 
 
   </body>

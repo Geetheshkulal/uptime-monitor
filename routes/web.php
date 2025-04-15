@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Http;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
 use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -32,6 +33,8 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('latestUpdates',function(){return view('pages.latestUpdates');})->name('latest.page');
 Route::get('documentation',function(){return view('pages.documentation');})->name('documentation.page');
 
 
@@ -141,7 +144,7 @@ Route::group(['middleware' => ['auth']], function () {
     
 });
 
-Route::get('/track/{token}', [App\Http\Controllers\TrackingController::class, 'pixel']);
+// Route::get('/track/{token}', [App\Http\Controllers\TrackingController::class, 'pixel']);
 
 
 Route::post('/subscribe', function (Request $request) {
@@ -168,7 +171,7 @@ Route::post('/send-notification', function (Request $request) {
     $payload = json_encode([
         'title' => 'Push Alert! 🚀',
         'body' => 'This is a test push notification from Laravel.',
-        'icon' => '/logo.png' // Optional icon (must exist in public folder)
+        'icon' => '/logo.png' // Optional icon
     ]);
 
     // ✅ Send using WebPush
@@ -190,6 +193,7 @@ Route::post('/send-notification', function (Request $request) {
 
     return response()->json(['success' => true]);
 });
+
 
 
 require __DIR__.'/auth.php';
