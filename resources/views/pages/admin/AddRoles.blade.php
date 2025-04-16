@@ -3,6 +3,11 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<style>
+    * {
+        border-radius: 0 !important;
+    }
+</style>
 @endpush
 <div class="page-content">
     <div class="container-fluid">

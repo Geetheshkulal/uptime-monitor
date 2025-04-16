@@ -30,6 +30,9 @@
             font-weight: 600;
             color: #6e707e;
         }
+        * {
+            border-radius: 0 !important;
+        }
     </style>
 @endpush
 

@@ -350,12 +350,14 @@
                 dataType: "json",
                 success: function (response) {
                     var maxDataPoints = 20;
-                    var responseTimes = response.map(item => item.response_time).slice(-maxDataPoints);;
-                    var timestamps = response.map(item => new Date(item.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })).slice(-maxDataPoints);;
+                    var responseTimes = response.responses.map(item => item.response_time).slice(-maxDataPoints);;
+                    var timestamps = response.responses.map(item => new Date(item.created_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })).slice(-maxDataPoints);;
 
                     myLineChart.data.datasets[0].data = responseTimes;
                     myLineChart.data.labels = timestamps;
                     myLineChart.update();
+
+                    statusElement.textContent = response.status;
 
                     updateAverageResponse();
                 },

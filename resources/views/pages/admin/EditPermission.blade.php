@@ -1,7 +1,11 @@
 @extends('dashboard')
 @section('content')
 
-
+<style>
+    * {
+    border-radius: 0 !important;
+}
+</style>
 <div class="page-content">
     <div class="container-fluid">
         <div class="row mb-4">

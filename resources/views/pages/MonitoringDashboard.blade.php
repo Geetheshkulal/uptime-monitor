@@ -4,6 +4,32 @@
     @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+
+    <style>
+        /* Add this to your existing styles */
+        .pulse {
+            animation: heartbeat 1.5s infinite;
+            transform-origin: center;
+        }
+    
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+            14% {
+                transform: scale(1.3);
+            }
+            28% {
+                transform: scale(1);
+            }
+            42% {
+                transform: scale(1.3);
+            }
+            70% {
+                transform: scale(1);
+            }
+        }
+    </style> 
     @endpush
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
@@ -52,8 +78,8 @@
 
                 <!-- Earnings (Monthly) Card Example -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-rgb shadow h-100 py-2">
-                    {{-- <div class="card border-left-success shadow h-100 py-2"> --}}
+                    {{-- <div class="card border-rgb shadow h-100 py-2"> --}}
+                    <div class="card border-left-success shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
