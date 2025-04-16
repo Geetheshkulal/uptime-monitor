@@ -2,13 +2,10 @@
 
 namespace App\Console;
 
-use App\Jobs\PortJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Jobs\MonitorJob;
 
-use Illuminate\Support\Facades\Artisan;
-use App\Models\User;
 
 class Kernel extends ConsoleKernel
 {
@@ -17,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();\
+
         $schedule->job(new MonitorJob())->everyMinute();
         $schedule->command('payments:expire-check')->daily();
     }

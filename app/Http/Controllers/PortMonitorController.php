@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use App\Models\Monitors;
 use App\Models\PortResponse;
 use Illuminate\Support\Facades\Log;
-
 use Illuminate\Http\Request;
 
 class PortMonitorController extends Controller

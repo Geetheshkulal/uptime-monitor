@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
-
 
 class ProfileController extends Controller
 {
@@ -50,7 +47,6 @@ class ProfileController extends Controller
 
         $user->fill($validated);
 
-        // $request->user()->fill($request->validated());
 
         $changes = [];
         foreach ($validated as $key => $newValue) {

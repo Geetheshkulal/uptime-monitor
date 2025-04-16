@@ -10,8 +10,7 @@ use App\Models\PingResponse;
 use App\Models\PortResponse;
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
+
 
 class MonitoringController extends Controller
 {
@@ -19,7 +18,7 @@ class MonitoringController extends Controller
   {
       $query = null;
 
-      // Check monitor type and get data from the appropriate table
+      // Check monitor type and get data from the appropriate tablew
       switch ($monitor->type) {
           case 'port':
               $query = PortResponse::where('monitor_id', $monitor->id);
@@ -211,7 +210,11 @@ class MonitoringController extends Controller
                 $ChartResponses = collect();
     }
     
-     return response()->json($ChartResponses);
+    return response()->json([
+        'responses' => $ChartResponses,
+        'status' => $details->status,  // your new key-value pair
+    ]);
+    
    }
 
    public function MonitorDelete($id)
@@ -318,6 +321,4 @@ class MonitoringController extends Controller
 
     return redirect()->back()->with('success', 'Monitoring details updated successfully.');
    }
-
-
 }
