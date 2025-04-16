@@ -58,12 +58,6 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     
-    // public function getActivitylogOptions(): LogOptions
-    // {
-    //     return LogOptions::defaults()
-    //     ->logOnly(['name', 'role','status','type']);
-    //     // Chain fluent methods for configuration options
-    // }
     public function monitors()
     {
      return $this->hasMany(Monitors::class);

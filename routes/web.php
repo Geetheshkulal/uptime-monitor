@@ -2,11 +2,9 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PremiumPageController;
 use App\Http\Controllers\TrackingController;
-use GuzzleHttp\Client;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MonitoringController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SslCheckController;
 use App\Http\Controllers\DnsController;
@@ -15,7 +13,6 @@ use App\Http\Controllers\PortMonitorController;
 use App\Http\Controllers\HttpMonitoringController;
 use App\Http\Controllers\CashFreePaymentController;
 use App\Http\Controllers\PlanSubscriptionController;
-use Illuminate\Support\Facades\Http;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
 use Illuminate\Http\Request;
@@ -142,8 +139,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     
 });
-
-// Route::get('/track/{token}', [App\Http\Controllers\TrackingController::class, 'pixel']);
 
 
 Route::post('/subscribe', function (Request $request) {

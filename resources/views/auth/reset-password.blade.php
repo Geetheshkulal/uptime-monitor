@@ -21,12 +21,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <style>
-        /* .bg-gradient-primary {
-            background-color: #f8f9fc;
-            background-image: linear-gradient(180deg, #f8f9fc 10%, #c2cbe5 100%);
-            background-size: cover;
-        } */
-        
         .card {
             border: 0;
             box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
