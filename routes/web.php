@@ -20,16 +20,6 @@ use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
 use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::get('/', [AdminController::class, 'welcome']);
 
@@ -53,48 +43,40 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/dashboard', [MonitoringController::class, 'MonitoringDashboard'])->middleware('role:user')->name('monitoring.dashboard');
-    
     Route::get('/monitoring/dashboard/update', [MonitoringController::class, 'MonitoringDashboardUpdate'])->name('monitoring.dashboard.update');
 
 
     Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->middleware('monitor.limit')->name('add.monitoring');
-    
     Route::get('/monitoring/display/{id}/{type}', [MonitoringController::class, 'MonitoringDisplay'])->middleware('monitor.access')->name('display.monitoring');
-    
     Route::get('/monitoring/chart/update/{id}/{type}', [MonitoringController::class, 'MonitoringChartUpdate'])->name('display.chart.update');
 
     // for delete and edit monitoring
     Route::get('/monitoring/delete/{id}',[MonitoringController::class,'MonitorDelete'])->name('monitoring.delete');
     Route::post('/monitoring/edit/{id}', [MonitoringController::class,'MonitorEdit'])->name('monitoring.update');
-
     Route::post('/monitor/pause/{id}', [MonitoringController::class, 'pauseMonitor'])->name('monitor.pause');
 });
 
 Route::middleware(['auth','verified'])->group(function () {
+
     Route::get('/ssl-check', [SslCheckController::class, 'index'])->middleware('premium_middleware')->name('ssl.check');
     Route::get('/ssl/history', [SslCheckController::class, 'history'])->middleware('premium_middleware')->name('ssl.history');
-
     Route::post('/ssl-check', [SslCheckController::class, 'check'])->middleware('premium_middleware')->name('ssl.check.domain');
+
     Route::get('/incidents', [IncidentController::class, 'incidents'])->name('incidents');
     Route::get('/incidents/fetch', [IncidentController::class, 'fetchIncidents'])->name('incidents.fetch'); // Add this for AJAX
     Route::get('/plan-subscription', [PlanSubscriptionController::class, 'planSubscription'])->name('planSubscription');
-
     Route::post('/dns-check', [DnsController::class, 'checkDnsRecords']);
     Route::post('/add/dns', [DnsController::class,'AddDNS'])->name('add.dns');
-
     Route::post('/monitoring/ping', [PingMonitoringController::class, 'store'])->name('ping.monitoring.store');
 
 
     // for port 
     Route::post('/monitor/port',[PortMonitorController::class,'PortStore'])->name('monitor.port');
-    
     Route::post('/monitoring/http', [HttpMonitoringController::class, 'store'])->name('monitoring.http.store');
 
-    
     Route::get('cashfree/payments/create', [CashFreePaymentController::class, 'create'])->name('callback');
     Route::post('cashfree/payments/store', [CashFreePaymentController::class, 'store'])->name('store');
     Route::any('cashfree/payments/success', [CashFreePaymentController::class, 'success'])->name('success');
-
     Route::get('premium',[PremiumPageController::class,'PremiumPage'])->name('premium.page');
 });
 
@@ -126,7 +108,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('admin/store/permission', [AdminController::class, 'StorePermission'])->middleware('role:superadmin')->name('store.permission');
 
     Route::get('/admin/delete/permission/{id}', [AdminController::class, 'DeletePermission'])->middleware('role:superadmin')->name('delete.permission');
-
     Route::get('/admin/display/activity', [AdminController::class,'DisplayActivity'])->middleware('permission:see.activity')->name('display.activity');
 
     

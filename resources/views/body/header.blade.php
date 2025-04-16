@@ -224,7 +224,7 @@ style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitori
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->name}}</span>
-                <img class="img-profile rounded-circle"
+                <img class="img-profile rounded-circle profile"
                     src="{{ Avatar::create(auth()->user()->name)->toBase64() }}">
             </a>
             <!-- Dropdown - User Information -->
