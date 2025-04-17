@@ -140,37 +140,31 @@
         }
 
         .login-image {
-        /* height: 70%;
-        min-height: 400px;
-        object-fit: cover;
-        padding-left: 23px;
-        margin-top: 53px;
-        font-size: large; */
-        width: 381px;       
-        height: 376px;       
-        object-fit: cover;   
-        padding-left: 23px;
-        margin-top: 53px;
+            width: 381px;       
+            height: 376px;       
+            object-fit: cover;   
+            padding-left: 23px;
+            margin-top: 53px;
         }
         
         .custom-back-button {
-        top: 15px;
-        left: 20px;
-        z-index: 1;
-        position: absolute;
-    }
+            top: 15px;
+            left: 20px;
+            z-index: 1;
+            position: absolute;
+        }
 
-.custom-btn-lg {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-* {
-    border-radius: 0 !important;
-}
+        .custom-btn-lg {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        *{
+            border-radius: 0 !important;
+        }
         @media (max-width: 768px) {
             .bg-login-image {
                 min-height: 200px;

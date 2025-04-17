@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subscriptions;
-use Illuminate\Http\Request;
 use Log;
 
 class PremiumPageController extends Controller

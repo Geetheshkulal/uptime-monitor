@@ -20,9 +20,6 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\RequestException;
 use App\Models\PingResponse;
 use App\Mail\FollowUpMail;
-
-//  for notifications
-use App\Models\User;
 use Str;
 
 

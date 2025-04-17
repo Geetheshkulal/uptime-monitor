@@ -12,17 +12,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+    
     }
 
-    /**
-     * Bootstrap any application services.
-     */
+
     public function boot()
-{
-    // if (app()->environment('local')) {
-    //     URL::forceRootUrl(config('app.url'));
-    //     URL::forceScheme('https');
-    // }
-}
+    {
+
+    }
 }

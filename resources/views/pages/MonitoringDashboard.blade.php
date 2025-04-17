@@ -32,8 +32,66 @@
     </style> 
     @endpush
 
+   {{-- for animation --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    {{-- for intro js tour --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css"/>
+
 </head>
+<style>
+  
+.introjs-tooltip {
+  background-color: white;  /* Dark gray */
+  color: #0b38e9;             /* White text */
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(55, 73, 241, 0.967);
+}
+
+/* Tooltip Title */
+.introjs-tooltip-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgb(5, 36, 55); 
+}
+
+/* Buttons */
+.introjs-button {
+  background-color: #3b82f6; /* Blue */
+  color: white;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 13px;
+  transition: background-color 0.3s;
+  border: none;
+}
+
+.introjs-button:hover {
+  background-color: #2563eb; /* Darker blue */
+}
+
+/* Highlighted Element Border */
+.introjs-helperLayer {
+  border-radius: 10px;
+  border: none;
+}
+
+/* Progress bar */
+.introjs-progressbar {
+  background-color: #22d3ee; /* Cyan */
+}
+
+.introjs-bullets li > a {
+  background-color: #facc15;
+}
+
+.introjs-bullets li > a.active {
+  background-color: #22c55e;
+}
+
+    </style>
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
@@ -49,7 +107,7 @@
                     Add New Monitor
                 </a>
                 @else
-                <a class="bg-primary btn btn-secondary position-relative" 
+                <a class="bg-primary btn btn-secondary position-relative AddMonitor" 
                     href="{{ route('add.monitoring') }}"
                     title="Free Monitors">
                     Add New Monitor
@@ -61,7 +119,7 @@
             <div data-aos="fade-up" class="row">
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-primary shadow h-100 py-2">
-                        <div class="card-body">
+                        <div class="card-body first">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
@@ -78,9 +136,9 @@
 
                 <!-- Earnings (Monthly) Card Example -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    {{-- <div class="card border-rgb shadow h-100 py-2"> --}}
-                    <div class="card border-left-success shadow h-100 py-2">
-                        <div class="card-body">
+                    <div class="card border-rgb shadow h-100 py-2">
+                    {{-- <div class="card border-left-success shadow h-100 py-2"> --}}
+                        <div class="card-body second">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
@@ -98,7 +156,7 @@
                 <!-- Earnings (Monthly) Card Example -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-info shadow h-100 py-2">
-                        <div class="card-body">
+                        <div class="card-body third">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
@@ -121,7 +179,7 @@
                 <!-- Pending Requests Card Example -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-warning shadow h-100 py-2">
-                        <div class="card-body">
+                        <div class="card-body fourth">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
@@ -220,7 +278,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('display.monitoring', ['id'=>$monitor->id, 'type'=>$monitor->type]) }}" class="btn btn-sm btn-success">
+                                        <a href="{{ route('display.monitoring', ['id'=>$monitor->id, 'type'=>$monitor->type]) }}" class="btn btn-sm btn-success view">
                                             <i class="fas fa-eye fa-sm"></i> View
                                         </a>
                                     </td>
@@ -293,5 +351,63 @@
     });
 </script>
 @endpush
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
+
+<script>
+    introJs().setOptions({
+        steps:[{
+            title:'Check My Site',
+            intro:'Welcome to check my site! Lets take a quick tour'
+        },
+        {
+         element:document.querySelector('.profile'),
+         intro:'Access your profile settings and account information here.'
+       },
+        {
+         element:document.querySelector('.AddMonitor'),
+         intro:'click here to add new monitor'
+       },
+       {
+         element:document.querySelector('.incident'),
+         intro:'View and manage incident reports related to your monitored services.'
+       },
+       {
+         element:document.querySelector('.plan'),
+         intro:'Explore and manage your current subscription plan or upgrade to premium.'
+       },
+       {
+         element:document.querySelector('.ssl'),
+         intro:'Check the SSL certificate expiry status of your domains here.'
+       },
+       {
+         element:document.querySelector('.first'),
+         intro:'This shows the total number of monitors you have configured.'
+       },
+       {
+         element:document.querySelector('.second'),
+         intro:'Displays the number of services that are currently operational.'
+       },
+       {
+         element:document.querySelector('.third'),
+         intro:'Displays the number of services that are currently down.'
+       },
+       {
+         element:document.querySelector('.fourth'),
+         intro:'Shows the number of monitors that are currently paused.'
+       },
+       {
+         element:document.querySelector('.view'),
+         intro:'Click here to view, edit, update, or delete your monitors.'
+       }
+      ],
+      dontShowAgain:true,
+      showProgress: true,
+    showBullets: false,
+  nextLabel: 'Next →',
+  prevLabel: '← Back',
+  doneLabel: 'Let’s go!'
+    }).start();
+</script>
 
 @endsection

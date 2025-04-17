@@ -27,7 +27,7 @@
 
     <li class="nav-item {{ request()->routeIs('incidents') ? 'active' : '' }}" 
         style="{{ request()->routeIs('incidents') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
-        <a class="nav-link text-white" href="{{ route('incidents') }}">
+        <a class="nav-link text-white incident" href="{{ route('incidents') }}">
             <i class="fas fa-exclamation-triangle"></i>
             <span>Incidents</span>
         </a>
@@ -35,7 +35,7 @@
 
     <li class="nav-item {{ request()->routeIs('planSubscription') ? 'active' : '' }}" 
         style="{{ request()->routeIs('planSubscription') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
-        <a class="nav-link text-white" href="{{ route('planSubscription') }}">
+        <a class="nav-link text-white plan" href="{{ route('planSubscription') }}">
             <i class="fas fa-credit-card"></i>
             <span>Plan & subscription</span>
         </a>
@@ -53,7 +53,7 @@
     @elseif(auth()->user()->status === 'free')
     <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}" 
         style="{{ request()->routeIs('ssl.check') ? 'background-color: #1b3b6f !important; border-left: 4px solid #ffffff; box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.4); transition: all 0.3s ease-in-out;' : '' }}">
-        <a class="nav-link text-white d-flex justify-content-between align-items-center" href="{{ route('premium.page') }}">
+        <a class="nav-link ssl text-white d-flex justify-content-between align-items-center" href="{{ route('premium.page') }}">
             <div>
                 <i style="color: yellow;" class="fas fa-lock"></i>
                 <span style="color: yellow;">SSL Check</span>

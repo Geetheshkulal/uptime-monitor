@@ -375,8 +375,6 @@
       </div>
     </div>
   </section>
-
-  <iframe src="https://check-my-site.feedbear.com/updates?embed=true" width="100%" height="300"></iframe>
   <!-- Footer -->
 <footer class="bg-dark text-light py-5">
   <div class="container">

@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Monitors;
 
 use Illuminate\Support\Facades\Auth;
-use App\Models\DnsResponse;
+
 
 
 class DNSController extends Controller
