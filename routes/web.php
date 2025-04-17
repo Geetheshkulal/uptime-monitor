@@ -19,9 +19,8 @@ use Illuminate\Http\Request;
 
 
 Route::get('/', [AdminController::class, 'welcome']);
-
+Route::get('documentation', [AdminController::class, 'documentation'])->name('documentation.page');
 Route::get('latestUpdates',function(){return view('pages.latestUpdates');})->name('latest.page');
-Route::get('documentation',function(){return view('pages.documentation');})->name('documentation.page');
 
 
 Route::post('/email/verification-notification',function (Request $request) {

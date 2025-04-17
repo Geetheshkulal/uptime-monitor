@@ -205,6 +205,10 @@
     border-radius: 0 !important;
 }
     </style>
+     <!-- PWA  -->
+  <link rel="manifest" href="{{ asset('manifest.json') }}">
+  <meta name="theme-color" content="#6777ef">
+  <link rel="apple-touch-icon" href="{{ asset('mainlogo.png') }}">
 </head>
 
 <body class="bg-gradient-primary">
@@ -322,7 +326,22 @@
     <script src="{{asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
     <script src="{{asset('frontend/assets/js/sb-admin-2.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+    <script>
+        if ("serviceWorker" in navigator) {
+           // Register a service worker hosted at the root of the
+           // site using the default scope.
+           navigator.serviceWorker.register("/sw.js",{ scope: "/" }).then(
+           (registration) => {
+              console.log("Service worker registration succeeded:", registration);
+           },
+           (error) => {
+              console.error(Service worker registration failed: ${error});
+           },
+         );
+       } else {
+          console.error("Service workers are not supported.");
+       }
+     </script>
     <script>
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);

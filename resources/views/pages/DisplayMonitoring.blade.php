@@ -178,17 +178,17 @@
 
         <!-- Current Response Card -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow-lg h-100 py-3">
+            <div class="card border-left-primary shadow-lg h-100 py-3">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-2">
                                 Current Response
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-check-circle fa-2x text-success"></i>
+                            <i class="fas fa-check-circle fa-2x text-primary"></i>
                         </div>
                     </div>
                 </div>
@@ -197,17 +197,17 @@
 
         <!-- Average Response Card -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-warning shadow-lg h-100 py-3">
+            <div class="card border-left-primary shadow-lg h-100 py-3">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-2">
                                 Average Response
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800" id="averageResponse">0 ms</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-hourglass-half fa-2x text-warning"></i>
+                            <i class="fas fa-hourglass-half fa-2x text-primary"></i>
                         </div>
                     </div>
                 </div>

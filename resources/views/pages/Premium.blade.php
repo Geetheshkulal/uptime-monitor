@@ -1,99 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upgrade to Premium</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        * {
-            border-radius: 0 !important;
-        }
-        .ribbon {
-            position: absolute;
-            top: 10px;
-            right: -20px;
-            transform: rotate(45deg);
-            width: 120px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            padding: 5px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-        .premium-highlight {
-            border: 3px solid gold !important;
-            box-shadow: 0px 4px 20px rgba(255, 215, 0, 0.6);
-            animation: glow 1.5s infinite alternate;
-        }
-        @keyframes glow {
-            0% { box-shadow: 0px 4px 15px rgba(255, 215, 0, 0.3); }
-            100% { box-shadow: 0px 4px 30px rgba(255, 215, 0, 0.7); }
-        }
-        .bg-dark {
-            background-color: #212529 !important;
-        }
-        .text-warning {
-            color: #ffc107 !important;
-        }
-        .btn-warning {
-            background-color: #ffc107;
-            border-color: #ffc107;
-            color: #212529;
-        }
-        .border-warning {
-            border-color: #ffc107 !important;
-        }
-        .border-secondary {
-            border-color: #6c757d !important;
-        }
-    </style>
-</head>
-<body>
-    <header class="bg-dark py-3">
-        <div class="container text-white text-center">
-            <h1>Upgrade Your Plan</h1>
-        </div>
-    </header>
-    
-    <section id="upgrade" class="py-5">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold mb-3 text-warning">Upgrade to Premium</h2>
-                <p class="text-muted mx-auto" style="max-width: 600px;">
-                    Unlock advanced monitoring features and take full control of your website’s uptime.
-                </p>
-            </div>
-            
-            <div class="row justify-content-center g-4">
-                <!-- Basic Plan (Current Plan) -->
-                <div class="col-lg-4">
-                    <div class="card h-100 border-secondary shadow-sm position-relative">
-                        <div class="ribbon bg-secondary text-white text-center">Your Current Plan</div>
-                        <div class="card-body p-4">
-                            <h3 class="fw-bold mb-2">Basic</h3>
-                            <div class="text-secondary mb-4">
-                                <span class="display-6 fw-bold">₹0</span>
+@extends('dashboard')
+
+@section('content')
+
+@push('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<style>
+    * { border-radius: 0 !important; }
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+    }
+    .bg-dark { background-color: #2c3e50 !important; }
+    .text-white { color: #fff !important; }
+    .btn-primary, .btn-secondary {
+        background-color: #3498db;
+        border-color: #3498db;
+        color: #fff;
+    }
+    .btn-primary:hover, .btn-secondary:hover {
+        background-color: #2980b9;
+        border-color: #2980b9;
+    }
+    .btn-warning {
+        background-color: #f39c12;
+        border-color: #f39c12;
+        color: #fff;
+    }
+    .btn-warning:hover {
+        background-color: #e68a00;
+        border-color: #d97e00;
+    }
+    .card {
+        border: 1px solid #ddd;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    }
+    .card-header {
+        background-color: #e9ecef;
+        border-bottom: 1px solid #ddd;
+    }
+    .card-body {
+        padding: 1.5rem;
+    }
+    .text-success { color: #28a745 !important; }
+    .text-muted { color: #6c757d !important; }
+    .text-warning { color: #f39c12 !important; }
+    .border-warning { border-color: #f39c12 !important; }
+    .border-secondary { border-color: #3498db !important; }
+
+    .ribbon {
+        position: absolute;
+        top: 10px;
+        right: -20px;
+        transform: rotate(45deg);
+        width: 120px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        padding: 5px 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        z-index: 10;
+    }
+    .ribbon.bg-secondary {
+        background-color: #3498db;
+    }
+
+    .premium-highlight {
+        border: 3px solid #f39c12 !important;
+        box-shadow: 0px 4px 20px rgba(243, 156, 18, 0.6);
+        animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+        0% { box-shadow: 0px 4px 15px rgba(243, 156, 18, 0.3); }
+        100% { box-shadow: 0px 4px 30px rgba(243, 156, 18, 0.7); }
+    }
+
+    footer.bg-dark {
+        padding: 1rem 0;
+        margin-top: 3rem;
+    }
+</style>
+@endpush
+
+<div class="container-fluid">
+    <section id="upgrade" class="py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold mb-3 text-primary">Upgrade to Premium   <i class="fas fa-crown fa-lg" style="color: gold; animation: glow 1.5s infinite alternate;"></i></h2>
+                    <p class="text-muted mx-auto" style="max-width: 600px;">
+                        Unlock advanced monitoring features and take full control of your website’s uptime.
+                    </p>
+                </div>
+
+                <div class="row justify-content-center g-4">
+                    <div class="col-lg-4">
+                        <div class="card h-100 border-secondary shadow-sm position-relative">
+                            <div class="ribbon bg-secondary text-white">Your Current Plan</div>
+                            <div class="card-body p-4">
+                                <h5 class="fw-bold text-primary mb-2">Basic</h5>
+                                <div class="text-primary mb-4">
+                                    <span class="display-6 fw-bold">₹0</span>
+                                </div>
+                                <ul class="list-unstyled mb-4">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 5 websites</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-minute checks</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email & Telegram Bot alerts</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-day history</li>
+                                </ul>
+                                <button class="btn btn-primary d-block w-100" disabled>Current Plan</button>
                             </div>
-                            <ul class="list-unstyled mb-4">
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 5 websites</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-minute checks</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email & Telegram Bot alerts</li>
-                                <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-day history</li>
-                            </ul>
-                            <button class="btn btn-secondary d-block" disabled>Current Plan</button>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Premium Plan (Highlighted) -->
-                @foreach($plans as $plan)
+
+                    @foreach($plans as $plan)
                     <div class="col-lg-4">
                         <div class="card h-100 border-warning shadow-lg premium-highlight">
                             <div class="card-body p-4">
-                                <h3 class="fw-bold mb-2 text-warning">{{$plan->name}}</h3>
+                                <h5 class="fw-bold mb-2 text-warning">{{ $plan->name }}</h5>
                                 <div class="text-warning mb-4">
-                                    <span class="display-6 fw-bold">₹{{$plan->amount}}</span>
+                                    <span class="display-6 fw-bold">₹{{ $plan->amount }}</span>
                                     <span class="text-muted">/month</span>
                                 </div>
                                 <ul class="list-unstyled mb-4">
@@ -101,28 +132,28 @@
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-minute checks</li>
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email & Telegram Bot alerts</li>
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> SSL expiry check</li>
-                                    {{-- <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Custom integrations</li> --}}
                                 </ul>
                                 <form action="{{ route('store') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="name" value="{{ auth()->user()->name }}">
                                     <input type="hidden" name="email" value="{{ auth()->user()->email }}">
                                     <input type="hidden" name="mobile" value="{{ auth()->user()->phone }}">
-                                    <input type="hidden" name="subscription_id" value="{{$plan->id}}">
-                                    <button type="submit" class="btn btn-warning d-block fw-bold">Upgrade Now</button>
+                                    <input type="hidden" name="subscription_id" value="{{ $plan->id }}">
+                                    <button type="submit" class="btn btn-warning d-block fw-bold w-100">Upgrade Now</button>
                                 </form>
                             </div>
                         </div>
                     </div>
-                @endforeach
+                    @endforeach
+                </div>
+
             </div>
         </div>
     </section>
-    
-    <footer class="bg-dark text-white text-center py-3">
-        <p class="mb-0">&copy; 2025 Uptime Monitor. All rights reserved.</p>
-    </footer>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+@endpush
+
+@endsection

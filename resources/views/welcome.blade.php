@@ -117,8 +117,7 @@
         <li class="nav-item">
           <button class="nav-link"  data-feedbear-button>Give Feedback</button>
         </li>
-        <button onclick="subscribeUser()">Subscribe</button> 
-        <button onclick="sendNotification()">Send Push Notification</button>    
+       
         
       </ul>
       @if (Route::has('login'))      
