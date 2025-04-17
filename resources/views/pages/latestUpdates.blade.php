@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-
+    {{-- showing the latest updates using feedbear --}}
     <div class="updates-container">
         <iframe src="https://check-my-site.feedbear.com/updates"></iframe>
     </div>

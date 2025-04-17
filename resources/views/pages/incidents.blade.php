@@ -36,6 +36,7 @@
                                 </tr>
                             </thead>
                             <tbody id="incidentTableBody">
+                                {{-- check if incident table is empty --}}
                                 @if ($incidents->isEmpty())
                                     <tr>
                                         <td colspan="6" class="text-center text-muted">No incidents are available</td>

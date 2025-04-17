@@ -72,12 +72,17 @@ class MonitorJob
         \n🛠 Type: {$monitor->type}
         \n📅 Detected At: " . now()->toDateTimeString();
 
+        $start=microtime(true);
         
-        Http::get("https://api.telegram.org/bot{$botToken}/sendMessage", [
+        $response=Http::get("https://api.telegram.org/bot{$botToken}/sendMessage", [
             'chat_id' => $chatId,
             'text' => $message,
             'parse_mode' => 'Markdown'
         ]);
+
+        $duration=microtime(true)-$start;
+        Log::info('Telegram API Response Time: ' . round($duration * 1000, 2) . ' ms');
+        Log::info('Telegram API Response: ', $response->json());
     }
 
     public function SendPwaNotification($userId)
