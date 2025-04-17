@@ -6,6 +6,7 @@ use App\Models\HttpResponse;
 use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\PortResponse;
+use App\Models\PushSubscription;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,12 +15,15 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Monitors;
 use App\Models\DnsResponse;
 use App\Mail\MonitorDownAlert;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\RequestException;
 use App\Models\PingResponse;
 use App\Mail\FollowUpMail;
+use Minishlink\WebPush\Subscription;
+use Minishlink\WebPush\WebPush;
 use Str;
 
 
@@ -76,7 +80,53 @@ class MonitorJob
         ]);
     }
 
+    public function SendPwaNotification($userId)
+    {
+        try {
+            // Get subscriptions only for the specific user
+            $subscriptions = PushSubscription::where('user_id', $userId)->get();
 
+            if ($subscriptions->isEmpty()) {
+                Log::info("No PWA subscriptions found for user {$userId}");
+                return;
+            }
+
+            $webPush = new WebPush([
+                'VAPID' => [
+                    'subject' => 'mailto:'.env('MAIL_FROM_ADDRESS', 'notifications@example.com'),
+                    'publicKey' => env('VAPID_PUBLIC_KEY'),
+                    'privateKey' => env('VAPID_PRIVATE_KEY'),
+                ]
+            ]);
+
+            $payload = json_encode([
+                'title' => 'Monitor Alert',
+                'body' => 'Your Monitor is still down',
+                'icon' => '/logo.png'
+            ]);
+
+            foreach ($subscriptions as $subscription) {
+                $pushSubscription = new Subscription(
+                    $subscription->endpoint,
+                    $subscription->p256dh,
+                    $subscription->auth,
+                    'aes128gcm'
+                );
+
+                $webPush->queueNotification($pushSubscription, $payload);
+            }
+
+            $results = $webPush->flush();
+            foreach ($results as $report) {
+                if (!$report->isSuccess()) {
+                    Log::error("PWA notification failed for user {$userId}: " . $report->getReason());
+                }
+            }
+
+        } catch (\Exception $e) {
+            Log::error("PWA notification error for user {$userId}: " . $e->getMessage());
+        }
+    }
 private function checkHttp(Monitors $monitor)
 {
     $status = 'down';
@@ -418,12 +468,17 @@ public function sendFollowUpEmail(){
 
         $notifications = Notification::where('status', 'unread')
             ->where('created_at', '<=', $fiveMinutesAgo)
+            ->with('monitor.user') // Ensure you have this relationship
             ->get();
 
         foreach ($notifications as $notification) {
-            // Send the follow-up email (customize with your logic/view)
-            Mail::to($notification->monitor->email)->send(new FollowUpMail($notification->monitor));
+            // Send the follow-up email
+            Mail::to($notification->monitor->email)
+                ->send(new FollowUpMail($notification->monitor));
 
+            // Send PWA notification only to the monitor's owner
+            $this->SendPwaNotification($notification->monitor->user_id);
+            
             // Optionally, log or update status
             Log::info("Follow-up email sent to: {$notification->monitor->email}");
             $notification->delete();
@@ -457,9 +512,11 @@ public function sendFollowUpEmail(){
                         $this->checkHttp($monitor);
                         break;
                     }
+                $this->sendFollowUpEmail();
             }
             
-            $this->sendFollowUpEmail();
+            
+            
         
         } catch (\Exception $e) {
             Log::error("MonitorJob failed: " . $e->getMessage());

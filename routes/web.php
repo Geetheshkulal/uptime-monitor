@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PremiumPageController;
+use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
@@ -122,52 +123,9 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 
-Route::post('/subscribe', function (Request $request) {
-    session(['subscription' => $request->all()]); // Temporarily store subscription
-    return response()->json(['success' => true]);
-});
+Route::post('/subscribe', [PushNotificationController::class , 'subscribe']);
 
-Route::post('/send-notification', function (Request $request) {
-    $subscription = session('subscription');
-
-    if (!$subscription) {
-        return response()->json(['success' => false, 'error' => 'No subscription saved yet!']);
-    }
-
-    // ✅ Prepare the subscription object
-    $sub = Subscription::create([
-        'endpoint' => $subscription['endpoint'],
-        'publicKey' => $subscription['keys']['p256dh'],
-        'authToken' => $subscription['keys']['auth'],
-        'contentEncoding' => 'aes128gcm',
-    ]);
-
-    // ✅ Prepare the payload for the push notification
-    $payload = json_encode([
-        'title' => 'Push Alert! 🚀',
-        'body' => 'This is a test push notification from Laravel.',
-        'icon' => '/logo.png' // Optional icon
-    ]);
-
-    // ✅ Send using WebPush
-    $webPush = new WebPush([
-        'VAPID' => [
-            'subject' => 'mailto:example@example.com', // Your email here
-            'publicKey' => env('VAPID_PUBLIC_KEY'),
-            'privateKey' => env('VAPID_PRIVATE_KEY'),
-        ],
-    ]);
-
-    $webPush->queueNotification($sub, $payload);
-
-    foreach ($webPush->flush() as $report) {
-        if (!$report->isSuccess()) {
-            return response()->json(['success' => false, 'error' => 'Notification failed to deliver.']);
-        }
-    }
-
-    return response()->json(['success' => true]);
-});
+Route::post('/send-notification',[PushNotificationController::class,'send']);
 
 Route::get('/track/{token}.png', [TrackingController::class, 'pixel'])->withoutMiddleware(['web', 'verified', 'auth', \App\Http\Middleware\VerifyCsrfToken::class]);
 

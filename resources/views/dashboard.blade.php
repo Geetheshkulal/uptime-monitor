@@ -172,9 +172,84 @@
     <!-- Page level custom scripts -->
     <script src="{{asset('frontend/assets/js/demo/chart-area-demo.js')}}"></script>
     
-    {{-- <script src="{{asset('frontend/assets/js/demo/chart-pie-demo.js')}}"></script> --}}
+    <script src="{{ asset('/sw.js') }}"></script>
+ 
+    <script>
+        if ("serviceWorker" in navigator) {
+            // Register a service worker hosted at the root of the
+            // site using the default scope.
+            navigator.serviceWorker.register("/sw.js",{ scope: "/" }).then(
+            (registration) => {
+                console.log("Service worker registration succeeded:", registration);
+            },
+            (error) => {
+                console.error(Service worker registration failed: ${error});
+            },
+            );
+        } else {
+            console.error("Service workers are not supported.");
+        }
+    </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+        // Utility function to convert base64 to Uint8Array
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
 
+        async function subscribeUser() {
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                try {
+                    // Register service worker
+                    const register = await navigator.serviceWorker.register('/sw.js');
+
+                    // Subscribe for push notifications
+                    const subscription = await register.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: urlBase64ToUint8Array("{{ env('VAPID_PUBLIC_KEY') }}")
+                    });
+
+                    // Extract subscription data
+                    const subscriptionData = {
+                        endpoint: subscription.endpoint,
+                        keys: {
+                            p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')))),
+                            auth: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth'))))
+                        }
+                    };
+
+                    // Send subscription data to backend
+                    await fetch('/subscribe', {
+                        method: 'POST',
+                        body: JSON.stringify(subscriptionData),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    });
+
+                    alert('Subscribed to Push Notifications!');
+                } catch (error) {
+                    console.log('Subscription failed:', error);
+                }
+            } else {
+                console.log("Your browser does not support push notifications.");
+            }
+        }
+
+        // Expose to global scope
+        window.subscribeUser = subscribeUser;
+        subscribeUser()
+    });
+    </script>
 
 </body>
 

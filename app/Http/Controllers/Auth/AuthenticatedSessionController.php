@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\PushSubscription;
 use App\Providers\RouteServiceProvider;
 use Http;
 use Illuminate\Http\RedirectResponse;
@@ -92,20 +93,22 @@ class AuthenticatedSessionController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-    if ($user) {
-        activity()
-            ->causedBy($user)
-            ->inLog('auth')
-            ->event('logout')
-            ->withProperties([
-                'name'       => $user->name,
-                'email'      => $user->email,
-                'ip'         => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'logout_at'  => now()
-            ])
-            ->log('User logged out');
-    }
+        PushSubscription::where('user_id',$user->id)->delete();
+
+        if ($user) {
+            activity()
+                ->causedBy($user)
+                ->inLog('auth')
+                ->event('logout')
+                ->withProperties([
+                    'name'       => $user->name,
+                    'email'      => $user->email,
+                    'ip'         => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'logout_at'  => now()
+                ])
+                ->log('User logged out');
+        }
 
         Auth::guard('web')->logout();
 
