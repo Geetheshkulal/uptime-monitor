@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
-use Http;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 
 class AuthenticatedSessionController extends Controller
@@ -55,7 +56,18 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user(); // Ensure $user is the logged-in user
 
     if ($user instanceof User) {
+
         $user->update(['last_login_ip' => $request->ip()]);
+
+        $currentSessionId=session()->getId();
+
+        if($user->session_id && $user->session_id !== $currentSessionId)
+        {
+            Session::getHandler()->destroy($user->session_id);
+        }
+
+        $user->session_id = $currentSessionId;
+        $user->save();
     }
 
     activity()

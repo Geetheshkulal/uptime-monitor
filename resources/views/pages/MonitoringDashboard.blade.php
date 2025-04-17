@@ -39,18 +39,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css"/>
 
 </head>
+
 <style>
   
+  /* css for intro js */
 .introjs-tooltip {
-  background-color: white;  /* Dark gray */
-  color: #0b38e9;             /* White text */
+  background-color: white;  
+  color: #0b38e9;           
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(55, 73, 241, 0.967);
 }
 
-/* Tooltip Title */
 .introjs-tooltip-title {
   font-size: 18px;
   font-weight: 600;
@@ -69,18 +70,16 @@
 }
 
 .introjs-button:hover {
-  background-color: #2563eb; /* Darker blue */
+  background-color: #2563eb; 
 }
 
-/* Highlighted Element Border */
 .introjs-helperLayer {
   border-radius: 10px;
   border: none;
 }
 
-/* Progress bar */
 .introjs-progressbar {
-  background-color: #22d3ee; /* Cyan */
+  background-color: #22d3ee; 
 }
 
 .introjs-bullets li > a {
@@ -91,14 +90,14 @@
   background-color: #22c55e;
 }
 
-    </style>
+</style>
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
             <div data-aos="fade-up" class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Overview</h1>
-                
+                {{-- check condition if total monitor is greater than 5 --}}
                 @if($totalMonitors>=5 && auth()->user()->status=='free')
                 <a class="bg-primary btn btn-secondary position-relative border-none" 
                     href="{{ route('premium.page') }}"
@@ -115,7 +114,7 @@
                 @endif
             </div>
 
-            <!-- Stats Cards Row -->
+            <!-- total monitors -->
             <div data-aos="fade-up" class="row">
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-primary shadow h-100 py-2">
@@ -134,10 +133,9 @@
                     </div>
                 </div>
 
-                <!-- Earnings (Monthly) Card Example -->
+                <!-- currently up -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-rgb shadow h-100 py-2">
-                    {{-- <div class="card border-left-success shadow h-100 py-2"> --}}
                         <div class="card-body second">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
@@ -153,7 +151,7 @@
                     </div>
                 </div>
 
-                <!-- Earnings (Monthly) Card Example -->
+                <!-- down count -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-info shadow h-100 py-2">
                         <div class="card-body third">
@@ -176,7 +174,7 @@
                     </div>
                 </div>
 
-                <!-- Pending Requests Card Example -->
+                <!-- paused count -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-warning shadow h-100 py-2">
                         <div class="card-body fourth">
@@ -200,6 +198,7 @@
                 <h1 class="h3 mb-0 text-gray-800">My Monitors</h1>
             </div>
 
+            {{-- if user is free show the banner --}}
             @if(auth()->user()->status === 'free' && $hasMoreMonitors)
             <div data-aos="fade-up" class="premium-alert text-center mb-4 p-4" style="
                 background: linear-gradient(180deg, blue,lightblue);

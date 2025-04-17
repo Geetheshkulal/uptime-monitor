@@ -13,6 +13,7 @@
       --sidebar-width: 280px;
     }
     
+    
     body {
       display: flex;
       min-height: 100vh;
