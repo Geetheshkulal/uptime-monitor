@@ -38,6 +38,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckUserSession::class,
         ],
 
         'api' => [
@@ -74,5 +75,9 @@ class Kernel extends HttpKernel
         'monitor.limit' => \App\Http\Middleware\LimitMonitorMiddleware::class,
         'disable_cookies' => \App\Http\Middleware\DisableCookies::class,
         'check.session'=>\App\Http\Middleware\CheckUserSession::class,
+    ];
+
+    protected $routeMiddleware = [
+        'check.session' => \App\Http\Middleware\CheckUserSession::class,
     ];
 }

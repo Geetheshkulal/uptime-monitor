@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
@@ -53,22 +54,18 @@ class AuthenticatedSessionController extends Controller
         
         $request->authenticate();
 
+        $request->session()->regenerate();
+
         /** @var User $user */
-        $user = Auth::user(); // Ensure $user is the logged-in user
+        $user = Auth::user(); 
 
-    if ($user instanceof User) {
+     if ($user instanceof User) {
 
-        $user->update(['last_login_ip' => $request->ip()]);
+            $user->session_id = Session::getId();
+            // $user->last_activity = now();
+            $user->last_login_ip = $request->ip();
+            $user->save(); 
 
-        $currentSessionId=session()->getId();
-
-        if($user->session_id && $user->session_id !== $currentSessionId)
-        {
-            Session::getHandler()->destroy($user->session_id);
-        }
-
-        $user->session_id = $currentSessionId;
-        $user->save();
     }
 
     activity()
@@ -84,8 +81,6 @@ class AuthenticatedSessionController extends Controller
             ->log('User logged in');
 
 
-        $request->session()->regenerate();
-
         if ($request->has('remember')) {
             Cookie::queue('remember_email', $request->email, 1440); // for 1 days
             Cookie::queue('remember_password', $request->password, 1440); 
@@ -96,6 +91,8 @@ class AuthenticatedSessionController extends Controller
 
         $redirectRoute=($user->hasRole('superadmin'))?RouteServiceProvider::ADMIN_DASHBOARD:RouteServiceProvider::HOME;
 
+     
+
         return redirect()->intended($redirectRoute);
     }
 
@@ -104,6 +101,13 @@ class AuthenticatedSessionController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
+
+          if ($user instanceof User) {
+
+            $user->update([
+                'session_id' => null,
+            ]);
+        }
 
         PushSubscription::where('user_id',$user->id)->delete();
 
