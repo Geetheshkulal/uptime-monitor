@@ -4,7 +4,6 @@ namespace App\Jobs;
 use App\Models\Incident;
 use App\Models\HttpResponse;
 use App\Models\Notification;
-use App\Models\Payment;
 use App\Models\PortResponse;
 use App\Models\PushSubscription;
 use Carbon\Carbon;
@@ -15,7 +14,6 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Monitors;
 use App\Models\DnsResponse;
 use App\Mail\MonitorDownAlert;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -415,12 +413,7 @@ private function checkHttp(Monitors $monitor)
             return $status === 'up';
     
         } catch (\Exception $e) {
-            // Log the error with details about the monitor and the exception message
-            
-            // Optionally, send an alert to admins about the issue
-            // \Mail::to('admin@example.com')->send(new ErrorOccurredNotification($e));
-    
-            // Return false or handle accordingly
+            Log::error('Error occurreed: '.$e);
             return false;
         }
     }
@@ -519,10 +512,6 @@ public function sendFollowUpEmail(){
                     }
                 $this->sendFollowUpEmail();
             }
-            
-            
-            
-        
         } catch (\Exception $e) {
             Log::error("MonitorJob failed: " . $e->getMessage());
         }

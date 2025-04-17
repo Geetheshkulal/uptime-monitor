@@ -70,7 +70,7 @@
                                     <th>Properties</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody>                                                                                                                    
                                 @foreach($logs as $log)
                                 <tr>
                                     <td>{{ $log->id }}</td>

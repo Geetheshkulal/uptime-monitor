@@ -86,7 +86,6 @@
 </head>
 <body>
 
-  <script src="{{ asset('js/notification.js') }}"></script>
   <!-- Navigation -->
   <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
