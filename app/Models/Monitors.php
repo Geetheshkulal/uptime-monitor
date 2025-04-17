@@ -27,5 +27,9 @@ class Monitors extends Model
         return $this->hasMany(Notification::class, 'monitor_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
 }
