@@ -22,13 +22,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <style>
-        .bg-register-image {
-            background: url('{{ asset('frontend/assets/img/register-bg.jpg') }}');
-            background-size: cover;
-            background-position: center;
-            min-height: 300px;
-        }
-        
         .card {
             border: 0;
             border-radius: 1rem;
@@ -183,11 +176,6 @@
 }
         
         @media (max-width: 768px) {
-            .bg-register-image {
-                min-height: 200px;
-                border-radius: 1rem 1rem 0 0;
-            }
-            
             .card {
                 margin: 1rem;
             }

@@ -1,6 +1,3 @@
-<link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
-
 <style>
     @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
   
@@ -127,33 +124,7 @@ body.dark .dropdown-item:hover {
         <i class="fa fa-bars"></i>
     </button>
 
-    {{-- filepath: c:\xampp\htdocs\uptime-monitor\resources\views\body\header.blade.php --}}
-{{-- <a 
-href="{{ url()->previous() }}" 
-class="btn btn-primary d-flex align-items-center justify-content-center back-button {{ request()->is('monitoring/dashboard') ? 'disabled' : '' }}" 
-style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitoring/dashboard') ? 'pointer-events: none; opacity: 0.6;' : '' }}">
-<i class="fas fa-arrow-left"></i>
-</a> --}}
-
-
-
-
-
-
-    <!-- Topbar Search -->
-    {{-- <form
-        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group">
-            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                aria-label="Search" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="button">
-                    <i class="fas fa-search fa-sm"></i>
-                </button>
-            </div>
-        </div>
-    </form> --}}
-
+   
  
 
     <!-- Topbar Navbar -->
@@ -185,18 +156,7 @@ style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitori
 
         {{-- dark mode and light mode --}}
 
-        {{-- <div>
-            <input type="checkbox" class="checkbox" id="checkbox">
-            <label for="checkbox" class="checkbox-label">
-              <i class="fas fa-moon"></i>
-              <i class="fas fa-sun"></i>
-              <span class="ball"></span>
-            </label>
-          </div> --}}
-
-
-        
-        <!-- Nav Item - Alerts -->
+   <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -234,14 +194,6 @@ style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitori
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
-                {{-- <a class="dropdown-item" href="#">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Settings
-                </a> --}}
-                {{-- <a class="dropdown-item" href="#">
-                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Activity Log
-                </a> --}}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -253,26 +205,3 @@ style="width: 40px; height: 40px; border-radius: 50%; {{ request()->is('monitori
     </ul>
 
 </nav>
-
-<script>
-const checkbox = document.getElementById("checkbox");
-
-// Check local storage for theme preference
-if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
-    checkbox.checked = true;
-}
-
-checkbox.addEventListener("change", () => {
-    document.body.classList.toggle("dark");
-
-    if (document.body.classList.contains("dark")) {
-        localStorage.setItem("theme", "dark");
-    } else {
-        localStorage.setItem("theme", "light");
-    }
-});
-
-
-
-</script>

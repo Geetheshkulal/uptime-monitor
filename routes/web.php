@@ -1,11 +1,18 @@
 <?php
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BillingController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PremiumPageController;
 use App\Http\Controllers\PushNotificationController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MonitoringController;
+use App\Http\Controllers\UserController;
+use App\Models\Subscriptions;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SslCheckController;
 use App\Http\Controllers\DnsController;
@@ -14,15 +21,22 @@ use App\Http\Controllers\PortMonitorController;
 use App\Http\Controllers\HttpMonitoringController;
 use App\Http\Controllers\CashFreePaymentController;
 use App\Http\Controllers\PlanSubscriptionController;
-use Minishlink\WebPush\Subscription;
-use Minishlink\WebPush\WebPush;
 use Illuminate\Http\Request;
 
 
-Route::get('/', [AdminController::class, 'welcome']);
+Route::get('/', function()
+{
+    $plans = Subscriptions::all();
+    return view('welcome', compact('plans'));
+});
 
 Route::get('latestUpdates',function(){return view('pages.latestUpdates');})->name('latest.page');
-Route::get('documentation',function(){return view('pages.documentation');})->name('documentation.page');
+
+Route::get('documentation',function()
+{
+    $plans = Subscriptions::all();
+    return view('pages.documentation', compact('plans'));
+})->name('documentation.page');
 
 
 Route::post('/email/verification-notification',function (Request $request) {
@@ -83,41 +97,41 @@ Route::middleware(['auth','verified'])->group(function () {
 Route::group(['middleware' => ['auth']], function () {
     // Routes accessible only by superadmin
     Route::get('/admin/dashboard',[AdminController::class,'AdminDashboard'])->middleware('role:superadmin')->name('admin.dashboard');
-    Route::get('/admin/display/users', action: [AdminController::class,'DisplayUsers'])->middleware('permission:see.users')->name('display.users');
-    Route::get('/admin/display/roles', [AdminController::class,'DisplayRoles'])->middleware('permission:see.roles')->name('display.roles');
-    Route::get('/admin/display/permissions', [AdminController::class, 'DisplayPermissions'])->middleware('role:superadmin')->name('display.permissions');
-    Route::get('/admin/display/user/{id}', action: [AdminController::class,'ShowUser'])->middleware('permission:see.users')->name('show.user');
+    Route::get('/admin/display/users', action: [UserController::class,'DisplayUsers'])->middleware('permission:see.users')->name('display.users');
+    Route::get('/admin/display/roles', [RoleController::class,'DisplayRoles'])->middleware('permission:see.roles')->name('display.roles');
+    Route::get('/admin/display/permissions', [PermissionController::class, 'DisplayPermissions'])->middleware('role:superadmin')->name('display.permissions');
+    Route::get('/admin/display/user/{id}', action: [UserController::class,'ShowUser'])->middleware('permission:see.users')->name('show.user');
 
     // Route::get('/admin/users', [AdminController::class, 'AddUser'])->name('add.user.form');
-    Route::post('/admin/add/users', [AdminController::class, 'storeUser'])->middleware('permission:add.user')->name('add.user');
-    Route::get('/admin/edit/user/{id}', [AdminController::class, 'EditUsers'])->middleware('permission:edit.user')->name('edit.user');
-    Route::put('/admin/edit/user/{id}', [AdminController::class, 'UpdateUsers'])->middleware('permission:edit.user')->name('update.user');
-    Route::delete('/admin/delete/user/{id}', [AdminController::class, 'DeleteUser'])->middleware('permission:delete.user')->name('delete.user');
+    Route::post('/admin/add/users', [UserController::class, 'storeUser'])->middleware('permission:add.user')->name('add.user');
+    Route::get('/admin/edit/user/{id}', [UserController::class, 'EditUsers'])->middleware('permission:edit.user')->name('edit.user');
+    Route::put('/admin/edit/user/{id}', [UserController::class, 'UpdateUsers'])->middleware('permission:edit.user')->name('update.user');
+    Route::delete('/admin/delete/user/{id}', [UserController::class, 'DeleteUser'])->middleware('permission:delete.user')->name('delete.user');
 
-    Route::get('/admin/add/roles', [AdminController::class, 'AddRole'])->middleware(middleware: 'permission:add.role')->name('add.role');
-    Route::post('/roles', [AdminController::class, 'StoreRole'])->middleware('permission:add.role')->name('store.role');
+    Route::get('/admin/add/roles', [RoleController::class, 'AddRole'])->middleware(middleware: 'permission:add.role')->name('add.role');
+    Route::post('/roles', [RoleController::class, 'StoreRole'])->middleware('permission:add.role')->name('store.role');
 
-    Route::get('/admin/delete/role/{id}', [AdminController::class, 'DeleteRole'])->middleware('permission:delete.role')->name('delete.role');
-    Route::get('/admin/edit/role/{id}', [AdminController::class, 'EditRole'])->middleware('permission:edit.role')->name('edit.role');
-    Route::put('/admin/update/role/{id}', [AdminController::class, 'UpdateRole'])->middleware('permission:edit.role')->name('update.role');
+    Route::get('/admin/delete/role/{id}', [RoleController::class, 'DeleteRole'])->middleware('permission:delete.role')->name('delete.role');
+    Route::get('/admin/edit/role/{id}', [RoleController::class, 'EditRole'])->middleware('permission:edit.role')->name('edit.role');
+    Route::put('/admin/update/role/{id}', [RoleController::class, 'UpdateRole'])->middleware('permission:edit.role')->name('update.role');
 
 
-    Route::get('admin/add/permission', [AdminController::class, 'AddPermission'])->middleware('role:superadmin')->name('add.permission');
-    Route::post('admin/store/permission', [AdminController::class, 'StorePermission'])->middleware('role:superadmin')->name('store.permission');
+    Route::get('admin/add/permission', [PermissionController::class, 'AddPermission'])->middleware('role:superadmin')->name('add.permission');
+    Route::post('admin/store/permission', [PermissionController::class, 'StorePermission'])->middleware('role:superadmin')->name('store.permission');
 
-    Route::get('/admin/delete/permission/{id}', [AdminController::class, 'DeletePermission'])->middleware('role:superadmin')->name('delete.permission');
-    Route::get('/admin/display/activity', [AdminController::class,'DisplayActivity'])->middleware('permission:see.activity')->name('display.activity');
+    Route::get('/admin/delete/permission/{id}', [PermissionController::class, 'DeletePermission'])->middleware('role:superadmin')->name('delete.permission');
+    Route::get('/admin/display/activity', [ActivityController::class,'DisplayActivity'])->middleware('permission:see.activity')->name('display.activity');
 
     
-    Route::get('/admin/edit/permissions/{id}', [AdminController::class, 'EditPermission'])->middleware('role:superadmin')->name('edit.permission');
-    Route::put('/admin/update/permissions/{id}', [AdminController::class, 'UpdatePermission'])->middleware('role:superadmin')->name('update.permission');
+    Route::get('/admin/edit/permissions/{id}', [PermissionController::class, 'EditPermission'])->middleware('role:superadmin')->name('edit.permission');
+    Route::put('/admin/update/permissions/{id}', [PermissionController::class, 'UpdatePermission'])->middleware('role:superadmin')->name('update.permission');
 
-    Route::get('/roles/{id}/permissions', [AdminController::class, 'EditRolePermissions'])->middleware('permission:edit.role.permissions')->name('edit.role.permissions');
-    Route::post('/roles/{id}/permissions', [AdminController::class, 'UpdateRolePermissions'])->middleware('permission:edit.role.permissions')->name('update.role.permissions');
+    Route::get('/roles/{id}/permissions', [RolePermissionController::class, 'EditRolePermissions'])->middleware('permission:edit.role.permissions')->name('edit.role.permissions');
+    Route::post('/roles/{id}/permissions', [RolePermissionController::class, 'UpdateRolePermissions'])->middleware('permission:edit.role.permissions')->name('update.role.permissions');
 
 
-    Route::get('/billing',[AdminController::class,'Billing'])->middleware('role:superadmin')->name('billing');
-    Route::post('/edit/billing/{id}',[AdminController::class,'EditBilling'])->middleware('role:superadmin')->name('edit.billing');
+    Route::get('/billing',[BillingController::class,'Billing'])->middleware('role:superadmin')->name('billing');
+    Route::post('/edit/billing/{id}',[BillingController::class,'EditBilling'])->middleware('role:superadmin')->name('edit.billing');
 
     
 });
@@ -125,7 +139,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::post('/subscribe', [PushNotificationController::class , 'subscribe']);
 
-Route::post('/send-notification',[PushNotificationController::class,'send']);
 
 Route::get('/track/{token}.png', [TrackingController::class, 'pixel'])->withoutMiddleware(['web', 'verified', 'auth', \App\Http\Middleware\VerifyCsrfToken::class]);
 
