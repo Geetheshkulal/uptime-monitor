@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\CustomResetPassword;
+use App\Notifications\CustomVerifyEmail;
 
 // use Spatie\Activitylog\Traits\LogsActivity;
 // use Spatie\Activitylog\LogOptions;
@@ -68,4 +70,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
      return $this->hasMany(Monitors::class);
     }
+
+    public function sendPasswordResetNotification($token)
+{
+    $this->notify(new CustomResetPassword($token));
+}
+
+public function sendEmailVerificationNotification()
+{
+    $this->notify(new CustomVerifyEmail);
+}
 }
