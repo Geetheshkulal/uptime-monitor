@@ -10,83 +10,94 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    .gradient-bg {
-      background: linear-gradient(90deg, #0d6efd 0%, #0a58ca 100%);
-    }
-    .pulse-animation {
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      50% {
-        transform: scale(1.05);
-        opacity: 0.8;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-    .hero-section {
-      padding-top: 120px;
-      padding-bottom: 80px;
-    }
-    .feature-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-    .testimonial-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .popular-plan {
-      position: relative;
-      border: 2px solid #0d6efd;
-      border-radius: 0.375rem;
-    }
-    .popular-badge {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .step-circle {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-    .btn {
-  border-radius: 0 !important;
-}
-    
-  </style>
+  
   <!-- PWA  -->
   <link rel="manifest" href="{{ asset('manifest.json') }}">
   <meta name="theme-color" content="#6777ef">
   <link rel="apple-touch-icon" href="{{ asset('mainlogo.png') }}">
-</head>
-<body>
 
-  <!-- Navigation -->
+   <!-- Toastr CSS -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+</head>
+
+<style>
+  .gradient-bg {
+    background: linear-gradient(90deg, #0d6efd 0%, #0a58ca 100%);
+  }
+  .pulse-animation {
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  .hero-section {
+    padding-top: 120px;
+    padding-bottom: 80px;
+  }
+  .feature-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .testimonial-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .popular-plan {
+    position: relative;
+    border: 2px solid #0d6efd;
+    border-radius: 0.375rem;
+  }
+  .popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .step-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .btn {
+border-radius: 0 !important;
+}
+  
+</style>
+
+
+@if (session('error'))
+<script>
+    toastr.error("{{ session('error') }}");
+</script>
+@endif
+
+<body>
   <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
   <div class="container">
@@ -368,7 +379,7 @@
           <p class="lead mb-5">Join thousands of businesses that trust CheckMySite to keep their websites and services running smoothly.</p>
           <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
             <a href="{{ route('login') }}" class="btn btn-light btn-lg text-primary fw-bold px-4">Start Your Free Trial</a>
-            {{-- <a href="#" class="btn btn-outline-light btn-lg px-4">Schedule a Demo</a> --}}
+           
           </div>
         </div>
       </div>
@@ -391,17 +402,7 @@
         </div>
       </div>
 
-      <!-- Product Section -->
-      {{-- <div class="col-lg-3 col-md-6">
-        <h3 class="h5 fw-bold mb-3">Product</h3>
-        <ul class="list-unstyled">
-          <li class="mb-2"><a href="#features" class="text-light text-decoration-none">Features</a></li>
-          <li class="mb-2"><a href="#pricing" class="text-light text-decoration-none">Pricing</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Integrations</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">API</a></li>
-          <li class="mb-2"><a href="#" class="text-light text-decoration-none">Status</a></li>
-        </ul>
-      </div> --}}
+    
       <div class="col-lg-4 col-md-4">
         <h3 class="h6 fw-bold mb-3">Product</h3>
         <div class="d-flex flex-wrap gap-3">
@@ -434,6 +435,10 @@
 </footer>
   <!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- jQuery and Toastr scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 
