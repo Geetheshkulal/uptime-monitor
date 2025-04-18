@@ -3,13 +3,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Monitors;
-
 use Illuminate\Support\Facades\Auth;
 
-
-
+//Controller for DNS
 class DNSController extends Controller
 {
+    //Add a new DNS monitor.
     public function AddDNS(Request $request){
 
         $request->validate([
@@ -36,6 +35,7 @@ class DNSController extends Controller
             'telegram_bot_token' => $request->telegram_bot_token,
         ]);
 
+        //Log activity.
         activity()
         ->performedOn($monitor)
         ->causedBy(auth()->user())

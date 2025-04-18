@@ -7,27 +7,33 @@ use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
-    //
+    //Display permission page
     public function DisplayPermissions()
     {
         $permissions = Permission::latest()->get();
         return view('pages.admin.DisplayPermissions', compact('permissions'));
     }
 
+    //Add permission page
     public function AddPermission()
     {
         return view('pages.admin.AddPermission');
     }
 
+    //Function to store permission
     public function StorePermission(Request $request)
     {
+        //validation
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:permissions,name',
             'group_name' => 'required|string|in:user,role,permission,monitor,activity'
         ]);
 
+        //Create the permissions
+
         $permission=Permission::create($validated);
 
+        //log activity
         activity()
         ->causedBy(auth()->user())
         ->performedOn($permission)
@@ -46,6 +52,7 @@ class PermissionController extends Controller
                ->with('success', 'Permission added successfully!');
     }
 
+    //Delete Permission
     public function DeletePermission($id)
     {
         try {
@@ -54,8 +61,9 @@ class PermissionController extends Controller
 
             $deletedData = $permission->toArray();
 
-            $permission->delete();
+            $permission->delete(); //delete the permission
 
+            ///Log the activity
             activity()
             ->causedBy(auth()->user())
             ->performedOn($permission)
@@ -78,12 +86,14 @@ class PermissionController extends Controller
     }
 
 
+    //Edit permission page.
     public function EditPermission($id)
     {
         $permission = Permission::findOrFail($id);
         return view('pages.admin.EditPermission', compact('permission'));
     }
 
+    //Update the permission
     public function UpdatePermission(Request $request, $id)
     {
         $validated = $request->validate([
@@ -92,12 +102,13 @@ class PermissionController extends Controller
         ]);
 
         try {
-            $permission = Permission::findOrFail($id);
+            $permission = Permission::findOrFail($id); //Find a permission.
 
             $oldValues = $permission->getOriginal();
 
             $permission->update($validated);
 
+            //Log activity
             activity()
             ->causedBy(auth()->user())
             ->performedOn($permission)

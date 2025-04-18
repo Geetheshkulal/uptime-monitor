@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
-use App\Models\Subscriptions;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Activitylog\Models\Activity;
 use App\Models\Monitors;
@@ -19,16 +16,14 @@ class AdminController extends Controller
     /**
      * Display all users in the admin panel with pagination
      */
-    
-
     public function AdminDashboard(){
-        $role = Role::where('name', 'user')->first();
+        $role = Role::where('name', 'user')->first(); //Get user role from roles table.
     
-        $total_user_count = $role->users()->count();
+        $total_user_count = $role->users()->count(); //Count of total number of users
         
-        $paid_user_count = $role->users()->where('status', 'paid')->count();
+        $paid_user_count = $role->users()->where('status', 'paid')->count(); //Number of paid users.
     
-        $monitor_count = Monitors::count();
+        $monitor_count = Monitors::count(); //Total Number of Monitors by all users.
     
         // Total revenue from subscriptions linked to payments
         $total_revenue = Payment::with('subscription')
@@ -82,6 +77,7 @@ class AdminController extends Controller
         // Count of active users in the last month.
         $thirtyDaysAgo = Carbon::now()->subDays(30);
     
+        //Number of active users in last 30 days (users who performed any activity in this interval)
         $activeUserIds = Activity::where('created_at', '>=', $thirtyDaysAgo)
             ->whereHas('causer.roles', function ($query) {
                 $query->where('name', 'user'); // Spatie role name
@@ -90,10 +86,8 @@ class AdminController extends Controller
             ->pluck('causer_id');
     
         $active_users = $activeUserIds->count();
-    
- 
-    
-        // CPU
+
+        // Run shell command to get cpu load percentage.
         $cpuRaw = shell_exec('wmic cpu get loadpercentage /value');
         preg_match('/LoadPercentage=(\d+)/', $cpuRaw, $cpuMatches);
         $cpuPercent = $cpuMatches[1] ?? 'N/A';

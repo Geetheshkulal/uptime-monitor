@@ -6,8 +6,10 @@ use App\Models\Monitors;
 use Illuminate\Http\Request;
 
 
+//Controller for Ping Monitors.
 class PingMonitoringController extends Controller
 {
+    //store the ping monitor.
     public function store(Request $request)
     {
         $request->validate([
@@ -38,6 +40,7 @@ class PingMonitoringController extends Controller
             // Default to DOWN until the cron job updates it
         ]);
         
+        //Log the activity
         activity()
         ->causedBy(auth()->user())
         ->performedOn($monitor)

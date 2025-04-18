@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Subscriptions;
 use Log;
 
+//Controller to display premium plans page
 class PremiumPageController extends Controller
 {
-    //
+    //Get plans data(subscriptions) and send it to view
     public function PremiumPage(){
         $plans = Subscriptions::all();
   

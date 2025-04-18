@@ -8,8 +8,10 @@ use App\Models\PortResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
+//Controller for port monitor.
 class PortMonitorController extends Controller
 {
+    //Store port monitors.
     public function PortStore(Request $request)
     {
         
@@ -25,6 +27,7 @@ class PortMonitorController extends Controller
             'telegram_bot_token' => 'nullable|string',
         ]);
 
+        //Create Monitor
         $monitor=Monitors::create([
             'name'=>$request->name,
             'status'=>null,
@@ -41,6 +44,7 @@ class PortMonitorController extends Controller
 
         Log::info('Monitor created:', $monitor->toArray());
 
+        //Log activity
         activity()
         ->causedBy(auth()->user())
         ->performedOn($monitor)
@@ -56,6 +60,8 @@ class PortMonitorController extends Controller
         return redirect()->route('monitoring.dashboard')->with('success', ucfirst($request->type) . ' monitoring added successfully!');
     }
 
+    
+    //Function to check if a port is up
     public function checkPort($host, $port)
     {
         $start = microtime(true);
@@ -77,6 +83,7 @@ class PortMonitorController extends Controller
     }
 
 
+    //Function to fetch and check port monitors
     public function monitor()
     {
 
@@ -87,6 +94,7 @@ class PortMonitorController extends Controller
         foreach ($monitors as $monitor) {
             $result = $this->checkPort($monitor->url, $monitor->port);
     
+            //create port response
             PortResponse::create([
                 'monitor_id' => $monitor->id,
                 'response_time' => $result['status'] === 'down' ? 0 : $result['response_time'],

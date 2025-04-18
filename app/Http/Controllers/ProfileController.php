@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 
+//Controller for user profile
 class ProfileController extends Controller
 {
     /**
@@ -58,10 +59,10 @@ class ProfileController extends Controller
             }
         }
 
-        
-
+        //Update User
         $request->user()->save();
 
+        //Log activity
         activity()
         ->performedOn($user)
         ->causedBy($user)
@@ -78,12 +79,15 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        //Input validation
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
 
         $user = $request->user();
 
+
+        //Log Deletion activity
         activity()
         ->performedOn($user)
         ->causedBy($user)
@@ -95,6 +99,7 @@ class ProfileController extends Controller
         ])
         ->log('Deleted account');
 
+        //Logout user after deletion
         Auth::logout();
 
         $user->delete();

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class IncidentController extends Controller
 {
+    //Display incidents
     public function incidents()
     {
         // Get the logged-in user's ID
@@ -21,8 +22,10 @@ class IncidentController extends Controller
             ->whereIn('monitor_id', $userMonitors) // Filter incidents by the monitor IDs of the logged-in user
             ->get();
         
+        //Temporary monitor to log activity.
         $tempMonitor= Monitors::where('user_id', $userId)->first();
 
+        //Log the activity
         if ($tempMonitor) {
             activity()
                 ->performedOn($tempMonitor)
@@ -39,19 +42,21 @@ class IncidentController extends Controller
 
         return view('pages.incidents', compact('incidents'));
     }
+
+    //AJAX controller for incidents.
     public function fetchIncidents()
-{
-    $userId = Auth::id();
+    {
+        $userId = Auth::id();
 
-    // Get the monitor IDs associated with the logged-in user
-    $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
+        // Get the monitor IDs associated with the logged-in user
+        $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
 
-    // Fetch incidents with related monitor data
-    $incidents = Incident::with('monitor')
-        ->whereIn('monitor_id', $userMonitors)
-        ->get();
+        // Fetch incidents with related monitor data
+        $incidents = Incident::with('monitor')
+            ->whereIn('monitor_id', $userMonitors)
+            ->get();
 
-    return response()->json(['incidents' => $incidents]);
-}
+        return response()->json(['incidents' => $incidents]);
+    }
 
 }
