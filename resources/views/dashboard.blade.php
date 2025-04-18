@@ -37,7 +37,7 @@
     <link href="{{asset('frontend/assets/css/sb-admin-2.min.css')}}" rel="stylesheet">
     <style>
         /* Square edges for all elements */
-        *{
+        *:not("status-dot"){
             border-radius: 0 !important;
         }
 

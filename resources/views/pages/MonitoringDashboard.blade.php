@@ -16,7 +16,7 @@
             --success: #1cc88a;
             --danger: #e74a3b;
             --warning: #f6c23e;
-            --info: #36b9cc;
+            --info: purple;
             --gray: #858796;
             --light-gray: #f8f9fc;
             --dark-gray: #5a5c69;
@@ -49,6 +49,9 @@
         /* ========== STATUS INDICATORS ========== */
         .status-badge {
             display: inline-flex;
+            width: 60px; 
+            align-items: center;       /* vertically center */
+            justify-content: center;  /* horizontally center */ 
             align-items: center;
             padding: 0.35rem 0.65rem;
             border-radius: 0.35rem;
@@ -222,12 +225,12 @@
             <!-- Status Cards -->
             <div data-aos="fade-up" class="row mb-4 fade-in">
                 <!-- Total Monitors -->
-                <div class="col-xl-3 col-md-6 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4 ">
                     <div class="card h-100">
-                        <div class="card-body first">
+                        <div class="card-body border-left-primary first">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
-                                    <div class="text-xs font-weight-bold text-gray-500 text-uppercase mb-1">Total Monitors</div>
+                                    <div class="text-xs font-weight-bold text-blue-600 text-uppercase mb-1">Total Monitors</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalMonitors">{{ $totalMonitors }}</div>
                                 </div>
                                 <div class="ml-auto">
@@ -241,10 +244,10 @@
                 <!-- Up Count -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card h-100">
-                        <div class="card-body second">
+                        <div class="card-body border-left-primary second">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
-                                    <div class="text-xs font-weight-bold text-gray-500 text-uppercase mb-1">Up</div>
+                                    <div class="text-xs font-weight-bold text-blue-600  text-uppercase mb-1">Up</div>
                                     <div class="h5 mb-0 font-weight-bold text-success" id="upCount">{{ $upCount }}</div>
                                 </div>
                                 <div class="ml-auto">
@@ -258,10 +261,10 @@
                 <!-- Down Count -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card h-100">
-                        <div class="card-body third">
+                        <div class="card-body border-left-primary third">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
-                                    <div class="text-xs font-weight-bold text-gray-500 text-uppercase mb-1">Down</div>
+                                    <div class="text-xs font-weight-bold text-blue-600  text-uppercase mb-1">Down</div>
                                     <div class="h5 mb-0 font-weight-bold text-danger" id="downCount">{{ $downCount }}</div>
                                 </div>
                                 <div class="ml-auto">
@@ -275,10 +278,10 @@
                 <!-- Paused Count -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card h-100">
-                        <div class="card-body fourth">
+                        <div class="card-body border-left-primary fourth">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
-                                    <div class="text-xs font-weight-bold text-gray-500 text-uppercase mb-1">Paused</div>
+                                    <div class="text-xs font-weight-bold text-blue-600  text-uppercase mb-1">Paused</div>
                                     <div class="h5 mb-0 font-weight-bold text-info" id="pausedCount">{{ $pausedCount }}</div>
                                 </div>
                                 <div class="ml-auto">
@@ -352,12 +355,10 @@
                                             </span>
                                             @elseif ($monitor->status === 'up')
                                             <span class="status-badge badge-up">
-                                                <span class="status-dot" style="background: var(--success);"></span>
                                                 Up
                                             </span>
                                             @else
                                             <span class="status-badge badge-down">
-                                                <span class="status-dot" style="background: var(--danger);"></span>
                                                 Down
                                             </span>
                                             @endif
