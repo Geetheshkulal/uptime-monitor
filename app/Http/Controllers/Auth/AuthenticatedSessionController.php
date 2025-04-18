@@ -22,8 +22,9 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create()
     {
+      
         return view('auth.login');
     }
 
@@ -91,9 +92,8 @@ class AuthenticatedSessionController extends Controller
 
         $redirectRoute=($user->hasRole('superadmin'))?RouteServiceProvider::ADMIN_DASHBOARD:RouteServiceProvider::HOME;
 
-     
-
-        return redirect()->intended($redirectRoute);
+        Log::info('Session data in login controller:', session()->all());
+        return redirect()->intended($redirectRoute)->with('success', 'Login Successfully');;
     }
 
    

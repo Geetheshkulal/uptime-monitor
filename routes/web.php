@@ -48,7 +48,7 @@ Route::post('/email/verification-notification',function (Request $request) {
 
 
 
-Route::middleware(['auth','verified','check.session'])->group(function () {
+Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -68,7 +68,7 @@ Route::middleware(['auth','verified','check.session'])->group(function () {
     Route::post('/monitor/pause/{id}', [MonitoringController::class, 'pauseMonitor'])->name('monitor.pause');
 });
 
-Route::middleware(['auth','verified','check.session'])->group(function () {
+Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
 
     Route::get('/ssl-check', [SslCheckController::class, 'index'])->middleware('premium_middleware')->name('ssl.check');
     Route::get('/ssl/history', [SslCheckController::class, 'history'])->middleware('premium_middleware')->name('ssl.history');

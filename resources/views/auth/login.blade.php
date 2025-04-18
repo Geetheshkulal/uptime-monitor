@@ -189,6 +189,12 @@
         }
     </style>
 
+@if (session('error'))
+    <script>
+        toastr.error("{{ session('error') }}");
+    </script>
+@endif
+
 <body class="bg-gradient-primary">
 
     <div class="container">
@@ -293,6 +299,10 @@
     <script src="{{asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
     <script src="{{asset('frontend/assets/js/sb-admin-2.min.js')}}"></script>
 
+      <!-- jQuery and Toastr scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 
     <script>
         function togglePassword(fieldId) {
@@ -336,29 +346,6 @@
             });
     }
 </script>
-
-
-
-  <!-- jQuery and Toastr scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-
-@if (session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
-@endif
-
-  {{-- <script>
-      @if (session('success'))
-          toastr.success("{{ session('success') }}");
-      @endif
-
-      @if (session('error'))
-      toastr.error("{{ session('error') }}");
-      @endif
-  </script> --}}
 
 
 </body>
