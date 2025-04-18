@@ -3,29 +3,28 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\Response;
-
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 class CheckUserSession
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next): Response
+    public function handle($request, Closure $next)
     {
-        if(Auth::check())
-        {
-            $user=Auth::user();
-            if($user->session_id !== session()->getId())
-            {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
+        $user = Auth::user();
+        
+        if ($user) {
+            $sessionId = Session::getId();
 
-                return redirect()->route('login')->with('error','You were logged out because your account was logged in elsewhere.');
+            Log::debug('Middleware check:', [
+                'current_session' => $sessionId,
+                'user_session' => $user->session_id
+            ]);
+            
+            // If user's session_id doesn't match current session
+            if ($user->session_id !== $sessionId) {
+                Auth::logout();
+               
+                return redirect()->route('login')->with('error', 'Logged out from other device');
             }
         }
         

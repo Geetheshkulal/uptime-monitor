@@ -12,14 +12,17 @@
 
     <!-- Custom fonts -->
     <link href="{{asset('frontend/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
 
     <!-- Custom styles -->
     <link href="{{asset('frontend/assets/css/sb-admin-2.min.css')}}" rel="stylesheet">
 
-    <!-- Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+     <!-- Toastr CSS -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
 
     <style>
         .bg-login-image {
@@ -180,7 +183,6 @@
             }
         }
     </style>
-</head>
 
 <body class="bg-gradient-primary">
 
@@ -285,7 +287,7 @@
     <script src="{{asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
     <script src="{{asset('frontend/assets/js/sb-admin-2.min.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 
     <script>
         function togglePassword(fieldId) {
@@ -316,6 +318,28 @@
             });
         });
     </script>
+
+  <!-- jQuery and Toastr scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+@if (session('error'))
+    <script>
+        toastr.error("{{ session('error') }}");
+    </script>
+@endif
+
+  {{-- <script>
+      @if (session('success'))
+          toastr.success("{{ session('success') }}");
+      @endif
+
+      @if (session('error'))
+      toastr.error("{{ session('error') }}");
+      @endif
+  </script> --}}
+
 
 </body>
 </html>
