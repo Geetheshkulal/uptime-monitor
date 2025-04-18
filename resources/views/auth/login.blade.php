@@ -205,7 +205,7 @@
 
                         <div class="row">
                             <div class="col-lg-5 d-none d-lg-block p-0">
-                                <img src="{{ asset('frontend/assets/img/login.jpg') }}" alt="Login Image" class="img-fluid login-image" />
+                                <img src="{{ asset('frontend/assets/img/login.webp') }}" alt="Login Image" class="img-fluid login-image" />
                             </div>
                             <div class="col-lg-7">
                                 <div class="p-5">
@@ -247,7 +247,7 @@
                                             @enderror
                                         </div>
 
-                                        <div class="g-recaptcha mt-4" data-sitekey={{config('services.recaptcha.key')}}></div>
+                                        <div class="g-recaptcha mt-4" data-sitekey="{{config('services.recaptcha.key')}}"></div>
                                         @error('g-recaptcha-response')
                                             <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
                                         @enderror
@@ -340,26 +340,22 @@
 
 
   <!-- jQuery and Toastr scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+  <script>
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "timeOut": "5000"
+    };
 
-@if (session('error'))
-    <script>
+    @if(session('error'))
         toastr.error("{{ session('error') }}");
-    </script>
-@endif
+    @endif
 
-  {{-- <script>
-      @if (session('success'))
-          toastr.success("{{ session('success') }}");
-      @endif
-
-      @if (session('error'))
-      toastr.error("{{ session('error') }}");
-      @endif
-  </script> --}}
-
+    
+</script>
+ 
 
 </body>
 </html>

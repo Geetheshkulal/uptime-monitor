@@ -8,7 +8,6 @@
 
     
     <!-- Page Heading -->
-
     <div class="container-fluid">
         <div class="row  p-2">
             <div class="d-flex  flex-md-row justify-content-between align-items-start align-items-md-center w-100">
@@ -264,11 +263,11 @@
                 });
 
                 function updateAverageResponse() {
-
                     if (responseTimes.length > 0) {
                         let sum = responseTimes.reduce((a, b) => a + b, 0);
                         let average = (sum / responseTimes.length).toFixed(2); // Round to 2 decimal places
                         document.getElementById("averageResponse").textContent = average + " ms";
+                        
                     } else {
                         document.getElementById("averageResponse").textContent = "No Data";
                     }
@@ -404,7 +403,8 @@
                             <div class="mb-3">
                                 <label for="dns_resource_type" class="form-label">DNS Resource Type</label>
                                 <select id="dns_resource_type" class="form-control" name="dns_resource_type" required>
-                                    <option value="A" {{ $details->dns_resource_type == 'A' ? 'selected' : '' }}>A
+                                    <option value="A" {{ $details->dns_resource_type == 'A' ? 'selected' : '' }}>
+                                        A
                                     </option>
                                     <option value="AAAA" {{ $details->dns_resource_type == 'AAAA' ? 'selected' : '' }}>
                                         AAAA</option>
