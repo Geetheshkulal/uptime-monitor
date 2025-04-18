@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PushSubscription;
+use Illuminate\Http\Request;
 
 class PushNotificationController extends Controller
 {
