@@ -9,7 +9,16 @@
     <link href="{{ asset('frontend/assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,700" rel="stylesheet">
     <link href="{{ asset('frontend/assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#6777ef">
+    <link rel="apple-touch-icon" href="{{ asset('mainlogo.png') }}">
+
 </head>
+<style>
+* {
+    border-radius: 0 !important;
+ }
+</style>
 
 <body class="bg-gradient-primary d-flex align-items-center justify-content-center min-vh-100">
 
@@ -63,5 +72,19 @@
     <script src="{{ asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
+
+    <!--PWA-->
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(function (registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(function (error) {
+                console.error('Service Worker registration failed:', error);
+            });
+    }
+</script>
+
 </body>
 </html>
