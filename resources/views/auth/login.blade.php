@@ -22,6 +22,11 @@
 
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+
+     <link rel="manifest" href="{{ asset('manifest.json') }}">
+     <meta name="theme-color" content="#6777ef">
+     <link rel="apple-touch-icon" href="{{ asset('mainlogo.png') }}">
+
 </head>
 
     <style>
@@ -318,6 +323,21 @@
             });
         });
     </script>
+
+<!--PWA-->
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(function (registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(function (error) {
+                console.error('Service Worker registration failed:', error);
+            });
+    }
+</script>
+
+
 
   <!-- jQuery and Toastr scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -193,6 +193,11 @@
     border-radius: 0 !important;
 }
     </style>
+
+<link rel="manifest" href="{{ asset('manifest.json') }}">
+<meta name="theme-color" content="#6777ef">
+<link rel="apple-touch-icon" href="{{ asset('mainlogo.png') }}">
+
 </head>
 
 <body class="bg-gradient-primary">
@@ -402,5 +407,19 @@
             });
         });
     </script>
+
+    <!--PWA-->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                .then(function (registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function (error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+    
 </body>
 </html>
