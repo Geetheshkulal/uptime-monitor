@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\PushSubscription;
+use Illuminate\Http\Request;
 
+//Controller for push notifications
 class PushNotificationController extends Controller
 {
     public function subscribe(Request $request)

@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 
 class BillingController extends Controller
 {
-    //
-
+    //View Billing Page
     public function Billing(){
         $subscriptions = Subscriptions::all();
         return view('pages.admin.Billing', compact('subscriptions'));
     }
 
+    //Update billing amount
     public function EditBilling(Request $request,$id){
         $vaildated = $request->validate([
             'name'=>'required',

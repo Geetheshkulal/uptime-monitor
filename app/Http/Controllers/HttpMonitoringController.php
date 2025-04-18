@@ -7,6 +7,7 @@ use App\Models\HttpResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; 
 
+//Controller for HttP
 class HttpMonitoringController extends Controller
 {
     // Store a new HTTP monitor entry
@@ -38,6 +39,7 @@ class HttpMonitoringController extends Controller
             'updated_at' => now(),
         ]);
 
+        //Record the activity
         activity()
         ->performedOn($monitor)
         ->causedBy(auth()->user())

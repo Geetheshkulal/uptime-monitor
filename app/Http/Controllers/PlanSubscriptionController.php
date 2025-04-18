@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Subscriptions;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\Payment;
 
-
+//Payments controller for user payments table else redirect to plans page
 class PlanSubscriptionController extends Controller
 {
   public function planSubscription()
