@@ -429,4 +429,5 @@
             toastr.success("{{ session('success') }}");
         @endif
     </script>
+    
 @endsection

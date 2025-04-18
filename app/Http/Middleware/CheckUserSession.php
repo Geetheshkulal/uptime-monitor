@@ -23,7 +23,8 @@ class CheckUserSession
             // If user's session_id doesn't match current session
             if ($user->session_id !== $sessionId) {
                 Auth::logout();
-                return redirect('/login')->with('error', 'You have been logged out because your account was accessed from another location.');
+               
+                return redirect()->route('login')->with('error', 'Logged out from other device');
             }
         }
         

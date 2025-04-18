@@ -394,10 +394,6 @@
        {
          element:document.querySelector('.fourth'),
          intro:'Shows the number of monitors that are currently paused.'
-       },
-       {
-         element:document.querySelector('.view'),
-         intro:'Click here to view, edit, update, or delete your monitors.'
        }
       ],
       dontShowAgain:true,
