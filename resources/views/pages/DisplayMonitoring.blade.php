@@ -60,7 +60,6 @@
         </div>
 
 
-
         <div class="row">
             <div class="col-xl-12">
                 <h5 class="text-gray-800 font-weight-bold mb-3">
@@ -102,7 +101,7 @@
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-2">
                                     Current Response
                                 </div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="currentResponse">0 ms</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-check-circle fa-2x text-success"></i>
@@ -175,6 +174,7 @@
                 ) !!};
 
                 var statusElement = document.getElementById('statusElement');
+                var currentResponseElement = document.getElementById('currentResponse');
 
                 var myLineChart = new Chart(ctx, {
                     type: 'line',
@@ -296,6 +296,13 @@
                             myLineChart.update();
 
                             statusElement.textContent = response.status;
+
+                             // Update the Current Response card with the latest response time
+                        if (responseTimes.length > 0) {
+                            currentResponseElement.textContent = responseTimes[responseTimes.length - 1] + " ms";
+                        } else {
+                            currentResponseElement.textContent = "No Data";
+                        }
 
                             updateAverageResponse();
                         },
