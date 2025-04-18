@@ -48,6 +48,10 @@
             border-color: #6c757d !important;
         }
     </style>
+     <!-- PWA  -->
+  <link rel="manifest" href="{{ asset('manifest.json') }}">
+  <meta name="theme-color" content="#6777ef">
+  <link rel="apple-touch-icon" href="{{ asset('mainlogo.png') }}">
 </head>
 <body>
     <header class="bg-dark py-3">
@@ -124,5 +128,16 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                .then(function (registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch(function (error) {
+                    console.error('Service Worker registration failed:', error);
+                });
+        }
+    </script>
 </body>
 </html>
