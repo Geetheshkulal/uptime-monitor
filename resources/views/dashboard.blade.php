@@ -37,24 +37,7 @@
     <link href="{{asset('frontend/assets/css/sb-admin-2.min.css')}}" rel="stylesheet">
     <style>
         /* Square edges for all elements */
-        .card, .btn, .table, .badge, .modal-content, .form-control, 
-        .dataTables_wrapper .dataTables_filter input,
-        .dataTables_wrapper .dataTables_length select,
-        .dataTables_wrapper .dataTables_paginate .paginate_button,
-        .page-item:first-child .page-link,
-        .page-item:last-child .page-link,
-        .sidebar, .navbar, .dropdown-menu, .scroll-to-top,
-        #accordionSidebar, .topbar, .shadow,
-        .sidebar-divider, .sidebar-heading,
-        .nav-item, .nav-link, .collapse-inner,
-        .bg-gradient-primary, .bg-white,
-        .sidebar .nav-item .nav-link,
-        .navbar-search, .dropdown-list,
-        .topbar-divider, .chart-area,
-        .card-body, .card-header,
-        .modal-header, .modal-footer,
-        #content-wrapper, #wrapper,
-        #logoutModal, .toast {
+        *{
             border-radius: 0 !important;
         }
 

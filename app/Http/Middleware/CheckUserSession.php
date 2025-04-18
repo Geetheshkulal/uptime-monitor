@@ -6,14 +6,16 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+
+//To prevent same user login from multiple devices at the same time.
 class CheckUserSession
 {
     public function handle($request, Closure $next)
     {
-        $user = Auth::user();
+        $user = Auth::user(); //Get current user
         
         if ($user) {
-            $sessionId = Session::getId();
+            $sessionId = Session::getId(); //Get sessionId
 
             Log::debug('Middleware check:', [
                 'current_session' => $sessionId,

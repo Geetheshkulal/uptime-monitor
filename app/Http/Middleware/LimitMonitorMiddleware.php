@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+//Limit free Users to 5 monitors
 class LimitMonitorMiddleware
 {
     /**

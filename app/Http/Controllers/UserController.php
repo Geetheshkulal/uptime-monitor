@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 
+//Controller to manage users
 class UserController extends Controller
 {
-    //
+    //Store a user
     public function storeUser(Request $request)
     {
         // Validate input
@@ -44,6 +45,7 @@ class UserController extends Controller
                 Log::warning("Role not found: " . $validated['role']);
             }
 
+            //Record activity
             activity()
                 ->causedBy(auth()->user()) // the super admin
                 ->performedOn($user)
@@ -58,7 +60,7 @@ class UserController extends Controller
                 ])
                 ->log(" {$user->name} created a new user");
 
-            Log::info("User created successfully: ", $user->toArray());
+            Log::info("User created successfully: ", $user->toArray()); //Log the activity
 
             return redirect()->route('display.users')->with('success', 'User created successfully');
         } catch (\Exception $e) {
@@ -68,6 +70,7 @@ class UserController extends Controller
         }
     }
 
+        //Display all users  (for superadmin)
         public function DisplayUsers(Request $request)
         {
             $roles = Role::whereNot('name','superadmin')->get();
@@ -86,6 +89,8 @@ class UserController extends Controller
 
             return view('pages.admin.DisplayUsers', compact('users','roles'));
         }
+
+        //Show details of a particular user
 
         public function ShowUser($id)
         {
@@ -108,6 +113,7 @@ class UserController extends Controller
             return view('pages.admin.ViewUserDetails', compact('user'));
         }
 
+         //Edit user data page
         public function EditUsers($id)
         {
             $user = User::findOrFail($id);
@@ -116,7 +122,7 @@ class UserController extends Controller
             return view('pages.admin.EditUsers', compact('user', 'roles'));
         }
 
-
+        //Update User
         public function UpdateUsers(Request $request, $id)
         {
             $user = User::findOrFail($id);
@@ -175,7 +181,7 @@ class UserController extends Controller
             }
         }
 
-
+        //Delete a particular user
         public function DeleteUser($id)
         {
             try {
@@ -186,6 +192,7 @@ class UserController extends Controller
 
                 $user = User::findOrFail($id);
 
+                //cannot delete superadmin
                 if($user->hasRole('superadmin')){
                     return redirect()->back()->with('error', 'Superadmin cannot be deleted.');
 
@@ -199,6 +206,7 @@ class UserController extends Controller
 
                 $user->delete();
 
+                //Record activity
                 activity()
                 ->causedBy(auth()->user())       // who deleted
                 ->performedOn($user)             // which user was deleted

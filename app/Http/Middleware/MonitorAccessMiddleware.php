@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+//Give access to only own monitors
 class MonitorAccessMiddleware
 {
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
+//Remove cookies(for tracking poxel)
 class DisableCookies
 {
     public function handle($request, Closure $next)

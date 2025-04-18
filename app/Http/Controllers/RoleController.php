@@ -35,11 +35,13 @@ class RoleController extends Controller
     }
 
 
+    //Add Role page
     public function AddRole()
     {
         return view('pages.admin.AddRoles');
     }
-    
+
+    //Store the new role in Database.
     public function StoreRole(Request $request)
     {
         $request->validate([
@@ -65,13 +67,14 @@ class RoleController extends Controller
     }
 
 
+    //Delete a role
     public function DeleteRole($id)
     {
         try {
             $role = Role::findOrFail($id);
             
-            // Prevent deletion of admin role (optional safeguard)
-            if ($role->name === 'admin') {
+            // Prevent deletion of superadmin role 
+            if ($role->name === 'superadmin') {
                 return redirect()->back()
                        ->with('error', 'Cannot delete Admin role!');
             }
@@ -93,6 +96,7 @@ class RoleController extends Controller
             ])
             ->log("Role deleted");
 
+            //Delete Role
             $role->delete();
             
             return redirect()->route('display.roles')
@@ -105,6 +109,7 @@ class RoleController extends Controller
     }
     
 
+    //Edit Role Page
     public function EditRole($id)
     {
         $role = Role::findOrFail($id);
@@ -116,17 +121,20 @@ class RoleController extends Controller
      */
     public function UpdateRole(Request $request, $id)
     {
+        //Validate input
         $request->validate([
             'name' => 'required|string|max:255|unique:roles,name,'.$id
         ]);
-
-        $role = Role::findOrFail($id);
+ 
+        $role = Role::findOrFail($id); //Find role with given id
 
         $oldName = $role->name; 
         $newName = $request->name;
 
+        //Update role
         $role->update(['name' => $request->name]);
 
+        //Log the updation
         activity()
         ->causedBy(auth()->user())
         ->performedOn($role)
