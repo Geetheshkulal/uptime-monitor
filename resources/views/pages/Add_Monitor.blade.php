@@ -6,7 +6,46 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css"/>
+
     </head>
+  <style>
+    /* ========== INTROJS TOUR ========== */
+        .introjs-tooltip {
+            background-color: white;
+            color: rgb(51, 48, 48);
+            font-family: 'Poppins', sans-serif;
+            border-radius: 0.35rem;
+            /* box-shadow: 0 0.5rem 1.5rem rgba(7, 18, 144, 0.2); */
+            box-shadow: 0px 0px 6px 4px rgba(28, 61, 245, 0.2);   
+        }
+
+        .introjs-tooltip-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .introjs-button {
+            background-color: var(--primary);
+            border-radius: 0.25rem;
+            font-weight: 600;
+            color: black;
+        }
+
+        .introjs-button:hover {
+            background-color: #2e59d9;
+        } 
+        .introjs-overlay
+         {
+        pointer-events: none; 
+        }
+
+        .introjs-helperLayer {
+        pointer-events: none;
+        z-index: 1001;
+        }
+ </style>
 
 
     <div class="row mb-4 px-3 px-lg-4">
@@ -21,7 +60,7 @@
     </div>
 
     <div class="dropdown mb-4 mx-3 mx-lg-5">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        <button class="btn btn-primary dropdown-toggle MonitorTypes" type="button" id="dropdownMenuButton" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             HTTP Monitoring
         </button>
@@ -424,10 +463,31 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
+
     <script>
         @if (session('success'))
             toastr.success("{{ session('success') }}");
         @endif
     </script>
     
+    <script>
+         // Initialize tour(tool tip)
+    document.addEventListener("DOMContentLoaded", function () {
+        introJs().setOptions({
+            disableInteraction: false,
+            steps:[
+        {
+         element:document.querySelector('.MonitorTypes'),
+         intro:'Choose types of monitoring.',
+         position:'right'
+       }
+      ],
+            dontShowAgain: true,
+            nextLabel: 'Next',
+            prevLabel: 'Back',
+            doneLabel: 'Finish'
+        }).start();
+    });
+        </script>
 @endsection
