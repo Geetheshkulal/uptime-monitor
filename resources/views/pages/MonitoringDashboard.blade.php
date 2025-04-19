@@ -231,10 +231,10 @@
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
                                     <div class="text-xs font-weight-bold text-blue-600 text-uppercase mb-1">Total Monitors</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalMonitors">{{ $totalMonitors }}</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-500" id="totalMonitors">{{ $totalMonitors }}</div>
                                 </div>
                                 <div class="ml-auto">
-                                    <i class="fas fa-list-alt fa-2x text-gray-300"></i>
+                                    <i class="fas fa-list-alt fa-2x text-gray-500"></i>
                                 </div>
                             </div>
                         </div>

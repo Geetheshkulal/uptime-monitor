@@ -13,16 +13,16 @@
 
             <div x-data="{ tab: 'profile' }">
                 <!-- Tabs -->
-                <ul class="nav nav-tabs mb-4">
-                    <li class="nav-item">
-                        <button class="nav-link" :class="{ 'active': tab === 'profile' }" @click="tab = 'profile'">Profile</button>
+                <ul class="nav nav-tabs mb-4 ">
+                    <li class="nav-item btn-primary">
+                        <button class="nav-link btn-primary" :class="{ 'active': tab === 'profile' }" @click="tab = 'profile'">Profile</button>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link" :class="{ 'active': tab === 'password' }" @click="tab = 'password'">Password</button>
+                        <button class="nav-link btn-primary" :class="{ 'active': tab === 'password' }" @click="tab = 'password'">Password</button>
                     </li>
                     @if(!auth()->user()->hasRole('superadmin'))
                         <li class="nav-item">
-                            <button class="nav-link text-danger" :class="{ 'active': tab === 'delete' }" @click="tab = 'delete'">Delete</button>
+                            <button class="nav-link btn-primary text-danger" :class="{ 'active': tab === 'delete' }" @click="tab = 'delete'">Delete</button>
                         </li>
                     @endif
                 </ul>
