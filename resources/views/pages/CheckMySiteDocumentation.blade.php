@@ -1211,8 +1211,142 @@ code {
 
     <!-- Plan & Subscription Tab -->
     <div id="tab6" class="tab-content">
-        <!-- Monitor Display & Card Data --
+        <div class="monitor-module-doc">
+            <!-- Title Section -->
+            <div class="doc-header">
+                <h2>Plan and Subsribtion Module</h2>
+                <p>This section describes the Plan and Subsribtion functionaly in the CheckMySite application.</p>
+            </div>
+    
+            <!-- Incident Check -->
+            <div class="doc-section">
+                <h3>Incident Monitoring</h3>
+                <p>To monitor incidents for your website or server, navigate to the <strong>Incidents</strong> page, where all incidents related to your monitors will be displayed. The system automatically records incidents based on HTTP, DNS, and Port checks, and alerts you about any abnormalities in the monitoring data.</p>
+            </div>
+    
+            <!-- Incident List Section -->
+            <div class="doc-section">
+                <h3>Incident Creation</h3>
+            <p>When a monitor goes down, the system automatically creates an incident. This section details how incidents are created when the status is 'down' and how they are resolved when the status is 'up'.</p>
 
+            <!-- Code Snippet for Incident Creation -->
+            <pre><code>
+                private function createIncident(Monitors $monitor, string $status, string $monitorType)
+                {
+                    // If the status is 'down', we create an incident
+                    if ($status === 'down') {
+                        // Check if there's an existing 'down' incident for the same monitor that's still open (no end_timestamp)
+                        $existingIncident = Incident::where('monitor_id', $monitor->id)
+                            ->where('status', 'down')  // Looking for incidents that are 'down'
+                            ->whereNull('end_timestamp')  // Ensure that the incident is still open
+                            ->first();
+                        
+                        // If no existing open incident, create a new one
+                        if (!$existingIncident) {
+                            Incident::create([
+                                'monitor_id' => $monitor->id,
+                                'status' => 'down',
+                                'root_cause' => "{$monitorType} Monitoring Failed",  // Log the type of failure (e.g., Ping, DNS, HTTP)
+                                'start_timestamp' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        }
+                    }
+
+                    // If the status is 'up', we check and close any open incidents
+                    elseif ($status === 'up') {
+                        // Check for any open incidents (status = 'down' and no end_timestamp)
+                        $incident = Incident::where('monitor_id', $monitor->id)
+                            ->where('status', 'down')
+                            ->whereNull('end_timestamp')  // Ensure it's open (still 'down')
+                            ->first();
+
+                        // If an open incident is found, mark it as resolved
+                        if ($incident) {
+                            $incident->update([
+                                'status' => 'up',
+                                'end_timestamp' => now(),  // Set the time the monitor came back up
+                                'updated_at' => now(),
+                            ]);
+                        }
+                    }
+                }
+            </code></pre>
+            <p>The `createIncident()` function handles the creation and resolution of incidents based on the status of a monitor. When the status is 'down', it checks if there are any open incidents for the same monitor. If no incident is found, a new one is created with the appropriate status and root cause. If the status changes to 'up', the system searches for any open 'down' incidents for the monitor and resolves them by updating the status and setting the end timestamp.</p>
+        
+
+                <h3>Viewing Incidents</h3>
+                <p>On the incidents page, you will see a list of all incidents that have occurred with your monitors. The data is dynamically fetched from the server using an AJAX request for real-time updates. You can also refresh the incident list to see the most up-to-date information about your monitors' status.</p>
+    
+                <!-- Code Snippet for Fetching Incidents -->
+                <pre><code>
+                    public function incidents()
+                    {
+                        // Get the logged-in user's ID
+                        $userId = Auth::id();
+    
+                        // Get the monitor IDs associated with the logged-in user
+                        $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
+    
+                        // Fetch incidents that belong to the logged-in user's monitors
+                        $incidents = Incident::with('monitor') // Load incidents with associated monitors
+                            ->whereIn('monitor_id', $userMonitors) // Filter incidents by monitor IDs
+                            ->get();
+                        
+                        // Log the user's visit to the incidents page
+                        $tempMonitor = Monitors::where('user_id', $userId)->first();
+                        if ($tempMonitor) {
+                            activity()
+                                ->performedOn($tempMonitor)
+                                ->causedBy(auth()->user())
+                                ->inLog('incident monitoring')
+                                ->event('visited')
+                                ->withProperties([
+                                    'name' => auth()->user()->name,
+                                    'email' => auth()->user()->email,
+                                    'page' => 'Incidents Page'
+                                ])
+                                ->log('Visited the incidents page');
+                        }
+    
+                        return view('pages.incidents', compact('incidents'));
+                    }
+                </code></pre>
+                <p>The `incidents()` function retrieves the incidents related to the user's monitors and passes them to a Blade view for display. The function also logs the user's activity for auditing purposes.</p>
+    
+                
+    
+                <h2>Additional Features</h2>
+                <br>
+                <h3>Dynamic Incident Data</h3>
+                <p>The following method is responsible for fetching incidents dynamically, using AJAX to ensure that the incident list is always up-to-date without needing to refresh the page.</p>
+    
+                <!-- Code Snippet for Fetching Incidents Dynamically -->
+                <pre><code>
+                    public function fetchIncidents()
+                    {
+                        $userId = Auth::id();
+    
+                        // Get the monitor IDs associated with the logged-in user
+                        $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
+    
+                        // Fetch incidents with related monitor data
+                        $incidents = Incident::with('monitor')
+                            ->whereIn('monitor_id', $userMonitors)
+                            ->get();
+    
+                        return response()->json(['incidents' => $incidents]);
+                    }
+                </code></pre>
+                <p>The `fetchIncidents()` method fetches incidents dynamically and returns them as a JSON response. This method is typically used with AJAX for real-time updates of the incident list without reloading the page.</p>
+                
+            </div>
+    
+            <div class="doc-footer">
+                <h4>Conclusion</h4>
+                <p>The Incident Monitoring feature ensures that any potential issues with your monitors are detected and recorded. It provides real-time updates on incidents related to HTTP, DNS, and Port checks, as well as an easy-to-view incident history. Notifications and alerts are available to keep you informed of any critical incidents that may require your attention. The system also maintains a history of all incidents for quick reference and auditing purposes.</p>
+            </div>
+        </div>
     </div>
 </div>
 
