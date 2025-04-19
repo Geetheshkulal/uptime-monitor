@@ -2,6 +2,8 @@
 
 @section('content')
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css"/>
+
 <!-- Styling -->
 <style>
     body {
@@ -20,21 +22,58 @@
         background: linear-gradient(135deg, #007bff, #4a90e2);
         box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
     }
+
+     /* ========== INTROJS TOUR ========== */
+     .introjs-tooltip {
+            background-color: white;
+            color: var(--dark-gray);
+            font-family: 'Poppins', sans-serif;
+            border-radius: 0.35rem;
+            /* box-shadow: 0 0.5rem 1.5rem rgba(7, 18, 144, 0.2); */
+            box-shadow: 0px 0px 6px 4px rgba(28, 61, 245, 0.2);   
+        }
+
+        .introjs-tooltip-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .introjs-button {
+            background-color: var(--primary);
+            border-radius: 0.25rem;
+            font-weight: 600;
+            color: black;
+        }
+
+        .introjs-button:hover {
+            background-color: #2e59d9;
+        } 
+        .introjs-overlay
+         {
+        pointer-events: none; 
+        }
+
+        .introjs-helperLayer {
+        pointer-events: none;
+        z-index: 1001;
+        }
+
 </style>
 
 <div class="container my-5">
     <!-- Right aligned button -->
-    <div class="d-flex justify-content-end">
-        <a href="{{ route('ssl.history') }}" class="btn btn-outline-secondary rounded-pill mt-3 shadow-sm">
+    <div class="d-flex justify-content-end ">
+        <a href="{{ route('ssl.history') }}" class="btn btn-outline-secondary rounded-pill mt-3 shadow-sm SslCheck">
             📜 View SSL Check History
         </a>
     </div>
 
     
-    <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8">
+    <div class="row justify-content-center ">
+        <div class="col-lg-6 col-md-8 ">
             <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-body p-5 text-center">
+                <div class="card-body p-5 text-center SslBox ">
 
                     <!-- Title -->
                     <h2 class="fw-bold mb-4 text-primary">
@@ -122,12 +161,67 @@
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
 
 <script>
     document.getElementById('sslCheckForm').addEventListener('submit', function() {
         document.getElementById('submitButton').style.display = 'none';
         document.getElementById('loadingButton').style.display = 'block';
     });
+</script>
+
+<script>
+      // Initialize tour(tool tip)
+      document.addEventListener("DOMContentLoaded", function () {
+        const intro = introJs();
+        const savedStep=localStorage.getItem("introCurrentStep");
+
+        intro.setOptions({
+            disableInteraction: false,
+            steps:[
+        {
+         element:document.querySelector('.SslCheck'),
+         intro:'To view SSL check history',
+         position:'left'
+       },
+       {
+         element:document.querySelector('.SslBox'),
+         intro:'To check SSL expire.'
+       }
+      ],
+            dontShowAgain: true,
+            nextLabel: 'Next',
+            prevLabel: 'Back',
+            doneLabel: 'Finish'
+        });
+
+        if (savedStep !== null) { 
+        console.log("Resuming tour from step:", savedStep); 
+        intro.goToStep(Number(savedStep));
+        intro.start(); 
+    } else {
+        console.log("Starting tour from the beginning"); // Debugging
+        intro.start(); 
+    }
+        
+        // Save the current step to localStorage whenever the step changes
+        intro.onchange(function () {
+            const currentStep = intro._currentStep; // Get the current step
+            console.log("Saving step:", currentStep);
+            localStorage.setItem("introCurrentStep", currentStep); // Save it to localStorage
+        });
+
+        // Clear the saved step when the tour is completed
+        intro.oncomplete(function () {
+        localStorage.removeItem("introCurrentStep");
+       });
+
+        // Clear the saved step if the user exits the tour
+        intro.onexit(function () {
+        localStorage.removeItem("introCurrentStep");
+        });
+    });
+
 </script>
 
 @endsection

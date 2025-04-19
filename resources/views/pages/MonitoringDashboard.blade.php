@@ -180,9 +180,10 @@
         .introjs-tooltip {
             background-color: white;
             color: var(--dark-gray);
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Poppins', sans-serif;
             border-radius: 0.35rem;
-            box-shadow: 0 0.5rem 1.5rem rgba(58, 59, 69, 0.2);
+            /* box-shadow: 0 0.5rem 1.5rem rgba(7, 18, 144, 0.2); */
+            box-shadow: 0px 0px 6px 4px rgba(28, 61, 245, 0.2);   
         }
 
         .introjs-tooltip-title {
@@ -195,11 +196,22 @@
             background-color: var(--primary);
             border-radius: 0.25rem;
             font-weight: 600;
+            color: black;
         }
 
         .introjs-button:hover {
             background-color: #2e59d9;
+        } 
+        .introjs-overlay
+         {
+        pointer-events: none; 
         }
+
+        .introjs-helperLayer {
+        pointer-events: none;
+        z-index: 1001;
+        }
+
     </style>
 </head>
 
@@ -213,11 +225,11 @@
                 
                 @if($totalMonitors>=5 && auth()->user()->status=='free')
                 <a class="btn btn-primary AddMonitor" href="{{ route('premium.page') }}">
-                    <i class="fas fa-crown mr-2"></i>Upgrade Plan
+                    <i class="fas fa-crown"></i>Upgrade Plan
                 </a>
                 @else
                 <a class="btn btn-primary AddMonitor" href="{{ route('add.monitoring') }}">
-                    <i class="fas fa-plus mr-2"></i>Add Monitor
+                    <i class="fas fa-plus"></i>Add Monitor
                 </a>
                 @endif
             </div>
@@ -447,34 +459,45 @@
     });
 
     // Initialize tour(tool tip)
-        introJs().setOptions({
+    document.addEventListener("DOMContentLoaded", function () {
+        const intro = introJs();
+        const savedStep=localStorage.getItem("introCurrentStep");
+
+        intro.setOptions({
+            disableInteraction: false,
             steps:[{
             title:'Check My Site',
             intro:'Welcome to check my site! Lets take a quick tour'
         },
         {
          element:document.querySelector('.profile'),
-         intro:'Access your profile settings and account information here.'
+         intro:'Access your profile settings and account information here.',
+         position:'left'
        },
         {
          element:document.querySelector('.AddMonitor'),
-         intro:'click here to add new monitor'
+         intro:'click here to add new monitor',
+         position:'left'
        },
        {
-         element:document.querySelector('.incident'),
-         intro:'View and manage incident reports related to your monitored services.'
+         element:document.querySelector('a.incident'),
+         intro:'View and manage incident reports related to your monitored services.', 
+         position:'right'
        },
        {
          element:document.querySelector('.plan'),
-         intro:'Explore and manage your current subscription plan or upgrade to premium.'
+         intro:'Explore and manage your current subscription plan or upgrade to premium.',
+         position:'right'
        },
        {
          element:document.querySelector('.ssl'),
-         intro:'Check the SSL certificate expiry status of your domains here.'
+         intro:'Check the SSL certificate expiry status of your domains here.',
+         position:'right'
        },
        {
          element:document.querySelector('.first'),
-         intro:'This shows the total number of monitors you have configured.'
+         intro:'This shows the total number of monitors you have configured.',
+         position:'down'
        },
        {
          element:document.querySelector('.second'),
@@ -493,7 +516,34 @@
             nextLabel: 'Next',
             prevLabel: 'Back',
             doneLabel: 'Finish'
-        }).start();
+        });
+
+        if (savedStep !== null) { 
+        console.log("Resuming tour from step:", savedStep); 
+        intro.goToStep(Number(savedStep));
+        intro.start(); 
+    } else {
+        console.log("Starting tour from the beginning"); // Debugging
+        intro.start(); 
+    }
+        
+        // Save the current step to localStorage whenever the step changes
+        intro.onchange(function () {
+            const currentStep = intro._currentStep; // Get the current step
+            console.log("Saving step:", currentStep);
+            localStorage.setItem("introCurrentStep", currentStep); // Save it to localStorage
+        });
+
+        // Clear the saved step when the tour is completed
+        intro.oncomplete(function () {
+        localStorage.removeItem("introCurrentStep");
+       });
+
+        // Clear the saved step if the user exits the tour
+        intro.onexit(function () {
+        localStorage.removeItem("introCurrentStep");
+        });
+    });
 
     // Show success message if exists
     document.addEventListener("DOMContentLoaded", function() {
