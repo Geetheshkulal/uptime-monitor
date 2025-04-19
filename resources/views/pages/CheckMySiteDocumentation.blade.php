@@ -1211,7 +1211,7 @@ code {
 
     <!-- Plan & Subscription Tab -->
     <div id="tab6" class="tab-content">
-        <!-- Monitor Display & Card Data -->
+        <!-- Monitor Display & Card Data --
 
     </div>
 </div>
