@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Symfony\Component\VarDumper\Caster\RedisCaster;
 
 //Controller for implementing tracking pixel in mail for read reciept
 class TrackingController extends Controller
@@ -30,5 +31,10 @@ class TrackingController extends Controller
             'X-Frame-Options' => 'deny',
             'X-Robots-Tag' => 'noindex, nofollow',
         ]);
+    }
+
+    public function NotificationTracker(Request $request, $id){
+        Notification::where('token', $id)->update(['status' => 'read']); //update status to 'read'
+        return redirect()->to('/dashboard');
     }
 }

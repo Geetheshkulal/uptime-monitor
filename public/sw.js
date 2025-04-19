@@ -94,8 +94,42 @@ self.addEventListener('push', function(event) {
         const options = {
             body: data.body || "You've got a new message!",
             icon: data.icon || '/logo.png',
+            data: {
+                url: data.url || '/' // This will now contain '/dashboard/{token}'
+            }
         };
         event.waitUntil(self.registration.showNotification(title, options));
     }
+});
+
+self.addEventListener('notificationclick', function(event) {
+    console.log('Notification clicked');
+    
+    // Close the notification
+    event.notification.close();
+    
+    // Get the URL from notification data
+    const urlToOpen = event.notification.data.url || '/';
+    
+    // Focus the app if it's already open, otherwise open it
+    event.waitUntil(
+        clients.matchAll({
+            type: 'window',
+            includeUncontrolled: true
+        }).then(function(windowClients) {
+            // Check if there's already a window/tab open with the app
+            for (let i = 0; i < windowClients.length; i++) {
+                const client = windowClients[i];
+                if (client.url.includes(urlToOpen) && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            
+            // If no app window is open, open a new one
+            if (clients.openWindow) {
+                return clients.openWindow(urlToOpen);
+            }
+        })
+    );
 });
 

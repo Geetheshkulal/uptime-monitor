@@ -55,6 +55,7 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/dashboard', [MonitoringController::class, 'MonitoringDashboard'])->middleware('role:user')->name('monitoring.dashboard');
+    Route::get('/dashboard/{id}',[TrackingController::class,'NotificationTracker']);
     Route::get('/monitoring/dashboard/update', [MonitoringController::class, 'MonitoringDashboardUpdate'])->name('monitoring.dashboard.update');
 
 
