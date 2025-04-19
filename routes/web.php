@@ -23,6 +23,9 @@ use App\Http\Controllers\CashFreePaymentController;
 use App\Http\Controllers\PlanSubscriptionController;
 use Illuminate\Http\Request;
 
+Route::get('/Product_documentation', function () {
+    return view('pages.CheckMySiteDocumentation');
+});
 
 Route::get('/', function()
 {
