@@ -483,7 +483,6 @@ code {
     </div>
 
     <!-- Website Monitoring Tab -->
-  
     <div id="tab2" class="tab-content">
         <div class="monitor-module-doc">
             <!-- Title Section -->
@@ -1218,102 +1217,50 @@ code {
                 <p>This section describes the Plan and Subsribtion functionaly in the CheckMySite application.</p>
             </div>
     
-            <!-- Incident Check -->
+            <!-- premium middleware -->
             <div class="doc-section">
-                <h3>Incident Monitoring</h3>
-                <p>To monitor incidents for your website or server, navigate to the <strong>Incidents</strong> page, where all incidents related to your monitors will be displayed. The system automatically records incidents based on HTTP, DNS, and Port checks, and alerts you about any abnormalities in the monitoring data.</p>
-            </div>
-    
-            <!-- Incident List Section -->
-            <div class="doc-section">
-                <h3>Incident Creation</h3>
-            <p>When a monitor goes down, the system automatically creates an incident. This section details how incidents are created when the status is 'down' and how they are resolved when the status is 'up'.</p>
+                <h3>Premium Middleware</h3>
+            <p>Allows access to the premium page route without restriction<br>Redirects unauthenticated users to the login page<br>Redirects non-premium users to the premium upgrade page<br>Lets premium users proceed normally</p>
 
             <!-- Code Snippet for Incident Creation -->
             <pre><code>
-                private function createIncident(Monitors $monitor, string $status, string $monitorType)
+                public function handle(Request $request, Closure $next): Response
                 {
-                    // If the status is 'down', we create an incident
-                    if ($status === 'down') {
-                        // Check if there's an existing 'down' incident for the same monitor that's still open (no end_timestamp)
-                        $existingIncident = Incident::where('monitor_id', $monitor->id)
-                            ->where('status', 'down')  // Looking for incidents that are 'down'
-                            ->whereNull('end_timestamp')  // Ensure that the incident is still open
-                            ->first();
-                        
-                        // If no existing open incident, create a new one
-                        if (!$existingIncident) {
-                            Incident::create([
-                                'monitor_id' => $monitor->id,
-                                'status' => 'down',
-                                'root_cause' => "{$monitorType} Monitoring Failed",  // Log the type of failure (e.g., Ping, DNS, HTTP)
-                                'start_timestamp' => now(),
-                                'updated_at' => now(),
-                            ]);
-                        }
+                    // Allow unrestricted access to the premium page (upgrade page).
+                    if ($request->routeIs('premium.page')) {
+                        return $next($request);
                     }
-
-                    // If the status is 'up', we check and close any open incidents
-                    elseif ($status === 'up') {
-                        // Check for any open incidents (status = 'down' and no end_timestamp)
-                        $incident = Incident::where('monitor_id', $monitor->id)
-                            ->where('status', 'down')
-                            ->whereNull('end_timestamp')  // Ensure it's open (still 'down')
-                            ->first();
-
-                        // If an open incident is found, mark it as resolved
-                        if ($incident) {
-                            $incident->update([
-                                'status' => 'up',
-                                'end_timestamp' => now(),  // Set the time the monitor came back up
-                                'updated_at' => now(),
-                            ]);
-                        }
+                
+                    // Check if the user is not logged in.
+                    // If not authenticated, redirect to the login page.
+                    if (!$request->user()) {
+                        return redirect()->route('login');
                     }
+                
+                    // Check if the authenticated user does NOT have a 'paid' status.
+                    // If not a premium user, redirect them to the premium upgrade page with an error message.
+                    if ($request->user()->status !== 'paid') {
+                        return redirect()->route('premium.page')
+                            ->with('error', 'This feature requires a premium subscription');
+                    }
+                
+                    // If the user is authenticated and has 'paid' status, allow the request to proceed.
+                    return $next($request);
                 }
+                
             </code></pre>
-            <p>The `createIncident()` function handles the creation and resolution of incidents based on the status of a monitor. When the status is 'down', it checks if there are any open incidents for the same monitor. If no incident is found, a new one is created with the appropriate status and root cause. If the status changes to 'up', the system searches for any open 'down' incidents for the monitor and resolves them by updating the status and setting the end timestamp.</p>
+            <p>The handle function in the PremiumMiddleware class is responsible for restricting access to certain parts of the application based on the user's subscription status <br>Ensure's that only users with a premium subscription (status = 'paid') can access certain routes in the application(When a user makes a request to a route or controller that is protected by the PremiumMiddleware.).</p>
         
 
-                <h3>Viewing Incidents</h3>
-                <p>On the incidents page, you will see a list of all incidents that have occurred with your monitors. The data is dynamically fetched from the server using an AJAX request for real-time updates. You can also refresh the incident list to see the most up-to-date information about your monitors' status.</p>
-    
-                <!-- Code Snippet for Fetching Incidents -->
-                <pre><code>
-                    public function incidents()
-                    {
-                        // Get the logged-in user's ID
-                        $userId = Auth::id();
-    
-                        // Get the monitor IDs associated with the logged-in user
-                        $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
-    
-                        // Fetch incidents that belong to the logged-in user's monitors
-                        $incidents = Incident::with('monitor') // Load incidents with associated monitors
-                            ->whereIn('monitor_id', $userMonitors) // Filter incidents by monitor IDs
-                            ->get();
-                        
-                        // Log the user's visit to the incidents page
-                        $tempMonitor = Monitors::where('user_id', $userId)->first();
-                        if ($tempMonitor) {
-                            activity()
-                                ->performedOn($tempMonitor)
-                                ->causedBy(auth()->user())
-                                ->inLog('incident monitoring')
-                                ->event('visited')
-                                ->withProperties([
-                                    'name' => auth()->user()->name,
-                                    'email' => auth()->user()->email,
-                                    'page' => 'Incidents Page'
-                                ])
-                                ->log('Visited the incidents page');
-                        }
-    
-                        return view('pages.incidents', compact('incidents'));
-                    }
-                </code></pre>
-                <p>The `incidents()` function retrieves the incidents related to the user's monitors and passes them to a Blade view for display. The function also logs the user's activity for auditing purposes.</p>
-    
+                <h3>Example of using PremiumMiddleware</h3>
+                <p>The following route applies the PremiumMiddleware to the /ssl-check endpoint. If a user without a 'paid' status accesses this route, they will be redirected to the premium upgrade page.</p>
+
+                    <!-- Code Snippet for SSL Check Route with Middleware -->
+                    <pre><code>
+                    Route::get('/ssl-check', [SslCheckController::class, 'index'])
+                        ->middleware('premium_middleware')
+                        ->name('ssl.check');
+                    </code></pre>
                 
     
                 <h2>Additional Features</h2>
