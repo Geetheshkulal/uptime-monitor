@@ -97,6 +97,10 @@
         color: #dddfeb;
         margin-bottom: 1rem;
     }
+     .custom-spacing {
+        margin-left: 1.5rem; /* Or whatever matches your existing spacing */
+        margin-right: 1.5rem;
+    }
     
     /* Responsive adjustments */
     @media (max-width: 768px) {
@@ -109,11 +113,12 @@
 
 <div class="page-content">
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
         <h1 class="h3 mb-0 text-gray-800 font-600">Incident History</h1>
     </div>
 
     <!-- Content Row -->
+    <div class="custom-spacing">
     <div class="row">
         <div class="col-12">
             <div class="card shadow mb-4" data-aos="fade-up">
@@ -193,6 +198,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @push('scripts')
