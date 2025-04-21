@@ -207,13 +207,13 @@
             cursor: pointer;
         } 
         .introjs-overlay
-         {
-        pointer-events: none; 
+        {
+            pointer-events: none; 
         }
 
         .introjs-helperLayer {
-        pointer-events: none;
-        z-index: 1001;
+            pointer-events: none;
+            z-index: 1001;
         }
 
     </style>
