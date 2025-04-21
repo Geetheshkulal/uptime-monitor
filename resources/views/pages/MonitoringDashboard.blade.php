@@ -179,10 +179,8 @@
         /* ========== INTROJS TOUR ========== */
         .introjs-tooltip {
             background-color: white;
-            color: var(--dark-gray);
             font-family: 'Poppins', sans-serif;
             border-radius: 0.35rem;
-            /* box-shadow: 0 0.5rem 1.5rem rgba(7, 18, 144, 0.2); */
             box-shadow: 0px 0px 6px 4px rgba(28, 61, 245, 0.2);   
         }
 
