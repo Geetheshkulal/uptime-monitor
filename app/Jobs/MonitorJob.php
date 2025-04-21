@@ -84,138 +84,139 @@ class MonitorJob
     }
 
     public function SendPwaNotification($userId, $notificationToken = null)
-{
-    try {
-        $subscriptions = PushSubscription::where('user_id', $userId)->get();
-
-        if ($subscriptions->isEmpty()) {
-            Log::info("No PWA subscriptions found for user {$userId}");
-            return;
-        }
-
-        $webPush = new WebPush([
-            'VAPID' => [
-                'subject' => 'mailto:'.env('MAIL_FROM_ADDRESS', 'notifications@example.com'),
-                'publicKey' => env('VAPID_PUBLIC_KEY'),
-                'privateKey' => env('VAPID_PRIVATE_KEY'),
-            ]
-        ]);
-
-        $payload = json_encode([
-            'title' => 'Monitor Alert',
-            'body' => 'Your Monitor is still down',
-            'icon' => '/logo.png',
-            'url' => "/dashboard/" . $notificationToken // Add the URL here
-        ]);
-
-        foreach ($subscriptions as $subscription) {
-            $pushSubscription = new Subscription(
-                $subscription->endpoint,
-                $subscription->p256dh,
-                $subscription->auth,
-                'aes128gcm'
-            );
-
-            $webPush->queueNotification($pushSubscription, $payload);
-        }
-
-        $results = $webPush->flush();
-        foreach ($results as $report) {
-            if (!$report->isSuccess()) {
-                Log::error("PWA notification failed for user {$userId}: " . $report->getReason());
-            }
-        }
-
-    } catch (\Exception $e) {
-        Log::error("PWA notification error for user {$userId}: " . $e->getMessage());
-    }
-}
-private function checkHttp(Monitors $monitor)
-{
-    $status = 'down';
-    $statusCode = 0;
-    $responseTime = 0;
-    Log::info("Checking HTTP Monitor: {$monitor->id} ({$monitor->url})");
-
-    for ($attempt = 0; $attempt < $monitor->retries; $attempt++) {
+    {
         try {
-            $startTime = microtime(true);
-            $response = Http::timeout(10)->get($monitor->url);
-            $endTime = microtime(true);
+            $subscriptions = PushSubscription::where('user_id', $userId)->get();
 
-            $statusCode = $response->status();
-            $responseTime = round(($endTime - $startTime) * 1000, 2);
-
-            Log::info("HTTP Response ({$monitor->id}): Status $statusCode, Time {$responseTime}ms");
-
-            // Determine status based on status code
-            if ($response->successful()) {
-                $status = 'up';
-            } else {
-                $status = 'down';
-                Log::warning("HTTP Monitor {$monitor->id} returned non-success status: {$statusCode}");
+            if ($subscriptions->isEmpty()) {
+                Log::info("No PWA subscriptions found for user {$userId}");
+                return;
             }
 
-            break; // Exit retry loop on success
+            $webPush = new WebPush([
+                'VAPID' => [
+                    'subject' => 'mailto:'.env('MAIL_FROM_ADDRESS', 'notifications@example.com'),
+                    'publicKey' => env('VAPID_PUBLIC_KEY'),
+                    'privateKey' => env('VAPID_PRIVATE_KEY'),
+                ]
+            ]);
 
-        } catch (RequestException $e) {
-            Log::error("HTTP RequestException (Monitor ID: {$monitor->id}): " . $e->getMessage());
-            $statusCode = $e->response ? $e->response->status() : 0;
+            $payload = json_encode([
+                'title' => 'Monitor Alert',
+                'body' => 'Your Monitor is still down',
+                'icon' => '/logo.png',
+                'url' => "/dashboard/" . $notificationToken // Add the URL here
+            ]);
 
-            // Handle specific HTTP errors
-            if ($statusCode === 403) {
-                Log::warning("HTTP Monitor {$monitor->id} returned 403 (Forbidden).");
+            foreach ($subscriptions as $subscription) {
+                $pushSubscription = new Subscription(
+                    $subscription->endpoint,
+                    $subscription->p256dh,
+                    $subscription->auth,
+                    'aes128gcm'
+                );
+
+                $webPush->queueNotification($pushSubscription, $payload);
+            }
+
+            $results = $webPush->flush();
+            foreach ($results as $report) {
+                if (!$report->isSuccess()) {
+                    Log::error("PWA notification failed for user {$userId}: " . $report->getReason());
+                }
             }
 
         } catch (\Exception $e) {
-            Log::error("General HTTP Exception (Monitor ID: {$monitor->id}): " . $e->getMessage());
+            Log::error("PWA notification error for user {$userId}: " . $e->getMessage());
+        }
+    }
+    private function checkHttp(Monitors $monitor)
+    {
+        $status = 'down';
+        $statusCode = 0;
+        $responseTime = 0;
+        Log::info("Checking HTTP Monitor: {$monitor->id} ({$monitor->url})");
 
-            // Handle timeouts and SSL errors
-            if (strpos($e->getMessage(), 'timed out') !== false) {
-                $statusCode = 408; // Request Timeout
-            } elseif (strpos($e->getMessage(), 'SSL') !== false) {
-                $statusCode = 495; // SSL Failure
+        for ($attempt = 0; $attempt < $monitor->retries; $attempt++) {
+            try {
+                //Record response time.
+                $startTime = microtime(true);
+                $response = Http::timeout(10)->get($monitor->url);
+                $endTime = microtime(true);
+
+                $statusCode = $response->status();
+                $responseTime = round(($endTime - $startTime) * 1000, 2);
+
+                Log::info("HTTP Response ({$monitor->id}): Status $statusCode, Time {$responseTime}ms");
+
+                // Determine status based on status code
+                if ($response->successful()) {
+                    $status = 'up';
+                } else {
+                    $status = 'down';
+                    Log::warning("HTTP Monitor {$monitor->id} returned non-success status: {$statusCode}");
+                }
+
+                break; // Exit retry loop on success
+
+            } catch (RequestException $e) {
+                Log::error("HTTP RequestException (Monitor ID: {$monitor->id}): " . $e->getMessage());
+                $statusCode = $e->response ? $e->response->status() : 0;
+
+                // Handle specific HTTP errors
+                if ($statusCode === 403) {
+                    Log::warning("HTTP Monitor {$monitor->id} returned 403 (Forbidden).");
+                }
+
+            } catch (\Exception $e) {
+                Log::error("General HTTP Exception (Monitor ID: {$monitor->id}): " . $e->getMessage());
+
+                // Handle timeouts and SSL errors
+                if (strpos($e->getMessage(), 'timed out') !== false) {
+                    $statusCode = 408; // Request Timeout
+                } elseif (strpos($e->getMessage(), 'SSL') !== false) {
+                    $statusCode = 495; // SSL Failure
+                }
+            }
+
+            // Exponential backoff (max 5s)
+            if ($attempt < $monitor->retries - 1) {
+                sleep(min(pow(2, $attempt), 5));
             }
         }
 
-        // Exponential backoff (max 5s)
-        if ($attempt < $monitor->retries - 1) {
-            sleep(min(pow(2, $attempt), 5));
+        // Store response in the http_response table
+        try {
+            HttpResponse::create([
+                'monitor_id' => $monitor->id,
+                'status' => $status,
+                'status_code' => $statusCode,
+                'response_time' => $responseTime,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Failed to insert HTTP response for {$monitor->id}: " . $e->getMessage());
+        }
+
+        // Send alert if status is down
+        try{
+            $this->sendAlert($monitor, $status);
+        }catch (\Exception $e) {
+            Log::error(''. $e->getMessage());
+        }
+        $this->createIncident($monitor, $status, 'HTTP');
+
+        // Update monitor status
+        try {
+            $monitor->update([
+                'last_checked_at' => now(),
+                'status' => $status,
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Failed to update monitor status for {$monitor->id}: " . $e->getMessage());
         }
     }
-
-    // Store response in the http_response table
-    try {
-        HttpResponse::create([
-            'monitor_id' => $monitor->id,
-            'status' => $status,
-            'status_code' => $statusCode,
-            'response_time' => $responseTime,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-    } catch (\Exception $e) {
-        Log::error("Failed to insert HTTP response for {$monitor->id}: " . $e->getMessage());
-    }
-
-    // Send alert if status is down
-    try{
-        $this->sendAlert($monitor, $status);
-    }catch (\Exception $e) {
-        Log::error(''. $e->getMessage());
-    }
-    $this->createIncident($monitor, $status, 'HTTP');
-
-    // Update monitor status
-    try {
-        $monitor->update([
-            'last_checked_at' => now(),
-            'status' => $status,
-        ]);
-    } catch (\Exception $e) {
-        Log::error("Failed to update monitor status for {$monitor->id}: " . $e->getMessage());
-    }
-}
 
 
 
@@ -417,7 +418,8 @@ private function checkHttp(Monitors $monitor)
             return false;
         }
     }
-//NEW INCIDENTS
+    
+    //NEW INCIDENTS
     private function createIncident(Monitors $monitor, string $status, string $monitorType)
     {
        
@@ -460,55 +462,61 @@ private function checkHttp(Monitors $monitor)
     }
 }
 
-public function sendFollowUpEmail(){
-    try {
-        $fiveMinutesAgo = Carbon::now()->subMinutes(1);
+    public function sendFollowUpEmail()
+    {
+        try {
+            $fiveMinutesAgo = Carbon::now()->subMinutes(5);
 
-        $notifications = Notification::where('created_at', '<=', $fiveMinutesAgo)
-            ->with('monitor.user')
-            ->get();
+            $notifications = Notification::where('created_at', '<=', $fiveMinutesAgo)
+                ->with('monitor.user')
+                ->get();
 
-        foreach ($notifications as $notification) {
-            // Send follow-up email only once
-            if(!$notification->follow_up_sent){
-                Mail::to($notification->monitor->email)
-                    ->send(new FollowUpMail($notification->monitor));
-                $notification->follow_up_sent = true;
-                $notification->save();
-                Log::info("Follow-up email sent to: {$notification->monitor->email}"); 
+            foreach ($notifications as $notification) {
+                // Send follow-up email only once
+                if(!$notification->follow_up_sent){
+                    Mail::to($notification->monitor->email)
+                        ->send(new FollowUpMail($notification->monitor));
+                    $notification->follow_up_sent = true;
+                    $notification->save();
+                    Log::info("Follow-up email sent to: {$notification->monitor->email}"); 
+                }
+                
+                // Handle PWA notification separately
+                switch($notification->status){
+                    case 'unread':
+                        // Only send PWA notification if it's been at least 5 minutes since last notification
+                        $lastNotifiedAt = $notification->last_notified_at ? Carbon::parse($notification->last_notified_at) : null;
+                        
+                        if (!$lastNotifiedAt || $lastNotifiedAt->diffInMinutes(Carbon::now()) >= 5) {
+                            $this->SendPwaNotification($notification->monitor->user_id, $notification->token);
+                            $notification->last_notified_at = Carbon::now();
+                            $notification->touch();
+                            Log::info('PWA Notification Triggered');
+                        }
+                        break;
+                    default:
+                        $notification->delete();
+                }    
             }
-            
-            // Handle PWA notification separately
-            switch($notification->status){
-                case 'unread':
-                    // Only send PWA notification if it's been at least 5 minutes since last notification
-                    $lastNotifiedAt = $notification->last_notified_at ? Carbon::parse($notification->last_notified_at) : null;
-                    
-                    if (!$lastNotifiedAt || $lastNotifiedAt->diffInMinutes(Carbon::now()) >= 1) {
-                        $this->SendPwaNotification($notification->monitor->user_id, $notification->token);
-                        $notification->last_notified_at = Carbon::now();
-                        $notification->touch();
-                        Log::info('PWA Notification Triggered');
-                    }
-                    break;
-                default:
-                    $notification->delete();
-            }    
-        }
 
-    } catch (\Exception $e) {
-        Log::error("sendFollowUpEmail failed: " . $e->getMessage());
+        } catch (\Exception $e) {
+            Log::error("sendFollowUpEmail failed: " . $e->getMessage());
+        }
     }
-}
     
     public function handle(): void
     {
         try {
-            $monitors = Monitors::where('paused', false) // Skip paused monitors
-            ->whereRaw('? >= DATE_ADD(last_checked_at, INTERVAL `interval` MINUTE)', [now()])
-            ->orWhereNull('last_checked_at')
+            $monitors = Monitors::where('paused', false)
+            ->where(function ($query) {
+                $query->whereRaw(
+                    'DATE_FORMAT(NOW(), "%Y-%m-%d %H:%i") >= DATE_FORMAT(DATE_ADD(last_checked_at, INTERVAL `interval` MINUTE), "%Y-%m-%d %H:%i")'
+                )->orWhereNull('last_checked_at');
+            })
             ->get();
-    
+
+            Log::info('number of monitors:'.$monitors->count());
+
             foreach ($monitors as $monitor) {
                 switch ($monitor->type) {
                     case 'dns':
@@ -523,7 +531,7 @@ public function sendFollowUpEmail(){
                     case 'http':
                         $this->checkHttp($monitor);
                         break;
-                    }
+                }
                 $this->sendFollowUpEmail();
             }
         } catch (\Exception $e) {
