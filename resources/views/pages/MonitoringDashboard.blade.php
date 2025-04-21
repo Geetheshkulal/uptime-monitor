@@ -197,10 +197,14 @@
             border-radius: 0.25rem;
             font-weight: 600;
             color: black;
+            text-shadow: none;
+            
         }
 
         .introjs-button:hover {
             background-color: #2e59d9;
+            color:white;
+            cursor: pointer;
         } 
         .introjs-overlay
          {

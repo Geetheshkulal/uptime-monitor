@@ -300,7 +300,7 @@
     <script src="{{asset('frontend/assets/js/sb-admin-2.min.js')}}"></script>
 
       <!-- jQuery and Toastr scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
@@ -348,9 +348,6 @@
 </script>
 
 
-
-  <!-- jQuery and Toastr scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
   <script>
     toastr.options = {

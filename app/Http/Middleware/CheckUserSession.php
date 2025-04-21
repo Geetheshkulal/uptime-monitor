@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\PushSubscription;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -24,10 +25,11 @@ class CheckUserSession
             
             // If user's session_id doesn't match current session
             if ($user->session_id !== $sessionId) {
+                Session::flash('error', 'Logged out from other device');
                 Auth::logout();
-
-                Log::info('Redirecting with error message', ['error' => 'Logged out from other device']);
-                return redirect('login')->with('error', 'Logged out from other device');
+                PushSubscription::where('user_id',$user->id)->delete();
+                Log::info('Redirecting with error message', ['error' => 'Logged out from other device',$user->id]);
+                return redirect('login');
             }
         }
         
