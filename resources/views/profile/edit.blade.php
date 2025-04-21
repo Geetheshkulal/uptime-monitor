@@ -1,9 +1,13 @@
 @extends('dashboard')
 @section('content')
 
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-
+@push('styles')
+    <style>
+        .nav-item{
+            margin-right: 10px;
+        }
+    </style>
+@endpush
 <div class="container-fluid">
     <div class="row d-flex flex-column-reverse flex-lg-row">
         <div class="col-lg-8 col-md-12">
@@ -51,5 +55,7 @@
         </div>
     </div>
 </div>
-
+@push('scripts')
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+@endpush
 @endsection

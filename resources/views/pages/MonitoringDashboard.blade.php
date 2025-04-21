@@ -231,7 +231,7 @@
                 </a>
                 @else
                 <a class="btn btn-primary AddMonitor" href="{{ route('add.monitoring') }}">
-                    <i class="fas fa-plus"></i>Add Monitor
+                    <i class="fas fa-plus"></i> Add Monitor
                 </a>
                 @endif
             </div>
