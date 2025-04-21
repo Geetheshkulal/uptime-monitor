@@ -16,7 +16,7 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4 mx-3 mt-3">
         <h1 class="h3 mb-0 text-gray-800">Permissions Management</h1>
         @can('add.permission')
-            <a href="{{ route('add.permission') }}" class="d-none d-sm-inline-block btn btn-primary shadow-sm">
+            <a href="{{ route('add.permission') }}" class="d-sm-inline-block btn btn-primary shadow-sm mt-2 mt-md-0">
                 <i class="fas fa-plus fa-sm text-white-50 mr-1"></i> Add Permission
             </a>
         @endcan
