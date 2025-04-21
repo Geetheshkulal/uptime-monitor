@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
-});
+})->name('product.documentation');
 
 Route::get('/', function()
 {

@@ -265,68 +265,68 @@
     color: #333;
     line-height: 1.7;
     max-width: 100%;
-}
+    }
 
-.doc-header h2 {
-    font-size: 28px;
-    font-weight: bold;
-    color: #007bff;
-    margin-bottom: 10px;
-}
+    .doc-header h2 {
+        font-size: 28px;
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 10px;
+    }
 
-.doc-header p {
-    font-size: 16px;
-    color: #666;
-}
+    .doc-header p {
+        font-size: 16px;
+        color: #666;
+    }
 
-.doc-section {
-    margin-top: 40px;
-    padding: 20px;
-    border-left: 4px solid #007bff;
-    background-color: #f9f9f9;
-    border-radius: 12px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
-}
+    .doc-section {
+        margin-top: 40px;
+        padding: 20px;
+        border-left: 4px solid #007bff;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
+    }
 
-.doc-section h3 {
-    font-size: 22px;
-    color: #333;
-    margin-bottom: 10px;
-}
+    .doc-section h3 {
+        font-size: 22px;
+        color: #333;
+        margin-bottom: 10px;
+    }
 
-.doc-section p {
-    font-size: 15px;
-    color: #555;
-}
+    .doc-section p {
+        font-size: 15px;
+        color: #555;
+    }
 
-pre {
-    background-color: #2d2d2d;
-    color: #f8f8f2;
-    padding: 15px;
-    border-radius: 10px;
-    overflow-x: auto;
-    font-size: 14px;
-    margin: 20px 0;
-}
+    pre {
+        background-color: #2d2d2d;
+        color: #f8f8f2;
+        padding: 15px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 14px;
+        margin: 20px 0;
+    }
 
-code {
-    font-family: 'Courier New', Courier, monospace;
-    display: block;
-    white-space: pre;
-}
+    code {
+        font-family: 'Courier New', Courier, monospace;
+        display: block;
+        white-space: pre;
+    }
 
-.doc-footer {
-    margin-top: 50px;
-    padding-top: 20px;
-    border-top: 1px solid #ddd;
-}
+    .doc-footer {
+        margin-top: 50px;
+        padding-top: 20px;
+        border-top: 1px solid #ddd;
+    }
 
-.doc-footer h4 {
-    font-size: 20px;
-    color: #007bff;
-    margin-bottom: 10px;
-}
-  
+    .doc-footer h4 {
+        font-size: 20px;
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+    
 
     pre code .comment {
         color: green; /* Comment color */
@@ -339,7 +339,9 @@ code {
   <!-- Sidebar Navigation -->
   <div class="sidebar">
     <div class="sidebar-header">
-      <h4><i class="fas fa-heartbeat me-2"></i>CheckMySite</h4>
+      <a href="/">
+        <h4><i class="fas fa-heartbeat me-2"></i>CheckMySite</h4>
+      </a>
     </div>
     <div class="nav-menu">
       <a href="#" onclick="showTab('tab1')" class="active">

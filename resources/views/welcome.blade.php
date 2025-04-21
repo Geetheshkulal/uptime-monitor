@@ -119,7 +119,10 @@ border-radius: 0 !important;
           <a class="nav-link" href="#pricing">Pricing</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('documentation.page')}}">Documentation</a>
+          <a class="nav-link" href="{{ route('documentation.page')}}">User Documentation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('product.documentation')}}">Product Documentation</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('latest.page')}}">Latest updates</a>

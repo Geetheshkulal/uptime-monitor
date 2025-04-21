@@ -263,7 +263,7 @@
   <!-- Sidebar Navigation -->
   <div class="sidebar">
     <div class="sidebar-header">
-      <h4><i class="fas fa-heartbeat me-2"></i>CheckMySite</h4>
+      <a href = "/"><h4><i class="fas fa-heartbeat me-2"></i>CheckMySite</h4></a>
     </div>
     <div class="nav-menu">
       <a href="#" onclick="showTab('tab1')" class="active">
