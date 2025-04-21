@@ -103,6 +103,10 @@
         .table-responsive {
             border: 0;
         }
+    .custom-spacing {
+        margin-left: 1.5rem; /* Or whatever matches your existing spacing */
+        margin-right: 1.5rem;
+    } 
     }
 </style>
 @endpush
@@ -114,6 +118,7 @@
     </div>
 
     <!-- Content Row -->
+    <div class="custom-spacing">
     <div class="row">
         <div class="col-12">
             <div class="card shadow mb-4" data-aos="fade-up">
@@ -193,6 +198,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @push('scripts')

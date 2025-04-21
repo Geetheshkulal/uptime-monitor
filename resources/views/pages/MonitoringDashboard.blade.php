@@ -71,7 +71,7 @@
         }
 
         .badge-paused {
-            background-color: rgba(54, 185, 204, 0.1);
+            background-color: rgba(230, 0, 255, 0.1);
             color: var(--info);
         }
 
@@ -365,7 +365,6 @@
                                         <td>
                                             @if ($monitor->paused == 1)
                                             <span class="status-badge badge-paused">
-                                                <span style="background: var(--info);"></span>
                                                 Paused
                                             </span>
                                             @elseif ($monitor->status === 'up')

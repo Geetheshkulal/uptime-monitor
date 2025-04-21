@@ -27,11 +27,13 @@
     }
 
     .nav-item {
-        position: relative;
-        margin: 0.2rem 0.8rem;
-        border-radius: 0.35rem;
-        transition: all 0.3s ease;
-    }
+    position: relative;
+    margin: 0.2rem 0.4rem; /* adjust margin */
+    border-radius: 0.35rem;
+    transition: all 0.3s ease;
+    width: calc(100% - 0.8rem); /* set width */
+}
+
 
     .nav-item.active {
         background-color: rgba(255, 255, 255, 0.1) !important;
@@ -94,6 +96,22 @@
         from { opacity: 0.7; }
         to { opacity: 1; text-shadow: 0 0 5px rgb(252, 255, 59); }
     }
+    @media (max-width: 767.98px) {
+    .sidebar .nav-link {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.75rem;
+        padding: 0.5rem 0.25rem;
+        text-align: center;
+    }
+
+    .sidebar .nav-link i {
+        margin-right: 0;
+        margin-bottom: 0.25rem;
+        font-size: 1rem;
+    }
+}
 
     /* Sidebar toggler */
     #sidebarToggle {
