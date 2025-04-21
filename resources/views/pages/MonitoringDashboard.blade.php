@@ -354,7 +354,8 @@
                                 <tbody>
                                     @foreach ($monitors as $key=>$monitor)                           
                                     <tr class="{{ (auth()->user()->status === 'free' && $loop->index >= 5) ? 'disabled-row' : '' }}">
-                                        <td class="font-600">{{ $monitor->name }}</td>
+                                       
+                                        <td class="font-600">{{ $monitor->name }} </td>
                                         <td>
                                             <a href="{{ $monitor->url }}" target="_blank" class="text-primary">
                                                 {{ Str::limit($monitor->url, 30) }}
