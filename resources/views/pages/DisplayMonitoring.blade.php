@@ -6,7 +6,17 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     @endpush
 
-    
+    <style>
+        svg{
+            overflow: hidden;
+            vertical-align: middle;
+            width: 95px;
+            height: 81px;
+            margin-top: -41px;
+            margin-left:-45px;
+            margin-right: -11px;
+        }
+        </style>
     <!-- Page Heading -->
     <div class="container-fluid">
         <div class="row  p-2">
@@ -62,7 +72,31 @@
         <div class="row">
             <div class="col-xl-12">
                 <h5 class="text-gray-800 font-weight-bold mb-3">
-                    <span class="text-secondary">URL:</span>
+                    {{-- <span class="text-secondary">URL:</span> --}}
+
+                    @if($details->status === 'up')
+                    <svg xmlns="http://www.w3.org/2000/svg">
+                        <circle fill="#059212" stroke="none" cx="60" cy="60" r="17" opacity="0.5">
+                          <animate attributeName="opacity" dur="1s" values="0;0.5;0" repeatCount="indefinite" begin="0s" />
+                        </circle>
+                        <circle fill="#059212" stroke="none" cx="60" cy="60" r="9">
+                          <animate attributeName="opacity" dur="2s" values="0;1;0" repeatCount="indefinite" begin="2s"/>
+                        </circle>
+                      </svg>
+
+                      @else
+
+                      <svg xmlns="http://www.w3.org/2000/svg">
+
+                        <circle fill="#ff0000" stroke="none" cx="60" cy="60" r="17" opacity="0.5">
+                          <animate attributeName="opacity" dur="1s" values="0;0.5;0" repeatCount="indefinite" begin="0s" />
+                        </circle>
+                        <circle fill="#ff0000" stroke="none" cx="60" cy="60" r="9">
+                          <animate attributeName="opacity" dur="2s" values="0;1;0" repeatCount="indefinite" begin="2s"/>
+                        </circle>
+                      </svg>
+                      @endif
+
                     <span class="text-primary">{{ $details->url }}</span>
                 </h5>
             </div>
