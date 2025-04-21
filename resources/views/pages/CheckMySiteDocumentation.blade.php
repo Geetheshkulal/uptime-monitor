@@ -361,6 +361,9 @@ code {
       <a href="#" onclick="showTab('tab6')">
         <i class="fas fa-credit-card"></i> Plan & Subscription
       </a>
+      <a href="#" onclick="showTab('tab7')">
+        <i class="fas fa-credit-card"></i> User management
+      </a>
     </div>
   </div>
 
@@ -1295,6 +1298,236 @@ code {
             </div>
         </div>
     </div>
+
+
+    <!-- User Management Tab -->
+    <div id="tab7" class="tab-content">
+        <div class="monitor-module-doc">
+            <!-- Title Section -->
+            <div class="doc-header">
+                <h2>User Creation Flow in the CheckMySite Application</h2>
+                <p>This section explains the process of user creation in the CheckMySite application, including how permissions are validated, how user data is stored, and how roles are assigned.</p>
+            </div>
+    
+            <!-- Blade View Section -->
+            <div class="doc-section">
+                <h3>Blade View: DisplayRoles.blade.php</h3>
+                <p>The user creation flow begins from the Blade view where the Superuser is directed to the role management page. The button to add a new user:</p>
+    
+                <pre><code>
+                    href="{{ route('add.role') }}" class="d-none d-sm-inline-block btn btn-primary shadow-sm">
+                        Add User
+                    
+                </code></pre>
+                <p>This button, when clicked, will redirect the user to the route named <code>add.role</code>, where the user creation form is displayed.</p>
+            </div>
+    
+            <!-- Route Definition Section -->
+            <div class="doc-section">
+                <h3>Route Definition: web.php</h3>
+                <p>The next step involves defining the route that will handle the form submission to create a user. This is done in the <code>web.php</code> file:</p>
+    
+                <pre><code>
+                    Route::post('/admin/add/users', [UserController::class, 'storeUser'])
+                        ->middleware('permission:add.user')
+                        ->name('add.user');
+                </code></pre>
+                <p>The route listens for a <strong>POST</strong> request at <code>/admin/add/users</code>, and it uses the <code>storeUser</code> method in <code>UserController</code> to handle the form submission. The route is protected by the <strong>permission</strong> middleware, which checks whether the authenticated user has the <code>add.user</code> permission before allowing access to the route.</p>
+            </div>
+    
+            <!-- Middleware Section -->
+            <div class="doc-section">
+                <h3>Middleware: Permission Check</h3>
+                <p>The permission check is handled by the <code>permission</code> middleware, defined in <code>config/permission.php</code>:</p>
+    
+                <pre><code>
+    // In config/permission.php
+    'permission' => Spatie\Permission\Models\Permission::class,
+                </code></pre>
+                <p>This middleware uses the Spatie Permission package to check whether the currently authenticated user has the <code>add.user</code> permission. If the user does not have this permission, they will be denied access to the route.</p>
+            </div>
+    
+            <!-- Controller Method Section -->
+            <div class="doc-section">
+                <h3>Controller Method: storeUser</h3>
+                <p>The core logic for creating a user is handled in the <code>storeUser</code> method within the <code>UserController</code>. Here's the complete method:</p>
+    
+                <pre><code>
+                    public function storeUser(Request $request)
+                    {
+                        // Validate input data
+                        $validated = $request->validate([
+                            'name' => 'required|string|max:255',
+                            'email' => 'required|email|unique:users',
+                            'password' => 'required|min:3',
+                            'phone' => 'nullable|string',
+                            'role' => 'required|exists:roles,id', // Ensure the role exists
+                            'status' => 'required|in:free,paid',
+                            'premium_end_date' => 'nullable|date'
+                        ]);
+    
+                        try {
+                            // Create the user record in the database
+                            $user = User::create([
+                                'name' => $validated['name'],
+                                'email' => $validated['email'],
+                                'password' => Hash::make($validated['password']),
+                                'phone' => $validated['phone'] ?? null,
+                                'status' => $validated['status'],
+                                'premium_end_date' => $validated['premium_end_date'] ?? null,
+                                'last_login_ip' => $request->ip()
+                            ]);
+    
+                            // Assign the role to the created user
+                            $role = Role::find($validated['role']);
+                            if ($role) {
+                                $user->roles()->attach($role->id);
+                            } else {
+                                Log::warning("Role not found: " . $validated['role']);
+                            }
+    
+                            // Log the activity of user creation
+                            activity()
+                                ->causedBy(auth()->user()) // The admin or user who performed the action
+                                ->performedOn($user)
+                                ->inLog('user_management')
+                                ->event('user-created')
+                                ->withProperties([
+                                    'created_user_name' => $user->name,
+                                    'created_user_email' => $user->email,
+                                    'created_by' => auth()->user()->name,
+                                    'role_assigned' => $role ? $role->name : 'None',
+                                    'status' => $user->status,
+                                ])
+                                ->log("User created successfully: " . $user->name);
+    
+                            Log::info("User created successfully", $user->toArray()); // Log the activity
+    
+                            return redirect()->route('display.users')->with('success', 'User created successfully');
+                        } catch (\Exception $e) {
+                            Log::error("User creation error: " . $e->getMessage());
+    
+                            return back()->with('error', 'User creation failed. Please try again.');
+                        }
+                    }
+                </code></pre>
+                <p>In this method, after validating the incoming data, a new user is created and stored in the database. The method also assigns a role to the user and logs the activity. If there is an error, it catches the exception and logs the error message.</p>
+            </div>
+               <!-- Display Users Section -->
+        <div class="doc-section">
+            <h3>2. DisplayUsers() - Display All Users</h3>
+            <p>This method retrieves all users from the database, with a basic search functionality. It performs the following:</p>
+            <ul>
+                <li>Fetches users from the <code>users</code> table, excluding the 'superadmin' role.</li>
+                <li>Allows searching for users by name, email, or phone number.</li>
+                <li>Paginates results to display 10 users per page.</li>
+                <li>Passes the data to the <code>DisplayUsers</code> view for rendering.</li>
+            </ul>
+            <pre><code>
+                public function DisplayUsers(Request $request)
+                {
+                    $users = User::with('roles')
+                                ->when($search, function($query) use ($search) {
+                                    $query->where('name', 'like', "%{$search}%")
+                                          ->orWhere('email', 'like', "%{$search}%")
+                                          ->orWhere('phone', 'like', "%{$search}%");
+                                })
+                                ->orderBy('name')
+                                ->paginate(10);
+                    return view('pages.admin.DisplayUsers', compact('users'));
+                }
+            </code></pre>
+        </div>
+
+        <!-- Show User Details Section -->
+        <div class="doc-section">
+            <h3>3. ShowUser() - Show Details of a Specific User</h3>
+            <p>This method retrieves the details of a specific user using their ID and displays it. It also logs the viewing activity:</p>
+            <ul>
+                <li>Finds the user by ID and retrieves associated roles.</li>
+                <li>Logs the action of viewing the user's details using <code>activity()</code>.</li>
+                <li>Returns the <code>ViewUserDetails</code> view, passing the user data to display.</li>
+            </ul>
+            <pre><code>
+                public function ShowUser($id)
+                {
+                    $user = User::with('roles')->findOrFail($id);
+                    activity() // Log viewing activity
+                    return view('pages.admin.ViewUserDetails', compact('user'));
+                }
+            </code></pre>
+        </div>
+
+        <!-- Edit User Section -->
+        <div class="doc-section">
+            <h3>4. EditUsers() - Edit a User's Data</h3>
+            <p>This method allows editing a user's details by fetching the current user data and passing it to the edit form:</p>
+            <ul>
+                <li>Finds the user by ID.</li>
+                <li>Fetches all roles except for 'superadmin'.</li>
+                <li>Returns the <code>EditUsers</code> view, passing the user and roles for editing.</li>
+            </ul>
+            <pre><code>
+                public function EditUsers($id)
+                {
+                    $user = User::findOrFail($id);
+                    $roles = Role::whereNot('name', 'superadmin')->get();
+                    return view('pages.admin.EditUsers', compact('user', 'roles'));
+                }
+            </code></pre>
+        </div>
+
+        <!-- Update User Section -->
+        <div class="doc-section">
+            <h3>5. UpdateUsers() - Update a User's Information</h3>
+            <p>This method is responsible for updating a user's information. It validates the incoming data, compares old and new values, and logs the changes:</p>
+            <ul>
+                <li>Fetches the user by ID.</li>
+                <li>Validates the new user data (name, email, phone, etc.).</li>
+                <li>Updates the user's information in the database.</li>
+                <li>Updates the user's role using the <code>syncRoles</code> method to avoid duplicates.</li>
+                <li>Logs the update activity, including the old and new values.</li>
+            </ul>
+            <pre><code>
+                public function UpdateUsers(Request $request, $id)
+                {
+                    $user = User::findOrFail($id);
+                    // Validate data, update user and role, log activity
+                    return redirect()->route('display.users', $user->id)->with('success', 'User updated!');
+                }
+            </code></pre>
+        </div>
+
+        <!-- Delete User Section -->
+        <div class="doc-section">
+            <h3>6. DeleteUser() - Delete a User</h3>
+            <p>This method allows the deletion of a user, with certain checks in place to ensure no unauthorized deletions occur:</p>
+            <ul>
+                <li>Prevents the currently authenticated user from deleting their own account.</li>
+                <li>Prevents deletion of users with the 'superadmin' role.</li>
+                <li>Logs the deletion activity.</li>
+                <li>Deletes the user from the database and returns a success message.</li>
+            </ul>
+            <pre><code>
+                public function DeleteUser($id)
+                {
+                    $user = User::findOrFail($id);
+                    // Check conditions and delete user
+                    activity() // Log deletion activity
+                    return redirect()->route('display.users')->with('success', 'User deleted successfully!');
+                }
+            </code></pre>
+        </div>
+    
+            <!-- Footer Section -->
+            <div class="doc-footer">
+                <h4>Conclusion</h4>
+                <p>The user creation flow in the CheckMySite application ensures that only authorized users (with the correct permissions) can create new users. The process involves checking permissions via middleware, validating input in the controller, and handling user creation, role assignment, and activity logging. This approach provides a secure and traceable way of managing user accounts,manages all user-related actions in the application. It includes the creation, viewing, updating, and deletion of users, while also ensuring that permissions and roles are properly handled, and user activities are logged for audit purposes.</p>
+            </div>
+        </div>
+    </div>
+    
+    
 </div>
 
   <script>
