@@ -27,12 +27,11 @@
     }
 
     .nav-item {
-    position: relative;
-    margin: 0.2rem 0.4rem; /* adjust margin */
-    border-radius: 0.35rem;
-    transition: all 0.3s ease;
-    width: calc(100% - 0.8rem); /* set width */
-}
+        position: relative;
+        /* adjust margin */
+        border-radius: 0.35rem;
+        transition: all 0.3s ease;
+    }
 
 
     .nav-item.active {
@@ -113,19 +112,6 @@
     }
 }
 
-    /* Sidebar toggler */
-    #sidebarToggle {
-        width: 2.5rem;
-        height: 2.5rem;
-        background: rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.5);
-        margin: 0.5rem auto;
-    }
-
-    #sidebarToggle:hover {
-        background: rgba(255, 255, 255, 0.2);
-        color: #fff;
-    }
 </style>
 
 <ul data-aos="fade-right" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -234,13 +220,6 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
-
-    <!-- Sidebar Toggler -->
-    <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle">
-            <i class="fas fa-angle-left"></i>
-        </button>
-    </div>
 
     @role('user')
     @if(auth()->user()->status === 'free')
