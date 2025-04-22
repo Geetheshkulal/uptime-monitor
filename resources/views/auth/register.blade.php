@@ -268,8 +268,7 @@
                                                 <div class="password-col">
                                                     <div class="password-input-container">
                                                         <input type="password" class="form-control form-control-user"
-                                                            id="password_confirmation" name="password_confirmation" 
-                                                            placeholder="Confirm Password">
+                                                            id="password_confirmation" name="password_confirmation" placeholder="Confirm Password">
                                                         <span class="password-toggle" onclick="togglePassword('password_confirmation')">
                                                             <i class="far fa-eye"></i>
                                                         </span>
