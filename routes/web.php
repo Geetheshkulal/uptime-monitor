@@ -13,7 +13,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\UserController;
 use App\Models\Subscriptions;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SslCheckController;
 use App\Http\Controllers\DnsController;
 use App\Http\Controllers\PingMonitoringController;
@@ -21,7 +20,10 @@ use App\Http\Controllers\PortMonitorController;
 use App\Http\Controllers\HttpMonitoringController;
 use App\Http\Controllers\CashFreePaymentController;
 use App\Http\Controllers\PlanSubscriptionController;
+
+use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
@@ -42,14 +44,13 @@ Route::get('documentation',function()
 })->name('documentation.page');
 
 
+// email verify and register route
 Route::post('/email/verification-notification',function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
 
     return back()->with('message','Verification Email Sent.');
-
 })->middleware(['auth','throttle:6,1'])->name('verification.send');
-
-
+// end
 
 Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     

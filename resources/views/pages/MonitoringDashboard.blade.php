@@ -558,7 +558,23 @@
             });
         @endif
     });
+    
 </script>
+
+{{-- @if (session('success'))
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "5000"
+        };
+        toastr.success("{{ session('success') }}");
+    });
+</script>
+@endif --}}
+
 @endpush
 
 @endsection

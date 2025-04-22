@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Session;
 
 class RegisteredUserController extends Controller
 {
@@ -47,6 +48,7 @@ class RegisteredUserController extends Controller
             'phone'=> $request->phone,
         ]);
 
+         // Fire the Registered event to send the verification email
         event(new Registered($user));
 
         $user->assignRole('user');
@@ -65,7 +67,10 @@ class RegisteredUserController extends Controller
         
 
         Auth::login($user);
+        $user->session_id = Session::getId();
+        $user->save();
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect()->route('verification.notice');
+        // return redirect(RouteServiceProvider::HOME);
     }
 }
