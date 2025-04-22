@@ -29,7 +29,7 @@ class PermissionController extends Controller
             'group_name' => 'required|string|in:user,role,permission,monitor,activity'
         ]);
 
-        //Create the permissions
+        //Create the permissionjs
 
         $permission=Permission::create($validated);
 

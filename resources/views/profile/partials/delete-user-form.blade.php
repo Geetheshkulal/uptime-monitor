@@ -4,7 +4,7 @@
         Once your account is deleted, all of its resources and data will be permanently removed. Please enter your password to confirm.
     </p>
 
-    <button class="btn btn-danger mt-3" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
+    <button class="btn btn-danger my-3 " x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
         Delete Account
     </button>
 
@@ -21,9 +21,9 @@
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="text-danger small" />
             </div>
 
-            <div class="mt-4 d-flex justify-content-end">
-                <button type="button" class="btn btn-secondary me-2" x-on:click="$dispatch('close')">Cancel</button>
+            <div class="mt-4 d-flex justify-content-end" style=" gap:4px">
                 <button type="submit" class="btn btn-danger">Delete Account</button>
+                <button type="button" class="btn btn-secondary me-2" x-on:click="$dispatch('close')">Cancel</button>
             </div>
         </form>
     </x-modal>

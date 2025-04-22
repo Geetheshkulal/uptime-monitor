@@ -22,7 +22,7 @@ class DNSController extends Controller
         // Create a new DNS monitor entry
         $monitor = Monitors::create([
             'name'=> $request->name,
-            'status'=>'up',
+            'status'=>'down',
             'user_id' => Auth::id(),
             'url' => $request->domain, // Store domain as the target
             'type' => 'dns',

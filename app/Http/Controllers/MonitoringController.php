@@ -58,8 +58,8 @@ class MonitoringController extends Controller
       }
   
       //Get Metrics for dashboard.
-      $upCount = $monitors->where('status', 'up')->count();
-      $downCount = $monitors->where('status', 'down')->count();
+      $upCount = $monitors->where('status', 'up')->where('paused',0)->count();
+      $downCount = $monitors->where('status', 'down')->where('paused',0)->count();
       $totalMonitors = $monitors->count();
       $pausedCount = Monitors::where('user_id',auth()->id())->where('paused', 1)->count();
   
@@ -112,8 +112,8 @@ class MonitoringController extends Controller
       }
   
       //latest value for dashboard metrics
-      $upCount = $monitors->where('status', 'up')->count();
-      $downCount = $monitors->where('status', 'down')->count();
+      $upCount = $monitors->where('status', 'up')->where('paused',0)->count();
+      $downCount = $monitors->where('status', 'down')->where('paused',0)->count();
   
       return response()->json([
           'draw' => $draw,
@@ -137,7 +137,11 @@ class MonitoringController extends Controller
     public function MonitoringDisplay($id, $type)
     {
 
-        $details=Monitors::findOrFail($id); //Get monitor id
+        $details= Monitors::where('id', $id)
+        ->where('type', $type)
+        ->firstOrFail(); //Get monitor by id
+
+        
 
         //Get responses from relevant table.
         switch($type) {
@@ -189,7 +193,9 @@ class MonitoringController extends Controller
    public function MonitoringChartUpdate($id, $type)
    {
 
-    $details=Monitors::findOrFail($id);
+    $details=Monitors::where('id', $id)
+            ->where('type', $type)
+            ->firstOrFail();
 
     switch($type) {
 

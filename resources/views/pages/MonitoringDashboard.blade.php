@@ -226,12 +226,12 @@
                 <h1 class="h3 mb-0 text-gray-800 font-600">Overview</h1>
                 
                 @if($totalMonitors>=5 && auth()->user()->status=='free')
-                <a class="btn btn-primary AddMonitor" href="{{ route('premium.page') }}">
-                    <i class="fas fa-crown"></i>Upgrade Plan
+                <a class="btn btn-primary AddMonitor" style="color:yellow;" href="{{ route('premium.page') }}">
+                    <i class="fas fa-crown fa-sm mr-2"></i>Upgrade Plan
                 </a>
                 @else
                 <a class="btn btn-primary AddMonitor" href="{{ route('add.monitoring') }}">
-                    <i class="fas fa-plus"></i> Add Monitor
+                    <i class="fas fa-plus fa-sm"></i> Add Monitor
                 </a>
                 @endif
             </div>

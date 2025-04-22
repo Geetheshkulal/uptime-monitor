@@ -23,10 +23,11 @@
                         <table class="table table-bordered" id="paymentsTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Sl No.</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Payment Type</th>
+                                    <th>Transaction Id</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     <th>Created At</th>
@@ -35,7 +36,7 @@
                             <tbody>
                                 @forelse($subscriptions as $subscription)
                                 <tr>
-                                    <td>{{ $subscription->id }}</td>
+                                    <td>{{ $loop->iteration}}</td>
                                     <td>₹{{ number_format($subscription->subscription->amount, 2) }}</td>
                                     <td>
                                         @if($subscription->status === 'active')
@@ -47,6 +48,7 @@
                                         @endif
                                     </td>
                                     <td>{{ strtoupper($subscription->payment_type) }}</td>
+                                    <td>{{ $subscription->transaction_id }}</td>
                                     <td>{{ \Carbon\Carbon::parse($subscription->start_date)->format('d M Y') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($subscription->end_date)->format('d M Y') }}</td>
                                     <td>{{ $subscription->created_at->format('d M Y, h:i A') }}</td>
