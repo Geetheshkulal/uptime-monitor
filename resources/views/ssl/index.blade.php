@@ -2,6 +2,9 @@
 
 @section('content')
 
+<!-- Toastr CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css"/>
 
 <!-- Styling -->
@@ -22,6 +25,28 @@
         background: linear-gradient(135deg, #007bff, #4a90e2);
         box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
     }
+
+    .custom-bg-danger{
+        background-color:  #ff4d4d;
+        color: white;
+    }
+    .custom-bg-warning {
+    background-color: #ffcc00;
+    color: black; 
+  }
+
+.custom-bg-success {
+    background-color: #4caf50; 
+    color: white; 
+}
+.custom-bg-danger,
+.custom-bg-warning,
+.custom-bg-success {
+    padding: 0.3rem 0.4rem; 
+    font-size: 0.8rem; 
+    border-radius: 0.25rem; 
+    display: inline-block; 
+}
 
      /* ========== INTROJS TOUR ========== */
      .introjs-tooltip {
@@ -97,7 +122,7 @@
                     @endif
 
                     <!-- Form -->
-                    <form id="sslCheckForm" action="{{ route('ssl.check.domain') }}" method="POST" class="mt-3">
+                    <form id="sslCheckForm" method="POST" class="mt-3">
                         @csrf
                         <div class="mb-4">
                             <label for="domain" class="form-label fw-semibold">
@@ -114,66 +139,93 @@
                         <button id="loadingButton" class="btn btn-primary w-100 rounded-pill shadow mt-2" type="button" style="display:none;" disabled>
                             <span class="spinner-border spinner-border-sm me-2"></span>
                             Loading...
-                        </button>
-
-                        <!-- View History Button -->
-                      
+                        </button>                      
                     </form>
 
-                    <!-- SSL Details -->
-                    @if(session('ssl_details'))
-                        <div class="card mt-4 border-0 shadow-lg rounded-4">
-                            <div class="card-body p-4">
-                                <h5 class="fw-bold text-info mb-3">
-                                    ℹ️ SSL Certificate Details
-                                </h5>
-                                <ul class="list-group list-group-flush text-start">
-                                    {{-- <li class="list-group-item">
-                                        <strong>🛡 Status:</strong> 
-                                        <span 
-                                            class="badge 
-                                                {{ session('ssl_details')['days_remaining'] <= 0 ? 'bg-danger' : 
-                                                   (session('ssl_details')['days_remaining'] <= 30 ? 'bg-warning text-dark' : 'bg-success') }}">
-                                            {{ session('ssl_details')['status'] }}
-                                        </span>
-                                    </li> --}}
+                    <!-- SSL Details Section -->
 
-                                    <li class="list-group-item">
-                                        <strong>🛡 Status:</strong> {{ session('ssl_details')['status'] }}
-                                    </li>
-                                    <li class="list-group-item bg-light">
-                                        <strong>🌍 Domain:</strong> {{ session('ssl_details')['domain'] }}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <strong>🏅 Issuer:</strong> {{ session('ssl_details')['issuer'] }}
-                                    </li>
-                                    <li class="list-group-item bg-light">
-                                        <strong>📆 Valid From:</strong> {{ session('ssl_details')['valid_from'] }}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <strong>⏳ Valid To:</strong> 
-                                        <span>
-                                            {{ session('ssl_details')['valid_to'] }} 
-                                            ({{ session('ssl_details')['days_remaining'] }} days left)
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    @endif
+                    <div id="sslDetailsContainer" class="mt-4"></div>
 
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
 
 <script>
-    document.getElementById('sslCheckForm').addEventListener('submit', function() {
+    document.getElementById('sslCheckForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
         document.getElementById('submitButton').style.display = 'none';
         document.getElementById('loadingButton').style.display = 'block';
+
+        const formData = new FormData(this);
+
+        fetch("{{ route('ssl.check.domain')}}",{
+            method:"POST",
+            headers:{
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data=>{
+            document.getElementById('submitButton').style.display = 'block';
+            document.getElementById('loadingButton').style.display = 'none';
+
+        if(data.success)
+        {
+            const sslDetailsContainer = document.getElementById('sslDetailsContainer');
+            sslDetailsContainer.innerHTML = `
+                <div class="card border-0 shadow-lg rounded-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold text-info mb-3">ℹ️ SSL Certificate Details</h5>
+                        <ul class="list-group list-group-flush text-start">
+                            <li class="list-group-item">
+                                <strong>🛡 Status:</strong> 
+                                <span class="badge ${data.ssl_details.days_remaining <= 0 ? 'custom-bg-danger' : 
+                                    (data.ssl_details.days_remaining <= 30 ? 'custom-bg-warning' : 'custom-bg-success')}">
+                                    ${data.ssl_details.status}
+                                </span>
+                            </li>
+                            <li class="list-group-item bg-light">
+                                <strong>🌍 Domain:</strong> ${data.ssl_details.domain}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>🏅 Issuer:</strong> ${data.ssl_details.issuer}
+                            </li>
+                            <li class="list-group-item bg-light">
+                                <strong>📆 Valid From:</strong> ${data.ssl_details.valid_from}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>⏳ Valid To:</strong> 
+                                <span class="badge ${data.ssl_details.days_remaining < 10 ? 'custom-bg-danger' : 'custom-bg-success'}">
+                                    ${data.ssl_details.valid_to} (${data.ssl_details.days_remaining} days left)
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }else{
+            toastr.error(data.message, 'Error');
+        }
+        })
+        .catch(error=>{
+            document.getElementById('submitButton').style.display = 'block';
+            document.getElementById('loadingButton').style.display = 'none';
+
+        // Handle network or server errors
+        console.error("Error:", error);
+        toastr.error('An unexpected error occurred. Please try again.', 'Error');
+        })
     });
+
 </script>
 
 <script>
