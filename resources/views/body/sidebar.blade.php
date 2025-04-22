@@ -218,16 +218,4 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
-
-    @role('user')
-    @if(auth()->user()->status === 'free')
-    <div class="sidebar-card d-none d-lg-flex">
-        <img class="sidebar-card-illustration mb-2" src="{{asset('frontend/assets/img/undraw_rocket.svg')}}" alt="Premium Features">
-        <p class="text-center mb-2 text-white-50"><strong>CheckMySite Pro</strong> is packed with premium features</p>
-        <a class="btn btn-sm btn-warning" href="{{route('premium.page')}}">
-            <i class="fas fa-crown mr-1"></i>Upgrade to Pro
-        </a>
-    </div>
-    @endif
-    @endrole
 </ul>

@@ -321,55 +321,74 @@
                 icon.classList.add('fa-eye');
             }
         }
-    
         function checkPasswordStrength(password) {
-            const strengthBar = document.getElementById('password-strength-bar');
-            const strengthText = document.getElementById('password-strength-text');
-            let strength = 0;
-            let missingRequirements = [];
-    
-            const hasMinLength = password.length >= 8;
-            const hasLowercase = /[a-z]/.test(password);
-            const hasUppercase = /[A-Z]/.test(password);
-            const hasNumber = /\d/.test(password);
-            const hasSpecialChar = /[\W_]/.test(password);
-    
-            if (!hasMinLength) missingRequirements.push("8+ characters");
-            if (!hasLowercase) missingRequirements.push("lowercase letter");
-            if (!hasUppercase) missingRequirements.push("uppercase letter");
-            if (!hasNumber) missingRequirements.push("number");
-            if (!hasSpecialChar) missingRequirements.push("special character");
-    
-            if (hasMinLength) {
-                if (hasLowercase) strength++;
-                if (hasUppercase) strength++;
-                if (hasNumber) strength++;
-                if (hasSpecialChar) strength++;
-            } else {
-                strengthBar.style.width = '0%';
-                strengthBar.style.background = 'transparent';
-                strengthText.textContent = 'Missing: ' + missingRequirements.join(', ');
-                strengthText.className = 'text-danger';
-                return;
-            }
-    
-            const width = (strength / 4) * 100;
-            strengthBar.style.width = width + '%';
-    
-            if (password.length === 0) {
-                strengthBar.style.background = 'transparent';
-                strengthText.textContent = '';
-            } else if (missingRequirements.length > 0) {
-                strengthBar.style.background = '#dc3545';
-                strengthText.textContent = 'Missing: ' + missingRequirements.join(', ');
-                strengthText.className = 'text-danger';
-            } else {
-                strengthBar.style.background = '#28a745';
-                strengthText.textContent = 'Strong password';
-                strengthText.className = 'text-success';
-            }
-        }
-    
+    const strengthBar = document.getElementById('password-strength-bar');
+    const strengthText = document.getElementById('password-strength-text');
+    let strength = 0;
+    let missingRequirements = [];
+
+    const hasMinLength = password.length >= 8;
+    const hasLowercase = /[a-z]/.test(password);
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[\W_]/.test(password);
+
+    if (hasMinLength) strength++;
+    if (hasLowercase) strength++;
+    if (hasUppercase) strength++;
+    if (hasNumber) strength++;
+    if (hasSpecialChar) strength++;
+
+    // Missing requirements for user feedback
+    if (!hasMinLength) missingRequirements.push("8+ characters");
+    if (!hasLowercase) missingRequirements.push("lowercase letter");
+    if (!hasUppercase) missingRequirements.push("uppercase letter");
+    if (!hasNumber) missingRequirements.push("number");
+    if (!hasSpecialChar) missingRequirements.push("special character");
+
+    // Set bar width and color
+    let color = 'red';
+    let width = '20%';
+    let message = 'Very Weak';
+
+    switch (strength) {
+        case 1:
+            color = 'red';
+            width = '20%';
+            message = 'Very Weak';
+            break;
+        case 2:
+            color = 'orange';
+            width = '40%';
+            message = 'Weak';
+            break;
+        case 3:
+            color = 'gold';
+            width = '60%';
+            message = 'Moderate';
+            break;
+        case 4:
+            color = 'blue';
+            width = '80%';
+            message = 'Strong';
+            break;
+        case 5:
+            color = 'green';
+            width = '100%';
+            message = 'Very Strong';
+            break;
+    }
+
+    strengthBar.style.width = width;
+    strengthBar.style.backgroundColor = color;
+
+    if (strength === 5) {
+        strengthText.innerHTML = `<span class="text-success">${message}</span>`;
+    } else {
+        strengthText.innerHTML = `<span class="text-warning">${message}. Missing: ${missingRequirements.join(', ')}</span>`;
+    }
+}
+
         $(document).ready(function() {
             $('#registerForm').on('submit', function(e) {
                 e.preventDefault();
