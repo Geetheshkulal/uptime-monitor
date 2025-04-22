@@ -108,11 +108,11 @@
                                     <span class="display-6 fw-bold">₹0</span>
                                 </div>
                                 <ul class="list-unstyled mb-4">
-                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 5 websites</li>
-                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-minute checks</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Limited to 5 website monitors</li>
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Email & Telegram Bot alerts</li>
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-day history</li>
                                 </ul>
+                                <br>
                                 <button class="btn btn-primary d-block w-100" disabled>Current Plan</button>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
                                 </div>
                                 <ul class="list-unstyled mb-4">
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> All Basic features</li>
-                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited websites</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Unlimited website monitoring</li>
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> SSL expiry check</li>
                                 </ul>
                                 <br>
