@@ -78,16 +78,6 @@
       color: white;
     }
 
-    .badge-premium {
-      background-color: rgba(255, 193, 7, 0.2);
-      color: gold;
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 4px;
-      margin-left: 8px;
-      text-transform: uppercase;
-    }
 
     .content {
       flex: 1;
@@ -352,7 +342,6 @@
       </a>
       <a href="#" onclick="showTab('tab3')">
         <i class="fas fa-lock"></i> SSL Check
-        <span class="badge-premium">Premium feature</span>
       </a>      
       <a href="#" onclick="showTab('tab4')">
         <i class="fas fa-exclamation-triangle"></i> Incident Tracking
