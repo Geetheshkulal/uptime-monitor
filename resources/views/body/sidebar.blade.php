@@ -87,13 +87,6 @@
     .premium-feature .fa-crown {
         font-size: 0.8rem;
         margin-left: 0.5rem;
-        color: gold;
-        animation: glow 1.5s infinite alternate;
-    }
-
-    @keyframes glow {
-        from { opacity: 0.7; }
-        to { opacity: 1; text-shadow: 0 0 5px rgb(252, 255, 59); }
     }
     @media (max-width: 767.98px) {
     .sidebar .nav-link {
@@ -110,6 +103,11 @@
         margin-bottom: 0.25rem;
         font-size: 1rem;
     }
+  
+
+}
+.text-gold {
+    color: gold !important;
 }
 
 </style>
@@ -158,10 +156,10 @@
     </li>
     @elseif(auth()->user()->status === 'free')
     <li class="nav-item premium-feature {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
-        <a class="nav-link ssl" href="{{ route('premium.page') }}">
-            <i class="fas fa-lock"></i>
-            <span>SSL Check</span>
-            <i class="fas fa-crown"></i>
+        <a class="nav-link ssl text-gold" href="{{ route('premium.page') }}">
+            <i class="fas fa-lock text-gold"></i>
+            <span class="text-gold">SSL Check</span>
+            <i class="fas fa-crown text-gold"></i>
         </a>
     </li>
     @endif
