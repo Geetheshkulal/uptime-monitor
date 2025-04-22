@@ -143,8 +143,10 @@
                                 <select class="form-control" id="role" name="role" required>
                                     <option value="">Select Role</option>
                                     @foreach($roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                    @endforeach
+                                            @if($role->name != 'user')
+                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                            @endif
+                                        @endforeach
                                 </select>
                             </div>
                         </div>

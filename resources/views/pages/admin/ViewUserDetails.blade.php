@@ -74,34 +74,37 @@
                 </div>
                 <div class="col-md-4">
                     <!-- User Actions -->
-                    @canany(['edit.user','delete.user'])
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">Actions</h6>
-                            </div>
-                            <div class="card-body text-center">
-                                @can('edit.user')
-                                    <a href="{{ route('edit.user', $user->id) }}" class="btn btn-primary btn-block mb-3">
-                                        <i class="fas fa-edit"></i> Edit User
-                                    </a>
-                                @endcan
+                    @if(!$user->hasRole('superadmin'))
+                        @canany(['edit.user','delete.user'])
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h6 class="m-0 font-weight-bold text-primary">Actions</h6>
+                                </div>
+                                <div class="card-body text-center">
+                                    @if(!$user->hasRole('user'))
+                                        @can('edit.user')
+                                            <a href="{{ route('edit.user', $user->id) }}" class="btn btn-primary btn-block mb-3">
+                                                <i class="fas fa-edit"></i> Edit User
+                                            </a>
+                                        @endcan
+                                    @endif
+                                    
                                 
-                               
-                                @if(!$user->hasRole('superadmin'))
-                                    @can('delete.user')
-                                        <form action="{{ route('delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to delete this user?')">
-                                                <i class="fas fa-trash"></i> Delete User
-                                            </button>
-                                        </form>
-                                    @endcan
-                                @endif
+                                    @if(!$user->hasRole('superadmin'))
+                                        @can('delete.user')
+                                            <form action="{{ route('delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to delete this user?')">
+                                                    <i class="fas fa-trash"></i> Delete User
+                                                </button>
+                                            </form>
+                                        @endcan
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-                    @endcanany
-                    
+                        @endcanany
+                    @endif
                     <!-- Additional Info (optional) -->
                     <div class="card">
                         <div class="card-header">

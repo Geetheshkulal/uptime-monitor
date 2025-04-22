@@ -50,17 +50,19 @@
                                     <input type="text" class="form-control" id="phone" name="phone"
                                         value="{{ old('phone', $user->phone) }}">
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="role" class="form-label">Role</label>
-                                    <select class="form-control" id="role" name="role" required>
-                                        @foreach($roles as $role)
-                                        <option value="{{ $role->id }}" 
-                                                {{ $user->hasRole($role->name) ? 'selected' : '' }}>
-                                            {{ $role->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="role" class="form-label">Role</label>
+                                        <select class="form-control" id="role" name="role" required>
+                                            @foreach($roles as $role)
+                                                @if($role->name != 'user')
+                                                    <option value="{{ $role->id }}" 
+                                                            {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                                                        {{ $role->name }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
                             </div>
 
                             <div class="mt-4">

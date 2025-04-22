@@ -118,6 +118,10 @@ class UserController extends Controller
         {
             $user = User::findOrFail($id);
             $roles = Role::whereNot('name','superadmin')->get();
+
+            if($user->hasRole('user')||$user->hasRole('superadmin')){
+                abort(404, 'Page not found.');
+            }
             
             return view('pages.admin.EditUsers', compact('user', 'roles'));
         }
