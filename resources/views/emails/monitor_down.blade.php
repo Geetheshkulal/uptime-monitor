@@ -21,14 +21,14 @@
                     
                     <!-- Header -->
                     <tr>
-                        <td style="text-align: center; background: #dc3545; padding: 30px 20px; border-radius: 12px 12px 0 0;">
+                        <td style="text-align: center; background: #3490dc; padding: 30px 20px; border-radius: 12px 12px 0 0;">
                             <table width="100%" cellpadding="0" cellspacing="0" border="0">
                                 <tr>
                                     <td align="center">
                                         <table cellpadding="0" cellspacing="0" border="0">
                                             <tr>
                                                 <td style="vertical-align: middle;">
-                                                    <img src="https://i.postimg.cc/d3ctQNDG/mainlogo.png" alt="Logo" style="height: 40px; display: inline-block;">
+                                                    <img src="https://i.ibb.co/Fq8LgD9s/mainlogo.png" alt="Logo" style="height: 40px; display: inline-block;">
                                                 </td>
                                                 <td style="vertical-align: middle; padding-left: 10px;">
                                                     <span style="color: white; font-size: 24px; font-weight: 600; display: inline-block;">CheckMySite</span>
@@ -50,10 +50,10 @@
                     <tr>
                         <td style="padding: 40px 30px; font-size: 16px; line-height: 1.6;">
                             <p style="margin-top: 0;">Hello,</p>
-                            <p><strong style="color:#dc3545;">{{ $monitor->url }}</strong> is currently <strong>DOWN</strong> as of <strong>{{ now() }}</strong>.</p>
+                            <p><strong style="color:#3490dc;">{{ $monitor->url }}</strong> is currently <strong>DOWN</strong> as of <strong>{{ now() }}</strong>.</p>
                             <p>Please investigate this issue as soon as possible to minimize downtime.</p>
 
-                            <div style="background-color: #f8f9fa; border-left: 4px solid #dc3545; padding: 15px; margin: 30px 0; border-radius: 4px;">
+                            <div style="background-color: #f8f9fa; border-left: 4px solid #3490dc; padding: 15px; margin: 30px 0; border-radius: 4px;">
                                 <p style="margin: 0 0 10px 0; font-weight: 600;">You are receiving this alert because you are subscribed to CheckMySite monitoring notifications.</p>
                             </div>
                         </td>
@@ -95,7 +95,7 @@
                             <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
                                 <tr>
                                     <td style="vertical-align: middle;">
-                                        <img src="https://i.postimg.cc/d3ctQNDG/mainlogo.png" alt="Logo" style="height: 30px; display: inline-block;">
+                                        <img src="https://i.ibb.co/Fq8LgD9s/mainlogo.png" alt="Logo" style="height: 30px; display: inline-block;">
                                     </td>
                                     <td style="vertical-align: middle; padding-left: 8px;">
                                         <span style="color: #333; font-size: 18px; font-weight: 600; display: inline-block;">CheckMySite</span>

@@ -19,7 +19,9 @@
                                         <table cellpadding="0" cellspacing="0" border="0">
                                             <tr>
                                                 <td style="vertical-align: middle;">
-                                                    <img src="https://i.postimg.cc/d3ctQNDG/mainlogo.png" alt="Logo" style="height: 40px; display: inline-block;">
+                                                    
+                                                    
+                                                    <img src="https://i.ibb.co/Fq8LgD9s/mainlogo.png" alt="Logo" style="height: 40px; display: inline-block;">
                                                 </td>
                                                 <td style="vertical-align: middle; padding-left: 10px;">
                                                     <span style="color: white; font-size: 24px; font-weight: 600; display: inline-block;">CheckMySite</span>
@@ -104,7 +106,7 @@
                             <table cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
                                 <tr>
                                     <td style="vertical-align: middle;">
-                                        <img src="https://i.postimg.cc/d3ctQNDG/mainlogo.png" alt="Logo" style="height: 30px; display: inline-block;">
+                                        <img src="https://i.ibb.co/Fq8LgD9s/mainlogo.png" alt="Logo" style="height: 30px; display: inline-block;">
                                     </td>
                                     <td style="vertical-align: middle; padding-left: 8px;">
                                         <span style="color: #333; font-size: 18px; font-weight: 600; display: inline-block;">CheckMySite</span>

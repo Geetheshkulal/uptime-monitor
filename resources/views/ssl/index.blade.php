@@ -128,7 +128,7 @@
                                     ℹ️ SSL Certificate Details
                                 </h5>
                                 <ul class="list-group list-group-flush text-start">
-                                    <li class="list-group-item">
+                                    {{-- <li class="list-group-item">
                                         <strong>🛡 Status:</strong> 
                                         <span 
                                             class="badge 
@@ -136,6 +136,10 @@
                                                    (session('ssl_details')['days_remaining'] <= 30 ? 'bg-warning text-dark' : 'bg-success') }}">
                                             {{ session('ssl_details')['status'] }}
                                         </span>
+                                    </li> --}}
+
+                                    <li class="list-group-item">
+                                        <strong>🛡 Status:</strong> {{ session('ssl_details')['status'] }}
                                     </li>
                                     <li class="list-group-item bg-light">
                                         <strong>🌍 Domain:</strong> {{ session('ssl_details')['domain'] }}
@@ -148,8 +152,7 @@
                                     </li>
                                     <li class="list-group-item">
                                         <strong>⏳ Valid To:</strong> 
-                                        <span class="badge 
-                                            {{ session('ssl_details')['days_remaining'] < 10 ? 'bg-danger' : 'bg-success' }}">
+                                        <span>
                                             {{ session('ssl_details')['valid_to'] }} 
                                             ({{ session('ssl_details')['days_remaining'] }} days left)
                                         </span>
