@@ -19,7 +19,7 @@ class HttpMonitoringController extends Controller
             'url' => 'required|url',
             'email' => 'required|email',
             'retries' => 'required|integer|min:1',
-            'interval' => 'required|integer',
+            'interval' => 'required|integer|min:1',
             'telegram_id' => 'nullable|string',
             'telegram_bot_token' => 'nullable|string',
         ]);

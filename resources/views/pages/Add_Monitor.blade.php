@@ -93,29 +93,29 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Friendly name</label>
                             <input id="name" class="form-control" name="name" type="text"
-                                placeholder="E.g. Google" required>
+                                placeholder="E.g. Google"  >
                         </div>
                         <div class="mb-3">
                             <label for="url" class="form-label">URL</label>
                             <input id="url" class="form-control" name="url" type="text"
-                                placeholder="E.g. https://www.google.com" required>
+                                placeholder="E.g. https://www.google.com"  >
                         </div>
                         <div class="mb-3">
                             <label for="retries" class="form-label">Retries</label>
                             <input id="retries" class="form-control" name="retries" type="number" value="3"
-                                required>
+                                 >
                         </div>
                         <div class="mb-3">
                             <label for="interval" class="form-label">Interval (in minutes)</label>
                             <input id="interval" class="form-control" name="interval" type="number" value="1"
-                                required>
+                                 >
                         </div>
 
                         <h5 class="card-title">Notification</h5>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input id="email" class="form-control" name="email" type="email"
-                                placeholder="example@gmail.com" required>
+                                placeholder="example@gmail.com" >
                         </div>
                         <div class="mb-3">
                             <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
@@ -141,25 +141,25 @@
                 fields: `
                 <div class="mb-3">
                         <label for="name" class="form-label">Friendly name</label>
-                        <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" required>
+                        <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google"  >
                     </div>
                     <div class="mb-3">
                         <label for="url" class="form-label">URL</label>
-                        <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" required>
+                        <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com"  >
                     </div>
                     <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
-                        <input id="retries" class="form-control" name="retries" type="number" value="3" required>
+                        <input id="retries" class="form-control" name="retries" type="number" value="3"  >
                     </div>
                     <div class="mb-3">
                         <label for="interval" class="form-label">Interval (in minutes)</label>
-                        <input id="interval" class="form-control" name="interval" type="number" value="1" required>
+                        <input id="interval" class="form-control" name="interval" type="number" value="1"  >
                     </div>
                     
                     <h5 class="card-title">Notification</h5>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" required>
+                        <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
                     </div>
                     <div class="mb-3">
                         <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
@@ -178,24 +178,24 @@
                 fields: `
                 <div class="mb-3">
                     <label for="name" class="form-label">Friendly name</label>
-                    <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" required>
+                    <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google"  >
                 </div>
                 <div class="mb-3">
                     <label for="url" class="form-label">Domain or URL</label>
-                    <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" required>
+                    <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com"  >
                 </div>
                 <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
-                        <input id="retries" class="form-control" name="retries" type="number" value="3" required>
+                        <input id="retries" class="form-control" name="retries" type="number" value="3"  >
                     </div>
                     <div class="mb-3">
                         <label for="interval" class="form-label">Interval (in minutes)</label>
-                        <input id="interval" class="form-control" name="interval" type="number" value="1" required>
+                        <input id="interval" class="form-control" name="interval" type="number" value="1"  >
                     </div>
                 <h5 class="card-title">Notification</h5>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" required>
+                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com"  >
                 </div>
                 <div class="mb-3">
                     <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
@@ -216,16 +216,16 @@
                 fields: `
                <div class="mb-3">
                     <label for="name" class="form-label">Friendly name</label>
-                    <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" required>
+                    <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google"  >
                 </div>
 
                 <div class="mb-3">
                     <label for="url" class="form-label">Domain or URL</label>
-                    <input id="url" class="form-control" name="url" type="text" placeholder="E.g. www.google.com" required>
+                    <input id="url" class="form-control" name="url" type="text" placeholder="E.g. www.google.com"  >
                 </div>
                <div class="mb-3">
                     <label for="port" class="form-label">Port</label>
-                    <select id="port" class="form-control" name="port" required>
+                    <select id="port" class="form-control" name="port"  >
                         <option value="" disabled selected>Select Port</option>
                         <option value="21">FTP - 21</option>
                         <option value="22">SSH / SFTP-22</option>
@@ -244,17 +244,17 @@
                 </div>
                 <div class="mb-3">
                     <label for="retries" class="form-label">Retries</label>
-                    <input id="retries" class="form-control" name="retries" type="number" value="3" required>
+                    <input id="retries" class="form-control" name="retries" type="number" value="3"  >
                 </div>
                 <div class="mb-3">
                     <label for="interval" class="form-label">Interval (in minutes)</label>
-                    <input id="interval" class="form-control" name="interval" type="number" value="1" required>
+                    <input id="interval" class="form-control" name="interval" type="number" value="1"  >
                 </div>
                 
                 <h5 class="card-title">Notification</h5>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" required>
+                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com"  >
                 </div>
                 <div class="mb-3">
                     <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
@@ -273,27 +273,27 @@
                 fields: `
                 <div class="mb-3">
                         <label for="name" class="form-label">Friendly name</label>
-                        <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" required>
+                        <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google"  >
                     </div>
 
                     <div class="mb-3">
                         <label for="domain" class="form-label">Domain or URL</label>
-                        <input id="domain" class="form-control" name="domain" type="text" placeholder="E.g. google.com"  required>
+                        <input id="domain" class="form-control" name="domain" type="text" placeholder="E.g. google.com"   >
                     </div>
 
                     <div class="mb-3">
                         <label for="interval" class="form-label">Interval (in minutes)</label>
-                        <input id="interval" class="form-control" name="interval" type="number" min="1" value="1" required>
+                        <input id="interval" class="form-control" name="interval" type="number" min="1" value="1"  >
                     </div>
 
                     <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
-                        <input id="retries" class="form-control" name="retries" type="number" min="0" value="3" required>
+                        <input id="retries" class="form-control" name="retries" type="number" min="0" value="3"  >
                     </div>
 
                     <div class="mb-3">
                         <label for="dns_resource_type" class="form-label">DNS Resource Type</label>
-                        <select id="dns_resource_type" class="form-control" name="dns_resource_type" required>
+                        <select id="dns_resource_type" class="form-control" name="dns_resource_type"  >
                             <option value="A">A</option>
                             <option value="AAAA">AAAA</option>
                             <option value="CNAME">CNAME</option>
@@ -309,7 +309,7 @@
                     <h5 class="card-title">Notification</h5>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" required>
+                        <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com"  >
                     </div>
 
                     <div class="mb-3">
@@ -331,132 +331,197 @@
 
         // Keep your existing updateDropdown function
         function updateDropdown(selectedType, formType) {
-            document.getElementById("dropdownMenuButton").innerText = selectedType;
-            showForm(formType);
-        }
+    document.getElementById("dropdownMenuButton").innerText = selectedType;
+    showForm(formType);
+}
 
-        // Validation helper functions
-        function isValidUrl(string) {
-            try {
-                new URL(string);
-                return true;
-            } catch (_) {
-                return false;
-            }
-        }
+// Validation helper functions
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
 
-        function isValidDomain(string) {
-            const domainPattern = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i;
-            return domainPattern.test(string);
-        }
+function isValidDomain(string) {
+    const domainPattern = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i;
+    return domainPattern.test(string);
+}
 
-        function showError(inputElement, message) {
-            const existingError = inputElement.parentNode.querySelector('.invalid-feedback');
-            if (existingError) {
-                existingError.remove();
-            }
+function isValidEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
 
-            inputElement.classList.add('is-invalid');
+function showError(inputElement, message) {
+    const existingError = inputElement.parentNode.querySelector('.invalid-feedback');
+    if (existingError) {
+        existingError.remove();
+    }
 
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'invalid-feedback';
-            errorDiv.innerText = message;
-            inputElement.parentNode.appendChild(errorDiv);
-        }
+    inputElement.classList.add('is-invalid');
 
-        function clearError(inputElement) {
-            inputElement.classList.remove('is-invalid');
-            const existingError = inputElement.parentNode.querySelector('.invalid-feedback');
-            if (existingError) {
-                existingError.remove();
-            }
-        }
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'invalid-feedback';
+    errorDiv.innerText = message;
+    inputElement.parentNode.appendChild(errorDiv);
+}
 
-        // The showForm function with improved validation
-        function showForm(type) {
-            const formContainer = document.getElementById('formContainer');
-            formContainer.innerHTML = `
-            <h4 class="card-title">${forms[type].title}</h4>
-            <form id="monitoringForm" method="POST" action="${forms[type].action}">
-                @csrf
-                ${forms[type].fields}
-            </form>
-        `;
+function clearError(inputElement) {
+    inputElement.classList.remove('is-invalid');
+    const existingError = inputElement.parentNode.querySelector('.invalid-feedback');
+    if (existingError) {
+        existingError.remove();
+    }
+}
 
-            const form = document.getElementById('monitoringForm');
-            form.addEventListener('submit', function(event) {
-                let isValid = true;
+// The showForm function with improved validation
+function showForm(type) {
+    const formContainer = document.getElementById('formContainer');
+    formContainer.innerHTML = `
+        <h4 class="card-title">${forms[type].title}</h4>
+        <form id="monitoringForm" method="POST" action="${forms[type].action}">
+            @csrf
+            ${forms[type].fields}
+        </form>
+    `;
 
-                const urlField = document.getElementById('url') || document.getElementById('domain');
+    const form = document.getElementById('monitoringForm');
+    form.addEventListener('submit', function(event) {
+        let isValid = true;
 
-                if (urlField) {
-                    const fieldValue = urlField.value.trim();
-
-                    // Skip validation if field is empty (HTML required will handle this)
-                    if (fieldValue !== '') {
-                        if (type === 'http') {
-                            if (!isValidUrl(fieldValue)) {
-                                event.preventDefault();
-                                showError(urlField, 'Please enter a valid URL (e.g., https://www.example.com)');
-                                isValid = false;
-                            } else {
-                                clearError(urlField);
-                            }
-                        } else {
-                            if (!isValidUrl(fieldValue) && !isValidDomain(fieldValue)) {
-                                event.preventDefault();
-                                showError(urlField, 'Please enter a valid URL or domain name');
-                                isValid = false;
-                            } else {
-                                clearError(urlField);
-                            }
-                        }
+        // URL/Domain validation
+        const urlField = document.getElementById('url') || document.getElementById('domain');
+        if (urlField) {
+            const fieldValue = urlField.value.trim();
+            if (fieldValue !== '') {
+                if (type === 'http') {
+                    if (!isValidUrl(fieldValue)) {
+                        event.preventDefault();
+                        showError(urlField, 'Please enter a valid URL (e.g., https://www.example.com)');
+                        isValid = false;
+                    } else {
+                        clearError(urlField);
+                    }
+                } else {
+                    if (!isValidUrl(fieldValue) && !isValidDomain(fieldValue)) {
+                        event.preventDefault();
+                        showError(urlField, 'Please enter a valid URL or domain name');
+                        isValid = false;
+                    } else {
+                        clearError(urlField);
                     }
                 }
-                return isValid;
-            });
-
-            const urlField = document.getElementById('url') || document.getElementById('domain');
-            if (urlField) {
-                // Validate on blur (when leaving the field)
-                urlField.addEventListener('blur', function() {
-                    const fieldValue = urlField.value.trim();
-
-                    // If field is empty, just clear any errors and don't validate
-                    if (fieldValue === '') {
-                        clearError(urlField);
-                        return;
-                    }
-
-                    if (type === 'http') {
-                        if (!isValidUrl(fieldValue)) {
-                            showError(urlField, 'Please enter a valid URL (e.g., https://www.example.com)');
-                        } else {
-                            clearError(urlField);
-                        }
-                    } else {
-                        if (!isValidUrl(fieldValue) && !isValidDomain(fieldValue)) {
-                            showError(urlField, 'Please enter a valid URL or domain name');
-                        } else {
-                            clearError(urlField);
-                        }
-                    }
-                });
-
-                // Clear error when input changes - especially useful when field is cleared
-                urlField.addEventListener('input', function() {
-                    const fieldValue = urlField.value.trim();
-                    if (fieldValue === '') {
-                        clearError(urlField);
-                    }
-                });
             }
         }
 
-        // Initialize form on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            showForm('http');
+        // Retries validation (1-5)
+        const retriesField = document.getElementById('retries');
+        if (retriesField) {
+            const retriesValue = parseInt(retriesField.value);
+            if (isNaN(retriesValue) || retriesValue < 1 || retriesValue > 5) {
+                event.preventDefault();
+                showError(retriesField, 'Retries must be between 1 and 5');
+                isValid = false;
+            } else {
+                clearError(retriesField);
+            }
+        }
+
+        // Interval validation (1-1440)
+        const intervalField = document.getElementById('interval');
+        if (intervalField) {
+            const intervalValue = parseInt(intervalField.value);
+            if (isNaN(intervalValue) || intervalValue < 1 || intervalValue > 1440) {
+                event.preventDefault();
+                showError(intervalField, 'Interval must be between 1 and 1440 minutes');
+                isValid = false;
+            } else {
+                clearError(intervalField);
+            }
+        }
+
+        return isValid;
+    });
+
+    // URL/Domain field validation
+    const urlField = document.getElementById('url') || document.getElementById('domain');
+    if (urlField) {
+        urlField.addEventListener('blur', function() {
+            const fieldValue = urlField.value.trim();
+            if (fieldValue === '') {
+                clearError(urlField);
+                return;
+            }
+
+            if (type === 'http') {
+                if (!isValidUrl(fieldValue)) {
+                    showError(urlField, 'Please enter a valid URL (e.g., https://www.example.com)');
+                } else {
+                    clearError(urlField);
+                }
+            } else {
+                if (!isValidUrl(fieldValue) && !isValidDomain(fieldValue)) {
+                    showError(urlField, 'Please enter a valid URL or domain name');
+                } else {
+                    clearError(urlField);
+                }
+            }
         });
+
+        urlField.addEventListener('input', function() {
+            const fieldValue = urlField.value.trim();
+            if (fieldValue === '') {
+                clearError(urlField);
+            }
+        });
+    }
+
+    // Retries field validation
+    const retriesField = document.getElementById('retries');
+    if (retriesField) {
+        retriesField.addEventListener('blur', function() {
+            const value = parseInt(this.value);
+            if (isNaN(value) || value < 1 || value > 5) {
+                showError(this, 'Retries must be between 1 and 5');
+            } else {
+                clearError(this);
+            }
+        });
+
+        retriesField.addEventListener('input', function() {
+            if (this.value === '') {
+                clearError(this);
+            }
+        });
+    }
+
+    // Interval field validation
+    const intervalField = document.getElementById('interval');
+    if (intervalField) {
+        intervalField.addEventListener('blur', function() {
+            const value = parseInt(this.value);
+            if (isNaN(value) || value < 1 || value > 1440) {
+                showError(this, 'Interval must be between 1 and 1440 minutes');
+            } else {
+                clearError(this);
+            }
+        });
+
+        intervalField.addEventListener('input', function() {
+            if (this.value === '') {
+                clearError(this);
+            }
+        });
+    }
+}
+
+// Initialize form on page load
+document.addEventListener('DOMContentLoaded', function() {
+    showForm('http');
+});
     </script>
 
     <!-- jQuery and Toastr scripts -->
