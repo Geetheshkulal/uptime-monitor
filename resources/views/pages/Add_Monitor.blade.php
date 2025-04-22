@@ -329,8 +329,7 @@
         };
 
 
-        // Keep your existing updateDropdown function
-        function updateDropdown(selectedType, formType) {
+    function updateDropdown(selectedType, formType) {
     document.getElementById("dropdownMenuButton").innerText = selectedType;
     showForm(formType);
 }
@@ -443,6 +442,19 @@ function showForm(type) {
             }
         }
 
+        // Email validation
+        const emailField = document.getElementById('email');
+        if (emailField) {
+            const emailValue = emailField.value.trim();
+            if (!isValidEmail(emailValue)) {
+                event.preventDefault();
+                showError(emailField, 'Please enter a valid email address');
+                isValid = false;
+            } else {
+                clearError(emailField);
+            }
+        }
+
         return isValid;
     });
 
@@ -511,6 +523,25 @@ function showForm(type) {
         });
 
         intervalField.addEventListener('input', function() {
+            if (this.value === '') {
+                clearError(this);
+            }
+        });
+    }
+
+    // Email field validation
+    const emailField = document.getElementById('email');
+    if (emailField) {
+        emailField.addEventListener('blur', function() {
+            const emailValue = this.value.trim();
+            if (!isValidEmail(emailValue)) {
+                showError(this, 'Please enter a valid email address');
+            } else {
+                clearError(this);
+            }
+        });
+
+        emailField.addEventListener('input', function() {
             if (this.value === '') {
                 clearError(this);
             }
