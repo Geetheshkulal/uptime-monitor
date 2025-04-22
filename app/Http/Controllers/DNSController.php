@@ -12,11 +12,13 @@ class DNSController extends Controller
     public function AddDNS(Request $request){
 
         $request->validate([
+            'name' => 'required|string',
             'domain' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'telegram_id' => 'nullable|string|max:255',
             'telegram_bot_token' => 'nullable|string|max:255',
-            'interval' => 'required|integer|min:1' // Ensure interval is valid
+            'interval' => 'required|integer|min:1', // Ensure interval is valid
+            'retries'=>'required|integer|min:1' 
         ]);
     
         // Create a new DNS monitor entry
