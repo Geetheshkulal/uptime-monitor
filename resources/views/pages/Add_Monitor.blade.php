@@ -214,55 +214,93 @@
                 title: "Port Monitoring",
                 action: "{{ route('monitor.port') }}",
                 fields: `
-               <div class="mb-3">
+                    <div class="mb-3">
                     <label for="name" class="form-label">Friendly name</label>
-                    <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google"  >
+                    <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" value="{{ old('name') }}">
+                    @error('name')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="url" class="form-label">Domain or URL</label>
-                    <input id="url" class="form-control" name="url" type="text" placeholder="E.g. www.google.com"  >
+                    <input id="url" class="form-control" name="url" type="text" placeholder="E.g. www.google.com" value="{{ old('url') }}">
+                    @error('url')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
-               <div class="mb-3">
+
+                <div class="mb-3">
                     <label for="port" class="form-label">Port</label>
-                    <select id="port" class="form-control" name="port"  >
-                        <option value="" disabled selected>Select Port</option>
-                        <option value="21">FTP - 21</option>
-                        <option value="22">SSH / SFTP-22</option>
-                        <option value="25">SMTP - 25</option>
-                        <option value="53">DNS - 53</option>
-                        <option value="80">HTTP - 80</option>
-                        <option value="110">POP3 - 110</option>
-                        <option value="143">IMAP-143</option>
-                        <option value="443">HTTPS-443</option>
-                        <option value="465">SMTP-465</option>
-                        <option value="587">SMTP-587</option>
-                        <option value="993">IMAP-993</option>
-                        <option value="995">POP3-995</option>
-                        <option value="3306">MYSQL-3306</option>
-                    </select>
+                    <input 
+                        id="portInput" 
+                        class="form-control" 
+                        name="port" 
+                        type="number" 
+                        placeholder="E.g., 80, 443, or custom port (1-65535)"
+                        list="defaultPorts"
+                        value="{{ old('port') }}"
+                    >
+                    <datalist id="defaultPorts">
+                        <option value="21">FTP</option>
+                        <option value="22">SSH/SFTP</option>
+                        <option value="25">SMTP</option>
+                        <option value="53">DNS</option>
+                        <option value="80">HTTP</option>
+                        <option value="110">POP3</option>
+                        <option value="143">IMAP</option>
+                        <option value="443">HTTPS</option>
+                        <option value="465">SMTP (SSL)</option>
+                        <option value="587">SMTP (TLS)</option>
+                        <option value="993">IMAP (SSL)</option>
+                        <option value="995">POP3 (SSL)</option>
+                        <option value="3306">MySQL</option>
+                    </datalist>
+                    @error('port')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
+
                 <div class="mb-3">
                     <label for="retries" class="form-label">Retries</label>
-                    <input id="retries" class="form-control" name="retries" type="number" value="3"  >
+                    <input id="retries" class="form-control" name="retries" type="number" value="{{ old('retries', 3) }}">
+                    @error('retries')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
+
                 <div class="mb-3">
                     <label for="interval" class="form-label">Interval (in minutes)</label>
-                    <input id="interval" class="form-control" name="interval" type="number" value="1"  >
+                    <input id="interval" class="form-control" name="interval" type="number" value="{{ old('interval', 1) }}">
+                    @error('interval')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
-                
+
                 <h5 class="card-title">Notification</h5>
+
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com"  >
+                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" value="{{ old('email') }}">
+                    @error('email')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
+
                 <div class="mb-3">
                     <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                    <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+                    <input id="telegram_id" class="form-control" name="telegram_id" type="text" value="{{ old('telegram_id') }}">
+                    @error('telegram_id')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
+
                 <div class="mb-3">
                     <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
+                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text" value="{{ old('telegram_bot_token') }}">
+                    @error('telegram_bot_token')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <input class="btn btn-primary w-100" type="submit" value="Submit">

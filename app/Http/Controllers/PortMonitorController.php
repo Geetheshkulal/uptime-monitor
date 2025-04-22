@@ -19,7 +19,7 @@ class PortMonitorController extends Controller
         $request->validate([
             'url' => 'required|string',
             'name' => 'required|string',
-            'port' => 'required|integer',
+            'port' => 'required|integer|min:1|max:65535',
             'retries' => 'required|integer|min:1',
             'interval' => 'required|integer|min:1',
             'email' => 'required|string',
