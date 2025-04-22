@@ -79,8 +79,8 @@ class SslCheckController extends Controller
             ])
             ->log('SSL certificate monitored and logged.');
 
-            return redirect()->back()->with([
-                'success' => 'SSL check successful!',
+            return response()->json([
+                'success' => true,
                 'ssl_details' => [
                     'domain'         => $host,
                     'issuer'         => $cert['issuer']['CN'] ?? 'Unknown',
@@ -90,8 +90,24 @@ class SslCheckController extends Controller
                     'status'         => $status
                 ]
             ]);
+
+            // return redirect()->back()->with([
+            //     'success' => 'SSL check successful!',
+            //     'ssl_details' => [
+            //         'domain'         => $host,
+            //         'issuer'         => $cert['issuer']['CN'] ?? 'Unknown',
+            //         'valid_from'     => $validFrom->toDateString(),
+            //         'valid_to'       => $validTo->toDateString(),
+            //         'days_remaining' => $daysRemaining,
+            //         'status'         => $status
+            //     ]
+            // ]);
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', "No valid SSL certificate found for '{$host}'.");
+            return response()->json([
+                'success' => false,
+                'message' => "No valid SSL certificate found for '{$host}'."
+            ]);
+            // return redirect()->back()->with('error', "No valid SSL certificate found for '{$host}'.");
         }
         
     }

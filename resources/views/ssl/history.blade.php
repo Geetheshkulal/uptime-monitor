@@ -6,6 +6,31 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
 @endpush
 
+<style>
+    .custom-bg-danger{
+        background-color:  #ff4d4d;
+        color: white;
+    }
+    .custom-bg-warning {
+    background-color: #ffcc00;
+    color: black; 
+  }
+
+.custom-bg-success {
+    background-color: #4caf50; 
+    color: white; 
+}
+.custom-bg-danger,
+.custom-bg-warning,
+.custom-bg-success {
+    padding: 0.3rem 0.4rem; 
+    font-size: 0.8rem; 
+    border-radius: 0.25rem; 
+    display: inline-block; 
+}
+
+ </style>
+
 <div class="page-content">
     <!-- Page Heading with proper margins -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4 mx-3 mt-3">
@@ -50,11 +75,11 @@
                                     <td>{{ $ssl->valid_to }}</td>
                                     <td>
                                         @if(str_contains($ssl->status, 'Expired'))
-                                            <span class="badge bg-danger">{{ $ssl->status }}</span>
+                                            <span class="badge custom-bg-danger">{{ $ssl->status }}</span>
                                         @elseif(str_contains($ssl->status, 'Soon'))
-                                            <span class="badge bg-warning text-dark">{{ $ssl->status }}</span>
+                                            <span class="badge custom-bg-warning text-dark">{{ $ssl->status }}</span>
                                         @else
-                                            <span class="badge bg-success">{{ $ssl->status }}</span>
+                                            <span class="badge custom-bg-success">{{ $ssl->status }}</span>
                                         @endif
                                     </td>
                                     <td>{{ $ssl->created_at->format('Y-m-d H:i') }}</td>
