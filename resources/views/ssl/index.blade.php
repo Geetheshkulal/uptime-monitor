@@ -142,45 +142,6 @@
                         </button>                      
                     </form>
 
-                    <!-- SSL Details -->
-                    {{-- @if(session('ssl_details'))
-                        <div class="card mt-4 border-0 shadow-lg rounded-4">
-                            <div class="card-body p-4">
-                                <h5 class="fw-bold text-info mb-3">
-                                    ℹ️ SSL Certificate Details
-                                </h5>
-                                <ul class="list-group list-group-flush text-start">
-                                    <li class="list-group-item">
-                                        <strong>🛡 Status:</strong> 
-                                        <span 
-                                            class="badge 
-                                                {{ session('ssl_details')['days_remaining'] <= 0 ? 'custom-bg-danger' : 
-                                                   (session('ssl_details')['days_remaining'] <= 30 ? 'custom-bg-warning' : 'custom-bg-success') }}">
-                                            {{ session('ssl_details')['status'] }}
-                                        </span>
-                                    </li>
-                                    <li class="list-group-item bg-light">
-                                        <strong>🌍 Domain:</strong> {{ session('ssl_details')['domain'] }}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <strong>🏅 Issuer:</strong> {{ session('ssl_details')['issuer'] }}
-                                    </li>
-                                    <li class="list-group-item bg-light">
-                                        <strong>📆 Valid From:</strong> {{ session('ssl_details')['valid_from'] }}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <strong>⏳ Valid To:</strong> 
-                                        <span class="badge 
-                                            {{ session('ssl_details')['days_remaining'] < 10 ? 'custom-bg-danger' : 'custom-bg-success' }}">
-                                            {{ session('ssl_details')['valid_to'] }} 
-                                            ({{ session('ssl_details')['days_remaining'] }} days left)
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    @endif --}}
-
                     <!-- SSL Details Section -->
 
                     <div id="sslDetailsContainer" class="mt-4"></div>
