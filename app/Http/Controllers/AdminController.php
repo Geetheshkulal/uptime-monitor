@@ -17,6 +17,7 @@ class AdminController extends Controller
      * Display all users in the admin panel with pagination
      */
     public function AdminDashboard(){
+
         $role = Role::where('name', 'user')->first(); //Get user role from roles table.
     
         $total_user_count = $role->users()->count(); //Count of total number of users
@@ -87,11 +88,8 @@ class AdminController extends Controller
     
         $active_users = $activeUserIds->count();
 
-        // Run shell command to get cpu load percentage.
-        $cpuRaw = shell_exec('wmic cpu get loadpercentage /value');
-        preg_match('/LoadPercentage=(\d+)/', $cpuRaw, $cpuMatches);
-        $cpuPercent = $cpuMatches[1] ?? 'N/A';
-
+       // Fetch CPU usage dynamically
+        // $cpuPercent = $this->getCpuUsage();
     
         return view('pages.admin.AdminDashboard', compact(
             'total_user_count',
@@ -101,9 +99,34 @@ class AdminController extends Controller
             'month_labels',
             'user_data',
             'monthly_revenue',
-            'active_users',
-            'cpuPercent'
+            'active_users'
         ));
     }
+    
+    public function fetchCpuUsage()
+    {
+    $cpuPercent = $this->getCpuUsage();
 
+    return response()->json(['cpuPercent' => $cpuPercent]);
+    }
+    private function getCpuUsage()
+    {
+    if (PHP_OS_FAMILY === 'Windows') {
+        // Use PowerShell to get CPU usage
+        $command = 'powershell -Command "Get-Counter \'\Processor(_Total)\% Processor Time\' | Select-Object -ExpandProperty CounterSamples | Select-Object -ExpandProperty CookedValue"';
+        $output = shell_exec($command);
+
+        // Parse the output and return the CPU usage
+        return is_numeric($output) ? round((float) $output, 0) : 'N/A'; // Round to nearest whole number
+    } elseif (PHP_OS_FAMILY === 'Linux') {
+        // Use sys_getloadavg() for Linux
+        $cpu_load = sys_getloadavg();
+        $cpuCores = (int) shell_exec('nproc'); // Get the number of CPU cores
+        $cpuCores = $cpuCores > 0 ? $cpuCores : 1; // Default to 1 core if command fails
+        return round(($cpu_load[0] / $cpuCores) * 100, 0); // Scale to percentage and round
+    } else {
+        // Unsupported OS
+        return 'N/A';
+    }
+}
 }

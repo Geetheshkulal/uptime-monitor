@@ -106,6 +106,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/display/roles', [RoleController::class,'DisplayRoles'])->middleware('permission:see.roles')->name('display.roles');
     Route::get('/admin/display/permissions', [PermissionController::class, 'DisplayPermissions'])->middleware('role:superadmin')->name('display.permissions');
     Route::get('/admin/display/user/{id}', action: [UserController::class,'ShowUser'])->middleware('permission:see.users')->name('show.user');
+    // cpu usage
+    Route::get('/admin/fetch-cpu-usage', [AdminController::class, 'fetchCpuUsage'])->name('admin.fetch-cpu-usage');
 
     // Route::get('/admin/users', [AdminController::class, 'AddUser'])->name('add.user.form');
     Route::post('/admin/add/users', [UserController::class, 'storeUser'])->middleware('permission:add.user')->name('add.user');

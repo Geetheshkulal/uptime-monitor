@@ -127,7 +127,7 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
                                 Server Health</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{$cpuPercent}}%</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800" id="cpuUsage">Loading...</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-heartbeat text-secondary"></i>
@@ -252,6 +252,25 @@
             });
         });
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        function updateCpuUsage() {
+            fetch("{{ route('admin.fetch-cpu-usage') }}")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('cpuUsage').textContent = data.cpuPercent + '%';
+                })
+                .catch(error => console.error('Error fetching CPU usage:', error));
+        }
+
+        // Update CPU usage every 1 second
+        setInterval(updateCpuUsage, 1000);
+
+        // Initial fetch
+        updateCpuUsage();
+    });
+</script>
 @endpush
 
 @endsection
