@@ -123,6 +123,28 @@
   <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
       <i class="fa fa-bars"></i>
   </button>
+  @hasrole('user')
+  <div class="dropdown">
+    <button
+      class="btn dropdown-toggle"
+      type="button"
+      id="helpBtn"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <i class="fas fa-question-circle mr-2"></i> Help
+    </button>
+  
+    <div class="dropdown-menu" aria-labelledby="helpBtn">
+      <button class="dropdown-item" id="startTourBtn">
+        <i class="fas fa-play mr-2"></i> Start Tour
+      </button>
+      <!-- add more options here -->
+    </div>
+  </div>
+  
+  @endhasrole
 
   <!-- Topbar Navbar -->
   <ul class="navbar-nav ml-auto">
