@@ -74,7 +74,7 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         'monitor.limit' => \App\Http\Middleware\LimitMonitorMiddleware::class,
         'disable_cookies' => \App\Http\Middleware\DisableCookies::class,
-        // 'CheckUserSession'=>\App\Http\Middleware\CheckUserSession::class,
+        'CheckUserSession'=>\App\Http\Middleware\CheckUserSession::class,
     ];
 
     protected $routeMiddleware = [

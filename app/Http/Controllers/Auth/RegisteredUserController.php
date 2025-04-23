@@ -70,6 +70,7 @@ class RegisteredUserController extends Controller
         $user->session_id = Session::getId();
         $user->save();
 
+        dd('Redirecting to verify-email');
         return redirect()->route('verification.notice');
         // return redirect(RouteServiceProvider::HOME);
     }
