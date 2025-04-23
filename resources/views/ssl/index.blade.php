@@ -282,4 +282,28 @@
 
 </script>
 
+<script>
+    document.getElementById("startTourBtn").addEventListener("click", function () {
+        const intro = introJs();
+        intro.setOptions({
+            steps: [
+                {
+                    element: document.querySelector('.SslCheck'),
+                    intro: 'To view SSL check history',
+                    position: 'left'
+                },
+                {
+                    element: document.querySelector('.SslBox'),
+                    intro: 'To check SSL expire.'
+                }
+            ],
+            nextLabel: 'Next',
+            prevLabel: 'Back',
+            doneLabel: 'Finish'
+        });
+        intro.start();
+    });
+</script>
+
+
 @endsection

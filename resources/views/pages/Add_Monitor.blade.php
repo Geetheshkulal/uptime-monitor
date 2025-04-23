@@ -624,4 +624,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }).start();
     });
         </script>
+
+<script>
+    $(document).ready(function() {
+        $('#startTourBtn').click(function() {
+            introJs().setOptions({
+                steps: [
+                    {
+                        element: document.querySelector('.MonitorTypes'),
+                        intro: 'Choose types of monitoring.',
+                        position: 'right'
+                    },
+                    {
+                        element: document.querySelector('#formContainer'),
+                        intro: 'Fill in the details for the selected monitoring type.',
+                        position: 'top'
+                    }
+                ],
+                nextLabel: 'Next',
+                prevLabel: 'Back',
+                doneLabel: 'Finish'
+            }).start();
+        });
+    });
+</script>
+
+
 @endsection
