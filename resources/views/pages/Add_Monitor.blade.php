@@ -112,19 +112,33 @@
                         </div>
 
                         <h5 class="card-title">Notification</h5>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input id="email" class="form-control" name="email" type="email"
-                                placeholder="example@gmail.com" >
-                        </div>
-                        <div class="mb-3">
-                            <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                            <input id="telegram_id" class="form-control" name="telegram_id" type="text">
-                        </div>
-                        <div class="mb-3">
-                            <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                            <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
-                        </div>
+<div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
+</div>
+
+<div class="mb-3">
+    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
+<div class="mb-3">
+    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
                         <input class="btn btn-primary w-100" type="submit" value="Submit">
                     </form>
                 </div>
@@ -156,19 +170,33 @@
                         <input id="interval" class="form-control" name="interval" type="number" value="1"  >
                     </div>
                     
-                    <h5 class="card-title">Notification</h5>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
-                    </div>
-                    <div class="mb-3">
-                        <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                        <input id="telegram_id" class="form-control" name="telegram_id" type="text">
-                    </div>
-                    <div class="mb-3">
-                        <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                        <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
-                    </div>
+                                       <h5 class="card-title">Notification</h5>
+<div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
+</div>
+
+<div class="mb-3">
+    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
+<div class="mb-3">
+    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
                     <input class="btn btn-primary w-100" type="submit" value="Submit">
             `
             },
@@ -192,20 +220,33 @@
                         <label for="interval" class="form-label">Interval (in minutes)</label>
                         <input id="interval" class="form-control" name="interval" type="number" value="1"  >
                     </div>
-                <h5 class="card-title">Notification</h5>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com"  >
-                </div>
-                <div class="mb-3">
-                    <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                    <input id="telegram_id" class="form-control" name="telegram_id" type="text">
-                </div>
-                <div class="mb-3">
-                    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
-                </div>
+                                    <h5 class="card-title">Notification</h5>
+<div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
+</div>
 
+<div class="mb-3">
+    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
+<div class="mb-3">
+    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
                 
             `
@@ -277,32 +318,33 @@
                     @enderror
                 </div>
 
-                <h5 class="card-title">Notification</h5>
+                                 <h5 class="card-title">Notification</h5>
+<div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
+</div>
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" value="{{ old('email') }}">
-                    @error('email')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+<div class="mb-3">
+    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
 
-                <div class="mb-3">
-                    <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                    <input id="telegram_id" class="form-control" name="telegram_id" type="text" value="{{ old('telegram_id') }}">
-                    @error('telegram_id')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text" value="{{ old('telegram_bot_token') }}">
-                    @error('telegram_bot_token')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
-
+<div class="mb-3">
+    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
             `
             },
@@ -344,21 +386,33 @@
                         </select>
                     </div>
 
-                    <h5 class="card-title">Notification</h5>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com"  >
-                    </div>
+                                      <h5 class="card-title">Notification</h5>
+<div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
+</div>
 
-                    <div class="mb-3">
-                        <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                        <input id="telegram_id" class="form-control" name="telegram_id" type="text">
-                    </div>
+<div class="mb-3">
+    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
 
-                    <div class="mb-3">
-                        <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                        <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
-                    </div>
+<div class="mb-3">
+    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
                     
                     <input class="btn btn-primary w-100" type="submit" value="Submit">
             `,
@@ -640,6 +694,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         intro: 'Fill in the details for the selected monitoring type.',
                         position: 'top'
                     }
+
                 ],
                 nextLabel: 'Next',
                 prevLabel: 'Back',
