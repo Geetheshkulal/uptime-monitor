@@ -114,7 +114,13 @@
                                     Current Status
                                 </div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800" id="statusElement">
-                                    {{ $details->status }}
+                                    {{-- {{ $details->status }} --}}
+                                    {{-- @if ($details->paused)
+                                            Paused
+                                    @else
+                                        {{ $details->status }}
+                                    @endif --}}
+
                                 </div>
                             </div>
                             <div class="col-auto">
@@ -195,6 +201,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>
+
             document.addEventListener("DOMContentLoaded", function() {
                 var ctx = document.getElementById("myAreaChart").getContext('2d');
 
@@ -208,6 +215,7 @@
 
                 var statusElement = document.getElementById('statusElement');
                 var currentResponseElement = document.getElementById('currentResponse');
+                var averageResponseElement = document.getElementById('averageResponse');
 
                 var myLineChart = new Chart(ctx, {
                     type: 'line',
@@ -282,7 +290,7 @@
                             borderWidth: 1,
                             xPadding: 15,
                             yPadding: 15,
-                            displayColors: false,
+                            displayColors: true,
                             intersect: false,
                             mode: 'index',
                             caretPadding: 10,
@@ -296,26 +304,59 @@
                     }
                 });
 
-                function updateAverageResponse() {
+                function updateAverageResponse(responseTimes) {
                     if (responseTimes.length > 0) {
                         let sum = responseTimes.reduce((a, b) => a + b, 0);
                         let average = (sum / responseTimes.length).toFixed(2); // Round to 2 decimal places
-                        document.getElementById("averageResponse").textContent = average + " ms";
+                        averageResponseElement.textContent = average + " ms";
                         
                     } else {
-                        document.getElementById("averageResponse").textContent = "No Data";
+                        averageResponseElement.textContent = "No Data";
                     }
                 }
 
-                // Call the function initially
-                updateAverageResponse();
 
-                setInterval(function() {
+        function initializeCurrentResponse() {
+            $.ajax({
+                url: "{{ route('display.chart.update', [$details->id, $details->type]) }}",
+                type: "GET",
+                dataType: "json",
+                success: function (response) {
+                    if (response.responses.length > 0) {
+                        // Get the latest response time
+                        const latestResponseTime = response.responses[response.responses.length - 1].response_time;
+                        currentResponseElement.textContent = latestResponseTime + " ms";
+
+                         // Update the average response
+                     const responseTimes = response.responses.map(item => item.response_time);
+                        updateAverageResponse(responseTimes);
+
+                    } else {
+                        currentResponseElement.textContent = "No Data";
+                        averageResponseElement.textContent = "No Data";
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching initial response time:", error);
+                }
+            });
+        }
+
+        // Call the function to initialize the current response time
+        initializeCurrentResponse();
+
+              setInterval(function() {
+                if(!isPaused) {
                     $.ajax({
                         url: "{{ route('display.chart.update', [$details->id, $details->type]) }}",
                         type: "GET",
                         dataType: "json",
                         success: function(response) {
+
+                            isPaused=response.paused;
+
+                            if(!isPaused){
+
                             var maxDataPoints = 20;
                             var responseTimes = response.responses.map(item => item.response_time)
                                 .slice(-maxDataPoints);;
@@ -328,25 +369,69 @@
                             myLineChart.data.labels = timestamps;
                             myLineChart.update();
 
-                            statusElement.textContent = response.status;
-
-                             // Update the Current Response card with the latest response time
+                             
                         if (responseTimes.length > 0) {
                             currentResponseElement.textContent = responseTimes[responseTimes.length - 1] + " ms";
                         } else {
                             currentResponseElement.textContent = "No Data";
                         }
 
-                            updateAverageResponse();
-                        },
-
+                            updateAverageResponse(responseTimes);
+                        }
+                        // Update status display whether paused or not
+                        statusElement.textContent = isPaused ? 'Paused' : response.status;
+                    },
                         error: function(xhr, status, error) {
                             console.error("Error fetching data:", error);
                         }
                     });
-                }, 10000); // Runs every 3000 milliseconds (3 seconds)
+                }
+                }, 3000); 
 
             });
+
+            let isPaused = false;
+
+            function pauseMonitor(monitorId, button) {
+                // Send AJAX request to toggle pause/resume
+                fetch(`/monitor/pause/${monitorId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update button classes and icon
+                            button.innerHTML = data.paused ?
+                                '<i class="fas fa-play fa-1x"></i> Resume' :
+                                '<i class="fas fa-pause fa-1x"></i> Pause';
+
+                            // Toggle button classes
+                            button.classList.toggle('btn-success', !data.paused);
+                            button.classList.toggle('btn-warning', data.paused);
+
+                            // Update the "Current Status" dynamically
+                    const statusElement = document.getElementById('statusElement');
+                    if (statusElement) {
+                        statusElement.textContent = data.paused ? 'Paused' : data.status;
+                    }
+
+                        isPaused=data.paused;
+                            // Show success message
+                            toastr.success(data.message);
+                        } else {
+                            toastr.error('Failed to update monitor status.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        toastr.error('An error occurred.');
+                    });
+            }
+
         </script>
     @endpush
 
@@ -507,39 +592,102 @@
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
         <script>
-            function pauseMonitor(monitorId, button) {
-                // Send AJAX request to toggle pause/resume
-                fetch(`/monitor/pause/${monitorId}`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
-                            'Content-Type': 'application/json',
-                        },
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Update button classes and icon
-                            button.innerHTML = data.paused ?
-                                '<i class="fas fa-play fa-1x"></i> Resume' :
-                                '<i class="fas fa-pause fa-1x"></i> Pause';
 
-                            // Toggle button classes
-                            button.classList.toggle('btn-success', !data.paused);
-                            button.classList.toggle('btn-warning', data.paused);
+            // let isPaused = false;
 
-                            // Show success message
-                            toastr.success(data.message);
-                        } else {
-                            toastr.error('Failed to update monitor status.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        toastr.error('An error occurred.');
-                    });
-            }
+            // function pauseMonitor(monitorId, button) {
+                
+            //     fetch(`/monitor/pause/${monitorId}`, {
+            //             method: 'POST',
+            //             headers: {
+            //                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+            //                 'Content-Type': 'application/json',
+            //             },
+            //         })
+            //         .then(response => response.json())
+            //         .then(data => {
+            //             if (data.success) {
+                           
+            //                 button.innerHTML = data.paused ?
+            //                     '<i class="fas fa-play fa-1x"></i> Resume' :
+            //                     '<i class="fas fa-pause fa-1x"></i> Pause';
+
+                         
+            //                 button.classList.toggle('btn-success', !data.paused);
+            //                 button.classList.toggle('btn-warning', data.paused);
+
+                           
+            //         const statusElement = document.getElementById('statusElement');
+            //         if (statusElement) {
+            //             statusElement.textContent = data.paused ? 'Paused' : data.status;
+            //         }
+
+            //             isPaused=data.paused;
+
+                          
+            //                 toastr.success(data.message);
+            //             } else {
+            //                 toastr.error('Failed to update monitor status.');
+            //             }
+            //         })
+            //         .catch(error => {
+            //             console.error('Error:', error);
+            //             toastr.error('An error occurred.');
+            //         });
+            // }
+
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     const statusElement = document.getElementById('statusElement');
+    //     const currentResponseElement = document.getElementById('currentResponse');
+    //     const averageResponseElement = document.getElementById('averageResponse');
+
+    //     setInterval(function () {
+    //         if (!isPaused) { 
+    //             $.ajax({
+    //                 url: "{{ route('display.chart.update', [$details->id, $details->type]) }}",
+    //                 type: "GET",
+    //                 dataType: "json",
+    //                 success: function (response) {
+    //                     var maxDataPoints = 20;
+    //                     var responseTimes = response.responses.map(item => item.response_time).slice(-maxDataPoints);
+    //                     var timestamps = response.responses.map(item => new Date(item.created_at).toLocaleString("en-IN", {
+    //                         timeZone: "Asia/Kolkata"
+    //                     })).slice(-maxDataPoints);
+
+    //                     myLineChart.data.datasets[0].data = responseTimes;
+    //                     myLineChart.data.labels = timestamps;
+    //                     myLineChart.update();
+
+                      
+    //                     if (statusElement) {
+    //                         statusElement.textContent = response.status;
+    //                     }
+
+                       
+    //                     if (responseTimes.length > 0) {
+    //                         currentResponseElement.textContent = responseTimes[responseTimes.length - 1] + " ms";
+    //                     } else {
+    //                         currentResponseElement.textContent = "No Data";
+    //                     }
+
+                       
+    //                     if (responseTimes.length > 0) {
+    //                         let sum = responseTimes.reduce((a, b) => a + b, 0);
+    //                         let average = (sum / responseTimes.length).toFixed(2); // Round to 2 decimal places
+    //                         averageResponseElement.textContent = average + " ms";
+    //                     } else {
+    //                         averageResponseElement.textContent = "No Data";
+    //                     }
+    //                 },
+    //                 error: function (xhr, status, error) {
+    //                     console.error("Error fetching data:", error);
+    //                 }
+    //             });
+    //         }
+    //     }, 3000); 
+    // });
         </script>
 
         <script>
