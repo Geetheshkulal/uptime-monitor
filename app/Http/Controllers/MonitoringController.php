@@ -228,6 +228,7 @@ class MonitoringController extends Controller
     return response()->json([
         'responses' => $ChartResponses,
         'status' => $details->status, 
+        'paused' => $details->paused,
     ]);
     
    }
