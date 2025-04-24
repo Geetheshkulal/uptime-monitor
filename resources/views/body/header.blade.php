@@ -140,6 +140,12 @@
       <button class="dropdown-item" id="startTourBtn">
         <i class="fas fa-play mr-2"></i> Start Tour
       </button>
+      <a class="dropdown-item" href="mailto:checkmysite2025@gmail.com?subject=Issue%20Report">
+        <i class="fas fa-bug mr-2"></i> Report an Issue
+      </a>
+      <a class="dropdown-item" href="{{ url('/documentation') }}">
+        <i class="fas fa-info-circle mr-2"></i> For more info
+    </a>
       <!-- add more options here -->
     </div>
   </div>
