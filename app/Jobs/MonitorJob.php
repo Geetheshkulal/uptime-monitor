@@ -40,7 +40,7 @@ class MonitorJob
     {
        
 
-        if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null)) {
+        if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null) ) {
             $token = Str::random(32);
 
         
@@ -52,7 +52,7 @@ class MonitorJob
             
             Mail::to($monitor->email)->send(new MonitorDownAlert($monitor,$token));
 
-            if($monitor->telegram_bot_token && $monitor->telegram_id )
+            if($monitor->telegram_bot_token && $monitor->telegram_id && $monitor->user->status === 'paid')
             {
                 $this->sendTelegramNotification($monitor);
             }
