@@ -133,7 +133,7 @@
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> SSL expiry check</li>
                                 </ul>
                                 <br>
-                                <form action="{{ route('store') }}" method="POST">
+                                <form id="paymentForm_{{ $plan->id }}" action="{{ route('store') }}" method="POST" target="_blank">
                                     @csrf
                                     <input type="hidden" name="name" value="{{ auth()->user()->name }}">
                                     <input type="hidden" name="email" value="{{ auth()->user()->email }}">
@@ -154,6 +154,56 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('form[id^="paymentForm_"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const paymentWindow = window.open('', 'paymentWindow', 'width=600,height=800');
+            
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify(Object.fromEntries(new FormData(form)))
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.payment_link) {
+                    paymentWindow.location.href = data.payment_link;
+                    
+                    // Check payment status every 3 seconds
+                    const checkPaymentStatus = setInterval(() => {
+                        fetch('/cashfree/payments/status')
+                        .then(response => response.json())
+                        .then(status => {
+                            console.log('status', status);
+                            if (status.payment_success) {
+                                clearInterval(checkPaymentStatus);
+                                paymentWindow.close();
+                                window.location.reload(); // Refresh parent page
+                            }
+                        });
+                    }, 3000);
+                } else {
+                    paymentWindow.close();
+                    alert('Error initiating payment. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                paymentWindow.close();
+                alert('Error initiating payment. Please try again.');
+            });
+        });
+    });
+});
+</script>
 @endpush
+
 
 @endsection

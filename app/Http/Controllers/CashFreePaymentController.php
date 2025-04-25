@@ -10,13 +10,13 @@ use App\Models\Payment;
 
 class CashFreePaymentController extends Controller
 {
-    //View Payment Page
+    // View Payment Page
     public function create(Request $request)
     {
         return view('payment-create');
     }
 
-    //Process payment  with cashfree
+    // Process payment with cashfree
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -26,9 +26,9 @@ class CashFreePaymentController extends Controller
             'subscription_id' => 'required'
         ]);
 
-        $subscription = Subscriptions::with('payment')->find($validated['subscription_id']); //get Subscription(plan)
+        $subscription = Subscriptions::with('payment')->find($validated['subscription_id']);
 
-        $orderId = 'order_' . rand(1111111111, 9999999999); //Generate an Id
+        $orderId = 'order_' . rand(1111111111, 9999999999);
 
         $url = "https://sandbox.cashfree.com/pg/orders";
 
@@ -36,14 +36,14 @@ class CashFreePaymentController extends Controller
             "Content-Type: application/json",
             "x-api-version: 2022-01-01",
             "x-client-id: " . env('CASHFREE_API_KEY'),
-            "x-client-secret: " .env('CASHFREE_API_SECRET')
+            "x-client-secret: " . env('CASHFREE_API_SECRET')
         ];
 
         $data = json_encode([
             'order_id' => $orderId,
-            'order_amount' => $subscription->amount, /* Extract amount from subscription */
+            'order_amount' => $subscription->amount,
             "order_currency" => "INR",
-            "order_note" => "subscription_id:" . $validated['subscription_id'], // Add this line
+            "order_note" => "subscription_id:" . $validated['subscription_id'] . "|user_id:" . auth()->id(),
             "customer_details" => [
                 "customer_id" => 'customer_' . rand(111111111, 999999999),
                 "customer_name" => $validated['name'],
@@ -51,11 +51,14 @@ class CashFreePaymentController extends Controller
                 "customer_phone" => $validated['mobile'],
             ],
             "order_meta" => [
-                "return_url" => 'http://127.0.0.1:8000/cashfree/payments/success/?order_id={order_id}&order_token={order_token}'
+                "return_url" => route('success', [
+                    'order_id' => $orderId,
+                    'order_token' => Str::random(32),
+                ]),
+                "notify_url" => route('webhook')
             ],
         ]);
 
-        //Send request to the payment API with headers and data.
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url); 
         curl_setopt($curl, CURLOPT_POST, true);
@@ -65,19 +68,47 @@ class CashFreePaymentController extends Controller
         $resp = curl_exec($curl);
         curl_close($curl);
 
-        return redirect()->to(json_decode($resp)->payment_link);
+        $paymentLink = json_decode($resp)->payment_link;
+        
+        // Return JSON response for the new window
+        return response()->json([
+            'payment_link' => $paymentLink,
+            'order_id' => $orderId
+        ]);
     }
 
-    //On successful payment.
+    // Handle payment success
     public function success(Request $request)
     {
         $orderId = $request->query('order_id');
-        $user = auth()->user();
 
+        // Verify payment and update records
+        $this->verifyAndProcessPayment($orderId);
+
+        // Close the window and notify parent
+        return view('pages.payment-success');
+    }
+
+    // Webhook for payment verification
+    public function webhook(Request $request)
+    {
+        $data = $request->all();
+        Log::info('Cashfree Webhook:', $data);
+
+        if (isset($data['orderId'])) {
+            $this->verifyAndProcessPayment($data['orderId']);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    // Common payment verification logic
+    protected function verifyAndProcessPayment($orderId)
+    {
         // First check if we already processed this payment
         $existingPayment = Payment::where('transaction_id', $orderId)->first();
         if ($existingPayment) {
-            return redirect()->route('monitoring.dashboard')->with('info', 'Payment was already processed successfully.');
+            return $existingPayment;
         }
 
         // Fetch order details from Cashfree
@@ -98,35 +129,48 @@ class CashFreePaymentController extends Controller
         $orderDetails = json_decode($response, true);
         Log::info("Order Details: ", $orderDetails);
 
-        // Verify the payment status with Cashfree
+        // Verify the payment status
         if (($orderDetails['order_status'] ?? '') !== 'PAID') {
-            return redirect()->route('monitoring.dashboard')->with('error', 'Payment not confirmed by Cashfree.');
+            return null;
         }
 
-        // Extract subscription_id from order_note
+        // Extract subscription_id and user_id from order_note
         $orderNote = $orderDetails['order_note'] ?? '';
         $subscriptionId = null;
-        if (Str::startsWith($orderNote, 'subscription_id:')) {
-            $subscriptionId = str_replace('subscription_id:', '', $orderNote);
+        $userId = null;
+        
+        $parts = explode('|', $orderNote);
+        foreach ($parts as $part) {
+            if (Str::startsWith($part, 'subscription_id:')) {
+                $subscriptionId = str_replace('subscription_id:', '', $part);
+            }
+            if (Str::startsWith($part, 'user_id:')) {
+                $userId = str_replace('user_id:', '', $part);
+            }
         }
 
-        if (!$subscriptionId) {
-            return redirect()->route('monitoring.dashboard')->with('error', 'Unable to verify subscription. Please contact support.');
+        if (!$subscriptionId || !$userId) {
+            return null;
         }
 
-        // Use transaction to ensure atomic operation
-        \DB::transaction(function () use ($orderId, $user, $subscriptionId, $orderDetails) {
+        // Process payment
+        return \DB::transaction(function () use ($orderId, $userId, $subscriptionId, $orderDetails) {
+            $user = \App\Models\User::find($userId);
+            
+            if (!$user) {
+                return null;
+            }
+
             // Create payment record
             $payment = Payment::create([
                 'status' => 'active',
-                'user_id' => $user->id,
+                'user_id' => $userId,
                 'payment_status' => 'paid',
                 'transaction_id' => $orderId,
                 'payment_type' => 'upi',
                 'start_date' => now(),
                 'end_date' => now()->addMonth(),
                 'subscription_id' => $subscriptionId,
-        
             ]);
 
             // Update user status
@@ -150,8 +194,18 @@ class CashFreePaymentController extends Controller
                     'premium_until' => $user->premium_end_date,
                 ])
                 ->log('User completed a premium payment successfully');
-        });
 
-        return redirect()->route('monitoring.dashboard')->with('success', 'Payment successful! Features unlocked.');
+            return $payment;
+        });
+    }
+
+    public function status(Request $request)
+    {
+        $user = auth()->user();
+        $hasActiveSubscription = ($user->status == 'paid');
+        
+        return response()->json([
+            'payment_success' => $hasActiveSubscription
+        ]);
     }
 }

@@ -19,6 +19,9 @@ class PremiumMiddleware
     {
         // Skip middleware for premium page
         if ($request->routeIs('premium.page')) {
+            if ($request->user()->status === 'paid') {
+                return redirect()->route('monitoring.dashboard');
+            }
             return $next($request);
         }
 

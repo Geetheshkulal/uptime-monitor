@@ -108,7 +108,10 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::get('cashfree/payments/create', [CashFreePaymentController::class, 'create'])->name('callback');
     Route::post('cashfree/payments/store', [CashFreePaymentController::class, 'store'])->name('store');
     Route::any('cashfree/payments/success', [CashFreePaymentController::class, 'success'])->name('success');
-    Route::get('premium',[PremiumPageController::class,'PremiumPage'])->name('premium.page');
+    Route::any('cashfree/payments/webhook', [CashFreePaymentController::class, 'webhook'])->name('webhook');
+    Route::any('cashfree/payments/status', [CashFreePaymentController::class, 'status'])->name('payment.status');
+
+    Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->name('premium.page');
 });
 
 
