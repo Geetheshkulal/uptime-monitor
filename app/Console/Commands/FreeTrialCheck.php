@@ -40,6 +40,8 @@ class FreeTrialCheck extends Command
             })
             ->get();
 
+            $this->info("Found " . $users->count() . " users whose free trial has expired.");
+
             foreach ($users as $user){
                 $user->status= 'free';
                 $user->premium_end_date = null;
