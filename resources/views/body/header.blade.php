@@ -127,7 +127,7 @@
   }
   </style>
 
-@if (auth()->user()->status === 'paid')
+@if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date===Null)
 @php
     // Calculate remaining trial days
     $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
