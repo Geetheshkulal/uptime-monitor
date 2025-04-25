@@ -116,7 +116,9 @@
   }
   </style>
 
-
+<div class="bg-black text-white">
+  hello you have free trail access 
+</div>
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
   <!-- Sidebar Toggle (Topbar) -->
