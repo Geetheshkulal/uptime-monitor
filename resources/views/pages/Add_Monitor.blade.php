@@ -90,55 +90,67 @@
                     {{-- // add action based on route --}}
                     <form id="monitoringForm" method="POST" action="{{ route('monitoring.http.store') }}">
                         @csrf
+                        <input type="hidden" name="form_type" value="http"> <!-- Add this hidden input -->
                         <div class="mb-3">
                             <label for="name" class="form-label">Friendly name</label>
                             <input id="name" class="form-control" name="name" type="text"
                                 placeholder="E.g. Google"  >
+                            @if (old('form_type') === 'http')
+                                @error('name')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
+                            @endif
                         </div>
                         <div class="mb-3">
                             <label for="url" class="form-label">URL</label>
                             <input id="url" class="form-control" name="url" type="text"
                                 placeholder="E.g. https://www.google.com"  >
+                            @if (old('form_type') === 'http')
+                                @error('url')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
+                            @endif
                         </div>
                         <div class="mb-3">
                             <label for="retries" class="form-label">Retries</label>
                             <input id="retries" class="form-control" name="retries" type="number" value="3"
                                  >
+                            @if (old('form_type') === 'http')
+                                @error('retries')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
+                            @endif
                         </div>
                         <div class="mb-3">
                             <label for="interval" class="form-label">Interval (in minutes)</label>
                             <input id="interval" class="form-control" name="interval" type="number" value="1"
                                  >
+                            @if (old('form_type') === 'http')
+                                @error('interval')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
+                            @endif
                         </div>
 
                         <h5 class="card-title">Notification</h5>
-<div class="mb-3">
-    <label for="email" class="form-label">Email</label>
-    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
-</div>
-
-<div class="mb-3">
-    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
-    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
-
-<div class="mb-3">
-    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
-
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input id="email" class="form-control" name="email" type="email"
+                                placeholder="example@gmail.com" >
+                            @if (old('form_type') === 'http')
+                                @error('email')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
+                            @endif
+                        </div>
+                        <div class="mb-3">
+                            <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                            <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+                        </div>
+                        <div class="mb-3">
+                            <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                            <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
+                        </div>
                         <input class="btn btn-primary w-100" type="submit" value="Submit">
                     </form>
                 </div>
@@ -153,50 +165,62 @@
                 title: "HTTP Monitoring",
                 action: "{{ route('monitoring.http.store') }}",
                 fields: `
+                <input type="hidden" name="form_type" value="http"> <!-- Add this hidden input -->
                 <div class="mb-3">
                         <label for="name" class="form-label">Friendly name</label>
                         <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google"  >
+                        @if (old('form_type') === 'http')
+                            @error('name')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
                     <div class="mb-3">
                         <label for="url" class="form-label">URL</label>
                         <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com"  >
+                        @if (old('form_type') === 'http')
+                            @error('url')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
                     <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
                         <input id="retries" class="form-control" name="retries" type="number" value="3"  >
+                        @if (old('form_type') === 'http')
+                            @error('retries')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
                     <div class="mb-3">
                         <label for="interval" class="form-label">Interval (in minutes)</label>
                         <input id="interval" class="form-control" name="interval" type="number" value="1"  >
+                        @if (old('form_type') === 'http')
+                            @error('interval')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
                     
-                                       <h5 class="card-title">Notification</h5>
-<div class="mb-3">
-    <label for="email" class="form-label">Email</label>
-    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
-</div>
-
-<div class="mb-3">
-    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
-    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
-
-<div class="mb-3">
-    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
+                    <h5 class="card-title">Notification</h5>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
+                        @if (old('form_type') === 'http')
+                            @error('email')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
+                    </div>
+                    <div class="mb-3">
+                        <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                        <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+                    </div>
+                    <div class="mb-3">
+                        <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                        <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
+                    </div>
                     <input class="btn btn-primary w-100" type="submit" value="Submit">
             `
             },
@@ -204,49 +228,62 @@
                 title: "Ping Monitoring",
                 action: "{{ route('ping.monitoring.store') }}",
                 fields: `
+                <input type="hidden" name="form_type" value="ping"> <!-- Add this hidden input -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Friendly name</label>
                     <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google"  >
+                    @if (old('form_type') === 'ping')
+                        @error('name')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    @endif
                 </div>
                 <div class="mb-3">
                     <label for="url" class="form-label">Domain or URL</label>
                     <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com"  >
+                    @if (old('form_type') === 'ping')
+                        @error('url')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    @endif
                 </div>
                 <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
                         <input id="retries" class="form-control" name="retries" type="number" value="3"  >
+                        @if (old('form_type') === 'ping')
+                            @error('retries')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
                     <div class="mb-3">
                         <label for="interval" class="form-label">Interval (in minutes)</label>
                         <input id="interval" class="form-control" name="interval" type="number" value="1"  >
+                        @if (old('form_type') === 'ping')
+                            @error('interval')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
-                                    <h5 class="card-title">Notification</h5>
-<div class="mb-3">
-    <label for="email" class="form-label">Email</label>
-    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
-</div>
+                <h5 class="card-title">Notification</h5>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com"  >
+                    @if (old('form_type') === 'ping')
+                        @error('email')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    @endif
+                </div>
+                <div class="mb-3">
+                    <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                    <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+                </div>
+                <div class="mb-3">
+                    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
+                </div>
 
-<div class="mb-3">
-    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
-    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
-
-<div class="mb-3">
-    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
                 
             `
@@ -255,20 +292,25 @@
                 title: "Port Monitoring",
                 action: "{{ route('monitor.port') }}",
                 fields: `
+                <input type="hidden" name="form_type" value="port"> <!-- Add this hidden input -->
                     <div class="mb-3">
                     <label for="name" class="form-label">Friendly name</label>
                     <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" value="{{ old('name') }}">
-                    @error('name')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
+                    @if (old('form_type') === 'port')
+                        @error('name')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    @endif
                 </div>
 
                 <div class="mb-3">
                     <label for="url" class="form-label">Domain or URL</label>
                     <input id="url" class="form-control" name="url" type="text" placeholder="E.g. www.google.com" value="{{ old('url') }}">
-                    @error('url')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
+                    @if (old('form_type') === 'port')
+                        @error('url')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    @endif
                 </div>
 
                 <div class="mb-3">
@@ -297,78 +339,100 @@
                         <option value="995">POP3 (SSL)</option>
                         <option value="3306">MySQL</option>
                     </datalist>
-                    @error('port')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
+                    @if (old('form_type') === 'port')
+                        @error('port')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    @endif
                 </div>
 
                 <div class="mb-3">
                     <label for="retries" class="form-label">Retries</label>
                     <input id="retries" class="form-control" name="retries" type="number" value="{{ old('retries', 3) }}">
-                    @error('retries')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
+                    @if (old('form_type') === 'port')
+                        @error('retries')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    @endif
                 </div>
 
                 <div class="mb-3">
                     <label for="interval" class="form-label">Interval (in minutes)</label>
                     <input id="interval" class="form-control" name="interval" type="number" value="{{ old('interval', 1) }}">
-                    @error('interval')
-                        <div class="text-danger mt-1">{{ $message }}</div>
-                    @enderror
+                    @if (old('form_type') === 'port')
+                        @error('interval')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    @endif
                 </div>
 
-                                 <h5 class="card-title">Notification</h5>
-<div class="mb-3">
-    <label for="email" class="form-label">Email</label>
-    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
-</div>
+                <h5 class="card-title">Notification</h5>
 
-<div class="mb-3">
-    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
-    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" value="{{ old('email') }}">
+                    @if (old('form_type') === 'port')
+                        @error('email')
+                            <div class="text-danger mt-1">{{ $message }}</div>
+                        @enderror
+                    @endif
+                </div>
 
-<div class="mb-3">
-    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
+                <div class="mb-3">
+                    <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                    <input id="telegram_id" class="form-control" name="telegram_id" type="text" value="{{ old('telegram_id') }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text" value="{{ old('telegram_bot_token') }}">
+                </div>
+
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
             `
             },
             dns: {
                 title: "DNS Monitoring",
                 fields: `
+                <input type="hidden" name="form_type" value="dns"> <!-- Add this hidden input -->
                 <div class="mb-3">
                         <label for="name" class="form-label">Friendly name</label>
                         <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google"  >
+                        @if (old('form_type') === 'dns')
+                            @error('name')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
 
                     <div class="mb-3">
                         <label for="domain" class="form-label">Domain or URL</label>
                         <input id="domain" class="form-control" name="domain" type="text" placeholder="E.g. google.com"   >
+                        @if (old('form_type') === 'dns')
+                            @error('domain')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
 
                     <div class="mb-3">
                         <label for="interval" class="form-label">Interval (in minutes)</label>
                         <input id="interval" class="form-control" name="interval" type="number" min="1" value="1"  >
+                        @if (old('form_type') === 'dns')
+                            @error('interval')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
 
                     <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
                         <input id="retries" class="form-control" name="retries" type="number" min="0" value="3"  >
+                        @if (old('form_type') === 'dns')
+                            @error('retries')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
 
                     <div class="mb-3">
@@ -384,35 +448,33 @@
                             <option value="SRV">SRV</option>
                             <option value="DNS_ALL">DNS_ALL</option>
                         </select>
+                        @if (old('form_type') === 'dns')
+                            @error('dns_resource_type')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
                     </div>
 
-                                      <h5 class="card-title">Notification</h5>
-<div class="mb-3">
-    <label for="email" class="form-label">Email</label>
-    <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com">
-</div>
+                    <h5 class="card-title">Notification</h5>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com"  >
+                        @if (old('form_type') === 'dns')
+                            @error('email')
+                                <div class="text-danger mt-1">{{ $message }}</div>
+                            @enderror
+                        @endif
+                    </div>
 
-<div class="mb-3">
-    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
-    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
+                    <div class="mb-3">
+                        <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
+                        <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+                    </div>
 
-<div class="mb-3">
-    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
-           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
-    @if (auth()->user()->status === 'free')
-        <small class="form-text text-muted">
-            <a href="{{ route('premium.page') }}">Upgrade to premium</a> to enable Telegram notifications.
-        </small>
-    @endif
-</div>
+                    <div class="mb-3">
+                        <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                        <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
+                    </div>
                     
                     <input class="btn btn-primary w-100" type="submit" value="Submit">
             `,
@@ -422,229 +484,234 @@
 
 
     function updateDropdown(selectedType, formType) {
-    document.getElementById("dropdownMenuButton").innerText = selectedType;
-    showForm(formType);
-}
-
-// Validation helper functions
-function isValidUrl(string) {
-    try {
-        new URL(string);
-        return true;
-    } catch (_) {
-        return false;
-    }
-}
-
-function isValidDomain(string) {
-    const domainPattern = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i;
-    return domainPattern.test(string);
-}
-
-function isValidEmail(email) {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-}
-
-function showError(inputElement, message) {
-    const existingError = inputElement.parentNode.querySelector('.invalid-feedback');
-    if (existingError) {
-        existingError.remove();
+        document.getElementById("dropdownMenuButton").innerText = selectedType;
+        document.getElementById("selectedType").value = formType; // Update hidden input value
+        showForm(formType);
     }
 
-    inputElement.classList.add('is-invalid');
-
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'invalid-feedback';
-    errorDiv.innerText = message;
-    inputElement.parentNode.appendChild(errorDiv);
-}
-
-function clearError(inputElement) {
-    inputElement.classList.remove('is-invalid');
-    const existingError = inputElement.parentNode.querySelector('.invalid-feedback');
-    if (existingError) {
-        existingError.remove();
+    // Validation helper functions
+    function isValidUrl(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
     }
-}
 
-// The showForm function with improved validation
-function showForm(type) {
-    const formContainer = document.getElementById('formContainer');
-    formContainer.innerHTML = `
-        <h4 class="card-title">${forms[type].title}</h4>
-        <form id="monitoringForm" method="POST" action="${forms[type].action}">
-            @csrf
-            ${forms[type].fields}
-        </form>
-    `;
+    function isValidDomain(string) {
+        const domainPattern = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$/i;
+        return domainPattern.test(string);
+    }
 
-    const form = document.getElementById('monitoringForm');
-    form.addEventListener('submit', function(event) {
-        let isValid = true;
+    function isValidEmail(email) {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    }
 
-        // URL/Domain validation
+    function showError(inputElement, message) {
+        const existingError = inputElement.parentNode.querySelector('.invalid-feedback');
+        if (existingError) {
+            existingError.remove();
+        }
+
+        inputElement.classList.add('is-invalid');
+
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'invalid-feedback';
+        errorDiv.innerText = message;
+        inputElement.parentNode.appendChild(errorDiv);
+    }
+
+    function clearError(inputElement) {
+        inputElement.classList.remove('is-invalid');
+        const existingError = inputElement.parentNode.querySelector('.invalid-feedback');
+        if (existingError) {
+            existingError.remove();
+        }
+    }
+
+    // The showForm function with improved validation
+    function showForm(type) {
+        const formContainer = document.getElementById('formContainer');
+        formContainer.innerHTML = `
+            <h4 class="card-title">${forms[type].title}</h4>
+            <form id="monitoringForm" method="POST" action="${forms[type].action}">
+                @csrf
+                <input type="hidden" name="form_type" value="${type}"> <!-- Add this hidden input -->
+                <input type="hidden" id="selectedType" name="selectedType" value="${type}"> <!-- Hidden input -->
+                ${forms[type].fields}
+            </form>
+        `;
+
+        const form = document.getElementById('monitoringForm');
+        form.addEventListener('submit', function(event) {
+            let isValid = true;
+
+            // URL/Domain validation
+            const urlField = document.getElementById('url') || document.getElementById('domain');
+            if (urlField) {
+                const fieldValue = urlField.value.trim();
+                if (fieldValue !== '') {
+                    if (type === 'http') {
+                        if (!isValidUrl(fieldValue)) {
+                            event.preventDefault();
+                            showError(urlField, 'Please enter a valid URL (e.g., https://www.example.com)');
+                            isValid = false;
+                        } else {
+                            clearError(urlField);
+                        }
+                    } else {
+                        if (!isValidUrl(fieldValue) && !isValidDomain(fieldValue)) {
+                            event.preventDefault();
+                            showError(urlField, 'Please enter a valid URL or domain name');
+                            isValid = false;
+                        } else {
+                            clearError(urlField);
+                        }
+                    }
+                }
+            }
+
+            // Retries validation (1-5)
+            const retriesField = document.getElementById('retries');
+            if (retriesField) {
+                const retriesValue = parseInt(retriesField.value);
+                if (isNaN(retriesValue) || retriesValue < 1 || retriesValue > 5) {
+                    event.preventDefault();
+                    showError(retriesField, 'Retries must be between 1 and 5');
+                    isValid = false;
+                } else {
+                    clearError(retriesField);
+                }
+            }
+
+            // Interval validation (1-1440)
+            const intervalField = document.getElementById('interval');
+            if (intervalField) {
+                const intervalValue = parseInt(intervalField.value);
+                if (isNaN(intervalValue) || intervalValue < 1 || intervalValue > 1440) {
+                    event.preventDefault();
+                    showError(intervalField, 'Interval must be between 1 and 1440 minutes');
+                    isValid = false;
+                } else {
+                    clearError(intervalField);
+                }
+            }
+
+            // Email validation
+            const emailField = document.getElementById('email');
+            if (emailField) {
+                const emailValue = emailField.value.trim();
+                if (!isValidEmail(emailValue)) {
+                    event.preventDefault();
+                    showError(emailField, 'Please enter a valid email address');
+                    isValid = false;
+                } else {
+                    clearError(emailField);
+                }
+            }
+
+            return isValid;
+        });
+
+        // URL/Domain field validation
         const urlField = document.getElementById('url') || document.getElementById('domain');
         if (urlField) {
-            const fieldValue = urlField.value.trim();
-            if (fieldValue !== '') {
+            urlField.addEventListener('blur', function() {
+                const fieldValue = urlField.value.trim();
+                if (fieldValue === '') {
+                    clearError(urlField);
+                    return;
+                }
+
                 if (type === 'http') {
                     if (!isValidUrl(fieldValue)) {
-                        event.preventDefault();
                         showError(urlField, 'Please enter a valid URL (e.g., https://www.example.com)');
-                        isValid = false;
                     } else {
                         clearError(urlField);
                     }
                 } else {
                     if (!isValidUrl(fieldValue) && !isValidDomain(fieldValue)) {
-                        event.preventDefault();
                         showError(urlField, 'Please enter a valid URL or domain name');
-                        isValid = false;
                     } else {
                         clearError(urlField);
                     }
                 }
-            }
+            });
+
+            urlField.addEventListener('input', function() {
+                const fieldValue = urlField.value.trim();
+                if (fieldValue === '') {
+                    clearError(urlField);
+                }
+            });
         }
 
-        // Retries validation (1-5)
+        // Retries field validation
         const retriesField = document.getElementById('retries');
         if (retriesField) {
-            const retriesValue = parseInt(retriesField.value);
-            if (isNaN(retriesValue) || retriesValue < 1 || retriesValue > 5) {
-                event.preventDefault();
-                showError(retriesField, 'Retries must be between 1 and 5');
-                isValid = false;
-            } else {
-                clearError(retriesField);
-            }
+            retriesField.addEventListener('blur', function() {
+                const value = parseInt(this.value);
+                if (isNaN(value) || value < 1 || value > 5) {
+                    showError(this, 'Retries must be between 1 and 5');
+                } else {
+                    clearError(this);
+                }
+            });
+
+            retriesField.addEventListener('input', function() {
+                if (this.value === '') {
+                    clearError(this);
+                }
+            });
         }
 
-        // Interval validation (1-1440)
+        // Interval field validation
         const intervalField = document.getElementById('interval');
         if (intervalField) {
-            const intervalValue = parseInt(intervalField.value);
-            if (isNaN(intervalValue) || intervalValue < 1 || intervalValue > 1440) {
-                event.preventDefault();
-                showError(intervalField, 'Interval must be between 1 and 1440 minutes');
-                isValid = false;
-            } else {
-                clearError(intervalField);
-            }
+            intervalField.addEventListener('blur', function() {
+                const value = parseInt(this.value);
+                if (isNaN(value) || value < 1 || value > 1440) {
+                    showError(this, 'Interval must be between 1 and 1440 minutes');
+                } else {
+                    clearError(this);
+                }
+            });
+
+            intervalField.addEventListener('input', function() {
+                if (this.value === '') {
+                    clearError(this);
+                }
+            });
         }
 
-        // Email validation
+        // Email field validation
         const emailField = document.getElementById('email');
         if (emailField) {
-            const emailValue = emailField.value.trim();
-            if (!isValidEmail(emailValue)) {
-                event.preventDefault();
-                showError(emailField, 'Please enter a valid email address');
-                isValid = false;
-            } else {
-                clearError(emailField);
-            }
+            emailField.addEventListener('blur', function() {
+                const emailValue = this.value.trim();
+                if (!isValidEmail(emailValue)) {
+                    showError(this, 'Please enter a valid email address');
+                } else {
+                    clearError(this);
+                }
+            });
+
+            emailField.addEventListener('input', function() {
+                if (this.value === '') {
+                    clearError(this);
+                }
+            });
         }
+    }
 
-        return isValid;
+    // Initialize form on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectedType = "{{ old('selectedType', 'http') }}"; // Retain selected type after submission
+        document.getElementById("dropdownMenuButton").innerText = forms[selectedType].title;
+        showForm(selectedType);
     });
-
-    // URL/Domain field validation
-    const urlField = document.getElementById('url') || document.getElementById('domain');
-    if (urlField) {
-        urlField.addEventListener('blur', function() {
-            const fieldValue = urlField.value.trim();
-            if (fieldValue === '') {
-                clearError(urlField);
-                return;
-            }
-
-            if (type === 'http') {
-                if (!isValidUrl(fieldValue)) {
-                    showError(urlField, 'Please enter a valid URL (e.g., https://www.example.com)');
-                } else {
-                    clearError(urlField);
-                }
-            } else {
-                if (!isValidUrl(fieldValue) && !isValidDomain(fieldValue)) {
-                    showError(urlField, 'Please enter a valid URL or domain name');
-                } else {
-                    clearError(urlField);
-                }
-            }
-        });
-
-        urlField.addEventListener('input', function() {
-            const fieldValue = urlField.value.trim();
-            if (fieldValue === '') {
-                clearError(urlField);
-            }
-        });
-    }
-
-    // Retries field validation
-    const retriesField = document.getElementById('retries');
-    if (retriesField) {
-        retriesField.addEventListener('blur', function() {
-            const value = parseInt(this.value);
-            if (isNaN(value) || value < 1 || value > 5) {
-                showError(this, 'Retries must be between 1 and 5');
-            } else {
-                clearError(this);
-            }
-        });
-
-        retriesField.addEventListener('input', function() {
-            if (this.value === '') {
-                clearError(this);
-            }
-        });
-    }
-
-    // Interval field validation
-    const intervalField = document.getElementById('interval');
-    if (intervalField) {
-        intervalField.addEventListener('blur', function() {
-            const value = parseInt(this.value);
-            if (isNaN(value) || value < 1 || value > 1440) {
-                showError(this, 'Interval must be between 1 and 1440 minutes');
-            } else {
-                clearError(this);
-            }
-        });
-
-        intervalField.addEventListener('input', function() {
-            if (this.value === '') {
-                clearError(this);
-            }
-        });
-    }
-
-    // Email field validation
-    const emailField = document.getElementById('email');
-    if (emailField) {
-        emailField.addEventListener('blur', function() {
-            const emailValue = this.value.trim();
-            if (!isValidEmail(emailValue)) {
-                showError(this, 'Please enter a valid email address');
-            } else {
-                clearError(this);
-            }
-        });
-
-        emailField.addEventListener('input', function() {
-            if (this.value === '') {
-                clearError(this);
-            }
-        });
-    }
-}
-
-// Initialize form on page load
-document.addEventListener('DOMContentLoaded', function() {
-    showForm('http');
-});
     </script>
 
     <!-- jQuery and Toastr scripts -->
@@ -694,7 +761,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         intro: 'Fill in the details for the selected monitoring type.',
                         position: 'top'
                     }
-
                 ],
                 nextLabel: 'Next',
                 prevLabel: 'Back',
