@@ -114,11 +114,34 @@
   body.dark .dropdown-item:hover {
     background-color: #444 !important;
   }
+  .Free-trial-notice{
+    position: absolute;
+    background-color: #f8d210;
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 1000; 
+    width: 100%;
+    margin-bottom: 5px;
+    padding: 3px;
+  }
   </style>
+
+@if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date===Null)
+@php
+    // Calculate remaining trial days
+    $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
+@endphp
+
+@if ($trialDaysLeft > 0)
+    <div class="Free-trial-notice">
+        You have free trial access for {{ $trialDaysLeft }} more days!
+    </div>
+@endif
+@endif
 
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
   <!-- Sidebar Toggle (Topbar) -->
   <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
       <i class="fa fa-bars"></i>

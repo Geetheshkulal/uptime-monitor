@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->job(new MonitorJob())->everyMinute();
         $schedule->command('payments:expire-check')->daily();
+        $schedule->command('users:free-trial-check')->daily();
     }
 
     /**
