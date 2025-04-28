@@ -112,7 +112,7 @@
 
 </style>
 
-<ul data-aos="fade-right" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul data-aos="fade-right" class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion d-flex flex-column" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
@@ -125,97 +125,111 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    @hasrole('user')
-    <li class="nav-item {{ request()->is('dashboard*') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('monitoring.dashboard') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
+    <!-- Wrapper for main nav items -->
+    <div class="flex-grow-1">
+        @hasrole('user')
+        <li class="nav-item {{ request()->is('dashboard*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('monitoring.dashboard') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
 
-    <li class="nav-item {{ request()->routeIs('incidents') ? 'active' : '' }}">
-        <a class="nav-link incident" href="{{ route('incidents') }}">
-            <i class="fas fa-exclamation-triangle"></i>
-            <span>Incidents</span>
-        </a>
-    </li>
+        <li class="nav-item {{ request()->routeIs('incidents') ? 'active' : '' }}">
+            <a class="nav-link incident" href="{{ route('incidents') }}">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Incidents</span>
+            </a>
+        </li>
 
-    <li class="nav-item {{ request()->routeIs('planSubscription') ? 'active' : '' }}">
-        <a class="nav-link plan" href="{{ route('planSubscription') }}">
-            <i class="fas fa-credit-card"></i>
-            <span>Plan & Subscription</span>
-        </a>
-    </li>
+        <li class="nav-item {{ request()->routeIs('planSubscription') ? 'active' : '' }}">
+            <a class="nav-link plan" href="{{ route('planSubscription') }}">
+                <i class="fas fa-credit-card"></i>
+                <span>Plan & Subscription</span>
+            </a>
+        </li>
 
-    @if (auth()->user()->status === 'paid')
-    <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
-        <a class="nav-link ssl" href="{{ route('ssl.check') }}">
-            <i class="fas fa-lock"></i>
-            <span>SSL Check</span>
-        </a>
-    </li>
-    @elseif(auth()->user()->status === 'free')
-    <li class="nav-item premium-feature {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
-        <a class="nav-link ssl text-gold" href="{{ route('premium.page') }}">
-            <i class="fas fa-lock text-gold"></i>
-            <span class="text-gold">SSL Check</span>
-            <i class="fas fa-crown text-gold"></i>
-        </a>
-    </li>
-    @endif
-    @endhasrole
+        @if (auth()->user()->status === 'paid')
+        <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
+            <a class="nav-link ssl" href="{{ route('ssl.check') }}">
+                <i class="fas fa-lock"></i>
+                <span>SSL Check</span>
+            </a>
+        </li>
+        @elseif(auth()->user()->status === 'free')
+        <li class="nav-item premium-feature {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
+            <a class="nav-link ssl text-gold" href="{{ route('premium.page') }}">
+                <i class="fas fa-lock text-gold"></i>
+                <span class="text-gold">SSL Check</span>
+                <i class="fas fa-crown text-gold"></i>
+            </a>
+        </li>
+        @endif
+        @endhasrole
 
-    @hasrole('superadmin')
-    <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.dashboard') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-        </a>
-    </li>
-    @endhasrole
+        @hasrole('superadmin')
+        <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        @endhasrole
 
-    @can('see.users')
-    <li class="nav-item {{ request()->routeIs('display.users') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('display.users') }}">
-            <i class="fas fa-user"></i>
-            <span>Users</span>
-        </a>
-    </li>
-    @endcan
+        @can('see.users')
+        <li class="nav-item {{ request()->routeIs('display.users') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('display.users') }}">
+                <i class="fas fa-user"></i>
+                <span>Users</span>
+            </a>
+        </li>
+        @endcan
 
-    @can('see.roles')
-    <li class="nav-item {{ request()->routeIs('display.roles') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('display.roles') }}">
-            <i class="fas fa-user-tag"></i>
-            <span>Roles</span>
-        </a>
-    </li>
-    @endcan
+        @can('see.roles')
+        <li class="nav-item {{ request()->routeIs('display.roles') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('display.roles') }}">
+                <i class="fas fa-user-tag"></i>
+                <span>Roles</span>
+            </a>
+        </li>
+        @endcan
 
-    @hasrole('superadmin')
-    <li class="nav-item {{ request()->routeIs('display.permissions') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('display.permissions') }}">
-            <i class="fas fa-door-open"></i>
-            <span>Permissions</span>
-        </a>
-    </li>
-    <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('billing') }}">
-            <i class="fas fa-money-bill"></i>
-            <span>Billing</span>
-        </a>
-    </li>
-    @endhasrole
+        @hasrole('superadmin')
+        <li class="nav-item {{ request()->routeIs('display.permissions') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('display.permissions') }}">
+                <i class="fas fa-door-open"></i>
+                <span>Permissions</span>
+            </a>
+        </li>
 
-    @can('see.activity')
-    <li class="nav-item {{ request()->routeIs('display.activity') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('display.activity') }}">
-            <i class="fas fa-chart-line"></i>
-            <span>Activity Log</span>
-        </a>
-    </li>
-    @endcan
+        <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('billing') }}">
+                <i class="fas fa-money-bill"></i>
+                <span>Billing</span>
+            </a>
+        </li>
+        @endhasrole
 
-    <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+        @can('see.activity')
+        <li class="nav-item {{ request()->routeIs('display.activity') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('display.activity') }}">
+                <i class="fas fa-chart-line"></i>
+                <span>Activity Log</span>
+            </a>
+        </li>
+        @endcan
+
+            <!-- Helpdesk item at bottom -->
+        <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">
+            <a class="nav-link" href="{{route('display.tickets')}}">
+                <i class="fas fa-headset"></i>
+                <span>Raise Issue</span>
+            </a>
+        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+    </div>
+
+
+
 </ul>
