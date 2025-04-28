@@ -9,13 +9,182 @@
         border-radius: 0 !important;
     }
     </style>    
+    
 @endpush
+<style>
+   .tooltip-inner {
+    background-color: #0e55e1 !important; /* Custom background color */
+    color: #fff !important; /* Custom text color */
+    font-size: 14px; /* Adjust font size */
+    border-radius: 5px  !important; /* Add rounded corners */
+    padding: 8px; /* Add padding */
+}
+
+.tooltip.bs-tooltip-top .arrow::before {
+    border-top-color: #0e55e1 !important; 
+}
+
+.tooltip.bs-tooltip-bottom .arrow::before {
+    border-bottom-color: #0e55e1 !important;
+}
+.tooltip.bs-tooltip-left .arrow::before {
+    border-left-color: #0e55e1 !important;
+}
+
+.tooltip.bs-tooltip-right .arrow::before {
+    border-right-color: #0e55e1 !important;
+}
+</style>
+
 
 <div class="page-content">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4 mx-3 mt-3">
         <h1 class="h3 mb-0 text-gray-800">Tickets</h1>
     </div>
+
+  <!-- Ticket Card -->
+  {{-- <div class="row ml-4 d-flex justify-content-center">
+  <div class="col-xl-2 col-md-6 mb-4 ">
+    <div class="card card-counter border-left-primary shadow h-100 py-2 rounded">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        Total Tickets</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-ticket-alt text-primary fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-xl-2 col-md-6 mb-4">
+    <div class="card card-counter border-left-success shadow h-100 py-2 rounded">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        Open Tickets</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-folder-open text-success fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-xl-2 col-md-6 mb-4">
+    <div class="card card-counter border-left-danger shadow h-100 py-2 rounded">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        Closed Tickets</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-check-circle text-danger fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-xl-2 col-md-6 mb-4">
+    <div class="card card-counter border-left-warning shadow h-100 py-2 rounded">
+        <div class="card-body">
+            <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        On HoldTickets</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                </div>
+                <div class="col-auto">
+                    <i class="fas fa-pause-circle text-warning fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  </div> --}}
+  <!-- Ticket Card -->
+<div class="row mx-3 mb-4 d-flex justify-content-around">
+    <div class="col-md-3 col-xl-2 mb-4">
+        <div class="card card-counter border-left-primary shadow h-100 py-2 rounded">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Total Tickets</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-ticket-alt text-primary fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-xl-2 mb-4">
+        <div class="card card-counter border-left-success shadow h-100 py-2 rounded">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Open Tickets</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-folder-open text-success fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-xl-2 mb-4">
+        <div class="card card-counter border-left-danger shadow h-100 py-2 rounded">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Closed Tickets</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle text-danger fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-xl-2 mb-4">
+        <div class="card card-counter border-left-warning shadow h-100 py-2 rounded">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            On Hold Tickets</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-pause-circle text-warning fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
     <!-- Content Row -->
     <div class="row mx-3">
@@ -24,9 +193,6 @@
                 <!-- Card Header -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white px-4">
                     <h6 class="m-0 font-weight-bold text-primary">All Subscription Plans</h6>
-                    <!-- <a href="#" class="btn btn-primary btn-sm">
-                        <i class="fas fa-plus"></i> Add New
-                    </a> -->
                 </div>
                 
                 <!-- Card Body -->
@@ -61,19 +227,7 @@
                                         <td>{{$ticket->contact_no}}</td>
                                         <td>{{$ticket->assigned_user_id}}</td>
                                         <td>{{$ticket->created_at}}</td>
-                                        <td>comment</td>
-                                        {{-- <td>
-                                            <a href="#" 
-                                               class="btn btn-sm btn-primary edit-subscription"
-                                               title="Edit"
-                                               data-toggle="modal" 
-                                               data-target="#editSubscriptionModal"
-                                               data-id="{{ $subscription->id }}"
-                                               data-name="{{ $subscription->name }}"
-                                               data-amount="{{ $subscription->amount }}">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        </td> --}}
+                                        <td><i class="far fa-comment-alt" style="color: #0e55e1; font-size:1.5rem; cursor: pointer; padding: 8px;" data-toggle="tooltip" title="View Comments"></i></td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -127,6 +281,8 @@
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 <script>
     $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
         $('#dataTable').DataTable({
             "paging": true,
             "searching": true,

@@ -158,7 +158,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/billing',[BillingController::class,'Billing'])->middleware('role:superadmin')->name('billing');
     Route::post('/edit/billing/{id}',[BillingController::class,'EditBilling'])->middleware('role:superadmin')->name('edit.billing');
 
-    Route::get('/tickets',[TicketController::class,'TicketsView'])->middleware('role:superadmin')->name('tickets');
+    Route::get('/admin/tickets',[TicketController::class,'TicketsView'])->middleware('role:superadmin')->name('tickets');
 
     
 });
