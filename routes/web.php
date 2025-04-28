@@ -161,7 +161,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/display/tickets',[TicketsController::class,'UserViewTickets'])->name('display.tickets');
     Route::get('/raise/tickets',[TicketsController::class,'RaiseTickets'])->name('raise.tickets');
-    Route::get('/tickets',[TicketController::class,'TicketsView'])->middleware('role:superadmin')->name('tickets');
+
+    Route::get('admin/tickets',[TicketController::class,'TicketsView'])->middleware('role:superadmin')->name('tickets');
 
     
 });
