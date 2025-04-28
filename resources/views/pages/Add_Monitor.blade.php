@@ -123,12 +123,21 @@
                         </div>
                         <div class="mb-3">
                             <label for="interval" class="form-label">Interval (in minutes)</label>
-                            <input id="interval" class="form-control" name="interval" type="number" value="1"
-                                 >
-                            @if (old('form_type') === 'http')
-                                @error('interval')
-                                    <div class="text-danger mt-1">{{ $message }}</div>
-                                @enderror
+                            <input 
+                                id="interval"
+                                class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}"
+                                name="interval"
+                                type="number"
+                                min="{{ auth()->user()->status === 'free' ? 5 : 1 }}"
+                                max="10"
+                                value="{{ old('interval', auth()->user()->status === 'free' ? 5 : 1) }}"
+                                {{ auth()->user()->status === 'free' ? 'title=Only 5-10 minutes allowed for free users' : '' }}
+                            >
+                            @if (auth()->user()->status === 'free')
+                                <small class="form-text text-muted">
+                                    Free users can set an interval between <strong>5 and 10 minutes</strong>. 
+                                    <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to set a shorter interval.
+                                </small>
                             @endif
                         </div>
 
@@ -144,13 +153,27 @@
                             @endif
                         </div>
                         <div class="mb-3">
-                            <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                            <input id="telegram_id" class="form-control" name="telegram_id" type="text">
+                            <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+                            <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+                                   {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+                            @if (auth()->user()->status === 'free')
+                                <small class="form-text text-muted">
+                                    <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+                                </small>
+                            @endif
                         </div>
+                        
                         <div class="mb-3">
                             <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                            <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
+                            <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+                                   {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+                            @if (auth()->user()->status === 'free')
+                                <small class="form-text text-muted">
+                                    <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+                                </small>
+                            @endif
                         </div>
+                        
                         <input class="btn btn-primary w-100" type="submit" value="Submit">
                     </form>
                 </div>
@@ -193,15 +216,25 @@
                             @enderror
                         @endif
                     </div>
-                    <div class="mb-3">
-                        <label for="interval" class="form-label">Interval (in minutes)</label>
-                        <input id="interval" class="form-control" name="interval" type="number" value="1"  >
-                        @if (old('form_type') === 'http')
-                            @error('interval')
-                                <div class="text-danger mt-1">{{ $message }}</div>
-                            @enderror
-                        @endif
-                    </div>
+                   <div class="mb-3">
+                            <label for="interval" class="form-label">Interval (in minutes)</label>
+                            <input 
+                                id="interval"
+                                class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}"
+                                name="interval"
+                                type="number"
+                                min="{{ auth()->user()->status === 'free' ? 5 : 1 }}"
+                                max="10"
+                                value="{{ old('interval', auth()->user()->status === 'free' ? 5 : 1) }}"
+                                {{ auth()->user()->status === 'free' ? 'title=Only 5-10 minutes allowed for free users' : '' }}
+                            >
+                            @if (auth()->user()->status === 'free')
+                                <small class="form-text text-muted">
+                                    Free users can set an interval between <strong>5 and 10 minutes</strong>. 
+                                    <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to set a shorter interval.
+                                </small>
+                            @endif
+                        </div>
                     
                     <h5 class="card-title">Notification</h5>
                     <div class="mb-3">
@@ -214,13 +247,27 @@
                         @endif
                     </div>
                     <div class="mb-3">
-                        <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                        <input id="telegram_id" class="form-control" name="telegram_id" type="text">
-                    </div>
-                    <div class="mb-3">
-                        <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                        <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
-                    </div>
+    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
+<div class="mb-3">
+    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
                     <input class="btn btn-primary w-100" type="submit" value="Submit">
             `
             },
@@ -257,14 +304,24 @@
                         @endif
                     </div>
                     <div class="mb-3">
-                        <label for="interval" class="form-label">Interval (in minutes)</label>
-                        <input id="interval" class="form-control" name="interval" type="number" value="1"  >
-                        @if (old('form_type') === 'ping')
-                            @error('interval')
-                                <div class="text-danger mt-1">{{ $message }}</div>
-                            @enderror
-                        @endif
-                    </div>
+                            <label for="interval" class="form-label">Interval (in minutes)</label>
+                            <input 
+                                id="interval"
+                                class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}"
+                                name="interval"
+                                type="number"
+                                min="{{ auth()->user()->status === 'free' ? 5 : 1 }}"
+                                max="10"
+                                value="{{ old('interval', auth()->user()->status === 'free' ? 5 : 1) }}"
+                                {{ auth()->user()->status === 'free' ? 'title=Only 5-10 minutes allowed for free users' : '' }}
+                            >
+                            @if (auth()->user()->status === 'free')
+                                <small class="form-text text-muted">
+                                    Free users can set an interval between <strong>5 and 10 minutes</strong>. 
+                                    <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to set a shorter interval.
+                                </small>
+                            @endif
+                        </div>
                 <h5 class="card-title">Notification</h5>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
@@ -276,13 +333,27 @@
                     @endif
                 </div>
                 <div class="mb-3">
-                    <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                    <input id="telegram_id" class="form-control" name="telegram_id" type="text">
-                </div>
-                <div class="mb-3">
-                    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
-                </div>
+    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
+<div class="mb-3">
+    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
 
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
                 
@@ -357,14 +428,24 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="interval" class="form-label">Interval (in minutes)</label>
-                    <input id="interval" class="form-control" name="interval" type="number" value="{{ old('interval', 1) }}">
-                    @if (old('form_type') === 'port')
-                        @error('interval')
-                            <div class="text-danger mt-1">{{ $message }}</div>
-                        @enderror
-                    @endif
-                </div>
+                            <label for="interval" class="form-label">Interval (in minutes)</label>
+                            <input 
+                                id="interval"
+                                class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}"
+                                name="interval"
+                                type="number"
+                                min="{{ auth()->user()->status === 'free' ? 5 : 1 }}"
+                                max="10"
+                                value="{{ old('interval', auth()->user()->status === 'free' ? 5 : 1) }}"
+                                {{ auth()->user()->status === 'free' ? 'title=Only 5-10 minutes allowed for free users' : '' }}
+                            >
+                            @if (auth()->user()->status === 'free')
+                                <small class="form-text text-muted">
+                                    Free users can set an interval between <strong>5 and 10 minutes</strong>. 
+                                    <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to set a shorter interval.
+                                </small>
+                            @endif
+                        </div>
 
                 <h5 class="card-title">Notification</h5>
 
@@ -378,15 +459,28 @@
                     @endif
                 </div>
 
-                <div class="mb-3">
-                    <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                    <input id="telegram_id" class="form-control" name="telegram_id" type="text" value="{{ old('telegram_id') }}">
-                </div>
+               <div class="mb-3">
+    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
 
-                <div class="mb-3">
-                    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                    <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text" value="{{ old('telegram_bot_token') }}">
-                </div>
+<div class="mb-3">
+    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
 
                 <input class="btn btn-primary w-100" type="submit" value="Submit">
             `
@@ -415,15 +509,36 @@
                         @endif
                     </div>
 
-                    <div class="mb-3">
-                        <label for="interval" class="form-label">Interval (in minutes)</label>
-                        <input id="interval" class="form-control" name="interval" type="number" min="1" value="1"  >
-                        @if (old('form_type') === 'dns')
-                            @error('interval')
-                                <div class="text-danger mt-1">{{ $message }}</div>
-                            @enderror
-                        @endif
-                    </div>
+
+<div class="mb-3">
+    <label for="interval" class="form-label">Interval (in minutes)</label>
+    <input 
+        id="interval"
+        class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}"
+        name="interval"
+        type="number"
+        min="{{ auth()->user()->status === 'free' ? 5 : 1 }}"
+        max="10"
+        value="{{ old('interval', auth()->user()->status === 'free' ? 5 : 1) }}"
+        {{ auth()->user()->status === 'free' ? 'title=Only 5-10 minutes allowed for free users' : '' }}
+    >
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            Free users can set an interval between <strong>5 and 10 minutes</strong>. 
+            <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to set a shorter interval.
+        </small>
+    @endif
+</div>
+
+<div class="mb-3">
+    <label for="retries" class="form-label">Retries</label>
+    <input id="retries" class="form-control" name="retries" type="number" min="0" value="3">
+    @if (old('form_type') === 'dns')
+        @error('retries')
+            <div class="text-danger mt-1">{{ $message }}</div>
+        @enderror
+    @endif
+</div>
 
                     <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
@@ -467,14 +582,27 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                        <input id="telegram_id" class="form-control" name="telegram_id" type="text">
-                    </div>
+    <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+    <input id="telegram_id" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_id" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
 
-                    <div class="mb-3">
-                        <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                        <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text">
-                    </div>
+<div class="mb-3">
+    <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+    <input id="telegram_bot_token" class="form-control {{ auth()->user()->status === 'free' ? 'bg-light text-muted border-secondary' : '' }}" name="telegram_bot_token" type="text"
+           {{ auth()->user()->status === 'free' ? 'disabled title=Only available for paid users' : '' }}>
+    @if (auth()->user()->status === 'free')
+        <small class="form-text text-muted">
+            <a href="{{ route('premium.page') }}">Upgrade to premium <i class="fa-solid fa-crown" style="color: #FFD43B;"></i></a> to enable Telegram notifications.
+        </small>
+    @endif
+</div>
+
                     
                     <input class="btn btn-primary w-100" type="submit" value="Submit">
             `,
