@@ -81,11 +81,12 @@
         /* Attachment Styling */
         .attachment-preview {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-top: 10px;
-            padding: 8px;
-            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #eee;
             border-radius: 4px;
+            margin-bottom: 10px;
         }
 
         .attachment-preview i {
@@ -93,10 +94,33 @@
             color: var(--gray);
         }
 
+        .file-info {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .file-preview {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
         .remove-attachment {
-            margin-left: auto;
+            margin-left: 15px;
             color: var(--danger);
             cursor: pointer;
+        }
+
+        .remove-attachment:hover {
+            opacity: 0.8;
+        }
+
+        .img-thumbnail {
+            max-width: 100px;
+            max-height: 60px;
+            object-fit: contain;
+            margin-left: 10px;
         }
     </style>
 @endpush
@@ -106,7 +130,7 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Create New Ticket</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <a href="{{ route('display.tickets') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-ticket-alt fa-sm text-white-50"></i> View All Tickets
         </a>
     </div>
@@ -166,9 +190,9 @@
                     <label class="col-md-2 col-form-label">Description*</label>
                     <div class="col-md-10">
                         <!-- Quill Editor Container -->
-                        <div id="editor-container"></div>
+                        <div id="editor-container" class="@error('description') is-invalid @enderror"></div>
                         <!-- Hidden input to store the HTML content -->
-                        <input type="hidden" id="description" name="description" value="{{ old('description') }}" required>
+                        <input type="hidden" id="description" name="description" value="{{ old('description') }}">
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -180,17 +204,20 @@
                     <label for="attachments" class="col-md-2 col-form-label">Attachments</label>
                     <div class="col-md-10">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('attachments') is-invalid @enderror" id="attachments" name="attachments[]" multiple>
+                            <input type="file" class="custom-file-input @error('attachments') is-invalid @enderror @error('attachments.*') is-invalid @enderror" id="attachments" name="attachments[]" multiple>
                             <label class="custom-file-label" for="attachments">Choose files (max 5MB each)</label>
+                            @error('attachments')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                            @error('attachments.*')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                         </div>
                         <small class="form-text text-muted">
-                            You can upload up to 3 files (images, documents, or logs)
+                            You can upload up to 3 files (images only)
                         </small>
                         <!-- Attachment preview container -->
                         <div id="attachment-preview-container" class="mt-2"></div>
-                        @error('attachments')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
                 </div>
 
@@ -199,9 +226,7 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-paper-plane mr-2"></i> Submit Ticket
                         </button>
-                        <button type="reset" class="btn btn-outline-secondary ml-2">
-                            <i class="fas fa-undo mr-2"></i> Reset
-                        </button>
+                       
                     </div>
                 </div>
             </form>
@@ -224,7 +249,7 @@
                     ['bold', 'italic', 'underline', 'strike'],
                     [{ 'color': [] }, { 'background': [] }],
                     [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['link', 'image', 'video'],
+                    ['link'],
                     ['clean']
                 ]
             },
@@ -261,41 +286,48 @@
         });
     });
 
-    // Function to show attachment previews
+    // Updated showAttachmentPreviews function (replace both existing ones)
     function showAttachmentPreviews(files) {
         const container = document.getElementById('attachment-preview-container');
         container.innerHTML = '';
-        
+
         if (files.length === 0) return;
-        
+
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const previewDiv = document.createElement('div');
-            previewDiv.className = 'attachment-preview';
-            
-            let iconClass = 'fa-file';
-            if (file.type.startsWith('image/')) {
-                iconClass = 'fa-file-image';
-            } else if (file.type.includes('pdf')) {
-                iconClass = 'fa-file-pdf';
-            } else if (file.type.includes('word') || file.type.includes('document')) {
-                iconClass = 'fa-file-word';
-            } else if (file.type.includes('excel') || file.type.includes('spreadsheet')) {
-                iconClass = 'fa-file-excel';
-            }
-            
-            previewDiv.innerHTML = `
-                <i class="fas ${iconClass}"></i>
-                <span>${file.name} (${formatFileSize(file.size)})</span>
-                <span class="remove-attachment" data-index="${i}">
+            previewDiv.className = 'attachment-preview mb-2';
+
+            // Create basic file info section
+            const fileInfo = document.createElement('div');
+            fileInfo.className = 'd-flex align-items-center';
+            fileInfo.innerHTML = `
+                <i class="fas fa-file-image mr-2"></i>
+                <span class="mr-2">${file.name} (${formatFileSize(file.size)})</span>
+                <span class="remove-attachment ml-auto" data-index="${i}" style="cursor:pointer;">
                     <i class="fas fa-times"></i>
                 </span>
             `;
-            
+            previewDiv.appendChild(fileInfo);
+
+            // Add image preview if it's an image
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgPreview = document.createElement('img');
+                    imgPreview.src = e.target.result;
+                    imgPreview.alt = file.name;
+                    imgPreview.className = 'img-thumbnail mt-2';
+                    imgPreview.style.width = '100px';
+                    previewDiv.appendChild(imgPreview);
+                };
+                reader.readAsDataURL(file);
+            }
+
             container.appendChild(previewDiv);
         }
-        
-        // Add event listeners to remove buttons
+
+        // Add click event listeners to all remove buttons
         document.querySelectorAll('.remove-attachment').forEach(button => {
             button.addEventListener('click', function() {
                 const index = parseInt(this.getAttribute('data-index'));
@@ -303,6 +335,7 @@
             });
         });
     }
+    
 
     // Function to remove file from input
     function removeFileFromInput(index) {
@@ -329,7 +362,12 @@
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i]);
     }
+
+    // Show attachment previews (updated for images)
+
+
 </script>
+
 @endpush
 
 @endsection

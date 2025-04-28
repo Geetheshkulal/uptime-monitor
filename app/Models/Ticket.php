@@ -11,7 +11,10 @@ class Ticket extends Model
 
     protected $fillable = [
         'ticket_id', 'user_id', 'title', 'message', 'status',
-        'priority', 'contact_no', 'assigned_user_id'
+        'priority', 'assigned_user_id','attachments',
+    ];
+    protected $casts = [
+        'attachments' => 'array',
     ];
 
     public function user(){

@@ -236,20 +236,6 @@
             </a>
         </li>
     @hasrole('superadmin')
-    <li class="nav-item {{ request()->routeIs('display.permissions') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('display.permissions') }}">
-            <i class="fas fa-door-open"></i>
-            <span>Permissions</span>
-        </a>
-    </li>
-
-    <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('billing') }}">
-            <i class="fas fa-money-bill"></i>
-            <span>Billing</span>
-        </a>
-    </li>
-
     <li class="nav-item {{ request()->routeIs('tickets') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('tickets') }}">
             <i class="fas fa-ticket-alt"></i>
