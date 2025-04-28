@@ -7,7 +7,6 @@ use App\Http\Controllers\PremiumPageController;
 use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
-use App\Http\Controllers\TicketsController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\ProfileController;
@@ -21,7 +20,6 @@ use App\Http\Controllers\PortMonitorController;
 use App\Http\Controllers\HttpMonitoringController;
 use App\Http\Controllers\CashFreePaymentController;
 use App\Http\Controllers\PlanSubscriptionController;
-
 // for ticket and comments
 use App\Http\Controllers\TicketController;
 
@@ -159,10 +157,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/billing',[BillingController::class,'Billing'])->middleware('role:superadmin')->name('billing');
     Route::post('/edit/billing/{id}',[BillingController::class,'EditBilling'])->middleware('role:superadmin')->name('edit.billing');
 
-    Route::get('/display/tickets',[TicketsController::class,'UserViewTickets'])->name('display.tickets');
-    Route::get('/raise/tickets',[TicketsController::class,'RaiseTickets'])->name('raise.tickets');
+    Route::get('/display/tickets',[TicketController::class,'ViewTicketsUser'])->name('display.tickets');
+    Route::get('/raise/tickets',[TicketController::class,'RaiseTicketsPage'])->name('raise.tickets');
     Route::get('/tickets',[TicketController::class,'TicketsView'])->middleware('role:superadmin')->name('tickets');
-
+    Route::post('/store/tickets',[TicketController::class,'StoreTicket'])->name('store.tickets');
     
 });
 

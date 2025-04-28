@@ -178,57 +178,35 @@
                                 </thead>
                                 <tbody>
                                     <!-- Sample Data - Replace with dynamic data from your backend -->
-                                    <tr>
-                                        <td class="font-600">#TKT-1001</td>
-                                        <td>Website Monitoring Not Working</td>
-                                        <td>
-                                            <span class="status-badge badge-open">
-                                                Open
-                                            </span>
-                                        </td>
-                                        <td>High</td>
-                                        <td>Jun 12, 2023</td>
-                                        <td>Jun 14, 2023</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-view">
-                                                <i class="fas fa-eye mr-1"></i>View
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-600">#TKT-1002</td>
-                                        <td>SSL Certificate Expiry Alert</td>
-                                        <td>
-                                            <span class="status-badge badge-pending">
-                                                Pending
-                                            </span>
-                                        </td>
-                                        <td>Medium</td>
-                                        <td>Jun 10, 2023</td>
-                                        <td>Jun 11, 2023</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-view">
-                                                <i class="fas fa-eye mr-1"></i>View
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-600">#TKT-1003</td>
-                                        <td>Dashboard Not Loading Properly</td>
-                                        <td>
-                                            <span class="status-badge badge-closed">
-                                                Closed
-                                            </span>
-                                        </td>
-                                        <td>Low</td>
-                                        <td>May 28, 2023</td>
-                                        <td>Jun 5, 2023</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-view">
-                                                <i class="fas fa-eye mr-1"></i>View
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    @foreach ($tickets as $ticket )
+                                        <tr>
+                                            <td class="font-600">{{ $ticket->ticket_id }}</td>
+                                            <td>{{ $ticket->title }}</td>
+                                            <td>
+                                                @switch($ticket->status)
+                                                    @case('open')
+                                                        <span class="status-badge badge-open">Open</span>
+                                                        @break
+
+                                                    @case('closed')
+                                                        <span class="status-badge badge-closed">Closed</span>
+                                                        @break
+
+                                                    @case('on hold')
+                                                        <span class="status-badge badge-pending">Pending</span>
+                                                        @break
+                                                @endswitch
+                                            </td>
+                                                <td>{{$ticket->priority}}</td>
+                                                <td>{{$ticket->created_at->diffForHumans()}}</td>
+                                                <td>{{$ticket->updated_at->diffForHumans()}}</td>
+                                                <td>
+                                                    <a href="#" class="btn btn-sm btn-view">
+                                                        <i class="fas fa-eye mr-1"></i>View
+                                                    </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

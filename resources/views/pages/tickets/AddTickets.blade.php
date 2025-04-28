@@ -34,8 +34,11 @@
 
         .form-control, .custom-select {
             border-radius: 0.35rem;
-            padding: 0.75rem 1rem;
+            padding: 0.375rem 0.75rem; /* Bootstrap default for perfect centering */
             border: 1px solid #d1d3e2;
+            height: calc(1.5em + 0.75rem + 2px); /* Match Bootstrap's input height */
+            font-size: 1rem;
+            line-height: 1.5;
         }
 
         .form-control:focus, .custom-select:focus {
@@ -114,43 +117,47 @@
             <h6 class="m-0 font-weight-bold text-primary">Ticket Information</h6>
         </div>
         <div class="card-body">
-            <form id="ticketForm" method="POST" action="#" enctype="multipart/form-data">
+            <form id="ticketForm" method="POST" action="{{route('store.tickets')}}" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Subject -->
                 <div class="form-group row">
                     <label for="subject" class="col-md-2 col-form-label">Subject*</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" id="subject" name="subject" required>
-                        <div class="invalid-feedback">Please provide a subject for your ticket.</div>
+                        <input type="text" class="form-control @error('subject') is-invalid @enderror" id="subject" name="subject" value="{{ old('subject') }}">
+                        @error('subject')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
                 <!-- Priority -->
                 <div class="form-group row">
-                    <label for="priority" class="col-md-2 col-form-label">Priority*</label>
-                    <div class="col-md-4">
-                        <select class="custom-select" id="priority" name="priority" required>
+                    <div class="col-md-6">
+                        <label for="priority" class="col-form-label">Priority*</label>
+                        <select class="custom-select @error('priority') is-invalid @enderror" id="priority" name="priority">
                             <option value="" selected disabled>Select priority</option>
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
-                            <option value="critical">Critical</option>
+                            <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
+                            <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
+                            <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
                         </select>
-                        <div class="invalid-feedback">Please select a priority level.</div>
+                        @error('priority')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
-                    <!-- Category -->
-                    <label for="category" class="col-md-2 col-form-label">Category*</label>
-                    <div class="col-md-4">
-                        <select class="custom-select" id="category" name="category" required>
+                    <div class="col-md-6">
+                        <label for="category" class="col-form-label">Category*</label>
+                        <select class="custom-select @error('category') is-invalid @enderror" id="category" name="category">
                             <option value="" selected disabled>Select category</option>
-                            <option value="technical">Technical Issue</option>
-                            <option value="billing">Billing Inquiry</option>
-                            <option value="feature">Feature Request</option>
-                            <option value="general">General Question</option>
+                            <option value="technical" {{ old('category') == 'technical' ? 'selected' : '' }}>Technical Issue</option>
+                            <option value="billing" {{ old('category') == 'billing' ? 'selected' : '' }}>Billing Inquiry</option>
+                            <option value="feature" {{ old('category') == 'feature' ? 'selected' : '' }}>Feature Request</option>
+                            <option value="general" {{ old('category') == 'general' ? 'selected' : '' }}>General Question</option>
                         </select>
-                        <div class="invalid-feedback">Please select a category.</div>
+                        @error('category')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -161,8 +168,10 @@
                         <!-- Quill Editor Container -->
                         <div id="editor-container"></div>
                         <!-- Hidden input to store the HTML content -->
-                        <input type="hidden" id="description" name="description" required>
-                        <div class="invalid-feedback">Please provide a detailed description.</div>
+                        <input type="hidden" id="description" name="description" value="{{ old('description') }}" required>
+                        @error('description')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -171,7 +180,7 @@
                     <label for="attachments" class="col-md-2 col-form-label">Attachments</label>
                     <div class="col-md-10">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="attachments" name="attachments[]" multiple>
+                            <input type="file" class="custom-file-input @error('attachments') is-invalid @enderror" id="attachments" name="attachments[]" multiple>
                             <label class="custom-file-label" for="attachments">Choose files (max 5MB each)</label>
                         </div>
                         <small class="form-text text-muted">
@@ -179,6 +188,9 @@
                         </small>
                         <!-- Attachment preview container -->
                         <div id="attachment-preview-container" class="mt-2"></div>
+                        @error('attachments')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -239,43 +251,7 @@
             showAttachmentPreviews(files);
         });
 
-        // Form validation
-        document.getElementById('ticketForm').addEventListener('submit', function(e) {
-            let isValid = true;
-            
-            // Validate subject
-            if (!document.getElementById('subject').value.trim()) {
-                document.getElementById('subject').classList.add('is-invalid');
-                isValid = false;
-            }
-            
-            // Validate priority
-            if (!document.getElementById('priority').value) {
-                document.getElementById('priority').classList.add('is-invalid');
-                isValid = false;
-            }
-            
-            // Validate category
-            if (!document.getElementById('category').value) {
-                document.getElementById('category').classList.add('is-invalid');
-                isValid = false;
-            }
-            
-            // Validate description
-            if (!quill.getText().trim()) {
-                document.querySelector('#editor-container').classList.add('is-invalid');
-                isValid = false;
-            }
-            
-            if (!isValid) {
-                e.preventDefault();
-                // Scroll to first invalid field
-                document.querySelector('.is-invalid').scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }
-        });
+       
 
         // Remove invalid class when user starts typing/selecting
         document.querySelectorAll('input, select, textarea').forEach(element => {
