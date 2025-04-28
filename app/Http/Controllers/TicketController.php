@@ -32,7 +32,6 @@ class TicketController extends Controller
         $request->validate([
             'subject' => 'required',
             'priority' => 'required',
-            'category' => 'required',
             'description' => 'required|min:1',
             'attachments' => 'nullable|array|max:3',
             'attachments.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
@@ -51,7 +50,6 @@ class TicketController extends Controller
             'title' => $request->subject,
             'message' => $request->description,
             'priority' => $request->priority,
-            'category' => $request->category,
             'attachments' => $attachmentPaths,
             'user_id' => auth()->id(), // If you have user association
         ]);

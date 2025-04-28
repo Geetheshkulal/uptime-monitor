@@ -157,8 +157,8 @@
 
                 <!-- Priority -->
                 <div class="form-group row">
-                    <div class="col-md-6">
-                        <label for="priority" class="col-form-label">Priority*</label>
+                        <label for="priority" class="col-md-2 col-form-label">Priority*</label>
+                        <div class="col-md-10">
                         <select class="custom-select @error('priority') is-invalid @enderror" id="priority" name="priority">
                             <option value="" selected disabled>Select priority</option>
                             <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
@@ -166,20 +166,6 @@
                             <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
                         </select>
                         @error('priority')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="category" class="col-form-label">Category*</label>
-                        <select class="custom-select @error('category') is-invalid @enderror" id="category" name="category">
-                            <option value="" selected disabled>Select category</option>
-                            <option value="technical" {{ old('category') == 'technical' ? 'selected' : '' }}>Technical Issue</option>
-                            <option value="billing" {{ old('category') == 'billing' ? 'selected' : '' }}>Billing Inquiry</option>
-                            <option value="feature" {{ old('category') == 'feature' ? 'selected' : '' }}>Feature Request</option>
-                            <option value="general" {{ old('category') == 'general' ? 'selected' : '' }}>General Question</option>
-                        </select>
-                        @error('category')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
