@@ -199,12 +199,21 @@
             <span>Permissions</span>
         </a>
     </li>
+
     <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('billing') }}">
             <i class="fas fa-money-bill"></i>
             <span>Billing</span>
         </a>
     </li>
+
+    <li class="nav-item {{ request()->routeIs('tickets') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('tickets') }}">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Tickets</span>
+        </a>
+    </li>
+
     @endhasrole
 
     @can('see.activity')
