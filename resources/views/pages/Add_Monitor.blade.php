@@ -529,17 +529,6 @@
         </small>
     @endif
 </div>
-
-<div class="mb-3">
-    <label for="retries" class="form-label">Retries</label>
-    <input id="retries" class="form-control" name="retries" type="number" min="0" value="3">
-    @if (old('form_type') === 'dns')
-        @error('retries')
-            <div class="text-danger mt-1">{{ $message }}</div>
-        @enderror
-    @endif
-</div>
-
                     <div class="mb-3">
                         <label for="retries" class="form-label">Retries</label>
                         <input id="retries" class="form-control" name="retries" type="number" min="0" value="3"  >
