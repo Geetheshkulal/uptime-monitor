@@ -230,7 +230,11 @@
                                         <td>{{$ticket->contact_no}}</td>
                                         <td>{{$ticket->assigned_user_id}}</td>
                                         <td>{{$ticket->created_at}}</td>
-                                        <td><i class="far fa-comment-alt" style="color: #0e55e1; font-size:1.5rem; cursor: pointer; padding: 8px;" data-toggle="tooltip" title="View Comments"></i></td>
+                                        <td>
+                                            <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="text-decoration-none" title="View Ticket Details">
+                                            <i class="far fa-comment-alt" style="color: #0e55e1; font-size:1.5rem; cursor: pointer; padding: 8px;" data-toggle="tooltip" title="View Comments"></i>
+                                        </a>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
