@@ -127,7 +127,7 @@
   }
   </style>
 
-@if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date===Null)
+{{-- @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date===Null)
 @php
     // Calculate remaining trial days
     $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
@@ -138,7 +138,7 @@
         You have free trial access for {{ $trialDaysLeft }} more days!
     </div>
 @endif
-@endif
+@endif --}}
 
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">

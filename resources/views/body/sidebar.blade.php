@@ -109,6 +109,39 @@
 .text-gold {
     color: gold !important;
 }
+.trial-banner {
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 3px 12px rgba(118, 75, 162, 0.3);
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+            overflow: hidden;
+        }
+        .trial-banner:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(85, 48, 121, 0.4);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .trial-banner {
+                padding: 0.4rem !important;
+            }
+            .trial-badge {
+                font-size: 0.55rem !important;
+                padding: 0.1rem 0.3rem !important;
+                top: -6px !important;
+            }
+            .trial-icon {
+                width: 26px !important;
+                height: 26px !important;
+            }
+            .trial-icon i {
+                font-size: 0.9rem !important;
+            }
+            .trial-notice span {
+                font-size: 0.75rem !important;
+            }
+        }
 
 </style>
 
@@ -163,6 +196,36 @@
         </a>
     </li>
     @endif
+    @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date === null)
+    @php
+        $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
+    @endphp
+    @if ($trialDaysLeft > 0)
+    <li class="nav-item trial-notice mt-2 mb-2">
+        <div class="trial-banner p-2 text-center position-relative" style="border-radius: 6px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="trial-badge bg-warning text-dark px-2 py-1 rounded-pill d-inline-block" style="font-size: 0.6rem; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); white-space: nowrap;">
+                
+            </div>
+            <div class="d-flex flex-column align-items-center pt-2">
+                <div class="trial-icon d-flex align-items-center justify-content-center mb-1" style="width: 30px; height: 30px; background: rgba(255,255,255,0.2); border-radius: 50%;">
+                    <i class="fas fa-gift" style="font-size: 1rem; color: #e2fb65;"></i>
+                </div>
+                <span class="text-white fw-bold" style="font-size: 0.8rem; line-height: 1.2;">Premium Trial Active!</span>
+                <span class="text-white-50" style="font-size: 0.7rem;">{{ $trialDaysLeft }} days left</span>
+                <div class="progress w-100 mt-1" style="height: 3px;">
+                    <div class="progress-bar bg-white" role="progressbar" 
+                         style="width: {{ 100 - ($trialDaysLeft * 10) }}%" 
+                         aria-valuenow="{{ 100 - ($trialDaysLeft * 10) }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    @endif
+@endif
+
     @endhasrole
 
     @hasrole('superadmin')
