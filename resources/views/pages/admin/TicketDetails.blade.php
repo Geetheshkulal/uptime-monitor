@@ -343,51 +343,6 @@
         @endif
     });
 
-    // document.addEventListener('DOMContentLoaded', function() {
-        
-    //     const quill = new Quill('#editor-container', {
-    //         modules: {
-    //             toolbar: [
-    //                 [{ 'header': [1, 2, 3, false] }],
-    //                 ['bold', 'italic', 'underline', 'strike'],
-    //                 [{ 'color': [] }, { 'background': [] }],
-    //                 [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-    //                 ['link', 'image', 'video'],
-    //                 ['clean']
-    //             ]
-    //         },
-    //         placeholder: 'Describe your issue in detail...',
-    //         theme: 'snow'
-    //     });
-
-      
-    //     quill.on('text-change', function() {
-    //         document.getElementById('description').value = quill.root.innerHTML;
-    //     });
-
-     
-    //     document.querySelector('.custom-file-input').addEventListener('change', function(e) {
-    //         const files = e.target.files;
-    //         let fileNames = [];
-    //         for (let i = 0; i < files.length; i++) {
-    //             fileNames.push(files[i].name);
-    //         }
-    //         const label = document.querySelector('.custom-file-label');
-    //         label.textContent = fileNames.join(', ') || 'Choose files';
-            
-      
-    //         showAttachmentPreviews(files);
-    //     });
-
-       
-
-       
-    //     document.querySelectorAll('input, select, textarea').forEach(element => {
-    //         element.addEventListener('input', function() {
-    //             this.classList.remove('is-invalid');
-    //         });
-    //     });
-    // });
 
     document.addEventListener('DOMContentLoaded', function() {
     // Initialize Quill Editor with GitHub-like styling
