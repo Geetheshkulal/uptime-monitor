@@ -1,4 +1,5 @@
 @push('styles')
+<head>
   <style>
       @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
     
@@ -125,8 +126,40 @@
     margin-bottom: 5px;
     padding: 3px;
   }
-  </style>
+  #page-loader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.5s ease;
+}
 
+#page-loader .loader-content {
+  text-align: center;
+  color: white;
+}
+
+#page-loader .spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(255,255,255,0.3);
+  border-top: 6px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+  </style>
+</head>
 {{-- @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date===Null)
 @php
     // Calculate remaining trial days
@@ -139,6 +172,13 @@
     </div>
 @endif
 @endif --}}
+<!-- PAGE LOADER -->
+<div id="page-loader">
+  <div class="loader-content">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+</div>
 
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -158,19 +198,19 @@
     >
       <i class="fas fa-question-circle mr-2"></i> Help
     </button>
-  
     <div class="dropdown-menu" aria-labelledby="helpBtn">
-      <button class="dropdown-item" id="startTourBtn">
-        <i class="fas fa-play mr-2"></i> Start Tour
-      </button>
+      @if (request()->is('dashboard*') || request()->is('ssl-check*') || request()->is('monitoring/add*'))
+          <button class="dropdown-item" id="startTourBtn">
+              <i class="fas fa-play mr-2"></i> Start Tour
+          </button>
+      @endif
       <a class="dropdown-item" href="mailto:checkmysite2025@gmail.com?subject=Issue%20Report">
-        <i class="fas fa-bug mr-2"></i> Report an Issue
+          <i class="fas fa-bug mr-2"></i> Report an Issue
       </a>
       <a class="dropdown-item" href="{{ url('/documentation') }}">
-        <i class="fas fa-info-circle mr-2"></i> For more info
-    </a>
-      <!-- add more options here -->
-    </div>
+          <i class="fas fa-info-circle mr-2"></i> For more info
+      </a>
+  </div>
   </div>
   
   @endhasrole
@@ -200,3 +240,13 @@
   </ul>
 
 </nav>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Your AJAX, Form Scripts -->
+<script>
+  window.addEventListener('load', function() {
+    const loader = document.getElementById('page-loader');
+    loader.style.opacity = '0';
+    setTimeout(() => loader.style.display = 'none', 2000);
+  });
+</script>
+

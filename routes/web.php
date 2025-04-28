@@ -159,7 +159,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/display/tickets',[TicketController::class,'ViewTicketsUser'])->name('display.tickets');
     Route::get('/raise/tickets',[TicketController::class,'RaiseTicketsPage'])->name('raise.tickets');
-    Route::get('/tickets',[TicketController::class,'TicketsView'])->middleware('role:superadmin')->name('tickets');
+    Route::get('/admin/tickets',[TicketController::class,'TicketsView'])->middleware('role:superadmin')->name('tickets');
     Route::post('/store/tickets',[TicketController::class,'StoreTicket'])->name('store.tickets');
     
 });

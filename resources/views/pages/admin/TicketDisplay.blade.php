@@ -23,7 +23,7 @@
             <div class="card shadow mb-4">
                 <!-- Card Header -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white px-4">
-                    <h6 class="m-0 font-weight-bold text-primary">All Subscription Plans</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">All Tickets</h6>
                     <!-- <a href="#" class="btn btn-primary btn-sm">
                         <i class="fas fa-plus"></i> Add New
                     </a> -->
