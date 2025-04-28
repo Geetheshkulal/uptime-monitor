@@ -22,6 +22,9 @@ use App\Http\Controllers\HttpMonitoringController;
 use App\Http\Controllers\CashFreePaymentController;
 use App\Http\Controllers\PlanSubscriptionController;
 
+// for ticket and comments
+use App\Http\Controllers\TicketController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -158,6 +161,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/display/tickets',[TicketsController::class,'UserViewTickets'])->name('display.tickets');
     Route::get('/raise/tickets',[TicketsController::class,'RaiseTickets'])->name('raise.tickets');
+    Route::get('/tickets',[TicketController::class,'TicketsView'])->middleware('role:superadmin')->name('tickets');
 
     
 });
