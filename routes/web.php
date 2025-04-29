@@ -165,7 +165,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/display/tickets/{id}', [TicketController::class, 'ShowTicket'])->name('display.tickets.show');
     Route::put('/display/tickets/{id}', [TicketController::class, 'UpdateTicket'])->name('tickets.update');
     Route::post('/admin/comments', [TicketController::class, 'CommentStore'])->name('admin.comments.store');
-    
+    Route::get('/tickets/comments/update/{id}', [TicketController::class, 'CommentPageUpdate'])->name('tickets.comments.update');
 });
 
 
