@@ -6,36 +6,69 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Models\Comment;
+use App\Models\User;
+
+use App\Mail\TicketAssignedMail;
+use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
 {
     public function TicketsView(){
 
         $tickets = Ticket::all();
+
+        $TotalTickets = Ticket::count();
+        $OpenTickets = Ticket::where('status', 'open')->count();
+        $ClosedTickets = Ticket::where('status', 'closed')->count();
+        $OnHoldTickets = Ticket::where('status', 'on hold')->count();
         
-        return view('pages.admin.TicketDisplayAdmin', compact('tickets'));
+        return view('pages.admin.TicketDisplayAdmin', compact('tickets','TotalTickets','OpenTickets','ClosedTickets','OnHoldTickets'));
     }
 
     public function ShowTicket($id)
     {
         $ticket = Ticket::findOrFail($id);
         $comments = $ticket->comments()->with('user')->latest()->get();
+        $supportUsers = User::role('support')->get();
 
-        return view('pages.admin.TicketDetails', compact('ticket', 'comments'));
+        return view('pages.admin.TicketDetails', compact('ticket', 'comments','supportUsers'));
     }
 
     public function UpdateTicket(Request $request, $id)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-Z\s]+$/',
+            ],
             'message' => 'required|string',
             'status' => 'required|in:open,closed,on hold',
             'priority' => 'required|in:low,medium,high',
-            'contact_no' => 'required|string|max:10',
+            'assigned_user_id' => 'nullable|exists:users,id', 
+        ], [
+            'title.regex' => 'The title must only contain alphabetic characters. Numbers are not allowed.', // Custom error message
         ]);
+    
 
         $ticket = Ticket::findOrFail($id);
-        $ticket->update($request->all());
+
+        $previousAssignedUserId = $ticket->assigned_user_id;
+
+        $ticket->update([
+            'title' => $request->title,
+            'message' => $request->message,
+            'status' => $request->status,
+            'priority' => $request->priority,
+            'assigned_user_id' => $request->assigned_user_id, // Update assigned user
+        ]);
+
+        // Send email if the assigned user has changed
+    if ($previousAssignedUserId !== $request->assigned_user_id && $request->assigned_user_id) {
+        $assignedUser = User::find($request->assigned_user_id);
+        Mail::to($assignedUser->email)->queue(new TicketAssignedMail($ticket));
+    }
 
         return redirect()->back()->with('success', 'Ticket updated successfully');
     }
