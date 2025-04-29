@@ -416,58 +416,96 @@
 </div>
 
 <!-- Edit Ticket Modal -->
-<div class="modal fade" id="editTicketModal" tabindex="-1" role="dialog" aria-labelledby="editTicketModalLabel" aria-hidden="true">
+<div class="modal fade @if(session()->has('errors')) show @endif" id="editTicketModal" tabindex="-1" role="dialog" aria-labelledby="editTicketModalLabel" aria-hidden="true" @if(session()->has('errors')) style="display: block;" @endif>
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editTicketModalLabel">Edit Ticket</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="editTicketModalLabel">Edit Ticket #{{ $ticket->id }}</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="{{ route('tickets.update', $ticket->id) }}">
+            <form method="POST" action="{{ route('tickets.update', $ticket->id) }}" id="editTicketForm">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
+                   
                     <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" value="{{ $ticket->title }}" required>
+                        <label for="title" class="font-weight-bold">Title</label>
+                        <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title', $ticket->title) }}" required>
+                        @error('title')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
+
+                    
                     <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea class="form-control" id="message" name="message" rows="4" required>{{ $ticket->message }}</textarea>
+                        <label for="message" class="font-weight-bold">Description</label>
+                        <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="5" required>{{ old('message', $ticket->message) }}</textarea>
+                        @error('message')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
+
+                    <div class="row">
+                   
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="status" class="font-weight-bold">Status</label>
+                                <select class="form-control selectpicker @error('status') is-invalid @enderror" id="status" name="status" required data-style="btn-status">
+                                    <option value="open" {{ old('status', $ticket->status) == 'open' ? 'selected' : '' }} data-content="<span class='badge badge-success'>Open</span>">Open</option>
+                                    <option value="closed" {{ old('status', $ticket->status) == 'closed' ? 'selected' : '' }} data-content="<span class='badge badge-secondary'>Closed</span>">Closed</option>
+                                    <option value="on hold" {{ old('status', $ticket->status) == 'on hold' ? 'selected' : '' }} data-content="<span class='badge badge-warning'>On Hold</span>">On Hold</option>
+                                </select>
+                                @error('status')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                       
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="priority" class="font-weight-bold">Priority</label>
+                                <select class="form-control selectpicker @error('priority') is-invalid @enderror" id="priority" name="priority" required data-style="btn-priority">
+                                    <option value="low" {{ old('priority', $ticket->priority) == 'low' ? 'selected' : '' }} data-content="<span class='badge badge-info'>Low</span>">Low</option>
+                                    <option value="medium" {{ old('priority', $ticket->priority) == 'medium' ? 'selected' : '' }} data-content="<span class='badge badge-primary'>Medium</span>">Medium</option>
+                                    <option value="high" {{ old('priority', $ticket->priority) == 'high' ? 'selected' : '' }} data-content="<span class='badge badge-danger'>High</span>">High</option>
+                                </select>
+                                @error('priority')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    
                     <div class="form-group">
-                        <label for="status">Status</label>
-                        <select class="form-control" id="status" name="status" required>
-                            <option value="open" {{ $ticket->status == 'open' ? 'selected' : '' }}>Open</option>
-                            <option value="closed" {{ $ticket->status == 'closed' ? 'selected' : '' }}>Closed</option>
-                            <option value="on hold" {{ $ticket->status == 'on hold' ? 'selected' : '' }}>On Hold</option>
+                        <label for="assigned_user_id" class="font-weight-bold">Assigned To</label>
+                        <select class="form-control selectpicker @error('assigned_user_id') is-invalid @enderror" id="assigned_user_id" name="assigned_user_id" data-live-search="true" data-style="btn-user">
+                            <option value="" {{ old('assigned_user_id', $ticket->assigned_user_id) == null ? 'selected' : '' }} data-content="<span class='text-muted'>Unassigned</span>">Unassigned</option>
+                            @foreach($supportUsers as $user)
+                                <option value="{{ $user->id }}" {{ old('assigned_user_id', $ticket->assigned_user_id) == $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="priority">Priority</label>
-                        <select class="form-control" id="priority" name="priority" required>
-                            <option value="low" {{ $ticket->priority == 'low' ? 'selected' : '' }}>Low</option>
-                            <option value="medium" {{ $ticket->priority == 'medium' ? 'selected' : '' }}>Medium</option>
-                            <option value="high" {{ $ticket->priority == 'high' ? 'selected' : '' }}>High</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="contact_no">Contact No</label>
-                        <input type="text" class="form-control" id="contact_no" name="contact_no" value="{{ $ticket->contact_no }}" required>
+                        @error('assigned_user_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-1"></i> Save Changes
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-    <!-- Image View Modal -->
-    
 </div>
+
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">

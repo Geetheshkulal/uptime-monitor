@@ -4,6 +4,8 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+
+
 <style>
     * {
         border-radius: 0 !important;
@@ -11,29 +13,22 @@
     </style>    
     
 @endpush
+</style>
+
 <style>
-   .tooltip-inner {
-    background-color: #0e55e1 !important; /* Custom background color */
-    color: #fff !important; /* Custom text color */
-    font-size: 14px; /* Adjust font size */
-    border-radius: 5px  !important; /* Add rounded corners */
-    padding: 8px; /* Add padding */
-}
+    .tippy-box[data-theme~='custom'] {
+        background-color: #0e55e1 !important; 
+        color: #fff; 
+        font-size: 14px; 
+        border-radius: 5px !important; 
+        padding: 7px !important; 
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important; 
+    }
 
-.tooltip.bs-tooltip-top .arrow::before {
-    border-top-color: #0e55e1 !important; 
-}
+    .tippy-box[data-theme~='custom'] .tippy-arrow {
+        color: #0e55e1; 
+    }
 
-.tooltip.bs-tooltip-bottom .arrow::before {
-    border-bottom-color: #0e55e1 !important;
-}
-.tooltip.bs-tooltip-left .arrow::before {
-    border-left-color: #0e55e1 !important;
-}
-
-.tooltip.bs-tooltip-right .arrow::before {
-    border-right-color: #0e55e1 !important;
-}
 </style>
 
 
@@ -113,6 +108,8 @@
     </div>
 </div>
   </div> --}}
+
+
   <!-- Ticket Card -->
 <div class="row mx-3 mb-4 d-flex justify-content-around">
     <div class="col-md-3 col-xl-2 mb-4">
@@ -122,7 +119,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Total Tickets</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{$TotalTickets}}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-ticket-alt text-primary fa-2x"></i>
@@ -139,7 +136,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                             Open Tickets</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{$OpenTickets}}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-folder-open text-success fa-2x"></i>
@@ -156,7 +153,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                             Closed Tickets</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{$ClosedTickets}}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-check-circle text-danger fa-2x"></i>
@@ -173,7 +170,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                             On Hold Tickets</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{$OnHoldTickets}}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-pause-circle text-warning fa-2x"></i>
@@ -211,7 +208,6 @@
                                     <th>Message</th>
                                     <th>Status</th>
                                     <th>Priority</th>
-                                    <th>Contact No</th>
                                     <th>Assigned User</th>
                                     <th>Created at</th>
                                     <th>Action</th>
@@ -225,15 +221,31 @@
                                         <td>{{ $ticket->user_id }}</td>
                                         <td>{{$ticket->title}}</td>
                                         <td>{{$ticket->message}}</td>
-                                        <td>{{$ticket->status}}</td>
+                                        <td>
+                                            @if($ticket->status === 'open')
+                                                <span class="badge badge-success rounded">Open</span>
+                                            @elseif($ticket->status === 'closed')
+                                                <span class="badge badge-danger rounded">Closed</span>
+                                            @elseif($ticket->status === 'on hold')
+                                                <span class="badge badge-warning rounded">On Hold</span>
+                                            @else
+                                                <span class="badge badge-secondary">{{ ucfirst($ticket->status) }}</span>
+                                            @endif
+                                        </td>
                                         <td>{{$ticket->priority}}</td>
-                                        <td>{{$ticket->contact_no}}</td>
-                                        <td>{{$ticket->assigned_user_id}}</td>
+                                        <td>{{$ticket->assigned_user_id ? $ticket->assigned_user_id :'N/A'}}</td>
                                         <td>{{$ticket->created_at}}</td>
                                         <td>
-                                            <a href="{{ route('admin.tickets.show', $ticket->id) }}" class="text-decoration-none" title="View Ticket Details">
-                                            <i class="far fa-comment-alt" style="color: #0e55e1; font-size:1.5rem; cursor: pointer; padding: 8px;" data-toggle="tooltip" title="View Comments"></i>
+                                            <div class="d-flex">
+                                            <a href="{{ route('display.tickets.show', $ticket->id) }}" class="text-decoration-none ToolTip">
+                                            <i id="myComment"  class="far fa-comment-alt" style="color: #0e55e1; font-size:1.5rem; cursor: pointer; padding: 8px;"></i>
                                         </a>
+                                        @if($ticket->status === 'closed')
+                                        <a class="text-decoration-none" >
+                                            <i id="myClosed" class="fas fa-check-circle text-danger" style="color: #e10e18; font-size:1.5rem; padding: 8px;"></i>
+                                        </a>
+                                         @endif
+                                            </div>
                                         </td>
                                     </tr>
                                 @empty
@@ -286,9 +298,31 @@
 @push('scripts')
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+
+<!-- Load Tippy.js after Bootstrap -->
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+
+
+
 <script>
+    tippy('#myComment', {
+    content: 'View Comment',
+    theme: 'custom', 
+    animation: 'scale', 
+    arrow: true, 
+    placement: 'top', 
+});
+
+tippy('#myClosed', {
+    content: 'Closed',
+    theme: 'custom', 
+    animation: 'scale', 
+    arrow: true, 
+    placement: 'top', 
+});
+
     $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
 
         $('#dataTable').DataTable({
             "paging": true,
