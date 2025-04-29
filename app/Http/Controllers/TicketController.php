@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Models\Comment;
+use Laravolt\Avatar\Avatar;
 use App\Models\User;
 
 use App\Mail\TicketAssignedMail;
@@ -82,6 +83,21 @@ class TicketController extends Controller
         ]);
     
         return redirect()->back()->with('success', 'Comment added successfully.');
+    }
+
+    public function CommentPageUpdate($id){
+        $ticket = Ticket::findOrFail($id);
+        $comments = $ticket->comments()->with('user')->latest()->get();
+    
+        $comments->each(function ($comment) {
+            // Configure the avatar with color here
+            $avatar = new Avatar();
+            $comment->user->avatar_url = $avatar
+                ->create($comment->user->name)
+                ->toBase64();
+        });
+    
+        return response()->json($comments);
     }
 
     public function ViewTicketsUser()

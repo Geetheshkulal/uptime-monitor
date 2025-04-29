@@ -205,14 +205,15 @@
         }
 
         .btn-secondary {
-            color: #24292e;
-            background-color: #fafbfc;
+            color: #ffffff;
+            background-color: #4e73df;
             border-color: rgba(27, 31, 35, 0.15);
             margin-right: 8px;
         }
 
         .btn-secondary:hover {
-            background-color: #f3f4f6;
+            background-color: #4e73ff;
+            color: #000000;
         }
 
         /* Markdown body adjustments */
@@ -300,7 +301,7 @@
     <!-- Header with back button and edit option -->
     <div class="d-flex justify-content-between mb-3">
         <div>
-            <a href="{{ route('display.tickets') }}" class="btn btn-secondary">
+            <a href="{{ route('display.tickets') }}" class="btn back-btn" style="background-color: #858796;color: #fff;">
                 <i class="fas fa-arrow-left"></i> Back to tickets
             </a>
         </div>
@@ -339,7 +340,9 @@
             </div>
             <div class="comment-body markdown-body">
                 {!! $ticket->message !!}
-                <hr>
+                @if(count($ticket->attachments)>0)
+                    <hr style="height:1px;">
+                @endif
                 <div class="attachments-gallery">
                     @foreach($ticket->attachments as $attachment)
                         @if($attachment)
@@ -362,28 +365,29 @@
     <!-- Comments section -->
     @if($comments->count() > 0)
     <div class="mt-4">
-        <h4 class="mb-3">{{ $comments->count() }} {{ Str::plural('Comment', $comments->count()) }}</h4>
-        
-        @foreach($comments as $comment)
-        <div class="timeline-item">
-            <div class="comment">
-                <div class="comment-header">
-                    <img src="{{ Avatar::create($comment->user->name)->toBase64() }}" class="comment-avatar" alt="{{ $comment->user->name }}">
-                    <span class="comment-author">{{ $comment->user->name }}</span>
-                    <span class="comment-meta">commented on {{ $comment->created_at->format('M j, Y') }}</span>
-                    @if(auth()->id() == $comment->user_id)
-                    <div class="ml-auto">
-                        <button class="btn btn-sm btn-outline mr-1"><i class="fas fa-edit"></i></button>
-                        <button class="btn btn-sm btn-outline"><i class="fas fa-trash"></i></button>
+        <h4 class="mb-3 comment-count">{{ $comments->count() }} {{ Str::plural('Comment', $comments->count()) }}</h4>
+        <div class="comments-list">
+            @foreach($comments as $comment)
+            <div class="timeline-item">
+                <div class="comment">
+                    <div class="comment-header">
+                        <img src="{{ Avatar::create($comment->user->name)->toBase64() }}" class="comment-avatar" alt="{{ $comment->user->name }}">
+                        <span class="comment-author">{{ $comment->user->name }}</span>
+                        <span class="comment-meta">commented on {{ $comment->created_at->format('M j, Y') }}</span>
+                        @if(auth()->id() == $comment->user_id)
+                        <div class="ml-auto">
+                            <button class="btn btn-sm btn-outline mr-1"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-outline"><i class="fas fa-trash"></i></button>
+                        </div>
+                        @endif
                     </div>
-                    @endif
-                </div>
-                <div class="comment-body markdown-body">
-                    {!! $comment->comment_message !!}
+                    <div class="comment-body markdown-body">
+                        {!! $comment->comment_message !!}
+                    </div>
                 </div>
             </div>
+            @endforeach
         </div>
-        @endforeach
     </div>
     @endif
 
@@ -393,7 +397,7 @@
             Add comment
         </div>
         <div class="new-comment-body">
-            <form id="ticketForm" method="POST" action="{{ route('admin.comments.store') }}">
+            <form id="ticketForm" method="POST">
                 @csrf
                 <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                 
@@ -425,7 +429,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="{{ route('tickets.update', $ticket->id) }}" id="editTicketForm">
+            <form method="POST" action="{{ route('tickets.update', $ticket->id) }}">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -617,38 +621,6 @@
         imageModal.on('hidden.bs.modal', function() {
             downloadBtn.style.display = 'block';
         });
-    });
-
-   // The below script initializes the Quill editor for the edit ticket modal
-    document.addEventListener('DOMContentLoaded', function() {
-
-        const quill = new Quill('#quill-editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['link'],
-                    ['clean']
-                ]
-            },
-            placeholder: 'Describe the ticket in detail...'
-        });
-    
-        // Set initial content
-        quill.clipboard.dangerouslyPasteHTML(document.getElementById('message').value);
-    
-        // Update hidden input before form submission
-        document.getElementById('editTicketForm').onsubmit = function() {
-            const description = document.getElementById('message');
-            description.value = quill.root.innerHTML;
-            return true;
-        };
-    
-        // If modal is shown with errors, reinitialize Quill with the submitted content
-        @if(session()->has('errors'))
-            quill.clipboard.dangerouslyPasteHTML('{{ old('message') }}');
-        @endif
     });
 </script>
 
