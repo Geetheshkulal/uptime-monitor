@@ -437,11 +437,20 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
                     
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="message" class="font-weight-bold">Description</label>
                         <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="5" required>{{ old('message', $ticket->message) }}</textarea>
+                        @error('message')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div> --}}
+
+                     <!-- Description Field with Quill Editor -->
+                     <div class="form-group">
+                        <label for="message" class="font-weight-bold">Description</label>
+                        <div id="quill-editor">{!! old('message', $ticket->message) !!}</div>
+                        <input type="hidden" id="message" name="message" value="{{ old('message', $ticket->message) }}">
                         @error('message')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -576,6 +585,7 @@
             editor.style.minHeight = '150px';
             editor.style.color = '#24292e';
         }
+
     });
 
         
@@ -608,7 +618,41 @@
             downloadBtn.style.display = 'block';
         });
     });
+
+   // The below script initializes the Quill editor for the edit ticket modal
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const quill = new Quill('#quill-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link'],
+                    ['clean']
+                ]
+            },
+            placeholder: 'Describe the ticket in detail...'
+        });
+    
+        // Set initial content
+        quill.clipboard.dangerouslyPasteHTML(document.getElementById('message').value);
+    
+        // Update hidden input before form submission
+        document.getElementById('editTicketForm').onsubmit = function() {
+            const description = document.getElementById('message');
+            description.value = quill.root.innerHTML;
+            return true;
+        };
+    
+        // If modal is shown with errors, reinitialize Quill with the submitted content
+        @if(session()->has('errors'))
+            quill.clipboard.dangerouslyPasteHTML('{{ old('message') }}');
+        @endif
+    });
 </script>
+
+
 @endpush
 
 @endsection

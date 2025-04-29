@@ -37,12 +37,7 @@ class TicketController extends Controller
     public function UpdateTicket(Request $request, $id)
     {
         $request->validate([
-            'title' => [
-                'required',
-                'string',
-                'max:255',
-                'regex:/^[a-zA-Z\s]+$/',
-            ],
+            'title' => 'required|string|max:50',
             'message' => 'required|string',
             'status' => 'required|in:open,closed,on hold',
             'priority' => 'required|in:low,medium,high',
