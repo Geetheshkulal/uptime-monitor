@@ -190,7 +190,7 @@
                     <label for="attachments" class="col-md-2 col-form-label">Attachments</label>
                     <div class="col-md-10">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('attachments') is-invalid @enderror @error('attachments.*') is-invalid @enderror" id="attachments" name="attachments[]" multiple>
+                            <input type="file" class="custom-file-input @error('attachments') is-invalid @enderror @error('attachments.*') is-invalid @enderror" id="attachments" accept="image/*" name="attachments[]" multiple>
                             <label class="custom-file-label" for="attachments">Choose files (max 5MB each)</label>
                             @error('attachments')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>

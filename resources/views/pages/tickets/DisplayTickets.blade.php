@@ -198,10 +198,10 @@
                                                 @endswitch
                                             </td>
                                                 <td>{{$ticket->priority}}</td>
-                                                <td>{{ $ticket->created_at ? $ticket->created_at->diffForHumans() : 'N/A' }}</td>
-                                                <td>{{ $ticket->updated_at ? $ticket->updated_at->diffForHumans() : 'N/A' }}</td>
+                                                <td>{{$ticket->created_at->diffForHumans()}}</td>
+                                                <td>{{$ticket->updated_at->diffForHumans()}}</td>
                                                 <td>
-                                                    <a href="#" class="btn btn-sm btn-view">
+                                                    <a href="{{ route('display.tickets.show',$ticket->id) }}" class="btn btn-sm btn-view">
                                                         <i class="fas fa-eye mr-1"></i>View
                                                     </a>
                                             </td>

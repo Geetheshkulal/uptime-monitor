@@ -21,7 +21,7 @@ class TicketController extends Controller
         $ticket = Ticket::findOrFail($id);
         $comments = $ticket->comments()->with('user')->latest()->get();
 
-        return view('pages.admin.TicketDetails', compact('ticket', 'comments'));
+        return view('pages.tickets.TicketDetails', compact('ticket', 'comments'));
     }
 
     public function UpdateTicket(Request $request, $id)
@@ -87,7 +87,7 @@ class TicketController extends Controller
         }
 
         $ticket = Ticket::create([
-            'ticket_id'=>'TICKET-' . strtoupper(Str::random(10)),
+            'ticket_id'=>'TKT-' . strtoupper(Str::random(10)),
             'title' => $request->subject,
             'message' => $request->description,
             'priority' => $request->priority,

@@ -162,8 +162,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/store/tickets',[TicketController::class,'StoreTicket'])->name('store.tickets');
 
     Route::get('/admin/tickets',[TicketController::class,'TicketsView'])->middleware('role:superadmin')->name('tickets');
-    Route::get('/admin/tickets/{id}', [TicketController::class, 'ShowTicket'])->name('admin.tickets.show');
-    Route::put('/admin/tickets/{id}', [TicketController::class, 'UpdateTicket'])->name('admin.tickets.update');
+    Route::get('/display/tickets/{id}', [TicketController::class, 'ShowTicket'])->name('display.tickets.show');
+    Route::put('/display/tickets/{id}', [TicketController::class, 'UpdateTicket'])->name('tickets.update');
     Route::post('/admin/comments', [TicketController::class, 'CommentStore'])->name('admin.comments.store');
     
 });
