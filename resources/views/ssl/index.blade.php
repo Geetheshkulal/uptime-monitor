@@ -69,7 +69,7 @@
             border-radius: 0.25rem;
             font-weight: 600;
             text-shadow: none;
-            color: black;
+            color: white;
         }
 
         .introjs-button:hover {

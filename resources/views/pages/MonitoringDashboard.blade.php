@@ -194,7 +194,7 @@
             background-color: var(--primary);
             border-radius: 0.25rem;
             font-weight: 600;
-            color: black;
+            color: white;
             text-shadow: none;
             
         }
