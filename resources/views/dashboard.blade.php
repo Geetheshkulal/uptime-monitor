@@ -28,7 +28,7 @@
 
     <!-- Skeleton Loader Styles -->
     <style>
-        *:not(.status-dot) {
+        *:not(.status-dot):not(.status-badge,.status-indicator,.bar-segment) {
             border-radius: 0 !important;
         }
 
