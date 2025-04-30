@@ -227,7 +227,7 @@
             </a>
         </li>
 
-    @if (auth()->user()->status === 'paid')
+    @if (auth()->user()->status === 'paid' || auth()->user()->status === 'free_trial')
     <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
         <a class="nav-link ssl" href="{{ route('ssl.check') }}">
             <i class="fas fa-lock"></i>
@@ -314,7 +314,7 @@
                 <span>Raise Issue</span>
             </a>
         </li>
-        @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date === null)
+        @if (auth()->user()->status === 'free_trial')
     @php
         $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
     @endphp
