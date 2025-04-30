@@ -9,7 +9,6 @@
     <!-- Quill Editor CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
-    <!-- Custom GitHub-like Styles with Quill integration -->
     <style>
         :root {
             --color-text-primary: #24292e;
@@ -34,7 +33,6 @@
             max-width: 1280px;
         }
 
-        /* Header styles */
         .issue-header {
             padding-bottom: 8px;
             margin-bottom: 16px;
@@ -77,7 +75,6 @@
             background-color: var(--color-state-on-hold);
         }
 
-        /* Comment/timeline styles */
         .timeline-item {
             position: relative;
             padding-bottom: 16px;
@@ -129,7 +126,6 @@
             line-height: 1.5;
         }
 
-        /* New comment form with Quill */
         .new-comment {
             margin-top: 16px;
             border: 1px solid var(--color-border-primary);
@@ -148,7 +144,6 @@
             padding: 16px;
         }
 
-        /* Quill editor customization to match GitHub style */
         #editor-container {
             border: 1px solid var(--color-border-primary);
             border-radius: 6px;
@@ -205,18 +200,16 @@
         }
 
         .btn-secondary {
-            color: #ffffff;
-            background-color: #4e73df;
+            color: #24292e;
+            background-color: #fafbfc;
             border-color: rgba(27, 31, 35, 0.15);
             margin-right: 8px;
         }
 
         .btn-secondary:hover {
-            background-color: #4e73ff;
-            color: #000000;
+            background-color: #f3f4f6;
         }
 
-        /* Markdown body adjustments */
         .markdown-body {
             font-size: 14px;
             line-height: 1.5;
@@ -226,18 +219,6 @@
             max-width: 100%;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .issue-title {
-                font-size: 20px;
-            }
-            
-            .container {
-                padding-left: 16px;
-                padding-right: 16px;
-            }
-        }
-        /* Add these styles to your existing CSS */
         .attachments-gallery {
             display: flex;
             flex-wrap: wrap;
@@ -288,20 +269,29 @@
             transform: scale(1.05);
         }
 
-        /* Modal image styling */
         #modalImage {
             max-height: 70vh;
             max-width: 100%;
         }
+
+        @media (max-width: 768px) {
+            .issue-title {
+                font-size: 20px;
+            }
+            
+            .container {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+        }
     </style>
-@endpush
+    @endpush
 </head>
 
 <div class="container mt-4">
-    <!-- Header with back button and edit option -->
     <div class="d-flex justify-content-between mb-3">
         <div>
-            <a href="{{ route('display.tickets') }}" class="btn back-btn" style="background-color: #858796;color: #fff;">
+            <a href="{{ route('display.tickets') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to tickets
             </a>
         </div>
@@ -314,7 +304,6 @@
         @endhasrole
     </div>
 
-    <!-- Ticket header -->
     <div class="issue-header">
         <h1 class="issue-title">
             <span class="state-badge state-{{ $ticket->status == 'open' ? 'open' : ($ticket->status == 'closed' ? 'closed' : 'on-hold') }}">
@@ -330,7 +319,6 @@
         </div>
     </div>
 
-    <!-- Main ticket content -->
     <div class="timeline-item">
         <div class="comment">
             <div class="comment-header">
@@ -340,9 +328,7 @@
             </div>
             <div class="comment-body markdown-body">
                 {!! $ticket->message !!}
-                @if(count($ticket->attachments)>0)
-                    <hr style="height:1px;">
-                @endif
+                <hr>
                 <div class="attachments-gallery">
                     @foreach($ticket->attachments as $attachment)
                         @if($attachment)
@@ -363,12 +349,11 @@
     </div>
 
     <!-- Comments section -->
-    @if($comments->count() > 0)
-    <div class="mt-4">
-        <h4 class="mb-3 comment-count">{{ $comments->count() }} {{ Str::plural('Comment', $comments->count()) }}</h4>
-        <div class="comments-list">
+    <div class="mt-4" id="comments-section">
+        <h4 class="mb-3" id="comments-count">{{ $comments->count() }} {{ Str::plural('Comment', $comments->count()) }}</h4>
+        <div id="comments-list">
             @foreach($comments as $comment)
-            <div class="timeline-item">
+            <div class="timeline-item comment-item" data-comment-id="{{ $comment->id }}">
                 <div class="comment">
                     <div class="comment-header">
                         <img src="{{ Avatar::create($comment->user->name)->toBase64() }}" class="comment-avatar" alt="{{ $comment->user->name }}">
@@ -376,8 +361,8 @@
                         <span class="comment-meta">commented on {{ $comment->created_at->format('M j, Y') }}</span>
                         @if(auth()->id() == $comment->user_id)
                         <div class="ml-auto">
-                            <button class="btn btn-sm btn-outline mr-1"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-outline"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-sm btn-outline mr-1 edit-comment-btn"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-sm btn-outline delete-comment-btn"><i class="fas fa-trash"></i></button>
                         </div>
                         @endif
                     </div>
@@ -389,20 +374,18 @@
             @endforeach
         </div>
     </div>
-    @endif
 
-    <!-- Add comment form with Quill editor -->
-    <div class="new-comment mt-4">
+    <!-- Add comment form -->
+    <div class="new-comment mt-4" id="comment-form-container">
         <div class="new-comment-header">
             Add comment
         </div>
         <div class="new-comment-body">
-            <form id="ticketForm" method="POST">
+            <form id="ticketForm" method="POST" action="{{ route('admin.comments.store') }}">
                 @csrf
                 <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                 
                 <div class="form-group">
-                    <!-- Quill editor container -->
                     <div id="editor-container"></div>
                     <input type="hidden" id="description" name="description" value="{{ old('description') }}" required>
                     @error('description')
@@ -429,11 +412,10 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="{{ route('tickets.update', $ticket->id) }}">
+            <form method="POST" action="{{ route('tickets.update', $ticket->id) }}" id="editTicketForm">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
-                   
                     <div class="form-group">
                         <label for="title" class="font-weight-bold">Title</label>
                         <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title', $ticket->title) }}" required>
@@ -441,17 +423,8 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    
-                    {{-- <div class="form-group">
-                        <label for="message" class="font-weight-bold">Description</label>
-                        <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="5" required>{{ old('message', $ticket->message) }}</textarea>
-                        @error('message')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div> --}}
 
-                     <!-- Description Field with Quill Editor -->
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="message" class="font-weight-bold">Description</label>
                         <div id="quill-editor">{!! old('message', $ticket->message) !!}</div>
                         <input type="hidden" id="message" name="message" value="{{ old('message', $ticket->message) }}">
@@ -461,7 +434,6 @@
                     </div>
 
                     <div class="row">
-                   
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="status" class="font-weight-bold">Status</label>
@@ -476,7 +448,6 @@
                             </div>
                         </div>
 
-                       
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="priority" class="font-weight-bold">Priority</label>
@@ -492,7 +463,6 @@
                         </div>
                     </div>
 
-                    
                     <div class="form-group">
                         <label for="assigned_user_id" class="font-weight-bold">Assigned To</label>
                         <select class="form-control selectpicker @error('assigned_user_id') is-invalid @enderror" id="assigned_user_id" name="assigned_user_id" data-live-search="true" data-style="btn-user">
@@ -519,29 +489,30 @@
     </div>
 </div>
 
+<!-- Image Modal -->
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Attachment Preview</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <img id="modalImage" src="" class="img-fluid" alt="Attachment">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <a id="downloadBtn" href="#" class="btn btn-primary" download>
-                        <i class="fas fa-download"></i> Download
-                    </a>
-                </div>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Attachment Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid" alt="Attachment">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a id="downloadBtn" href="#" class="btn btn-primary" download>
+                    <i class="fas fa-download"></i> Download
+                </a>
             </div>
         </div>
     </div>
+</div>
+
 @push('scripts')
-<!-- Quill JS -->
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
@@ -556,7 +527,7 @@
             });
         @endif
 
-        // Initialize Quill Editor with GitHub-like styling
+        // Initialize Quill Editor for comments
         const quill = new Quill('#editor-container', {
             modules: {
                 toolbar: [
@@ -579,31 +550,14 @@
             return true;
         };
 
-        // Style adjustments to match GitHub's comment boxes
-        const editor = document.querySelector('#editor-container .ql-editor');
-        if (editor) {
-            editor.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif';
-            editor.style.fontSize = '14px';
-            editor.style.lineHeight = '1.5';
-            editor.style.padding = '8px 16px';
-            editor.style.minHeight = '150px';
-            editor.style.color = '#24292e';
-        }
-
-    });
-
-        
-    document.addEventListener("DOMContentLoaded", function() {
         // Image modal functionality
         const imageModal = $('#imageModal');
         const modalImage = document.getElementById('modalImage');
         const downloadBtn = document.getElementById('downloadBtn');
         
-        // Handle attachment clicks
         document.querySelectorAll('.attachment-container').forEach(container => {
             container.addEventListener('click', function() {
                 const imageUrl = this.getAttribute('data-image');
-                console.log(imageUrl)
                 modalImage.src = imageUrl;
                 downloadBtn.href = imageUrl;
                 downloadBtn.setAttribute('download', imageUrl.split('/').pop());
@@ -611,20 +565,172 @@
             });
         });
         
-        // Handle modal image loading errors
         modalImage.onerror = function() {
             this.src = 'https://via.placeholder.com/800x600?text=Image+Not+Available';
             downloadBtn.style.display = 'none';
         };
         
-        // Reset download button when modal is hidden
         imageModal.on('hidden.bs.modal', function() {
             downloadBtn.style.display = 'block';
         });
+
+        // Edit ticket modal Quill editor
+        const editQuill = new Quill('#quill-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link'],
+                    ['clean']
+                ]
+            },
+            placeholder: 'Describe the ticket in detail...'
+        });
+    
+        editQuill.clipboard.dangerouslyPasteHTML(document.getElementById('message').value);
+    
+        document.getElementById('editTicketForm').onsubmit = function() {
+            const description = document.getElementById('message');
+            description.value = editQuill.root.innerHTML;
+            return true;
+        };
+    
+        @if(session()->has('errors'))
+            editQuill.clipboard.dangerouslyPasteHTML('{{ old('message') }}');
+        @endif
+
+        // Function to fetch and update comments
+        function fetchComments() {
+            $.ajax({
+                url: "{{ route('tickets.comments.update', $ticket->id) }}",
+                type: "GET",
+                success: function(data) {
+                    if (Array.isArray(data)) {
+                        const commentsList = $('#comments-list');
+                        const commentsCount = $('#comments-count');
+                        
+                        // Store existing comment IDs to avoid duplicates
+                        const existingCommentIds = [];
+                        commentsList.find('.comment-item').each(function() {
+                            existingCommentIds.push($(this).data('comment-id'));
+                        });
+                        
+                        // Add new comments that don't already exist
+                        let newCommentsCount = 0;
+                        data.forEach(comment => {
+                            if (!existingCommentIds.includes(comment.id)) {
+                                const createdAt = new Date(comment.created_at);
+                                const formattedDate = createdAt.toLocaleDateString('en-US', { 
+                                    year: 'numeric', 
+                                    month: 'short', 
+                                    day: 'numeric' 
+                                });
+                                
+                                const commentHtml = `
+                                    <div class="timeline-item comment-item" data-comment-id="${comment.id}">
+                                        <div class="comment">
+                                            <div class="comment-header">
+                                                <img src="${comment.user.avatar_url}" class="comment-avatar" alt="${comment.user.name}">
+                                                <span class="comment-author">${comment.user.name}</span>
+                                                <span class="comment-meta">commented on ${formattedDate}</span>
+                                                ${comment.user_id == {{ auth()->id() }} ? `
+                                                    <div class="ml-auto">
+                                                        <button class="btn btn-sm btn-outline mr-1 edit-comment-btn"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-sm btn-outline delete-comment-btn"><i class="fas fa-trash"></i></button>
+                                                    </div>` : ''}
+                                            </div>
+                                            <div class="comment-body markdown-body">
+                                                ${comment.comment_message}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                // Append new comment to the comments list (before the comment form)
+                                commentsList.append(commentHtml);
+                                newCommentsCount++;
+                            }
+                        });
+                        
+                        // Update comment count if new comments were added
+                        if (newCommentsCount > 0) {
+                            const currentCount = parseInt(commentsCount.text().split(' ')[0]);
+                            const newCount = currentCount + newCommentsCount;
+                            commentsCount.text(`${newCount} ${newCount === 1 ? 'Comment' : 'Comments'}`);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error loading comments:", error);
+                }
+            });
+        }
+
+        // Initialize comment fetching every 3 seconds
+        setInterval(fetchComments, 3000);
+
+        // AJAX form submission for comments
+        $('#ticketForm').on('submit', function(event) {
+            event.preventDefault();
+            
+            const form = $(this);
+            const descriptionInput = form.find('input[name=description]');
+            descriptionInput.val(quill.root.innerHTML);
+            
+            $.ajax({
+                url: form.attr('action'),
+                type: "POST",
+                data: form.serialize(),
+                success: function(response) {
+                    toastr.success('Comment added successfully!');
+                    quill.setContents([]); // Clear the editor
+                    
+                    // Immediately fetch comments to show the new one
+                    fetchComments();
+                },
+                error: function(xhr) {
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        const errors = xhr.responseJSON.errors;
+                        if (errors.description) {
+                            toastr.error(errors.description[0]);
+                        }
+                    } else {
+                        toastr.error('Error adding comment!');
+                    }
+                }
+            });
+        });
+
+        // Handle comment deletion
+        $(document).on('click', '.delete-comment-btn', function() {
+            const commentItem = $(this).closest('.comment-item');
+            const commentId = commentItem.data('comment-id');
+            
+            if (confirm('Are you sure you want to delete this comment?')) {
+                $.ajax({
+                    url: `/admin/comments/${commentId}`,
+                    type: "DELETE",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        toastr.success('Comment deleted successfully!');
+                        commentItem.remove();
+                        
+                        // Update comment count
+                        const commentsCount = $('#comments-count');
+                        const currentCount = parseInt(commentsCount.text().split(' ')[0]);
+                        commentsCount.text(`${currentCount - 1} ${currentCount - 1 === 1 ? 'Comment' : 'Comments'}`);
+                    },
+                    error: function() {
+                        toastr.error('Error deleting comment!');
+                    }
+                });
+            }
+        });
     });
 </script>
-
-
 @endpush
 
 @endsection

@@ -29,7 +29,8 @@ class TicketController extends Controller
     public function ShowTicket($id)
     {
         $ticket = Ticket::findOrFail($id);
-        $comments = $ticket->comments()->with('user')->latest()->get();
+        $comments = $ticket->comments()->with('user')->orderBy('created_at', 'asc')->get();
+
         $supportUsers = User::role('support')->get();
 
         return view('pages.tickets.TicketDetails', compact('ticket', 'comments','supportUsers'));
@@ -87,7 +88,8 @@ class TicketController extends Controller
 
     public function CommentPageUpdate($id){
         $ticket = Ticket::findOrFail($id);
-        $comments = $ticket->comments()->with('user')->latest()->get();
+        $comments = $ticket->comments()->with('user')->orderBy('created_at', 'asc')->get();
+
     
         $comments->each(function ($comment) {
             // Configure the avatar with color here
