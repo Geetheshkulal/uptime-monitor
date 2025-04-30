@@ -41,7 +41,7 @@
 
         .skeleton {
             position: relative;
-            background-color: #e0e0e0;
+            background-color: #e3e6f0; 
             border-radius: 0.4rem;
             overflow: hidden;
         }
@@ -141,7 +141,7 @@
 
                 const skeletons = document.querySelectorAll('.skeleton');
                 skeletons.forEach(el => el.classList.remove('skeleton'));
-            }, 1000); // Delay for loader effect
+            }, 500); // Delay for loader effect
         });
     </script>
 
