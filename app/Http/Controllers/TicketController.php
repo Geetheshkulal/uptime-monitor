@@ -123,10 +123,21 @@ class TicketController extends Controller
         ]);
 
         $attachmentPaths = [];
+        // if ($request->hasFile('attachments')) {
+        //     foreach ($request->file('attachments') as $file) {
+        //         $path = $file->store('attachments', 'public');
+        //         $attachmentPaths[] = $path;
+        //     }
+        // }
+
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $path = $file->store('attachments', 'public');
-                $attachmentPaths[] = $path;
+               
+                $fileName = date('Ymd') . rand(1000, 9999) . '.' . $file->getClientOriginalExtension();
+    
+                $file->move(public_path('storage/attachments'), $fileName);
+    
+                $attachmentPaths[] = 'storage/attachments/' . $fileName;
             }
         }
 
