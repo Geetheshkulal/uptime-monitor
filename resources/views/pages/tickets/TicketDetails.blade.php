@@ -609,31 +609,6 @@
             downloadBtn.style.display = 'block';
         });
 
-        // Edit ticket modal Quill editor
-        const editQuill = new Quill('#quill-editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['link'],
-                    ['clean']
-                ]
-            },
-            placeholder: 'Describe the ticket in detail...'
-        });
-    
-        editQuill.clipboard.dangerouslyPasteHTML(document.getElementById('message').value);
-    
-        document.getElementById('editTicketForm').onsubmit = function() {
-            const description = document.getElementById('message');
-            description.value = editQuill.root.innerHTML;
-            return true;
-        };
-    
-        @if(session()->has('errors'))
-            editQuill.clipboard.dangerouslyPasteHTML('{{ old('message') }}');
-        @endif
 
         // Function to fetch and update comments
         function fetchComments() {

@@ -4,6 +4,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
 <style>
@@ -220,7 +221,7 @@
                                         <td>{{ $ticket->ticket_id }}</td>
                                         <td>{{ $ticket->user_id }}</td>
                                         <td>{{$ticket->title}}</td>
-                                        <td>{{ strip_tags($ticket->message)}}</td>
+                                        <td>{!! $ticket->message !!}</td>
                                         <td>
                                             @if($ticket->status === 'open')
                                                 <span class="badge badge-success rounded">Open</span>
@@ -299,6 +300,8 @@
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <!-- Load Tippy.js after Bootstrap -->
 <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
 <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
@@ -320,6 +323,17 @@ tippy('#myClosed', {
     animation: 'scale', 
     arrow: true, 
     placement: 'top', 
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+        @if(session('success'))
+            toastr.success("{{ session('success') }}", "Success", {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: 4000
+            });
+        @endif
 });
 
     $(document).ready(function () {
