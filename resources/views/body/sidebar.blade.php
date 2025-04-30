@@ -122,13 +122,13 @@
     }
   
 
-}
-.text-gold {
-    color: gold !important;
-}
-.trial-banner {
+    }
+    .text-gold {
+        color: gold !important;
+    }
+    .trial-banner {
             border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 3px 12px rgba(118, 75, 162, 0.3);
+            box-shadow: 0 3px 12px rgba(90, 58, 121, 0.3);
             transition: all 0.3s ease;
             margin: 0 0.25rem;
             overflow: hidden;
@@ -189,6 +189,13 @@
             <a class="nav-link incident" href="{{ route('incidents') }}">
                 <i class="fas fa-exclamation-triangle"></i>
                 <span>Incidents</span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ request()->routeIs('status') ? 'active' : '' }}"> 
+            <a class="nav-link" href="{{ route('status') }}">
+                <i class="fas fa-signal"></i> 
+                <span>Status Page</span>
             </a>
         </li>
 

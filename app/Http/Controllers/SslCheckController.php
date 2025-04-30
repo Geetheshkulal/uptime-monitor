@@ -14,7 +14,8 @@ class SslCheckController extends Controller
     //SSL page
     public function index()
     {
-        return view('ssl.index');
+        $sslChecks = Ssl::where('user_id', Auth::id())->latest()->get();
+        return view('ssl.index', compact('sslChecks'));
     }
 
     //Check for SSL validity.
@@ -112,10 +113,4 @@ class SslCheckController extends Controller
         
     }
 
-    //SSL Check history page
-    public function history()
-    {
-        $sslChecks = Ssl::where('user_id', Auth::id())->latest()->get();
-        return view('ssl.history', compact('sslChecks'));
-    }
 }

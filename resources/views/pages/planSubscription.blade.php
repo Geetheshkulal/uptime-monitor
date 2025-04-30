@@ -7,20 +7,41 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
+<style>
+    .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
+    .table thead th {
+        border: none;
+        font-weight: 700;
+        color: #858796;
+        padding: 1rem;
+        background: #f8f9fc;
+    }
+    
+    .table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-top: 1px solid #e3e6f0;
+    }
+    </style>
 
 
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
             <!-- Payments Table -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
+                <h1 class="h3 mb-0 text-gray-800 font-600">My Payment History</h1>
+            </div>
             <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">My Payment History</h6>
-                </div>
                 <div class="card-body skeleton">
 
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="paymentsTable" width="100%" cellspacing="0">
+                        <table class="table" id="paymentsTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>Sl No.</th>

@@ -220,7 +220,7 @@
                                         <td>{{ $ticket->ticket_id }}</td>
                                         <td>{{ $ticket->user_id }}</td>
                                         <td>{{$ticket->title}}</td>
-                                        <td>{{$ticket->message}}</td>
+                                        <td>{{ strip_tags($ticket->message)}}</td>
                                         <td>
                                             @if($ticket->status === 'open')
                                                 <span class="badge badge-success rounded">Open</span>
