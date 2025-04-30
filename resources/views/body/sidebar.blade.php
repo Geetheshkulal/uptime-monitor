@@ -32,6 +32,23 @@
         border-radius: 0.35rem;
         transition: all 0.3s ease;
     }
+    .upgrade-btn{
+        background: linear-gradient(to right, #facc15, #f97316);
+        color: white;
+        font-weight: 600;
+        padding: 0.5rem 1.25rem;
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: background 0.3s ease;
+        text-decoration: none;
+    }
+
+    .upgrade-btn:hover {
+        text-decoration: none;
+        color: inherit;
+    }
 
 
     .nav-item.active {
@@ -286,13 +303,15 @@
                         </div>
                         <span class="text-white fw-bold" style="font-size: 0.8rem; line-height: 1.2;">Premium Trial Active!</span>
                         <span class="text-white-50" style="font-size: 0.7rem;">{{ $trialDaysLeft }} days left</span>
-                        <div class="progress w-100 mt-1" style="height: 3px;">
+                        <a href="{{ route('premium.page') }}" class="upgrade-btn">Upgrade To Premium</a>
+                        <div class="progress w-100 mt-1" style="height: 3px;">    
                             <div class="progress-bar bg-white" role="progressbar" 
                                 style="width: {{ 100 - ($trialDaysLeft * 10) }}%" 
                                 aria-valuenow="{{ 100 - ($trialDaysLeft * 10) }}" 
                                 aria-valuemin="0" 
                                 aria-valuemax="100">
                             </div>
+                          
                         </div>
                     </div>
                 </div>

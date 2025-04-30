@@ -205,7 +205,8 @@ class CashFreePaymentController extends Controller
         $hasActiveSubscription = ($user->status == 'paid');
         
         return response()->json([
-            'payment_success' => $hasActiveSubscription
+            'payment_success' => $hasActiveSubscription,
+            'payment_end_date'=>$user->premium_end_date
         ]);
     }
 }
