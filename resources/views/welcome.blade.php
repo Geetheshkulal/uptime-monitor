@@ -742,14 +742,13 @@
                 <span class="display-6 fw-bold">₹0</span>
                 <span class="text-muted">/month</span>
               </div>
-              <ul class="list-unstyled mb-4">
+              <ul style="text-align: left; list-style: none; padding-left: 2cm;">
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> Monitor 5 websites</li>
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> 5-minute check</li>
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> Email alerts</li>
-                <li class="mb-3"><i class="fas fa-times-circle" style="color: #1b6af3;"></i>Telegram alert unavailable</li>
+                <li class="mb-3"><i class="fas fa-times-circle" style="color: #1b6af3;"></i> Telegram alert unavailable</li>
                 <li class="mb-3"><i class="fas fa-times-circle" style="color: #1b6af3;"></i> SSL expiry check unavailable</li>
-
-              </ul>
+            </ul>
               @if(auth()->check())
                 <a href="{{ route('monitoring.dashboard') }}" class="btn btn-outline-primary d-block">
                   Get Started
@@ -773,7 +772,7 @@
                   <span class="text-muted">/month</span>
                 </div>
               @endforeach
-              <ul class="list-unstyled mb-4">
+               <ul style="text-align: left; list-style: none; padding-left: 2cm;">
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  All basic features</li>
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  Monitor unlimited websites</li>
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  1-minute check</li>

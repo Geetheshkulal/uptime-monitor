@@ -29,11 +29,14 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
+use App\Http\Controllers\StatusPageController;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
 })->name('product.documentation');
 
+
+Route::get('/status',[StatusPageController::class,'index'])->name('status');
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
