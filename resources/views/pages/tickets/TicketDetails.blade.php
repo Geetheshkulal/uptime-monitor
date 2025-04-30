@@ -298,7 +298,7 @@
         @hasrole('superadmin')
         <div>
             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editTicketModal">
-                <i class="fas fa-pencil-alt"></i> Edit
+                <i class="fas fa-pencil-alt"></i> Edit Ticket
             </button>
         </div>
         @endhasrole
@@ -328,8 +328,10 @@
             </div>
             <div class="comment-body markdown-body">
                 {!! $ticket->message !!}
-                <hr>
-                <div class="attachments-gallery">
+                @if(count($ticket->attachments)>0)
+                    <hr style="height:1px;">
+                @endif
+                {{-- <div class="attachments-gallery">
                     @foreach($ticket->attachments as $attachment)
                         @if($attachment)
                             <div class="attachment-container" data-image="{{ Storage::url($attachment) }}">
@@ -343,6 +345,30 @@
                             </div>
                         @endif
                     @endforeach
+                </div>  --}}
+
+                <div class="attachments-gallery">
+                    @php
+                        $attachments = is_array($ticket->attachments) ? $ticket->attachments : json_decode($ticket->attachments, true);
+                    @endphp
+                
+                    @if($attachments)
+                        @foreach($attachments as $attachment)
+                            @if($attachment)
+                                <div class="attachment-container" data-image="{{ asset($attachment) }}">
+                                    <img src="{{ asset($attachment) }}" class="attachment-image" alt="Attachment">
+                                    <div class="attachment-overlay">
+                                        <div>
+                                            <i class="fas fa-search-plus fa-lg mb-2"></i>
+                                            <div>Click to view</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    @else
+                        <p>No attachments available.</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -423,8 +449,17 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    
+                    {{-- <div class="form-group">
+                        <label for="message" class="font-weight-bold">Description</label>
+                        <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="5" required>{{ old('message', $ticket->message) }}</textarea>
+                        @error('message')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div> --}}
 
-                    <div class="form-group">
+                     <!-- Description Field with Quill Editor -->
+                     <div class="form-group">
                         <label for="message" class="font-weight-bold">Description</label>
                         <div id="quill-editor">{!! old('message', $ticket->message) !!}</div>
                         <input type="hidden" id="message" name="message" value="{{ old('message', $ticket->message) }}">
