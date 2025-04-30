@@ -213,7 +213,6 @@
             pointer-events: none;
             z-index: 1001;
         }
-
     </style>
 </head>
 
@@ -239,8 +238,8 @@
             <!-- Status Cards -->
             <div data-aos="fade-up" class="row mb-4 fade-in">
                 <!-- Total Monitors -->
-                <div class="col-xl-3 col-md-6 mb-4 ">
-                    <div class="card h-100">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card h-100 skeleton" id="skeletonCard">
                         <div class="card-body border-left-primary first">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
@@ -257,7 +256,7 @@
 
                 <!-- Up Count -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 skeleton" id="skeletonCard">
                         <div class="card-body border-left-primary second">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
@@ -274,7 +273,7 @@
 
                 <!-- Down Count -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 skeleton" id="skeletonCard">
                         <div class="card-body border-left-primary third">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
@@ -291,7 +290,7 @@
 
                 <!-- Paused Count -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card h-100">
+                    <div class="card h-100 skeleton" id="skeletonCard">
                         <div class="card-body border-left-primary fourth">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
@@ -335,7 +334,7 @@
                 @endif
 
                 <!-- Monitors Table -->
-                <div data-aos="fade-up" class="card mb-4 px-4">
+                <div data-aos="fade-up" class="card mb-4 px-4 skeleton" id="skeletonCard">
                     <br>
                     <div class="card-body p-0">
                         <div class="table-responsive"style="min-width: 100%;">

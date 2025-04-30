@@ -17,7 +17,7 @@
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-primary">My Payment History</h6>
                 </div>
-                <div class="card-body">
+                <div class="card-body skeleton">
 
                     <div class="table-responsive">
                         <table class="table table-bordered" id="paymentsTable" width="100%" cellspacing="0">
