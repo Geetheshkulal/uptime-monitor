@@ -32,23 +32,7 @@
         border-radius: 0.35rem;
         transition: all 0.3s ease;
     }
-    /* .upgrade-btn{
-        background: linear-gradient(to right, #facc15, #f97316);
-        color: white;
-        font-weight: 600;
-        padding: 0.5rem 1.25rem;
-        border: none;
-        border-radius: 1rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        cursor: pointer;
-        transition: background 0.3s ease;
-        text-decoration: none;
-    }
-
-    .upgrade-btn:hover {
-        text-decoration: none;
-        color: inherit;
-    } */
+    
 
 
     .nav-item.active {
@@ -123,60 +107,97 @@
   
 
     }
+    .text-gold {
+        color: gold !important;
+    }
+
     .trial-banner {
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 3px 12px rgba(90, 58, 121, 0.3);
-            transition: all 0.3s ease;
-            margin: 0 0.25rem;
-            overflow: hidden;
-        }
-        .trial-banner:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(85, 48, 121, 0.4);
-        }
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 4px 15px rgba(106, 63, 186, 0.25);
+    transition: all 0.3s ease;
+    margin: 0 0.25rem;
+    overflow: hidden;
+    background: linear-gradient(135deg, #6e45e2 0%, #88d3ce 100%);
+    border-radius: 8px !important;
+}
+.trial-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(106, 63, 186, 0.35);
+}
+
+.trial-badge {
+    background: linear-gradient(to right, #f6d365 0%, #fda085 100%) !important;
+    color: #3a3a3a !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.trial-icon {
+    background: rgba(255,255,255,0.25) !important;
+    color: #fff !important;
+}
+
+.trial-notice span {
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.upgrade-btn {
+    background: linear-gradient(to right, #f83600 0%, #f9d423 100%);
+    color: white !important;
+    font-weight: 600;
+    padding: 0.4rem 1rem;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    margin-top: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.7rem;
+    text-decoration: none !important; 
+    display: inline-block;
+}
+
+.upgrade-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    color: white !important;
+    text-decoration: none !important; 
+}
+
+.progress {
+    background: rgba(0,0,0,0.15) !important;
+    height: 4px !important;
+}
+
+.progress-bar {
+    background: linear-gradient(to right, #a1ffce, #faffd1) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .trial-banner {
+        padding: 0.4rem !important;
+    }
+    .trial-badge {
+        font-size: 0.55rem !important;
+        padding: 0.1rem 0.3rem !important;
+        top: -6px !important;
+    }
+    .trial-icon {
+        width: 26px !important;
+        height: 26px !important;
+    }
+    .trial-icon i {
+        font-size: 0.9rem !important;
+    }
+    .trial-notice span {
+        font-size: 0.75rem !important;
+    }
+    .upgrade-btn {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.65rem;
+    }
+}
         
-        /* Responsive adjustments */
-        @media (max-width: 992px) {
-            .trial-banner {
-                padding: 0.4rem !important;
-            }
-            .trial-badge {
-                font-size: 0.55rem !important;
-                padding: 0.1rem 0.3rem !important;
-                top: -6px !important;
-            }
-            .trial-icon {
-                width: 26px !important;
-                height: 26px !important;
-            }
-            .trial-icon i {
-                font-size: 0.9rem !important;
-            }
-            .trial-notice span {
-                font-size: 0.75rem !important;
-            }
-        }
-        #accordionSidebar {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        /* overflow-y: hidden; */
-        z-index: 1030;
-        background-color: #4e73df; /* or match your current sidebar background */
-    }
-
-    #wrapper {
-        display: flex;
-    }
-
-    #content-wrapper {
-        flex: 1;
-        /* overflow-y: hidden; */
-    }
-
-    body {
-        /* overflow-x: hidden; */
-    }
 
 </style>
 
@@ -224,7 +245,7 @@
             </a>
         </li>
 
-    @if (auth()->user()->status === 'paid' || auth()->user()->status === 'free_trial')
+    @if (auth()->user()->status === 'paid')
     <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
         <a class="nav-link ssl" href="{{ route('ssl.check') }}">
             <i class="fas fa-lock"></i>
@@ -311,7 +332,7 @@
                 <span>Raise Issue</span>
             </a>
         </li>
-        @if (auth()->user()->status === 'free_trial')
+        @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date === null)
     @php
         $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
     @endphp
@@ -324,7 +345,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center pt-2">
                         <div class="trial-icon d-flex align-items-center justify-content-center mb-1" style="width: 30px; height: 30px; background: rgba(255,255,255,0.2); border-radius: 50%;">
-                            <i class="fas fa-gift" style="font-size: 1rem; color: #e3e5dd;"></i>
+                            <i class="fas fa-gift" style="font-size: 1rem; color: #e2fb65;"></i>
                         </div>
                         <span class="text-white fw-bold" style="font-size: 0.8rem; line-height: 1.2;">Premium Trial Active!</span>
                         <span class="text-white-50" style="font-size: 0.7rem;">{{ $trialDaysLeft }} days left</span>
