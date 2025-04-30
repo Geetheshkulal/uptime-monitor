@@ -143,7 +143,7 @@
 
 
 
-<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+<header class="navbar navbar-expand navbar-light bg-white topbar mb-4 shadow">
   <!-- Sidebar Toggle (Topbar) -->
   <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
       <i class="fa fa-bars"></i>
@@ -201,6 +201,6 @@
 
   </ul>
 
-</nav>
+</header>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
