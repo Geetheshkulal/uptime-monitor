@@ -1,221 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
-    {{-- <title>CHECK MY SITE</title> --}}
     <title>@yield('title', 'CheckMySite')</title>
+
     <link rel="manifest" href="{{ asset('/manifest.json') }}">
     <meta name="theme-color" content="#6777ef">
     <link rel="apple-touch-icon" href="{{ asset('mainlogo.png') }}">
-    <script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js', { scope: '/' })
-            .then(function (registration) {
-                console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch(function (error) {
-                console.error('Service Worker registration failed:', error);
-            });
-    }
-</script>
-    <!-- Custom fonts for this template-->
-    <link href="{{asset('frontend/assets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
 
-    <!-- Custom styles for this template-->
-    <link href="{{asset('frontend/assets/css/sb-admin-2.min.css')}}" rel="stylesheet">
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                .then(reg => console.log('Service Worker registered:', reg.scope))
+                .catch(err => console.error('Service Worker registration failed:', err));
+        }
+    </script>
+
+    <!-- Fonts and styles -->
+    <link href="{{ asset('frontend/assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
+    <link href="{{ asset('frontend/assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
+
+    <!-- Skeleton Loader Styles -->
     <style>
-        /* Square edges for all elements */
-        *:not("status-dot"){
+        *:not(.status-dot) {
             border-radius: 0 !important;
         }
 
-        /* Maintain scroll-to-top button visibility */
         .scroll-to-top {
             width: 40px;
             height: 40px;
             bottom: 20px;
             right: 20px;
         }
-    </style>
-    @stack('styles')
 
-   
+        .skeleton {
+            position: relative;
+            background-color: #e0e0e0;
+            border-radius: 0.4rem;
+            overflow: hidden;
+        }
+
+        .skeleton.sm { height: 16px; width: 30%; margin-bottom: 8px; }
+        .skeleton.md { height: 20px; width: 60%; margin-bottom: 10px; }
+        .skeleton.lg { height: 24px; width: 100%; margin-bottom: 12px; }
+
+        .skeleton * {
+            visibility: hidden;
+        }
+
+        .skeleton::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -150px;
+            width: 150px;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.5) 50%,
+                rgba(255,255,255,0) 100%
+            );
+            animation: shimmer 1.2s infinite ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% { left: -150px; }
+            100% { left: 100%; }
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+    </style>
+
+    @stack('styles')
 </head>
 
-<body id="page-top">
-
-    <!-- Page Wrapper -->
+<body id="page-top" class="loading">
     <div id="wrapper">
-
-        <!-- Sidebar -->
         @include('body.sidebar')
-        <!-- End of Sidebar -->
 
-        <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
             <div id="content">
-
-                <!-- Topbar -->
                 @include('body.header')
-                <!-- End of Topbar -->
 
-                <!-- Begin Page Content -->
+                <!-- Page Content -->
                 @yield('content')
-                <!-- /.container-fluid -->
-
             </div>
-            <!-- End of Main Content -->
 
-            <!-- Footer -->
-          @include('body.footer')
-            <!-- End of Footer -->
-
+            @include('body.footer')
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="logoutModal" tabindex="-1">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+                    <h5 class="modal-title">Ready to Leave?</h5>
+                    <button class="close" data-dismiss="modal"><span>×</span></button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Click "Logout" to end your session.</div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf
-                        <button type="submit" class="btn btn-primary">Logout</button>
+                        <button class="btn btn-primary">Logout</button>
                     </form>
                 </div>
-                
             </div>
         </div>
     </div>
+
+    <!-- JS Scripts -->
     <script src="{{ asset('frontend/assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/chart.js/Chart.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     @stack('scripts')
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="{{asset('frontend/assets/js/sb-admin-2.min.js')}}"></script>
-
-    <!-- Page level plugins -->
-    <script src="{{asset('frontend/assets/vendor/chart.js/Chart.min.js')}}"></script>
-    <!-- Page level custom scripts -->
-    <script src="{{asset('frontend/assets/js/demo/chart-area-demo.js')}}"></script>
-    
-    <script src="{{ asset('/sw.js') }}"></script>
- 
+    <!-- Remove skeletons after load -->
     <script>
-        if ("serviceWorker" in navigator) {
-            // Register a service worker hosted at the root of the
-            // site using the default scope.
-            navigator.serviceWorker.register("/sw.js",{ scope: "/" }).then(
-            (registration) => {
-                console.log("Service worker registration succeeded:", registration);
-            },
-            (error) => {
-                console.error(`Service worker registration failed: ${error}`);
-            },
-            );
-        } else {
-            console.error("Service workers are not supported.");
-        }
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.body.classList.remove('loading');
+
+                const skeletons = document.querySelectorAll('.skeleton');
+                skeletons.forEach(el => el.classList.remove('skeleton'));
+            }, 1000); // Delay for loader effect
+        });
     </script>
 
+    <!-- Push Notification Subscription -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-        // Utility function to convert base64 to Uint8Array
-        function urlBase64ToUint8Array(base64String) {
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-            const rawData = window.atob(base64);
-            const outputArray = new Uint8Array(rawData.length);
-            for (let i = 0; i < rawData.length; ++i) {
-                outputArray[i] = rawData.charCodeAt(i);
-            }
-            return outputArray;
-        }
+            async function subscribeUser() {
+                if ('serviceWorker' in navigator && 'PushManager' in window) {
+                    try {
+                        const reg = await navigator.serviceWorker.ready;
+                        const sub = await reg.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: urlBase64ToUint8Array("{{ env('VAPID_PUBLIC_KEY') }}")
+                        });
 
-        async function subscribeUser() {
-            if ('serviceWorker' in navigator && 'PushManager' in window) {
-                try {
-                    // Register service worker
-                    const register = await navigator.serviceWorker.register('/sw.js');
+                        const data = {
+                            endpoint: sub.endpoint,
+                            keys: {
+                                p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('p256dh')))),
+                                auth: btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('auth'))))
+                            }
+                        };
 
-                    // Subscribe for push notifications
-                    const subscription = await register.pushManager.subscribe({
-                        userVisibleOnly: true,
-                        applicationServerKey: urlBase64ToUint8Array("{{ env('VAPID_PUBLIC_KEY') }}")
-                    });
+                        await fetch('/subscribe', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify(data)
+                        });
 
-                    // Extract subscription data
-                    const subscriptionData = {
-                        endpoint: subscription.endpoint,
-                        keys: {
-                            p256dh: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')))),
-                            auth: btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth'))))
-                        }
-                    };
-
-                    // Send subscription data to backend
-                    await fetch('/subscribe', {
-                        method: 'POST',
-                        body: JSON.stringify(subscriptionData),
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    });
-
-                    console.log('Subscribed to Push Notifications!');
-                } catch (error) {
-                    console.log('Subscription failed:', error);
+                        console.log("Push subscription successful");
+                    } catch (err) {
+                        console.error("Push subscription failed:", err);
+                    }
+                } else {
+                    console.warn("Push not supported");
                 }
-            } else {
-                console.log("Your browser does not support push notifications.");
             }
-        }
 
-        // Expose to global scope
-        window.subscribeUser = subscribeUser;
-        subscribeUser()
-    });
+            function urlBase64ToUint8Array(base64String) {
+                const padding = '='.repeat((4 - base64String.length % 4) % 4);
+                const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+                const raw = atob(base64);
+                return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+            }
+
+            window.subscribeUser = subscribeUser;
+            subscribeUser();
+        });
     </script>
-
 </body>
-
 </html>

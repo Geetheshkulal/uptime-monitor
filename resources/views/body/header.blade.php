@@ -126,38 +126,6 @@
     margin-bottom: 5px;
     padding: 3px;
   }
-  #page-loader {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: linear-gradient(135deg, #6e8efb, #a777e3);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  transition: opacity 0.5s ease;
-}
-
-#page-loader .loader-content {
-  text-align: center;
-  color: white;
-}
-
-#page-loader .spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid rgba(255,255,255,0.3);
-  border-top: 6px solid #fff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 15px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
   </style>
 </head>
 {{-- @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date===Null)
@@ -172,13 +140,7 @@
     </div>
 @endif
 @endif --}}
-<!-- PAGE LOADER -->
-<div id="page-loader">
-  <div class="loader-content">
-    <div class="spinner"></div>
-    <p>Loading...</p>
-  </div>
-</div>
+
 
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -241,12 +203,4 @@
 
 </nav>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Your AJAX, Form Scripts -->
-<script>
-  window.addEventListener('load', function() {
-    const loader = document.getElementById('page-loader');
-    loader.style.opacity = '0';
-    setTimeout(() => loader.style.display = 'none', 0);
-  });
-</script>
 

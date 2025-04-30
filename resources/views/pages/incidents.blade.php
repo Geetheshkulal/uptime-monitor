@@ -128,8 +128,8 @@
             <div class="card shadow mb-4" data-aos="fade-up">
                 
                 <!-- Card Body -->
-                <div class="card-body">
-                    <div class="table-responsive">
+                <div class="card-body skeleton">
+                    <div class="table-responsive ">
                         <table class="table" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>

@@ -730,6 +730,38 @@
             }
         });
     });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Quill editor for edit ticket modal
+    const quill = new Quill('#quill-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['link'],
+                ['clean']
+            ]
+        },
+        placeholder: 'Describe the ticket in detail...'
+    });
+
+    // Set initial content
+    quill.clipboard.dangerouslyPasteHTML(document.getElementById('message').value);
+
+    // Update hidden input before form submission
+    document.getElementById('editTicketForm').onsubmit = function() {
+        const description = document.getElementById('message');
+        description.value = quill.root.innerHTML;
+        return true;
+    };
+
+    // If modal is shown with errors, reinitialize Quill with the submitted content
+    @if(session()->has('errors'))
+        quill.clipboard.dangerouslyPasteHTML('{{ old('message') }}');
+    @endif
+});
 </script>
 @endpush
 
