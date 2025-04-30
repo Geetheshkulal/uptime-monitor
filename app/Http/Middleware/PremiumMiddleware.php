@@ -18,25 +18,28 @@ class PremiumMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip middleware for premium page
-        if ($request->routeIs('premium.page')) {
-            if ($request->user()->status === 'paid' && $request->user()->premium_end_date!==null) {
-                return redirect()->route('monitoring.dashboard');
-            }
-            return $next($request);
-        }
+        
 
         // Check if user is authenticated
         if (!$request->user()) {
             return redirect()->route('login');
         }
+        
+        // Skip middleware for premium page
+        if ($request->routeIs('premium.page')) {
+            if($request->user()->status === 'paid') {
+                return redirect()->route('monitoring.dashboard')
+                    ->with('success', 'You are already a premium user.');
+            }
+            return $next($request);
+        }
 
-        // Check if user has paid status
+        // Check if user has free status
         if ($request->user()->status !== 'paid') {
             return redirect()->route('premium.page')
                 ->with('error', 'This feature requires a premium subscription');
         }
 
-        return $next($request);
+        
     }
 }

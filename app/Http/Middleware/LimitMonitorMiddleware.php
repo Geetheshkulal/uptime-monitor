@@ -21,7 +21,7 @@ class LimitMonitorMiddleware
         $user = $request->user();
 
         // Skip check for paid users and superadmins
-        if ($user->status === 'paid' || $user->hasRole('superadmin')) {
+        if ($user->status !== 'free' || $user->hasRole('superadmin')) {
             return $next($request);
         }
 

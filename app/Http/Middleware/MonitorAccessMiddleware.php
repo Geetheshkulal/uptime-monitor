@@ -42,7 +42,7 @@ class MonitorAccessMiddleware
         }
 
         // If user is unpaid, only allow access to the first 5 monitors
-        if ($user->status !== 'paid') {
+        if ($user->status === 'free') {
             $allowedMonitorIds = $user->monitors()->orderBy('id')->limit(5)->pluck('id')->toArray();
 
             if (!in_array($monitorId, $allowedMonitorIds)) {
