@@ -188,26 +188,26 @@
             cursor: pointer;
             border: 1px solid;
         }
-
         .btn-primary {
-            color: #fff;
-            background-color: #2ea44f;
-            border-color: rgba(27, 31, 35, 0.15);
+            
+            background-color: var(--primary);
+            border-color: var(--primary);
         }
 
         .btn-primary:hover {
-            background-color: #2c974b;
+            background-color: #2e59d9;
+            border-color: #2653d4;
         }
 
         .btn-secondary {
-            color: #24292e;
-            background-color: #fafbfc;
-            border-color: rgba(27, 31, 35, 0.15);
-            margin-right: 8px;
-        }
+        color: #fff;
+        background-color: #81838f;
+        border-color: #858796;
+        margin-right: 8px;
+     }
 
         .btn-secondary:hover {
-            background-color: #f3f4f6;
+            background-color: #666769;
         }
 
         .markdown-body {
@@ -291,7 +291,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between mb-3">
         <div>
-            <a href="{{ route('display.tickets') }}" class="btn btn-secondary">
+            <a href="{{ route('display.tickets') }}" class="btn btn-primary">
                 <i class="fas fa-arrow-left"></i> Back to tickets
             </a>
         </div>

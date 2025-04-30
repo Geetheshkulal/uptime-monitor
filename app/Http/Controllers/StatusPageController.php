@@ -10,7 +10,7 @@ class StatusPageController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $daysToShow = $user->status === 'paid' ? 120 : 30; // Determine days based on user status
+        $daysToShow = $user->status === 'free' ? 30 : 120; // Determine days based on user status
         
         $monitors = Monitors::with(['user'])
             ->where('user_id', auth()->id())

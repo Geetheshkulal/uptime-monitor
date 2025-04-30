@@ -36,9 +36,9 @@
     }
 
     .bar-segment {
-    width: {{ $user->status === 'paid' ? '6px' : '12px' }};
+    width: {{ $user->status === 'free' ? '12px' : '6px' }};
     height: 40px;
-    margin-right: {{ $user->status === 'paid' ? '3.7px' : '25px' }};
+    margin-right: {{ $user->status === 'free' ? '25px' : '3.7px' }};
     display: inline-block;
     border-radius: 3px;
     transition: all 0.3s ease;
