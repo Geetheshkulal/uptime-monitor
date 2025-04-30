@@ -32,7 +32,7 @@
         border-radius: 0.35rem;
         transition: all 0.3s ease;
     }
-    .upgrade-btn{
+    /* .upgrade-btn{
         background: linear-gradient(to right, #facc15, #f97316);
         color: white;
         font-weight: 600;
@@ -48,7 +48,7 @@
     .upgrade-btn:hover {
         text-decoration: none;
         color: inherit;
-    }
+    } */
 
 
     .nav-item.active {
@@ -123,9 +123,6 @@
   
 
     }
-    .text-gold {
-        color: gold !important;
-    }
     .trial-banner {
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 3px 12px rgba(90, 58, 121, 0.3);
@@ -159,6 +156,27 @@
                 font-size: 0.75rem !important;
             }
         }
+        #accordionSidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        /* overflow-y: hidden; */
+        z-index: 1030;
+        background-color: #4e73df; /* or match your current sidebar background */
+    }
+
+    #wrapper {
+        display: flex;
+    }
+
+    #content-wrapper {
+        flex: 1;
+        /* overflow-y: hidden; */
+    }
+
+    body {
+        /* overflow-x: hidden; */
+    }
 
 </style>
 
@@ -306,7 +324,7 @@
                     </div>
                     <div class="d-flex flex-column align-items-center pt-2">
                         <div class="trial-icon d-flex align-items-center justify-content-center mb-1" style="width: 30px; height: 30px; background: rgba(255,255,255,0.2); border-radius: 50%;">
-                            <i class="fas fa-gift" style="font-size: 1rem; color: #e2fb65;"></i>
+                            <i class="fas fa-gift" style="font-size: 1rem; color: #e3e5dd;"></i>
                         </div>
                         <span class="text-white fw-bold" style="font-size: 0.8rem; line-height: 1.2;">Premium Trial Active!</span>
                         <span class="text-white-50" style="font-size: 0.7rem;">{{ $trialDaysLeft }} days left</span>

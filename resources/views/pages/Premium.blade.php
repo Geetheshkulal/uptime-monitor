@@ -14,13 +14,22 @@
     .bg-dark { background-color: #2c3e50 !important; }
     .text-white { color: #fff !important; }
     .btn-primary, .btn-secondary {
-        background-color: #3498db;
-        border-color: #3498db;
+        background-color: var(--primary);
+        border-color: var(--primary);
         color: #fff;
     }
-    .btn-primary:hover, .btn-secondary:hover {
-        background-color: #2980b9;
-        border-color: #2980b9;
+    .btn-primary:hover {
+        background-color: #2e59d9;
+        border-color: #2653d4;
+    }
+    .btn-secondary {
+        color: #fff;
+        background-color: #81838f;
+        border-color: #858796;
+        margin-right: 8px;
+     }
+    .btn-secondary:hover {
+        background-color: #666769;
     }
     .btn-warning {
         background-color: #f39c12;
