@@ -78,6 +78,31 @@
         body.loading {
             overflow: hidden;
         }
+
+        #accordionSidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            z-index: 1030;
+            background-color: #4e73df; /* Match your current sidebar background */
+        }
+        header.navbar, nav.navbar 
+        {
+            position: fixed!important;
+            top: 0; /* Ensure it's at the top */
+            z-index: 1030; /* Ensure it's above other elements */
+            background-color: #4e73df; /* Ensure navbar has a background */
+            width: 100%; /* Make sure it's full width */
+        }
+        body.loading {
+    overflow-y: hidden; /* Prevent vertical scrolling only during loading */
+}
+
+body {
+    overflow-y: auto; /* Ensure scrolling is enabled after loading */
+}
+
+      
     </style>
 
     @stack('styles')
@@ -90,7 +115,7 @@
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 @include('body.header')
-
+<br><br><br><br>
                 <!-- Page Content -->
                 @yield('content')
             </div>
@@ -136,13 +161,14 @@
     <!-- Remove skeletons after load -->
     <script>
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.body.classList.remove('loading');
+    setTimeout(() => {
+        document.body.classList.remove('loading');
+        document.body.style.overflowY = 'auto'; // Ensure scrolling is enabled
 
-                const skeletons = document.querySelectorAll('.skeleton');
-                skeletons.forEach(el => el.classList.remove('skeleton'));
-            }, 500); // Delay for loader effect
-        });
+        const skeletons = document.querySelectorAll('.skeleton');
+        skeletons.forEach(el => el.classList.remove('skeleton'));
+    }, 500); // Delay for loader effect
+});
     </script>
 
     <!-- Push Notification Subscription -->

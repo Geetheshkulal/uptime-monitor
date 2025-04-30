@@ -159,27 +159,6 @@
                 font-size: 0.75rem !important;
             }
         }
-        #accordionSidebar {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        /* overflow-y: hidden; */
-        z-index: 1030;
-        background-color: #4e73df; /* or match your current sidebar background */
-    }
-
-    #wrapper {
-        display: flex;
-    }
-
-    #content-wrapper {
-        flex: 1;
-        /* overflow-y: hidden; */
-    }
-
-    body {
-        /* overflow-x: hidden; */
-    }
 
 </style>
 
