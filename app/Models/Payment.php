@@ -11,7 +11,7 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'status','user_id', 'payment_method', 'amount', 'payment_status', 'transaction_id', 'payment_type',
+        'payment_amount','status','user_id', 'payment_method', 'amount', 'payment_status', 'transaction_id', 'payment_type',
         'start_date', 'end_date','subscription_id'
     ];
     protected $table = 'payment';

@@ -103,102 +103,215 @@ class CashFreePaymentController extends Controller
     }
 
     // Common payment verification logic
+    // protected function verifyAndProcessPayment($orderId)
+    // {
+        
+    //     $existingPayment = Payment::where('transaction_id', $orderId)->first();
+    //     if ($existingPayment) {
+    //         return $existingPayment;
+    //     }
+
+        
+    //     $headers = [
+    //         "Content-Type: application/json",
+    //         "x-api-version: 2022-01-01",
+    //         "x-client-id: " . env('CASHFREE_API_KEY'),
+    //         "x-client-secret: ". env('CASHFREE_API_SECRET'),
+    //     ];
+
+    //     $curl = curl_init("https://sandbox.cashfree.com/pg/orders/{$orderId}");
+    //     //  $curl = curl_init("https://sandbox.cashfree.com/pg/orders/{$orderId}/payments");
+    //     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    //     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+    //     $response = curl_exec($curl);
+    //     curl_close($curl);
+
+    //     $orderDetails = json_decode($response, true);
+    //     Log::info("Cashfree Payment Details:", $orderDetails);
+
+
+    //     // Verify the payment status
+    //     if (($orderDetails['order_status'] ?? '') !== 'PAID') {
+    //         return null;
+    //     }
+
+    //     // Extract subscription_id and user_id from order_note
+    //     $orderNote = $orderDetails['order_note'] ?? '';
+    //     $subscriptionId = null;
+    //     $userId = null;
+        
+        
+    //     $parts = explode('|', $orderNote);
+    //     foreach ($parts as $part) {
+    //         if (Str::startsWith($part, 'subscription_id:')) {
+    //             $subscriptionId = str_replace('subscription_id:', '', $part);
+    //         }
+    //         if (Str::startsWith($part, 'user_id:')) {
+    //             $userId = str_replace('user_id:', '', $part);
+    //         }
+    //     }
+
+    //     if (!$subscriptionId || !$userId) {
+    //         return null;
+    //     }
+
+    //     // Process payment
+    //     return \DB::transaction(function () use ($orderId, $userId, $subscriptionId, $orderDetails) {
+    //         $user = \App\Models\User::find($userId);
+            
+    //         if (!$user) {
+    //             return null;
+    //         }
+
+    //         $paymentMethod = $orderDetails['payment_sessions'][0]['payment_method'] ?? 'unknown';
+
+    //         // Create payment record
+    //         $payment = Payment::create([
+    //             'status' => 'active',
+    //             'user_id' => $userId,
+    //             'payment_status' => 'paid',
+    //             'transaction_id' => $orderId,
+    //             'payment_type' => $paymentMethod,
+    //             'start_date' => now(),
+    //             'end_date' => now()->addMonth(),
+    //             'subscription_id' => $subscriptionId,
+    //         ]);
+
+    //         // Update user status
+    //         $user->update([
+    //             'status' => 'paid',
+    //             'premium_end_date' => now()->addMonth(),
+    //         ]);
+
+    //         // Log activity
+    //         activity()
+    //             ->performedOn($payment)
+    //             ->causedBy($user)
+    //             ->inLog('payment')
+    //             ->event('payment-success')
+    //             ->withProperties([
+    //                 'user_name' => $user->name,
+    //                 'email' => $user->email,
+    //                 'amount' => $payment->amount,
+    //                 'transaction_id' => $payment->transaction_id,
+    //                 'payment_type' => $payment->payment_type,
+    //                 'premium_until' => $user->premium_end_date,
+    //             ])
+    //             ->log('User completed a premium payment successfully');
+
+    //         return $payment;
+    //     });
+    // }
+
     protected function verifyAndProcessPayment($orderId)
     {
-        // First check if we already processed this payment
-        $existingPayment = Payment::where('transaction_id', $orderId)->first();
-        if ($existingPayment) {
-            return $existingPayment;
+    $existingPayment = Payment::where('transaction_id', $orderId)->first();
+    if ($existingPayment) {
+        return $existingPayment;
+    }
+
+    $headers = [
+        "Content-Type: application/json",
+        "x-api-version: 2022-01-01",
+        "x-client-id: " . env('CASHFREE_API_KEY'),
+        "x-client-secret: ". env('CASHFREE_API_SECRET'),
+    ];
+
+    // First get order details to verify status
+    $curl = curl_init("https://sandbox.cashfree.com/pg/orders/{$orderId}");
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    $orderDetails = json_decode($response, true);
+    Log::info("Cashfree Order Details:", $orderDetails);
+
+    // Verify the payment status
+    if (($orderDetails['order_status'] ?? '') !== 'PAID') {
+        return null;
+    }
+
+    // Now get payment details to get payment method
+    $curl = curl_init("https://sandbox.cashfree.com/pg/orders/{$orderId}/payments");
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    $paymentResponse = curl_exec($curl);
+    curl_close($curl);
+    $paymentDetails = json_decode($paymentResponse, true);
+    Log::info("Cashfree Payment Details:", $paymentDetails);
+
+    // Get the payment method from the first payment (if available)
+    $paymentMethod = 'unknown';
+    if (!empty($paymentDetails[0]['payment_method'])) {
+        // Get the first key of the payment_method array which is the method type
+        $methodTypes = array_keys($paymentDetails[0]['payment_method']);
+        if (!empty($methodTypes[0])) {
+            $paymentMethod = $methodTypes[0]; // 'netbanking', 'card', 'upi', etc.
         }
+    }
 
-        // Fetch order details from Cashfree
-        $headers = [
-            "Content-Type: application/json",
-            "x-api-version: 2022-01-01",
-            "x-client-id: " . env('CASHFREE_API_KEY'),
-            "x-client-secret: ". env('CASHFREE_API_SECRET'),
-        ];
 
-        $curl = curl_init("https://sandbox.cashfree.com/pg/orders/{$orderId}");
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        $orderDetails = json_decode($response, true);
-        Log::info("Order Details: ", $orderDetails);
-
-        // Verify the payment status
-        if (($orderDetails['order_status'] ?? '') !== 'PAID') {
-            return null;
+    $orderNote = $orderDetails['order_note'] ?? '';
+    $subscriptionId = null;
+    $userId = null;
+    
+    $parts = explode('|', $orderNote);
+    foreach ($parts as $part) {
+        if (Str::startsWith($part, 'subscription_id:')) {
+            $subscriptionId = str_replace('subscription_id:', '', $part);
         }
+        if (Str::startsWith($part, 'user_id:')) {
+            $userId = str_replace('user_id:', '', $part);
+        }
+    }
 
-        // Extract subscription_id and user_id from order_note
-        $orderNote = $orderDetails['order_note'] ?? '';
-        $subscriptionId = null;
-        $userId = null;
+    if (!$subscriptionId || !$userId) {
+        return null;
+    }
+
+    $paymentStatus = $paymentDetails[0]['payment_status'] ?? 'PENDING'; 
+    $paymentAmount = $paymentDetails[0]['payment_amount'] ?? $orderDetails['order_amount']; 
+
+    // Process payment
+    return \DB::transaction(function () use ($orderId, $userId, $subscriptionId, $paymentMethod,$paymentAmount,$paymentStatus, $orderDetails) {
+        $user = \App\Models\User::find($userId);
         
-        $parts = explode('|', $orderNote);
-        foreach ($parts as $part) {
-            if (Str::startsWith($part, 'subscription_id:')) {
-                $subscriptionId = str_replace('subscription_id:', '', $part);
-            }
-            if (Str::startsWith($part, 'user_id:')) {
-                $userId = str_replace('user_id:', '', $part);
-            }
-        }
-
-        if (!$subscriptionId || !$userId) {
+        if (!$user) {
             return null;
         }
 
-        // Process payment
-        return \DB::transaction(function () use ($orderId, $userId, $subscriptionId, $orderDetails) {
-            $user = \App\Models\User::find($userId);
-            
-            if (!$user) {
-                return null;
-            }
+        // Create payment record
+        $payment = Payment::create([
+            'payment_amount' => $paymentAmount,
+            'status' => 'active',
+            'user_id' => $userId,
+            'payment_status' => $paymentStatus,
+            'transaction_id' => $orderId,
+            'payment_type' => $paymentMethod,
+            'start_date' => now(),
+            'end_date' => now()->addMonth(),
+            'subscription_id' => $subscriptionId,
+        ]);
 
-            // Create payment record
-            $payment = Payment::create([
-                'status' => 'active',
-                'user_id' => $userId,
-                'payment_status' => 'paid',
-                'transaction_id' => $orderId,
-                'payment_type' => 'upi',
-                'start_date' => now(),
-                'end_date' => now()->addMonth(),
-                'subscription_id' => $subscriptionId,
-            ]);
+        // Update user status
+        // $user->update([
+        //     'status' => 'paid',
+        //     'premium_end_date' => now()->addMonth(),
+        // ]);
 
-            // Update user status
+        if ($paymentStatus === 'SUCCESS') {
             $user->update([
                 'status' => 'paid',
                 'premium_end_date' => now()->addMonth(),
             ]);
+        }
 
-            // Log activity
-            activity()
-                ->performedOn($payment)
-                ->causedBy($user)
-                ->inLog('payment')
-                ->event('payment-success')
-                ->withProperties([
-                    'user_name' => $user->name,
-                    'email' => $user->email,
-                    'amount' => $payment->amount,
-                    'transaction_id' => $payment->transaction_id,
-                    'payment_type' => $payment->payment_type,
-                    'premium_until' => $user->premium_end_date,
-                ])
-                ->log('User completed a premium payment successfully');
+        return $payment;
+    });
+}
 
-            return $payment;
-        });
-    }
-
+ 
     public function status(Request $request)
     {
         $user = auth()->user();

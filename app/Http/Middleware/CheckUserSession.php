@@ -18,10 +18,10 @@ class CheckUserSession
         if ($user) {
             $sessionId = Session::getId(); //Get sessionId
 
-            Log::debug('Middleware check:', [
-                'current_session' => $sessionId,
-                'user_session' => $user->session_id
-            ]);
+            // Log::debug('Middleware check:', [
+            //     'current_session' => $sessionId,
+            //     'user_session' => $user->session_id
+            // ]);
             
             // If user's session_id doesn't match current session
             if ($user->session_id !== $sessionId) {
