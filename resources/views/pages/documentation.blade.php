@@ -97,19 +97,20 @@
     }
 
     .back-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-size: 14px;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-    }
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  text-decoration: none; /* Add this line to remove underline */
+}
 
     .back-btn:hover {
       background-color: var(--primary-dark);
@@ -250,11 +251,6 @@
         padding: 30px 20px;
       }
       
-      .back-btn {
-        position: static;
-        margin-bottom: 20px;
-        display: inline-flex;
-      }
     }
   </style>
 </head>

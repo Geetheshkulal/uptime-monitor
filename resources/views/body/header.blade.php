@@ -1,5 +1,4 @@
 @push('styles')
-<head>
   <style>
       @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
     
@@ -115,19 +114,20 @@
   body.dark .dropdown-item:hover {
     background-color: #444 !important;
   }
-  .Free-trial-notice{
-    position: absolute;
-    background-color: #f8d210;
-    color: #000;
-    font-size: 16px;
-    font-weight: bold;
-    z-index: 1000; 
-    width: 100%;
-    margin-bottom: 5px;
-    padding: 3px;
-  }
+
+  header.navbar {
+  position: fixed;
+  top: 0 ;
+  left: 0 ;
+  right: 0 ;
+  z-index: 1030!;
+  width: 100%;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+}  
+
   </style>
-</head>
 {{-- @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date===Null)
 @php
     // Calculate remaining trial days
@@ -143,11 +143,15 @@
 
 
 
-<header class="navbar navbar-expand navbar-light bg-white topbar mb-4 shadow">
-  <!-- Sidebar Toggle (Topbar) -->
-  <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-      <i class="fa fa-bars"></i>
-  </button>
+<header class="navbar navbar-expand navbar-light bg-white topbar mb-4 shadow fixed-top">
+  <a class="sidebar-brand d-flex align-items-center" href="/">
+    <div class="sidebar-brand-icon rotate-n-15">
+      <i class="fas fa-heartbeat"></i>
+    </div>
+    <div class="sidebar-brand-text">CheckMySite</div>
+  </a>
+  
+  
   @hasrole('user')
   <div class="dropdown">
     <button
