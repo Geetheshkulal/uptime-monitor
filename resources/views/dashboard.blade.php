@@ -31,6 +31,10 @@
         *:not(.status-dot):not(.status-badge,.status-indicator,.bar-segment) {
             border-radius: 0 !important;
         }
+        * {
+  font-family: "Nunito", sans-serif;
+}
+
 
         .scroll-to-top {
             width: 40px;
@@ -98,9 +102,6 @@
     overflow-y: hidden; /* Prevent vertical scrolling only during loading */
 }
 
-body {
-    overflow-y: auto; /* Ensure scrolling is enabled after loading */
-}
 
       
     </style>
@@ -220,5 +221,19 @@ body {
             subscribeUser();
         });
     </script>
+    <script>
+        function matchSidebarBrandWidth() {
+            const sidebar = document.querySelector('.sidebar');
+            const brand = document.querySelector('.sidebar-brand');
+    
+            if (sidebar && brand) {
+                brand.style.width = sidebar.offsetWidth + 'px';
+            }
+        }
+    
+        window.addEventListener('load', matchSidebarBrandWidth);
+        window.addEventListener('resize', matchSidebarBrandWidth);
+    </script>
+    
 </body>
 </html>

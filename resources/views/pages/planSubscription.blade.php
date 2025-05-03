@@ -37,7 +37,7 @@
             <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
                 <h1 class="h3 mb-0 text-gray-800 font-600">My Payment History</h1>
             </div>
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4"data-aos="fade-up">
                 <div class="card-body skeleton">
 
                     <div class="table-responsive">

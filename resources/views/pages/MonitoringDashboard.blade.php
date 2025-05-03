@@ -222,7 +222,7 @@
         <div class="container-fluid">
             <!-- Page Header -->
             <div data-aos="fade-up" class="d-flex align-items-center justify-content-between mb-4 fade-in">
-                <h1 class="h3 mb-0 text-gray-800 font-600">Overview</h1>
+                <h1 class="h3 mb-0 text-gray-800 font-300">Overview</h1>
                 
                 @if($totalMonitors>=5 && auth()->user()->status=='free')
                 <a class="btn btn-primary AddMonitor" style="color:yellow;" href="{{ route('premium.page') }}">
@@ -309,7 +309,7 @@
             <!-- Monitors Section -->
             <div class="fade-in">
                 <div data-aos="fade-up" class="d-flex align-items-center justify-content-between mb-3">
-                    <h1 class="h3 mb-0 font-600">My Monitors</h1>
+                    <h1 class="h3 mb-0 font-300">My Monitors</h1>
                 </div>
 
                 @if(auth()->user()->status === 'free' && $hasMoreMonitors)

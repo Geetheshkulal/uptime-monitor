@@ -147,61 +147,64 @@
     </div>
 <br>
 <br>
-    <!-- Content Row with container margins -->
-    <div class="row mx-3">
-        <div class="col-12">
-            <div class="card shadow mb-4">
-                <!-- Card Header with padding -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white px-4">
-                    <h6 class="m-0 font-weight-bold text-primary SslCheck">SSL Certificate Records</h6>
+<button id="historyDropdownBtn" class="btn btn-link text-primary p-0 border-0 bg-transparent dropdown-toggle" type="button">
+    <i class="fas fa-history mr-2"></i>View history
+</button>
+
+<div id="historyTable" class="row mx-3" style="display: none;">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header with padding -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white px-4">
+                <h6 class="m-0 font-weight-bold text-primary SslCheck">SSL Certificate Records</h6>
+            </div>
+            
+            <!-- Card Body with consistent padding -->
+            <div class="card-body px-4 py-4">
+                @if($sslChecks->count())
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="sslChecksTable" width="100%" cellspacing="0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Domain</th>
+                                <th>Issuer</th>
+                                <th>Valid From</th>
+                                <th>Valid To</th>
+                                <th>Status</th>
+                                <th>Checked At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($sslChecks as $key => $ssl)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $ssl->url }}</td>
+                                <td>{{ $ssl->issuer }}</td>
+                                <td>{{ $ssl->valid_from }}</td>
+                                <td>{{ $ssl->valid_to }}</td>
+                                <td>
+                                    @if(str_contains($ssl->status, 'Expired'))
+                                        <span class="badge custom-bg-danger">{{ $ssl->status }}</span>
+                                    @elseif(str_contains($ssl->status, 'Soon'))
+                                        <span class="badge custom-bg-warning text-dark">{{ $ssl->status }}</span>
+                                    @else
+                                        <span class="badge custom-bg-success">{{ $ssl->status }}</span>
+                                    @endif
+                                </td>
+                                <td>{{ $ssl->created_at->format('Y-m-d H:i') }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                
-                <!-- Card Body with consistent padding -->
-                <div class="card-body px-4 py-4">
-                    @if($sslChecks->count())
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="sslChecksTable" width="100%" cellspacing="0">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Domain</th>
-                                    <th>Issuer</th>
-                                    <th>Valid From</th>
-                                    <th>Valid To</th>
-                                    <th>Status</th>
-                                    <th>Checked At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($sslChecks as $key => $ssl)
-                                <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ $ssl->url }}</td>
-                                    <td>{{ $ssl->issuer }}</td>
-                                    <td>{{ $ssl->valid_from }}</td>
-                                    <td>{{ $ssl->valid_to }}</td>
-                                    <td>
-                                        @if(str_contains($ssl->status, 'Expired'))
-                                            <span class="badge custom-bg-danger">{{ $ssl->status }}</span>
-                                        @elseif(str_contains($ssl->status, 'Soon'))
-                                            <span class="badge custom-bg-warning text-dark">{{ $ssl->status }}</span>
-                                        @else
-                                            <span class="badge custom-bg-success">{{ $ssl->status }}</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $ssl->created_at->format('Y-m-d H:i') }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    @else
-                        <p class="text-center">No SSL history available yet.</p>
-                    @endif
-                </div>
+                @else
+                    <p class="text-center">No SSL history available yet.</p>
+                @endif
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @push('scripts')
@@ -382,6 +385,20 @@
             doneLabel: 'Finish'
         });
         intro.start();
+    });
+</script>
+<script>
+    document.getElementById('historyDropdownBtn').addEventListener('click', function() {
+        const historyTable = document.getElementById('historyTable');
+        this.classList.toggle('active');
+        
+        if (historyTable.style.display === 'none') {
+            historyTable.style.display = 'block';
+            this.innerHTML = '<i class="fas fa-history mr-2"></i>Hide history';
+        } else {
+            historyTable.style.display = 'none';
+            this.innerHTML = '<i class="fas fa-history mr-2"></i>View history';
+        }
     });
 </script>
 

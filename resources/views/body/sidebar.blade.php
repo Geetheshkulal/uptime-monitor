@@ -95,6 +95,35 @@
         margin: 0 auto;
         display: block;
     }
+    .sidebar-brand {
+  background: linear-gradient(180deg, #4e73df 0%, #224abe 100%);
+  height: 4.375rem;
+  margin: 0;
+  width: 225px; /* same as .sidebar */
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-decoration: none;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center; 
+}
+
+
+.sidebar-brand-icon {
+  font-size: 1.2rem;
+  color: white;
+  margin-right: 0.5rem; /* spacing between icon and text */
+}
+
+.sidebar-brand-text {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: white;
+  white-space: nowrap; /* Prevent text from wrapping */
+}
 
     /* Premium feature indicator */
     .premium-feature {
@@ -120,7 +149,14 @@
         margin-bottom: 0.25rem;
         font-size: 1rem;
     }
-  
+    .sidebar-brand {
+        width: 105px;
+        justify-content: center;
+    }
+
+    .sidebar-brand-text {
+        display: none;
+    }
 
     }
     .text-gold {
