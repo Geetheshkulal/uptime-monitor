@@ -27,12 +27,12 @@
     }
     
     .bar-segment {
-        width: 12px;
-        height: 40px;
-        margin-right: 4px;
-        display: inline-block;
-        border-radius: 3px;
-        transition: all 0.3s ease;
+    width: {{ $user->status === 'free' ? '12px' : '7.8px' }};
+    height: 40px;
+    margin-right: {{ $user->status === 'free' ? '25px' : '3.7px' }};
+    display: inline-block;
+    border-radius: 3px;
+    transition: all 0.3s ease;
     }
     
     .bar-segment-wrapper {
@@ -173,12 +173,12 @@
         display: inline-block;
         margin-right: 0.5rem;
     }
-    
+
     .status-indicator-up {
         background-color: var(--success-color);
         box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
     }
-    
+
     .status-indicator-down {
         background-color: var(--danger-color);
         box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
@@ -250,7 +250,7 @@
 <div class="container-fluid px-4 py-3">
     <!-- Header Section -->
     <div class="status-header rounded-lg mb-4">
-        <h1 class="page-title">{{ $user->name }}'s Status Page</h1>
+        <h1 class="page-title">Status Page</h1>
         <p class="page-subtitle">Real-time monitoring status</p>
     </div>
 
