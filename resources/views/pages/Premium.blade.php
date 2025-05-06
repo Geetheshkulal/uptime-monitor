@@ -5,6 +5,8 @@
 @push('styles')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <style>
     * { border-radius: 0 !important; }
     body {
@@ -96,6 +98,13 @@
 </style>
 @endpush
 
+<!-- Apply Coupon Button -->
+<div class="text-end mb-3 me-3">
+    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#applyCouponModal">
+        Apply Coupon
+    </button>
+</div>
+
 <div class="container-fluid">
     <section id="upgrade" class="py-4">
         <div class="row justify-content-center">
@@ -127,14 +136,40 @@
                         </div>
                     </div>
 
+                    @php
+                         $appliedCoupon = session('applied_coupon');
+                    @endphp
+
+
                     @foreach($plans as $plan)
                     <div class="col-lg-4">
                         <div class="card h-100 border-warning shadow-lg premium-highlight">
                             <div class="card-body p-4">
                                 <h5 class="fw-bold mb-2 text-warning">{{ $plan->name }}</h5>
                                 <div class="text-warning mb-4">
-                                    <span class="display-6 fw-bold">₹{{ $plan->amount }}</span>
+
+                                @php
+                                    $originalPrice = $plan->amount;
+                                    $discount = $appliedCoupon['discount'] ?? 0;
+                                    $finalPrice = max(0, $originalPrice - $discount);
+                                @endphp
+                
+                                @if($discount > 0)
+                                    <span class="display-6 fw-bold">
+                                        <del>₹{{ number_format($originalPrice, 2) }}</del>
+                                        ₹{{ number_format($finalPrice, 2) }}
+                                    </span>
+
                                     <span class="text-muted">/month</span>
+                            
+                                @else
+                                    {{-- <span class="display-6 fw-bold">₹{{ number_format($originalPrice, 2) }}</span> --}}
+                                    <span class="display-6 fw-bold" data-original="{{ $plan->amount }}">₹{{ session('applied_coupon') ? ($plan->amount - session('applied_coupon.discount')) : $plan->amount }}</span>
+                                    <span class="text-muted">/month</span>
+                                @endif
+                               
+                                    {{-- <span class="display-6 fw-bold">₹{{ $plan->amount }}</span>
+                                    <span class="text-muted">/month</span> --}}
                                 </div>
                                 <ul class="list-unstyled mb-4">
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> All Basic features</li>
@@ -142,12 +177,23 @@
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> SSL expiry check</li>
                                 </ul>
                                 <br>
+
+                                @if(session('applied_coupon'))
+                                    <div class="applied-coupon-msg text-success fw-bold mb-2">
+                                    You applied coupon code "{{ session('applied_coupon.code') }}"
+                                    </div>
+                                @else
+                                    <div class="applied-coupon-msg text-success fw-bold mb-2" style="display: none;"></div>
+                                @endif
+
                                 <form id="paymentForm_{{ $plan->id }}" action="{{ route('store') }}" method="POST" target="_blank">
                                     @csrf
                                     <input type="hidden" name="name" value="{{ auth()->user()->name }}">
                                     <input type="hidden" name="email" value="{{ auth()->user()->email }}">
                                     <input type="hidden" name="mobile" value="{{ auth()->user()->phone }}">
                                     <input type="hidden" name="subscription_id" value="{{ $plan->id }}">
+
+    
                                     <button type="submit" class="btn btn-warning d-block fw-bold w-100">Upgrade Now</button>
                                 </form>
                             </div>
@@ -161,8 +207,195 @@
     </section>
 </div>
 
+
+<!-- Coupon Modal -->
+<div class="modal fade" id="applyCouponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="applyCouponForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="couponModalLabel">Enter Coupon Code</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="coupon_code" class="form-control" placeholder="Enter code" required>
+                    <div id="couponMessage" class="text-danger mt-2"></div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Apply</button>
+                    <div id="removeCouponWrapper" class="{{ session('applied_coupon') ? '' : 'd-none' }}">
+                        <button type="button" id="removeCouponBtn" class="btn btn-danger">Remove Coupon</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+  
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right", // or any other position
+        "timeOut": "4000"
+    };
+
+var count = 200;
+var defaults = {
+  origin: { y: 0.7 }
+};
+
+function fire(particleRatio, opts) {
+  confetti({
+    ...defaults,
+    ...opts,
+    particleCount: Math.floor(count * particleRatio)
+  });
+}
+
+function runConfettiPopper() {
+  fire(0.25, {
+    spread: 26,
+    startVelocity: 55,
+  });
+  fire(0.2, {
+    spread: 60,
+  });
+  fire(0.35, {
+    spread: 100,
+    decay: 0.91,
+    scalar: 0.8
+  });
+  fire(0.1, {
+    spread: 120,
+    startVelocity: 25,
+    decay: 0.92,
+    scalar: 1.2
+  });
+  fire(0.1, {
+    spread: 120,
+    startVelocity: 45,
+  });
+}
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const couponForm = document.getElementById('applyCouponForm');
+        const message = document.getElementById('couponMessage');
+        const removeWrapper = document.getElementById('removeCouponWrapper');
+        const removeBtn = document.getElementById('removeCouponBtn');
+
+        // If coupon is already applied (from server-side), show remove button
+        @if(session('applied_coupon'))
+            removeWrapper.classList.remove('d-none');
+            message.classList.remove('text-danger');
+            message.classList.add('text-success');
+            message.textContent = 'Coupon already applied.';
+        @endif
+
+        couponForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const code = this.coupon_code.value;
+
+            fetch(`/apply-coupon`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ code })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        
+                        document.querySelectorAll('.premium-highlight .display-6').forEach(el => {
+                            const original = parseFloat(el.getAttribute('data-original'));
+                            el.innerHTML = `<del>₹${original.toFixed(2)}</del> ₹${(original - data.discount).toFixed(2)}`;
+                        });
+
+                        document.querySelectorAll('.premium-highlight .applied-coupon-msg').forEach(el => {
+                            el.style.display = 'block';
+                            el.textContent = `You applied coupon code "${code}"`;
+                        });
+
+                    //     confetti({
+                    // particleCount: 100,
+                    // spread: 70,
+                    // origin: { y: 0.6 }
+                    //     });
+
+                        message.classList.remove('text-danger');
+                        message.classList.add('text-success');
+                        message.textContent = 'Coupon applied successfully!';
+                        removeWrapper.classList.remove('d-none');
+
+                        toastr.success(data.message);
+                
+                        setTimeout(()=>{
+
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('applyCouponModal'));
+                        modal.hide();
+                        }, 2000);
+                        
+                        runConfettiPopper();
+
+                    } else {
+                        message.classList.remove('text-success');
+                        message.classList.add('text-danger');
+                        message.textContent = data.message;
+                    }
+                });
+        });
+
+        removeBtn.addEventListener('click', function () {
+            fetch(`/remove-coupon`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        
+                        setTimeout(()=>{
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('applyCouponModal'));
+                        modal.hide();
+                    }, 2000);
+
+                        document.querySelectorAll('.premium-highlight .display-6').forEach(el => {
+                            const original = parseFloat(el.getAttribute('data-original'));
+                            el.innerHTML = `₹${original.toFixed(2)}`;
+                        });
+
+                        document.querySelectorAll('.premium-highlight .applied-coupon-msg').forEach(el => {
+                             el.style.display = 'none';
+                             el.textContent = '';
+                        });
+                        
+                    }
+                });
+        });
+    });
+</script>
+    
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('form[id^="paymentForm_"]').forEach(form => {

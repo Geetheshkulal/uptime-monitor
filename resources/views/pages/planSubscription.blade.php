@@ -48,17 +48,18 @@
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Payment Type</th>
+                                    <th>Payment Status</th>
                                     <th>Transaction Id</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
-                                    <th>Created At</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($subscriptions as $subscription)
                                 <tr>
                                     <td>{{ $loop->iteration}}</td>
-                                    <td>₹{{ number_format($subscription->subscription->amount, 2) }}</td>
+                                    <td>₹{{ number_format($subscription->payment_amount, 2) }}</td>
                                     <td>
                                         @if($subscription->status === 'active')
                                             <span class="badge badge-success">Active</span>
@@ -69,10 +70,11 @@
                                         @endif
                                     </td>
                                     <td>{{ strtoupper($subscription->payment_type) }}</td>
+                                    <td>{{ strtoupper($subscription->payment_status) }}</td>
                                     <td>{{ $subscription->transaction_id }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($subscription->start_date)->format('d M Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($subscription->start_date)->format('d M Y, h:i A') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($subscription->end_date)->format('d M Y') }}</td>
-                                    <td>{{ $subscription->created_at->format('d M Y, h:i A') }}</td>
+                                    {{-- <td>{{ $subscription->created_at->format('d M Y, h:i A') }}</td> --}}
                                 </tr>
                                 @empty
                                 <tr>

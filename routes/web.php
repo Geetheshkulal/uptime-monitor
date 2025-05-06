@@ -31,6 +31,7 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
 use App\Http\Controllers\StatusPageController;
 use App\Http\Controllers\PublicStatusPageController;
+use App\Http\Controllers\CouponController;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
@@ -126,6 +127,11 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::any('cashfree/payments/status', [CashFreePaymentController::class, 'status'])->name('payment.status');
 
     Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->name('premium.page');
+
+    Route::post('/apply-coupon', [CouponController::class, 'apply']);
+    Route::post('/remove-coupon', [CouponController::class, 'remove'])->name('coupon.remove');
+
+
 });
 
 
