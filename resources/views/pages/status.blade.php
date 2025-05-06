@@ -346,7 +346,14 @@
 
 
 <div class="container-fluid">
-    <h1 class="h3 mb-0 text-gray-800 font-600">Status Page</h1><br>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800 font-600">Status Page</h1>
+        <a href="{{ route('user.status-settings') }}" 
+           class="btn btn-primary {{ request()->routeIs('user.status-settings*') ? 'active' : '' }}">
+            <i class="fas fa-globe me-2"></i>
+            Share Status Page
+        </a>
+    </div>
 
     <!-- Monitors Section -->
     <div class="row animate__animated animate__fadeInUp">

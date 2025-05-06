@@ -1,0 +1,85 @@
+@extends('dashboard')
+
+@section('content')
+<div class="container py-4">
+    <h1 class="mb-4">Status Page Settings</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST" action="{{ route('user.status-settings.update') }}">
+                @csrf
+
+                <div class="mb-4">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" 
+                               id="enablePublicStatus" name="enable_public_status"
+                               {{ $user->enable_public_status ? 'checked' : '' }}
+                               onchange="togglePublicStatusFields()">
+                        <label class="form-check-label fw-bold" for="enablePublicStatus">
+                            Enable Public Status Page
+                        </label>
+                    </div>
+                    <small class="text-muted">
+                        When enabled, all your monitors will be visible at the public URL
+                    </small>
+                </div>
+
+                <div id="publicStatusFields" style="display: {{ $user->enable_public_status ? 'block' : 'none' }};">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Public URL</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" 
+                                   id="publicUrl" value="{{ $publicUrl }}" readonly>
+                            <button class="btn btn-outline-secondary" 
+                                    type="button" onclick="copyToClipboard('publicUrl')">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Embed Code</label>
+                        <div class="input-group">
+                            <textarea class="form-control" id="embedCode" 
+                                      rows="3" readonly>{{ $iframeCode }}</textarea>
+                            <button class="btn btn-outline-secondary" 
+                                    type="button" onclick="copyToClipboard('embedCode')">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Note:</strong> All your monitors will be visible on the page where you will embed this code 
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fas fa-save me-2"></i> Save Settings
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePublicStatusFields() {
+    const checkbox = document.getElementById('enablePublicStatus');
+    const fieldsDiv = document.getElementById('publicStatusFields');
+    fieldsDiv.style.display = checkbox.checked ? 'block' : 'none';
+}
+
+function copyToClipboard(elementId) {
+    const element = document.getElementById(elementId);
+    element.select();
+    document.execCommand('copy');
+    
+    if (typeof toastr !== 'undefined') {
+        toastr.success('Copied to clipboard');
+    } else {
+        alert('Copied to clipboard!');
+    }
+}
+</script>
+@endsection

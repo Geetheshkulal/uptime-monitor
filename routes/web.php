@@ -30,6 +30,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
 use App\Http\Controllers\StatusPageController;
+use App\Http\Controllers\PublicStatusPageController;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
@@ -38,6 +39,14 @@ Route::get('/Product_documentation', function () {
 
 Route::get('/status',[StatusPageController::class,'index'])->name('status');
 
+Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])
+     ->name('public.status');
+     Route::prefix('user')->group(function () {
+        Route::get('/status-settings', [UserController::class, 'statusPageSettings'])
+             ->name('user.status-settings');
+        Route::post('/status-settings', [UserController::class, 'updateStatusPageSettings'])
+             ->name('user.status-settings.update');
+    });
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');

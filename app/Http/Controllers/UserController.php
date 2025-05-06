@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 //Controller to manage users
 class UserController extends Controller
@@ -313,4 +314,38 @@ class UserController extends Controller
             return redirect()->route('display.sub.users')->with('success', 'Permissions updated successfully.');
         }
 
+
+        public function statusPageSettings()
+        {
+            /** @var \App\Models\User $user */
+            $user = auth()->user();
+        
+            // Auto-generate unique hash if doesn't exist
+            if (!$user->status_page_hash) {
+                $user->status_page_hash = Str::random(32);
+                $user->save(); 
+            }
+        
+            return view('user.status-settings', [
+                'user' => $user,
+                'publicUrl' => route('public.status', $user->status_page_hash),
+                'iframeCode' => '<iframe src="'.route('public.status', $user->status_page_hash).'" width="100%" height="600" style="border:none;"></iframe>'
+            ]);
+        }
+
+    /**
+     * Update status page settings
+     */
+    public function updateStatusPageSettings(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+        
+        $user->update([
+            'enable_public_status' => $request->has('enable_public_status')
+        ]);
+        
+        // Typically you would return a redirect response after an update
+        return back()->with('success', 'Status page settings updated successfully');
+    }
 }
