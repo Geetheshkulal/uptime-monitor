@@ -81,5 +81,48 @@ public function remove(Request $request)
     return response()->json(['success' => false, 'message' => 'No coupon applied.'], 400);
 }
 
+public function DisplayCoupons()
+{
+    $coupons = CouponCode::all();
+
+    return view('pages.coupons.DisplayCoupons', compact('coupons'));
+}
+
+public function CouponStore(Request $request)
+{
+    $request->validate([
+        'code' => 'required|unique:coupon_codes,code',
+        'value' => 'required|numeric',
+        'max_uses' => 'nullable|integer',
+        'valid_from' => 'nullable|date',
+        'valid_until' => 'nullable|date',
+        'is_active' => 'boolean'
+    ]);
+
+    CouponCode::create($request->all());
+
+    return back()->with('success', 'Coupon created successfully.');
+}
+
+public function CouponUpdate(Request $request, $id)
+{
+    $coupon = CouponCode::findOrFail($id);
+
+    $request->validate([
+        'code' => 'required|unique:coupon_codes,code,' . $coupon->id,
+        'value' => 'required|numeric',
+        'max_uses' => 'nullable|integer',
+        'valid_from' => 'nullable|date',
+        'valid_until' => 'nullable|date',
+        'is_active' => 'boolean'
+    ]);
+
+    $coupon->update($request->all());
+
+    return redirect()->back()->with('success', 'Coupon updated successfully.');
+}
+
+
+
 
 }
