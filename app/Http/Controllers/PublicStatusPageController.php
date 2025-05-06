@@ -19,7 +19,6 @@ class PublicStatusPageController extends Controller
 
         // Get and enrich public monitors
         $monitors = $user->monitors()
-                       ->where('is_public', true)
                        ->orderBy('status')
                        ->orderBy('name')
                        ->get()
