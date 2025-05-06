@@ -36,7 +36,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'premium_end_date',
         'status',
         'role',
-        'email_verified_at'
+        'email_verified_at',
+        'status_page_hash',
+        'enable_public_status'
     ];
 
     /**
@@ -64,7 +66,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
      return $this->hasMany(Monitors::class);
     }
-
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new CustomResetPassword($token));
