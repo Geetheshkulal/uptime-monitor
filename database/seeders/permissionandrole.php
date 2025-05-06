@@ -49,6 +49,9 @@ class permissionandrole extends Seeder
             
             // Activity permissions
             'see.activity' => 'activity'
+
+            'see.statuspage'=>'status_page'
+            'see.incidents'=>'incident'
         ];
 
         // Create permissions
