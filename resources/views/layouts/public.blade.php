@@ -25,7 +25,7 @@
         }
     </style>
 </head>
-<body>s
+<body>
     @yield('content')
 </body>
 </html>
