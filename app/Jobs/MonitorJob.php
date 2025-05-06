@@ -52,7 +52,7 @@ class MonitorJob
             
             Mail::to($monitor->email)->send(new MonitorDownAlert($monitor,$token));
 
-            if($monitor->telegram_bot_token && $monitor->telegram_id && $monitor->user->status === 'paid')
+            if($monitor->telegram_bot_token && $monitor->telegram_id && $monitor->user->status !== 'free')
             {
                 $this->sendTelegramNotification($monitor);
             }

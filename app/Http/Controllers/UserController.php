@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 //Controller to manage users
@@ -232,4 +234,83 @@ class UserController extends Controller
                     ->with('error', 'Error deleting user: ' . $e->getMessage());
             }
         }
+
+        public function DisplaySubUsers()
+        {
+            $user = auth()->user();
+
+            if ($user->is_sub_user) {
+                abort(403, 'Sub-users cannot view other sub-users.');
+            }
+
+            $subUsers = User::where('parent_user_id', $user->id)->get();
+
+            return view('pages.DisplaySubUsers', compact('subUsers'));
+        }
+
+        public function StoreSubUser(Request $request)
+        {
+            $request->validate([
+                'name'     => 'required|string|max:255',
+                'email'    => 'required|email|unique:users,email',
+                'password' => 'required|string|min:6',
+                'phone' => 'nullable|string',
+            ]);
+
+            $parentUser = auth()->user();
+            
+
+            // Optional: Ensure only main users can create sub-users
+            if ($parentUser->is_sub_user) {
+                return redirect()->back()->with('error', 'Sub-users cannot create other users.');
+            }
+
+            $subUser = User::create([
+                'name'            => $request->name,
+                'email'           => $request->email,
+                'password'        => Hash::make($request->password),
+                'status'          => 'subuser',
+                'phone'           => $request->phone,
+                'parent_user_id'  => $parentUser->id,
+                'email_verified_at' => now(),
+            ]);
+
+            // Assign role using Spatie
+            $subUser->assignRole('subuser');
+
+            return redirect()->back()->with('success', 'Sub-user added successfully.');
+        }
+
+        public function EditSubUserPermissions($id)
+        {
+            $user = User::findOrFail($id);
+
+            $targetGroups = ['monitor', 'status_page', 'incident'];
+
+            // Filter permissions by allowed groups
+            $permissions = Permission::whereIn('group_name', $targetGroups)->get();
+
+            $groupedPermissions = $permissions->groupBy('group_name');
+
+            $permission_groups = DB::table('permissions')
+                ->select('group_name')
+                ->whereIn('group_name', $targetGroups)
+                ->groupBy('group_name')
+                ->get();
+
+            return view('pages.EditSubUserPermissions', compact('user', 'groupedPermissions', 'permission_groups'));
+        }
+
+        public function UpdateSubUserPermissions(Request $request, $id)
+        {
+            $user = User::findOrFail($id);
+
+            $permissions = $request->input('permission', []);
+            
+
+            $user->syncPermissions($permissions);
+
+            return redirect()->route('display.sub.users')->with('success', 'Permissions updated successfully.');
+        }
+
 }

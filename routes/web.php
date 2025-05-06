@@ -77,7 +77,7 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/dashboard', [MonitoringController::class, 'MonitoringDashboard'])->middleware('role:user')->name('monitoring.dashboard');
+    Route::get('/dashboard', [MonitoringController::class, 'MonitoringDashboard'])->middleware(middleware: ['role:user'])->name('monitoring.dashboard');
     Route::get('/dashboard/{id}',[TrackingController::class,'NotificationTracker']);
     Route::get('/monitoring/dashboard/update', [MonitoringController::class, 'MonitoringDashboardUpdate'])->name('monitoring.dashboard.update');
 
@@ -169,6 +169,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/display/tickets/{id}', [TicketController::class, 'UpdateTicket'])->name('tickets.update');
     Route::post('/admin/comments', [TicketController::class, 'CommentStore'])->name('admin.comments.store');
     Route::get('/tickets/comments/update/{id}', [TicketController::class, 'CommentPageUpdate'])->name('tickets.comments.update');
+
+    Route::get('/display/subsusers', [UserController::class, 'DisplaySubUsers'])->name('display.sub.users');
+
+    Route::post('/add/subsusers', [UserController::class, 'StoreSubUser'])->name('add.sub.user');
+
+    Route::get('/sub-user/{id}/edit-permissions', [UserController::class, 'EditSubUserPermissions'])->name('edit.sub.user.permissions');
+    Route::post('/sub-user/{id}/update-permissions', [UserController::class, 'UpdateSubUserPermissions'])->name('update.sub.user.permissions');
+
 });
 
 

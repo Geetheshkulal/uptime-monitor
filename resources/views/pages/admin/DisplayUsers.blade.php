@@ -54,8 +54,10 @@
                                     <td>
                                         @if($user->status === 'paid')
                                             <span class="badge badge-success">Paid</span>
-                                        @else
+                                        @elseif($user->status === 'free')
                                             <span class="badge badge-secondary">Free</span>
+                                        @elseif($user->status === 'free_trial')
+                                            <span class="badge badge-warning">Free Trial</span>
                                         @endif
                                     </td>
                                     <td>

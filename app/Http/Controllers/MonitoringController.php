@@ -45,6 +45,8 @@ class MonitoringController extends Controller
   public function MonitoringDashboard()
   {
       $user = auth()->user();
+
+      $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
       
       // Get all monitors for the user
       $monitors = Monitors::where('user_id', $user->id)->get();
