@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Subscriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Payment;
+
+use App\Models\CouponCode;
 
 class CashFreePaymentController extends Controller
 {
@@ -26,11 +29,35 @@ class CashFreePaymentController extends Controller
             'subscription_id' => 'required'
         ]);
 
+        $userId=auth()->id();
         $subscription = Subscriptions::with('payment')->find($validated['subscription_id']);
 
         $orderId = 'order_' . rand(1111111111, 9999999999);
 
+        $orderAmount = $subscription->amount;
+
         $url = "https://sandbox.cashfree.com/pg/orders";
+
+        $couponCode =DB::table('coupon_user')
+        ->where('user_id', $userId)
+        ->join('coupon_codes', 'coupon_user.coupon_code_id', '=', 'coupon_codes.id')
+        ->where('coupon_codes.is_active', true)
+        ->where(function ($query) {
+            $now = now();
+            $query->whereNull('coupon_codes.valid_from')
+                  ->orWhere('coupon_codes.valid_from', '<=', $now);
+        })
+        ->where(function ($query) {
+            $now = now();
+            $query->whereNull('coupon_codes.valid_until')
+                  ->orWhere('coupon_codes.valid_until', '>=', $now);
+        })
+        ->select('coupon_codes.value')
+        ->first();
+
+        if ($couponCode) {
+            $orderAmount = max(0, $orderAmount - $couponCode->value);
+        }
 
         $headers = [
             "Content-Type: application/json",
@@ -41,7 +68,7 @@ class CashFreePaymentController extends Controller
 
         $data = json_encode([
             'order_id' => $orderId,
-            'order_amount' => $subscription->amount,
+            'order_amount' => $orderAmount,
             "order_currency" => "INR",
             "order_note" => "subscription_id:" . $validated['subscription_id'] . "|user_id:" . auth()->id(),
             "customer_details" => [

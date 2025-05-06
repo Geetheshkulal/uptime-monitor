@@ -75,4 +75,11 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new CustomVerifyEmail);
     }
 
+    public function coupons()
+
+    {
+    return $this->belongsToMany(CouponCode::class, 'coupon_user');
+    }
+
+
   }
