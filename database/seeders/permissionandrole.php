@@ -42,6 +42,10 @@ class permissionandrole extends Seeder
             // Monitor permissions
             'see.monitors' => 'monitor',
             'see.monitor.details' => 'monitor',
+            'edit.monitor' => 'monitor',
+            'delete.monitor' => 'monitor',
+
+            
             
             // Activity permissions
             'see.activity' => 'activity'

@@ -36,7 +36,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'premium_end_date',
         'status',
         'role',
-        'email_verified_at'
+        'email_verified_at',
+        'parent_user_id',
     ];
 
     /**
@@ -73,6 +74,17 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmail);
+    }
+
+    public function parentUser()
+    {
+        return $this->belongsTo(User::class, 'parent_user_id');
+    }
+
+    // Sub-users created by this parent user
+    public function subUsers()
+    {
+        return $this->hasMany(User::class, 'parent_user_id');
     }
 
   }

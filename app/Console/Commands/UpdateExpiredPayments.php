@@ -28,7 +28,7 @@ class UpdateExpiredPayments extends Command
         $today = Carbon::today();
 
          // Get users whose premium ends today and status is 'paid'
-         $users = User::where('status', 'paid')
+         $users = User::whereNot('status', 'free')
          ->whereDate('premium_end_date', $today)
          ->get();
 

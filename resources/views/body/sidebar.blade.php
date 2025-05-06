@@ -252,53 +252,72 @@
 
     <!-- Wrapper for main nav items -->
     <div class="flex-grow-1">
+        @hasanyrole(['user','subuser'])
+            @can('see.monitors')
+                <li class="nav-item {{ request()->is('dashboard*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('monitoring.dashboard') }}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            @endcan 
+
+            @can('see.incidents')
+                <li class="nav-item {{ request()->routeIs('incidents') ? 'active' : '' }}">
+                    <a class="nav-link incident" href="{{ route('incidents') }}">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Incidents</span>
+                    </a>
+                </li>
+            @endcan
+
+            @can('see.statuspage')
+                <li class="nav-item {{ request()->routeIs('status') ? 'active' : '' }}"> 
+                    <a class="nav-link" href="{{ route('status') }}">
+                        <i class="fas fa-signal"></i> 
+                        <span>Status Page</span>
+                    </a>
+                </li>
+            @endcan
+
+        @endhasanyrole
+
         @hasrole('user')
-        <li class="nav-item {{ request()->is('dashboard*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('monitoring.dashboard') }}">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span>
+            <li class="nav-item {{ request()->routeIs('planSubscription') ? 'active' : '' }}">
+                <a class="nav-link plan" href="{{ route('planSubscription') }}">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Plan & Subscription</span>
+                </a>
+            </li>
+        @endhasrole
+
+    @if (auth()->user()->status === 'paid' || auth()->user()->status === 'free_trial')
+        <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
+            <a class="nav-link ssl" href="{{ route('ssl.check') }}">
+                <i class="fas fa-lock"></i>
+                <span>SSL Check</span>
             </a>
         </li>
-
-        <li class="nav-item {{ request()->routeIs('incidents') ? 'active' : '' }}">
-            <a class="nav-link incident" href="{{ route('incidents') }}">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span>Incidents</span>
-            </a>
-        </li>
-
-        <li class="nav-item {{ request()->routeIs('status') ? 'active' : '' }}"> 
-            <a class="nav-link" href="{{ route('status') }}">
-                <i class="fas fa-signal"></i> 
-                <span>Status Page</span>
-            </a>
-        </li>
-
-        <li class="nav-item {{ request()->routeIs('planSubscription') ? 'active' : '' }}">
-            <a class="nav-link plan" href="{{ route('planSubscription') }}">
-                <i class="fas fa-credit-card"></i>
-                <span>Plan & Subscription</span>
-            </a>
-        </li>
-
-    @if (auth()->user()->status === 'paid')
-    <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
-        <a class="nav-link ssl" href="{{ route('ssl.check') }}">
-            <i class="fas fa-lock"></i>
-            <span>SSL Check</span>
-        </a>
-    </li>
     @elseif(auth()->user()->status === 'free')
-    <li class="nav-item premium-feature {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
-        <a class="nav-link ssl text-gold" href="{{ route('premium.page') }}">
-            <i class="fas fa-lock text-gold"></i>
-            <span class="text-gold">SSL Check</span>
-            <i class="fas fa-crown text-gold"></i>
-        </a>
-    </li>
+        <li class="nav-item premium-feature {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
+            <a class="nav-link ssl text-gold" href="{{ route('premium.page') }}">
+                <i class="fas fa-lock text-gold"></i>
+                <span class="text-gold">SSL Check</span>
+                <i class="fas fa-crown text-gold"></i>
+            </a>
+        </li>
     @endif
 
+    @hasrole('user')
+        <li class="nav-item {{ request()->routeIs('display.sub.users') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('display.sub.users') }}">
+                <i class="fas fa-user"></i>
+                <span>My Users</span>
+            </a>
+        </li>
     @endhasrole
+
+   
 
         @hasrole('superadmin')
         <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
