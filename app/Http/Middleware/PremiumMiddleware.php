@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function PHPUnit\Framework\isNull;
 
 class PremiumMiddleware
 {
@@ -18,8 +17,6 @@ class PremiumMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        
-
         // Check if user is authenticated
         if (!$request->user()) {
             return redirect()->route('login');
@@ -40,6 +37,7 @@ class PremiumMiddleware
                 ->with('error', 'This feature requires a premium subscription');
         }
 
-        
+        // Default case - user is premium and can proceed
+        return $next($request);
     }
 }
