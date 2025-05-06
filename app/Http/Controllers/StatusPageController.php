@@ -35,8 +35,8 @@ class StatusPageController extends Controller
         
         // Get data for the specified number of days
         $daysData = [];
-        $endDate = now();
-        $startDate = now()->subDays($daysToShow - 1); // Subtract (daysToShow - 1) to get correct number of days
+        $endDate = now()->startOfDay();
+        $startDate = now()->subDays($daysToShow - 1)->startOfDay();  // Subtract (daysToShow - 1) to get correct number of days
         
         // Initialize all days with default values
         $currentDate = clone $startDate;
