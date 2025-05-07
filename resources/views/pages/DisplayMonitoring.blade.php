@@ -32,16 +32,20 @@
                     <!-- Buttons - will wrap under name on small screens -->
                     <div class="d-flex flex-wrap flex-md-nowrap">
                         {{-- edit buttons for monitor --}}
-                        <button type="button" class="btn btn-primary mr-2 mb-2" data-toggle="modal" data-target="#editModal"
-                            onclick="setEditUrl({{ $details->id }})">
-                            <i class="fas fa-pen fa-1x"></i> Edit
-                        </button>
+                        @can('edit.monitor')
+                            <button type="button" class="btn btn-primary mr-2 mb-2" data-toggle="modal" data-target="#editModal"
+                                onclick="setEditUrl({{ $details->id }})">
+                                <i class="fas fa-pen fa-1x"></i> Edit
+                            </button>
+                        @endcan
 
                         {{-- delete buttons for monitor --}}
-                        <button type="button" class="btn btn-danger mr-2 mb-2" data-toggle="modal"
-                            data-target="#deleteModal" onclick="setDeleteUrl({{ $details->id }})">
-                            <i class="fas fa-trash fa-1x"></i> Delete
-                        </button>
+                        @can('delete.monitor')
+                            <button type="button" class="btn btn-danger mr-2 mb-2" data-toggle="modal"
+                                data-target="#deleteModal" onclick="setDeleteUrl({{ $details->id }})">
+                                <i class="fas fa-trash fa-1x"></i> Delete
+                            </button>
+                        @endcan
 
                         {{-- checking the conditions and toggles --}}
                         @if ($details->paused)

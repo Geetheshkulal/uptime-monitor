@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         .then(response => response.json())
                         .then(status => {
                             console.log('status', status);
-                            if (status.payment_success && status.payment_end_date!==null) {
+                            if (status.payment_success && status.payment_end_date!==null && status.status==='paid') {
                                 clearInterval(checkPaymentStatus);
                                 paymentWindow.close();
                                 window.location.reload(); // Refresh parent page

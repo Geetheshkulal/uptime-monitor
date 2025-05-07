@@ -13,6 +13,9 @@ class HttpMonitoringController extends Controller
     // Store a new HTTP monitor entry
     public function store(Request $request)
     {
+        $user = auth()->user();
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+
         Log::info('HTTP Monitor Request: ', $request->all());
         $request->validate([
             'name' => 'required|string',
@@ -26,7 +29,7 @@ class HttpMonitoringController extends Controller
 
         // Create a new HTTP monitor entry
         $monitor = Monitors::create([
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'name' => $request->name,
             'url' => $request->url,
             'type' => 'http',

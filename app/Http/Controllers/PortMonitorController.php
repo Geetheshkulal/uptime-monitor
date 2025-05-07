@@ -15,6 +15,9 @@ class PortMonitorController extends Controller
     public function PortStore(Request $request)
     {
         
+        $user = auth()->user();
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+
        Log::info('Request data:', $request->all());
         $request->validate([
             'url' => 'required|string',
@@ -31,7 +34,7 @@ class PortMonitorController extends Controller
         $monitor=Monitors::create([
             'name'=>$request->name,
             'status'=>null,
-            'user_id'=>auth()->id(),
+            'user_id'=>$user->id,
             'url'=>$request->url,
             'type'=>'port',
             'port'=>$request->port,

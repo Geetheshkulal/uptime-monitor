@@ -35,9 +35,11 @@ class CashFreePaymentController extends Controller
         $headers = [
             "Content-Type: application/json",
             "x-api-version: 2022-01-01",
-            "x-client-id: " . env('CASHFREE_API_KEY'),
-            "x-client-secret: " . env('CASHFREE_API_SECRET')
+            "x-client-id: ".config('services.cashfree.key'),
+            "x-client-secret: ".config('services.cashfree.secret'),
         ];
+
+
 
         $data = json_encode([
             'order_id' => $orderId,
@@ -67,6 +69,9 @@ class CashFreePaymentController extends Controller
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         $resp = curl_exec($curl);
         curl_close($curl);
+
+        Log::error('Cashfree API Response', ['response' => $resp]);
+
 
         $paymentLink = json_decode($resp)->payment_link;
         
@@ -115,8 +120,8 @@ class CashFreePaymentController extends Controller
         $headers = [
             "Content-Type: application/json",
             "x-api-version: 2022-01-01",
-            "x-client-id: " . env('CASHFREE_API_KEY'),
-            "x-client-secret: ". env('CASHFREE_API_SECRET'),
+            "x-client-id: ".config('services.cashfree.key'),
+            "x-client-secret: ".config('services.cashfree.secret'),
         ];
 
         $curl = curl_init("https://sandbox.cashfree.com/pg/orders/{$orderId}");
@@ -206,7 +211,8 @@ class CashFreePaymentController extends Controller
         
         return response()->json([
             'payment_success' => $hasActiveSubscription,
-            'payment_end_date'=>$user->premium_end_date
+            'payment_end_date'=>$user->premium_end_date,
+            'status' => $user->status,  
         ]);
     }
 }

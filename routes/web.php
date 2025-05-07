@@ -37,9 +37,9 @@ Route::get('/Product_documentation', function () {
 })->name('product.documentation');
 
 
-Route::get('/status',[StatusPageController::class,'index'])->name('status');
+Route::get('/status',[StatusPageController::class,'index'])->middleware('role:user|subuser')->middleware('permission:see.statuspage')->name('status');
 
-Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])
+Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])->middleware('role:user|subuser')->middleware('permission:see.statuspage')
      ->name('public.status');
      Route::prefix('user')->group(function () {
         Route::get('/status-settings', [UserController::class, 'statusPageSettings'])
@@ -91,13 +91,13 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::get('/monitoring/dashboard/update', [MonitoringController::class, 'MonitoringDashboardUpdate'])->name('monitoring.dashboard.update');
 
 
-    Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->middleware('monitor.limit')->name('add.monitoring');
-    Route::get('/monitoring/display/{id}/{type}', [MonitoringController::class, 'MonitoringDisplay'])->middleware('monitor.access')->name('display.monitoring');
+    Route::get('/monitoring/add', [MonitoringController::class, 'AddMonitoring'])->middleware('monitor.limit')->middleware('permission:add.monitor')->name('add.monitoring');
+    Route::get('/monitoring/display/{id}/{type}', [MonitoringController::class, 'MonitoringDisplay'])->middleware('monitor.access')->middleware('permission:see.monitor.details')->name('display.monitoring');
     Route::get('/monitoring/chart/update/{id}/{type}', [MonitoringController::class, 'MonitoringChartUpdate'])->name('display.chart.update');
 
     // for delete and edit monitoring
-    Route::get('/monitoring/delete/{id}',[MonitoringController::class,'MonitorDelete'])->name('monitoring.delete');
-    Route::post('/monitoring/edit/{id}', [MonitoringController::class,'MonitorEdit'])->name('monitoring.update');
+    Route::get('/monitoring/delete/{id}',[MonitoringController::class,'MonitorDelete'])->middleware('permission:delete.monitor')->name('monitoring.delete');
+    Route::post('/monitoring/edit/{id}', [MonitoringController::class,'MonitorEdit'])->middleware('permission:edit.monitor')->name('monitoring.update');
     Route::post('/monitor/pause/{id}', [MonitoringController::class, 'pauseMonitor'])->name('monitor.pause');
 });
 
@@ -107,7 +107,7 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::get('/ssl/history', [SslCheckController::class, 'history'])->middleware('premium_middleware')->name('ssl.history');
     Route::post('/ssl-check', [SslCheckController::class, 'check'])->middleware('premium_middleware')->name('ssl.check.domain');
 
-    Route::get('/incidents', [IncidentController::class, 'incidents'])->name('incidents');
+    Route::get('/incidents', [IncidentController::class, 'incidents'])->middleware('role:user|subuser')->middleware('permission:see.incidents')->name('incidents');
     Route::get('/incidents/fetch', [IncidentController::class, 'fetchIncidents'])->name('incidents.fetch'); // Add this for AJAX
     Route::get('/plan-subscription', [PlanSubscriptionController::class, 'planSubscription'])->name('planSubscription');
     Route::post('/dns-check', [DnsController::class, 'checkDnsRecords']);
@@ -125,7 +125,7 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::any('cashfree/payments/webhook', [CashFreePaymentController::class, 'webhook'])->name('webhook');
     Route::any('cashfree/payments/status', [CashFreePaymentController::class, 'status'])->name('payment.status');
 
-    Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->name('premium.page');
+    Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->middleware('role:user')->name('premium.page');
 });
 
 

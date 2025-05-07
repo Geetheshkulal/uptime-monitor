@@ -79,6 +79,7 @@ class MonitoringController extends Controller
   public function MonitoringDashboardUpdate(Request $request)
   {
       $user = auth()->user();
+      $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
       $draw = $request->input('draw');
       $start = $request->input('start');
       $length = $request->input('length');
@@ -131,7 +132,14 @@ class MonitoringController extends Controller
     //Function to display add monitroing page.
     public function AddMonitoring()
     {
+        $user = auth()->user();
+        if($user->hasRole('subuser')){
+            if($user->parentUser->status==='free' && $user->parentUser->monitors()->count()>=5){
+                return view('pages.SubUserPremiumNotPresent');
+            }
+        }
         return view('pages.Add_Monitor');
+
     }
 
 
@@ -270,6 +278,9 @@ class MonitoringController extends Controller
     public function pauseMonitor(Request $request, $id)
     {
         $user = auth()->user();
+
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+
 
         //Get monitor id to pause
         $monitor = Monitors::findOrFail($id);

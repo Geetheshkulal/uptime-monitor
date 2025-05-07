@@ -24,6 +24,12 @@ class ActivityController extends Controller
             $userQuery->whereNotIn('id',$superadminIds );
         }
 
+        if(auth()->user()->hasRole('user')){
+            $subUserIds = User::role('subuser')->where('parent_user_id', auth()->user()->id)->pluck('id');
+            $query->whereIn('causer_id', $subUserIds);
+            $userQuery->whereIn('id', $subUserIds);
+        }
+
         $logs = $query->get();
 
         // Fetch all users with only id and name

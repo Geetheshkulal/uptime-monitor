@@ -229,9 +229,11 @@
                     <i class="fas fa-crown fa-sm mr-2"></i>Upgrade Plan
                 </a>
                 @else
-                <a class="btn btn-primary AddMonitor" href="{{ route('add.monitoring') }}">
-                    <i class="fas fa-plus fa-sm"></i> Add Monitor
-                </a>
+                    @can('add.monitor')
+                        <a class="btn btn-primary AddMonitor" href="{{ route('add.monitoring') }}">
+                            <i class="fas fa-plus fa-sm"></i> Add Monitor
+                        </a>
+                    @endcan
                 @endif
             </div>
 
@@ -312,25 +314,39 @@
                     <h1 class="h3 mb-0 font-300">My Monitors</h1>
                 </div>
 
-                @if(auth()->user()->status === 'free' && $hasMoreMonitors)
-                <div data-aos="fade-up" class="card bg-primary text-white mb-4">
-                    <div class="card-body py-3">
-                        <div class="d-flex align-items-center">
-                            <div class="mr-3">
-                                <i class="fas fa-crown fa-2x"></i>
-                            </div>
-                            <div>
-                                <h4 class="mb-1">Upgrade to Premium</h4>
-                                <p class="mb-0">Monitor all your services without limitations</p>
-                            </div>
-                            <div class="ml-auto">
-                                <a href="{{ route('premium.page') }}" class="btn btn-light">
-                                    Upgrade Now
-                                </a>
+                @if(auth()->user()->status === 'free' && $hasMoreMonitors && auth()->user()->hasRole('user'))
+                    <div data-aos="fade-up" class="card bg-primary text-white mb-4">
+                        <div class="card-body py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="mr-3">
+                                    <i class="fas fa-crown fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-1">Upgrade to Premium</h4>
+                                    <p class="mb-0">Monitor all your services without limitations</p>
+                                </div>
+                                <div class="ml-auto">
+                                    <a href="{{ route('premium.page') }}" class="btn btn-light">
+                                        Upgrade Now
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                @elseif(auth()->user()->hasRole('subuser') && $hasMoreMonitors && auth()->user()->parentUser->status==='free')
+                    <div data-aos="fade-up" class="card bg-primary text-white mb-4">
+                        <div class="card-body py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="mr-3">
+                                    <i class="fas fa-crown fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4 class="mb-1">Upgrade to Premium</h4>
+                                    <p class="mb-0">Limited Monitors accessible. Parent user is not a premium user.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endif
 
                 <!-- Monitors Table -->
@@ -347,7 +363,9 @@
                                         <th>Status</th>
                                         <th>Created</th>
                                         <th>History</th>
-                                        <th>Actions</th>
+                                        @can('see.monitor.details')
+                                            <th>Actions</th>
+                                        @endcan
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -387,12 +405,14 @@
                                                 <span class="status-dot d-inline-block" style="background: var(--danger);"></span>
                                             @endif
                                         </td>
-                                        <td>
-                                            <a href="{{ route('display.monitoring', ['id'=>$monitor->id, 'type'=>$monitor->type]) }}" 
-                                               class="btn btn-sm btn-view">
-                                                <i class="fas fa-eye mr-1"></i>View
-                                            </a>
-                                        </td>
+                                        @can('see.monitor.details')
+                                            <td>
+                                                <a href="{{ route('display.monitoring', ['id'=>$monitor->id, 'type'=>$monitor->type]) }}" 
+                                                class="btn btn-sm btn-view">
+                                                    <i class="fas fa-eye mr-1"></i>View
+                                                </a>
+                                            </td>
+                                        @endcan
                                     </tr>
                                     @endforeach
                                 </tbody>
