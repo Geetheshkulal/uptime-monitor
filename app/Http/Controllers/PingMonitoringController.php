@@ -12,6 +12,9 @@ class PingMonitoringController extends Controller
     //store the ping monitor.
     public function store(Request $request)
     {
+        $user = auth()->user();
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+
         $request->validate([
             'name' => 'required|string',
             'url' => 'required',
@@ -25,7 +28,7 @@ class PingMonitoringController extends Controller
 
         // Save the monitor data to the database
         $monitor = Monitors::create([
-            'user_id' => auth()->id(),
+            'user_id' => $user->id,
             'name' => $request->name,
             'url' => $request->url,
             'type' => 'ping',

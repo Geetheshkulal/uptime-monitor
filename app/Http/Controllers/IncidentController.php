@@ -12,7 +12,12 @@ class IncidentController extends Controller
     public function incidents()
     {
         // Get the logged-in user's ID
-        $userId = Auth::id();
+        $user= Auth::user();
+
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+
+        $userId = $user->id;
+
 
         // Get the monitor IDs associated with the logged-in user
         $userMonitors = Monitors::where('user_id', $userId)->pluck('id');  // Fetch monitor IDs for the logged-in user
@@ -46,7 +51,11 @@ class IncidentController extends Controller
     //AJAX controller for incidents.
     public function fetchIncidents()
     {
-        $userId = Auth::id();
+        $user= Auth::user();
+
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+
+        $userId = $user->id;
 
         // Get the monitor IDs associated with the logged-in user
         $userMonitors = Monitors::where('user_id', $userId)->pluck('id');

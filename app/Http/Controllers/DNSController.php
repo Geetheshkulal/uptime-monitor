@@ -11,6 +11,9 @@ class DNSController extends Controller
     //Add a new DNS monitor.
     public function AddDNS(Request $request){
 
+        $user = auth()->user();
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+
         $request->validate([
             'name' => 'required|string',
             'domain' => 'required|string|max:255',
@@ -25,7 +28,7 @@ class DNSController extends Controller
         $monitor = Monitors::create([
             'name'=> $request->name,
             'status'=>'down',
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'url' => $request->domain, // Store domain as the target
             'type' => 'dns',
             'port'=>null,
@@ -44,7 +47,7 @@ class DNSController extends Controller
         ->inLog('DNS monitoring') 
         ->event('created')
         ->withProperties([
-            'user_name' => auth()->user()->name,
+            'user_name' => $user->name,
             'monitor_name' => $monitor->name,
             'monitor_url' => $monitor->url,
             'dns_resource_type'=>$request->dns_resource_type,

@@ -44,6 +44,7 @@ class permissionandrole extends Seeder
             'see.monitor.details' => 'monitor',
             'edit.monitor' => 'monitor',
             'delete.monitor' => 'monitor',
+            'add.monitor'=>'monitor',
 
             
             
@@ -51,7 +52,7 @@ class permissionandrole extends Seeder
             'see.activity' => 'activity',
 
             'see.statuspage'=>'status_page',
-            'see.incidents'=>'incident'
+            'see.incidents'=>'incident',
         ];
 
         // Create permissions
@@ -62,6 +63,5 @@ class permissionandrole extends Seeder
             ]);
         }
 
-        // Create superadmin role and assign all permissions       
     }
 }

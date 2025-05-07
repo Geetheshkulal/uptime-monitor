@@ -10,10 +10,12 @@ class StatusPageController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+
         $daysToShow = $user->status === 'free' ? 30 : 120; // Determine days based on user status
         
         $monitors = Monitors::with(['user'])
-            ->where('user_id', auth()->id())
+            ->where('user_id', $user->id)
             ->orderBy('status')
             ->orderBy('name')
             ->get()

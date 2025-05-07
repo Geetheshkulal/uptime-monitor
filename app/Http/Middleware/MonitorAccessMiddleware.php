@@ -20,6 +20,9 @@ class MonitorAccessMiddleware
     {
         $user = $request->user();
 
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+
+
         // Ensure the user is authenticated
         if (!$user) {
             return redirect()->route('login');
