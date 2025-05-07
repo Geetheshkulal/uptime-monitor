@@ -20,4 +20,10 @@ class CouponCode extends Model
         return $this->belongsToMany(User::class, 'coupon_user');
     }
 
+    public function claimedUsers()
+    {
+        return $this->belongsToMany(User::class, 'coupon_user', 'coupon_code_id', 'user_id')->withTimestamps();;
+    }
+
+
 }

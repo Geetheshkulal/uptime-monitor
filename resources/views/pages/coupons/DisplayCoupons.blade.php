@@ -160,8 +160,8 @@
                                             <i class="fas fa-trash" style="color: #e74a3b; cursor: pointer;"></i>
                                         </a>
 
-                                        {{-- <a href="{{ route('view.claimed.users', ['coupon_id' => $coupon->id]) }}" class="ml-2"> --}}
-                                        <a href="#" class="ml-2">
+                                        <a href="{{ route('view.claimed.users', ['coupon_id' => $coupon->id]) }}" class="ml-2">
+                                        {{-- <a href="#" class="ml-2"> --}}
                                             <i class="fas fa-eye" style="color: #2dce89; cursor: pointer;" title="View Coupon claimed users"></i>
                                         </a>
                                         </div>

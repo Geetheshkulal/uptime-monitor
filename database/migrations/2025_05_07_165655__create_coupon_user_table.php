@@ -20,6 +20,7 @@ return new class extends Migration
                   ->onDelete('cascade');
 
             $table->primary(['coupon_code_id', 'user_id']);
+            $table->timestamps();
         });
     }
 
