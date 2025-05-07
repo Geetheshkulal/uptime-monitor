@@ -143,7 +143,13 @@ public function destroy($id)
     return back()->with('success', 'Coupon deleted successfully.');
 }
 
+public function showClaimedUsers($coupon_id)
+{
+    $coupon = CouponCode::findOrFail($coupon_id);
+    $claimedUsers = $coupon->claimedUsers;
 
+    return view('pages.coupons.claimed_users', compact('claimedUsers', 'coupon'));
+}
 
 
 }
