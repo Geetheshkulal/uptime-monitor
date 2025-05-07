@@ -16,6 +16,21 @@
             margin-left:-45px;
             margin-right: -11px;
         }
+        .btn {
+            border-radius: 0.35rem;
+            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2653d4;
+        }
         </style>
     <!-- Page Heading -->
     <div class="container-fluid">
@@ -60,7 +75,7 @@
 
                 {{-- back button --}}
                 <div class="ml-md-auto ">
-                    <a href="{{ route('monitoring.dashboard') }}" class="btn btn-secondary">
+                    <a href="{{ route('monitoring.dashboard') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                         <i class="fas fa-arrow-left mr-1"></i>
                     </a>
                 </div>
@@ -105,7 +120,7 @@
         <!-- Status & Response Cards -->
         <div class="row d-flex justify-content-center">
             <!-- Current Status Card -->
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col-md-6 mb-4 ">
                 <div class="card border-left-primary shadow-lg h-100 py-3">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
