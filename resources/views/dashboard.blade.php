@@ -45,7 +45,7 @@
 
         .skeleton {
             position: relative;
-            background-color: #e3e6f0; 
+            background-color: whitesmoke;
             border-radius: 0.4rem;
             overflow: hidden;
         }

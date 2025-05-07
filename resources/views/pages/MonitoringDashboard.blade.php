@@ -211,7 +211,6 @@
 
         .introjs-helperLayer {
             pointer-events: none;
-            z-index: 1001;
         }
     </style>
 </head>

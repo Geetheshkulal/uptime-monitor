@@ -353,7 +353,7 @@
         <i class="fas fa-credit-card"></i> Plan & Subscription
       </a>
       <a href="#" onclick="showTab('tab7')">
-        <i class="fas fa-credit-card"></i> User management
+        <i class="fas fa-user"></i> User management
       </a>
     </div>
   </div>

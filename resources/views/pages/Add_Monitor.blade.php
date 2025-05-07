@@ -48,6 +48,21 @@
         pointer-events: none;
         z-index: 1001;
         }
+        .btn {
+            border-radius: 0.35rem;
+            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2653d4;
+        }
  </style>
 
 
@@ -55,8 +70,8 @@
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
                 <h1 class="mb-0 ml-lg-3">Add Monitoring</h1>
-                <a href="{{ route('monitoring.dashboard') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left mr-1"></i> Back
+                <a href="{{ route('monitoring.dashboard') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                    <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Dashboard
                 </a>
             </div>
         </div>

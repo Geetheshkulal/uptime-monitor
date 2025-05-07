@@ -150,7 +150,7 @@
     </div>
     <div class="sidebar-brand-text">CheckMySite</div>
   </a>
-  
+  &nbsp;
   
   @hasrole('user')
   <div class="dropdown">

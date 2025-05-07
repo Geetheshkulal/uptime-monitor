@@ -160,7 +160,7 @@
 
             <!-- Tickets Table -->
             <div class="fade-in">
-                <div data-aos="fade-up" class="card mb-4 px-4">
+                <div data-aos="fade-up" class="card mb-4 px-4 skeleton">
                     <br>
                     <div class="card-body p-0">
                         <div class="table-responsive" style="min-width: 100%;">
