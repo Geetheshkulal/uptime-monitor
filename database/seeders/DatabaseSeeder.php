@@ -22,5 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             permissionandrole::class,
         ]);
+        $this->call([
+            AssignDefaultPermissions::class,
+        ]);   
     }
 }
