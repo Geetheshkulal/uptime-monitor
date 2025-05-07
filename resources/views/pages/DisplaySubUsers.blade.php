@@ -53,9 +53,13 @@
                                             </a>
                                         </div>
                                         <div class="btn-group" role="group">
-                                            <a href="{{ route('delete.user', $user->id) }}" class="btn btn-sm btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this user?')">
+                                        <form action="{{ route('delete.user', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete">
                                                 <i class="fas fa-trash-alt"></i>
-                                            </a>
+                                            </button>
+                                        </form>
                                         </div>
                                     </td>
                                 </tr>

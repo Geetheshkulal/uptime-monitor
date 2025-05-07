@@ -24,6 +24,7 @@ class AssignDefaultPermissions extends Seeder
             'edit.monitor',      // Can edit monitors
             'delete.monitor',    // Can delete monitors
             'see.statuspage',     // Can view status page
+            'delete.user',      // To delete sub users
             
         ];
         

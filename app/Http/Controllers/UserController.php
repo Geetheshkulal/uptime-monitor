@@ -193,11 +193,14 @@ class UserController extends Controller
         {
             try {
                 // Prevent deleting yourself
-                if ($id == auth()->id()) {
+                if ($id === auth()->id()) {
                     return redirect()->back()->with('error', 'You cannot delete your own account!');
                 }
 
                 $user = User::findOrFail($id);
+
+                Log::info('User to be deleted: ', $user->toArray());
+
 
                 //cannot delete superadmin
                 if($user->hasRole('superadmin')){
