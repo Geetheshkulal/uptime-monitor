@@ -136,6 +136,7 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::get('/coupons', [CouponController::class, 'DisplayCoupons'])->name('display.coupons');
     Route::post('/coupons', [CouponController::class, 'CouponStore'])->name('coupons.store');
     Route::put('/coupons/{id}', [CouponController::class, 'CouponUpdate'])->name('coupons.update');
+    Route::delete('/coupons/{id}', [CouponController::class, 'destroy'])->name('coupons.destroy');
 
 
 
