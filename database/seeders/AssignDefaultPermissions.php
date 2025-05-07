@@ -17,6 +17,7 @@ class AssignDefaultPermissions extends Seeder
         // 2. Define which permissions should be given to regular users by default
         // These are the permissions you want all normal users to have
         $defaultPermissions = [
+            'see.activity',      // Can view activity logs
             'see.incidents',      // Can view incidents
             'see.monitors',       // Can view monitors list
             'see.monitor.details',// Can view monitor details
