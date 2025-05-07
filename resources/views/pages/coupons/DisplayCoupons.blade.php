@@ -1,0 +1,402 @@
+
+
+@extends('dashboard')
+@section('content')
+
+@push('styles')
+
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+           * {
+            border-radius: 0 !important;
+        }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .filter-container label {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: #6e707e;
+        }
+     
+        
+.select2-container {
+  width: 100% !important;
+  max-width: 100%;
+
+}
+.select2-container--default.select2-container--focus .select2-selection--multiple
+{
+    border: 1px solid #ced4da;
+    outline: 0;
+    /* margin-right: 14px;
+    margin-left: 14px; */
+}
+
+.select2-container--default .select2-selection--multiple {
+  min-height: 38px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 6px 8px;
+  background-color: #fff;
+  box-shadow: none;
+  margin-left: 14px ;
+  margin-right: 14px ;
+   
+}
+
+.select2-container--open .select2-dropdown--below{
+    border-top: none;
+     
+}
+
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #007bff;
+  border: 1px solid #007bff;
+  color: #fff;
+  padding: 2px 8px;
+  margin-top: 4px;
+  margin-right: 4px;
+  border-radius: 3px;
+  font-size: 0.875rem;
+ 
+}
+
+
+.select2-container--default .select2-selection--multiple .select2-search__field {
+  padding: 5px;
+  margin-top: 4px;
+  width: auto !important;
+  min-width: 150px;
+}
+
+
+.select2-container--open {
+  z-index: 9999;
+}
+
+
+.select2-dropdown {
+  /* max-width: 100% !important; */
+  box-sizing: border-box;
+  padding: 19px;
+}
+
+
+</style>
+@endpush
+
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        <div class="container-fluid">
+            <!-- Activity Log Table -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Manage Coupon Codes</h6>
+            
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#addCouponModal">
+                        Create Coupon Codes
+                      </button>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="couponTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>SL no</th>
+                                    <th>Coupon Code</th>
+                                    <th>Discount Flat</th>
+                                    <th>Max uses</th>
+                                    <th>Used</th>
+                                    <th>Valid from</th>
+                                    <th>Valid Until</th>
+                                    <th>Status</th>
+                                    <th>Updated At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>                                                                                                                    
+                                @foreach($coupons as $coupon)
+                                <tr>
+                                    <td>{{ $coupon->id }}</td>
+                                    <td>
+                                        {{ $coupon->code }}
+                                        <i class="fas fa-copy ml-2 text-primary" style="cursor: pointer;" onclick="copyToClipboard('{{$coupon->code}}')" title="Copy code"></i>
+                                    </td>
+                                    <td>{{ $coupon->value }}</td>
+                                    <td>{{ $coupon->max_uses }}</td>
+                                    <td>{{ $coupon->uses }}</td>
+                                    <td>{{ $coupon->valid_from ? \Carbon\Carbon::parse($coupon->valid_from)->format('d M y') : ''  }}</td>
+                                    <td>{{ $coupon->valid_until ? \Carbon\Carbon::parse($coupon->valid_until)->format('d M y') : '' }}</td>
+                                    <td>
+                                        @if($coupon->is_active)
+                                            <span class="badge badge-success">Active</span>
+                                        @else
+                                            <span class="badge badge-danger">Inactive</span>
+                                        @endif
+                                        
+                                </td> 
+                                    <td>{{ $coupon->updated_at->format('d M Y, h:i A') }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+                                        <a href="#" data-toggle="modal" data-target="#editCouponModal{{ $coupon->id }}">
+                                            <i class="fas fa-edit" style="color: #1e67e6; cursor: pointer;"></i>
+                                        </a>
+
+                                        <a href="#" data-toggle="modal" data-target="#deleteCouponModal{{ $coupon->id }}" class="ml-2">
+                                            <i class="fas fa-trash" style="color: #e74a3b; cursor: pointer;"></i>
+                                        </a>
+
+                                        {{-- <a href="{{ route('view.claimed.users', ['coupon_id' => $coupon->id]) }}" class="ml-2"> --}}
+                                        <a href="#" class="ml-2">
+                                            <i class="fas fa-eye" style="color: #2dce89; cursor: pointer;" title="View Coupon claimed users"></i>
+                                        </a>
+                                        </div>
+
+                                    </td>
+                                   
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Coupon Modal -->
+<div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form class="modal-content" method="POST" action="{{ route('coupons.store') }}">
+        @csrf
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCouponModalLabel">Create Coupon</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="form-group">
+            <label for="user_ids" class="ml-3 mt-4">Assign to Users (optional)</label><br>
+            <select id="user_ids" name="user_ids[]" class="form-control select2" multiple>
+              @foreach($users as $user)
+                <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+              @endforeach
+            </select>
+          </div>
+          
+  
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="code">Coupon Code</label>
+            <input id="code" name="code" class="form-control" placeholder="Enter coupon code" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="value">Discount Flat ₹</label>
+            <input type="number" id="value" name="value" class="form-control" placeholder="Enter flat discount value" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="max_uses">Max Uses</label>
+            <input type="number" id="max_uses" name="max_uses" class="form-control" placeholder="Enter max number of uses">
+          </div>
+  
+          <div class="form-group">
+            <label for="valid_from">Valid From</label>
+            <input type="date" id="valid_from" name="valid_from" class="form-control">
+          </div>
+  
+          <div class="form-group">
+            <label for="valid_until">Valid Until</label>
+            <input type="date" id="valid_until" name="valid_until" class="form-control">
+          </div>
+  
+          <div class="form-group">
+            <label for="is_active">Status</label>
+            <select id="is_active" name="is_active" class="form-control">
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Add Coupon</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Edit Coupon Modals - One for each coupon -->
+@foreach($coupons as $coupon)
+<div class="modal fade" id="editCouponModal{{ $coupon->id }}" tabindex="-1" role="dialog" aria-labelledby="editCouponModalLabel{{ $coupon->id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form class="modal-content" method="POST" action="{{ route('coupons.update', $coupon->id) }}">
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCouponModalLabel{{ $coupon->id }}">Edit Coupon</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+    
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="code{{ $coupon->id }}">Coupon Code</label>
+                    <input id="code{{ $coupon->id }}" name="code" class="form-control" value="{{ $coupon->code }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="value{{ $coupon->id }}">Discount Flat ₹</label>
+                    <input type="number" id="value{{ $coupon->id }}" name="value" class="form-control" value="{{ $coupon->value }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="max_uses{{ $coupon->id }}">Max Uses</label>
+                    <input type="number" id="max_uses{{ $coupon->id }}" name="max_uses" class="form-control" value="{{ $coupon->max_uses }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="valid_from{{ $coupon->id }}">Valid From</label>
+                    <input type="date" id="valid_from{{ $coupon->id }}" name="valid_from" class="form-control" value="{{ $coupon->valid_from ? \Carbon\Carbon::parse($coupon->valid_from)->format('Y-m-d') : '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="valid_until{{ $coupon->id }}">Valid Until</label>
+                    <input type="date" id="valid_until{{ $coupon->id }}" name="valid_until" class="form-control" value="{{ $coupon->valid_until ? \Carbon\Carbon::parse($coupon->valid_until)->format('Y-m-d') : ''  }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="is_active{{ $coupon->id }}">Status</label>
+                    <select id="is_active{{ $coupon->id }}" name="is_active" class="form-control">
+                        <option value="1" {{ $coupon->is_active ? 'selected' : '' }}>Active</option>
+                        <option value="0" {{ !$coupon->is_active ? 'selected' : '' }}>Inactive</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update Coupon</button>
+            </div>
+        </form>
+    </div>
+</div>
+  
+<!-- Delete Coupon Modals - One for each coupon -->
+<div class="modal fade" id="deleteCouponModal{{ $coupon->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteCouponModalLabel{{ $coupon->id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form class="modal-content" method="POST" action="{{ route('coupons.destroy', $coupon->id) }}">
+            @csrf
+            @method('DELETE')
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCouponModalLabel{{ $coupon->id }}">Delete Coupon</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+    
+            <div class="modal-body">
+                <p>Are you sure you want to delete this coupon: <strong>{{ $coupon->code }}</strong>?</p>
+                <p>This action cannot be undone.</p>
+            </div>
+    
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete Coupon</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@endforeach
+
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+  $(document).ready(function() {
+      $('#user_ids').select2({
+          placeholder: "Select one or more users",
+          allowClear: true
+      });
+  });
+
+
+</script>
+
+<script>
+  $(document).ready(function () {
+      @if(session('success'))
+          toastr.success("{{ session('success') }}");
+      @endif
+
+      @if(session('error'))
+          toastr.error("{{ session('error') }}");
+      @endif
+  });
+</script>
+
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            alert('Coupon code copied: ' + text);
+        }, function(err) {
+            alert('Failed to copy text: ', err);
+        });
+    }
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Initialize DataTable
+        var table = $('#couponTable').DataTable({ 
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "order": [[7, "desc"]],
+            "columnDefs": [
+                { "searchable": false, "targets": [8] } // Disable sorting for action column
+            ]
+            
+        });
+
+        // Filter table when user is selected
+        $('#userFilter').change(function() {
+            var userId = $(this).val();
+            table.column(5).search(userId).draw();
+        });
+    });
+
+   
+</script>
+
+@endpush
+
+@endsection

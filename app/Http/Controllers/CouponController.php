@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CouponCode;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class CouponController extends Controller
@@ -80,6 +81,69 @@ public function remove(Request $request)
 
     return response()->json(['success' => false, 'message' => 'No coupon applied.'], 400);
 }
+
+public function DisplayCoupons()
+{
+    $coupons = CouponCode::all();
+    $users = User::Role('user')->get();
+
+    return view('pages.coupons.DisplayCoupons', compact('coupons','users'));
+}
+
+public function CouponStore(Request $request)
+{
+    $request->validate([
+        'code' => 'required|unique:coupon_codes,code',
+        'value' => 'required|numeric',
+        'max_uses' => 'nullable|integer',
+        'valid_from' => 'nullable|date',
+        'valid_until' => 'nullable|date',
+        'is_active' => 'boolean',
+        'user_ids' => 'nullable|array',
+        'user_ids.*' => 'exists:users,id',
+    ]);
+
+    $data = $request->except('user_ids');
+
+    if($request->filled('user_ids')){
+
+        $data['user_ids'] = json_encode($request->user_ids);
+    
+    }
+        
+    // CouponCode::create($request->all());
+    CouponCode::create($data);
+
+    return back()->with('success', 'Coupon created successfully.');
+}
+
+public function CouponUpdate(Request $request, $id)
+{
+    $coupon = CouponCode::findOrFail($id);
+
+    $request->validate([
+        'code' => 'required|unique:coupon_codes,code,' . $coupon->id,
+        'value' => 'required|numeric',
+        'max_uses' => 'nullable|integer',
+        'valid_from' => 'nullable|date',
+        'valid_until' => 'nullable|date',
+        'is_active' => 'boolean'
+    ]);
+
+    $coupon->update($request->all());
+
+    return redirect()->back()->with('success', 'Coupon updated successfully.');
+}
+
+public function destroy($id)
+{
+    $coupon = CouponCode::findOrFail($id);
+    $coupon->delete();
+
+    return back()->with('success', 'Coupon deleted successfully.');
+}
+
+
 
 
 }

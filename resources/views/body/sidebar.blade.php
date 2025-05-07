@@ -361,6 +361,13 @@
         </a>
     </li>
 
+    <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('display.coupons') }}">
+            <i class="fas fa-percent"></i>
+            <span>Coupons</span>
+        </a>
+    </li>
+
     @endhasrole
 
         <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}">

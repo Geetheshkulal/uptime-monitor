@@ -128,6 +128,14 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
 
     Route::post('/apply-coupon', [CouponController::class, 'apply']);
     Route::post('/remove-coupon', [CouponController::class, 'remove'])->name('coupon.remove');
+    
+
+    // for super admin coupon
+    Route::get('/coupons', [CouponController::class, 'DisplayCoupons'])->name('display.coupons');
+    Route::post('/coupons', [CouponController::class, 'CouponStore'])->name('coupons.store');
+    Route::put('/coupons/{id}', [CouponController::class, 'CouponUpdate'])->name('coupons.update');
+    Route::delete('/coupons/{id}', [CouponController::class, 'destroy'])->name('coupons.destroy');
+
 
 
     Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->middleware('role:user')->name('premium.page');
