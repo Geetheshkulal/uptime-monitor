@@ -180,7 +180,7 @@
 </div>
 
 <!-- Add Coupon Modal -->
-<div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+{{-- <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <form class="modal-content" method="POST" action="{{ route('coupons.store') }}">
         @csrf
@@ -241,7 +241,67 @@
         </div>
       </form>
     </div>
-  </div>
+  </div> --}}
+  <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <form class="modal-content" method="POST" action="{{ route('coupons.store') }}">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCouponModalLabel">Create Coupon</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-2">
+                            <label for="code" class="small font-weight-bold">Coupon Code</label>
+                            <input id="code" name="code" class="form-control form-control-sm" placeholder="e.g. SUMMER20" required>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="value" class="small font-weight-bold">Discount (₹)</label>
+                            <input id="value" name="value" class="form-control form-control-sm" placeholder="Amount" required>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="max_uses" class="small font-weight-bold">Max Uses</label>
+                            <input id="max_uses" name="max_uses" class="form-control form-control-sm" placeholder="Enter max number of uses">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-2">
+                            <label for="valid_from" class="small font-weight-bold">Valid From</label>
+                            <input type="date" id="valid_from" name="valid_from" class="form-control form-control-sm">
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="valid_until" class="small font-weight-bold">Valid Until</label>
+                            <input type="date" id="valid_until" name="valid_until" class="form-control form-control-sm">
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="is_active" class="small font-weight-bold">Status</label>
+                            <select id="is_active" name="is_active" class="form-control form-control-sm">
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+
+            <div class="modal-footer py-2 d-flex justify-content-center">  <!-- Added d-flex justify-content-center -->
+                <button type="submit" class="btn btn-primary btn-lg px-4">Add Coupon</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 
   <!-- Edit Coupon Modals - One for each coupon -->
