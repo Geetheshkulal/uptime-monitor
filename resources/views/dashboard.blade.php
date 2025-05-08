@@ -88,7 +88,7 @@
             position: sticky;
             top: 0;
             height: 100vh;
-            z-index: 1030;
+            z-index: 1040;
             background-color: #4e73df; /* Match your current sidebar background */
         }
         header.navbar, nav.navbar 
@@ -234,6 +234,29 @@
     
         window.addEventListener('load', matchSidebarBrandWidth);
         window.addEventListener('resize', matchSidebarBrandWidth);
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const drawer = document.getElementById("sidebarDrawer");
+            const overlay = document.createElement("div");
+            overlay.className = "drawer-overlay";
+            document.body.appendChild(overlay);
+    
+            document.getElementById("sidebarToggleDrawer").addEventListener("click", function () {
+                drawer.classList.add("open");
+                overlay.classList.add("show");
+            });
+    
+            document.getElementById("closeDrawer").addEventListener("click", function () {
+                drawer.classList.remove("open");
+                overlay.classList.remove("show");
+            });
+    
+            overlay.addEventListener("click", function () {
+                drawer.classList.remove("open");
+                this.classList.remove("show");
+            });
+        });
     </script>
     
 </body>
