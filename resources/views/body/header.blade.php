@@ -28,11 +28,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-      }
-    
-      .fa-moon { color: #f1c40f; }
-      .fa-sun { color: #f39c12; }
-    
+      }   
       .checkbox-label .ball {
         background-color: #fff;
         width: 22px;
@@ -144,14 +140,8 @@
 
 
 <header class="navbar navbar-expand navbar-light bg-white topbar mb-4 shadow fixed-top">
-  <a class="sidebar-brand d-flex align-items-center" href="/">
-    <div class="sidebar-brand-icon rotate-n-15">
-      <i class="fas fa-heartbeat"></i>
-    </div>
-    <div class="sidebar-brand-text">CheckMySite</div>
-  </a>
-  &nbsp;
-  
+  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   @hasrole('user')
   <div class="dropdown">
     <button

@@ -8,7 +8,7 @@
 
     .sidebar-brand {
         height: 4.375rem;
-        background: rgba(0, 0, 0, 0.1);
+      
     }
 
     .sidebar-brand-icon {
@@ -80,7 +80,7 @@
         display: block;
     }
     .sidebar-brand {
-  background: linear-gradient(180deg, #4e73df 0%, #224abe 100%);
+  
   height: 4.375rem;
   margin: 0;
   width: 225px; /* same as .sidebar */
@@ -389,14 +389,12 @@
         @endcan
 
             <!-- Helpdesk item at bottom -->
-        @hasrole('user')
-            <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('display.tickets')}}">
-                    <i class="fas fa-headset"></i>
-                    <span>Raise Issue</span>
-                </a>
-            </li>
-        @endhasrole
+        <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">
+            <a class="nav-link" href="{{route('display.tickets')}}">
+                <i class="fas fa-headset"></i>
+                <span>Raise Issue</span>
+            </a>
+        </li>
         @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date === null)
             @php
                 $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);

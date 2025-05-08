@@ -23,7 +23,7 @@ class PublicStatusPageController extends Controller
                        ->orderBy('name')
                        ->get()
                        ->map(function ($monitor) use ($daysToShow) {
-                           return $this->enrichMonitorData($monitor, $daysToShow);
+                           return $this->getMonitorData($monitor, $daysToShow);
                        });
 
         return view('public-status', [
@@ -32,7 +32,7 @@ class PublicStatusPageController extends Controller
         ]);
     }
 
-    protected function enrichMonitorData($monitor, $daysToShow)
+    protected function getMonitorData($monitor, $daysToShow)
     {
         // Determine status color and icon
         $monitor->statusColor = $monitor->status == 'up' ? 'success' : 'danger';
@@ -40,7 +40,7 @@ class PublicStatusPageController extends Controller
         
         // Get data for the specified number of days
         $daysData = [];
-        $startDate = now()->subDays($daysToShow - 1);
+        $startDate = now()->subDays($daysToShow - 1)->startOfDay();
         $endDate = now();
         
         // Initialize all days with default values
