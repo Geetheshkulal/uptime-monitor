@@ -291,14 +291,15 @@
             </li>
         @endhasrole
 
-    @if (auth()->user()->status === 'paid' || auth()->user()->status === 'free_trial')
+
+    @if ((auth()->user()->status === 'paid' || auth()->user()->status === 'free_trial')&& auth()->user()->hasRole('user'))
         <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
             <a class="nav-link ssl" href="{{ route('ssl.check') }}">
                 <i class="fas fa-lock"></i>
                 <span>SSL Check</span>
             </a>
         </li>
-    @elseif(auth()->user()->status === 'free')
+    @elseif(auth()->user()->status === 'free' && auth()->user()->hasRole('user'))
         <li class="nav-item premium-feature {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
             <a class="nav-link ssl text-gold" href="{{ route('premium.page') }}">
                 <i class="fas fa-lock text-gold"></i>

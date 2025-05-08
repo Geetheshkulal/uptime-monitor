@@ -71,7 +71,7 @@ class ProfileController extends Controller
         ->withProperties(['changes' => $changes])
         ->log('Updated profile');
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('success', 'Profile Updated');
     }
 
     /**
@@ -85,6 +85,10 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+
+        if ($request->user()->id === auth()->id()) {
+            return redirect()->back()->with('error', 'You cannot delete your own account!');
+        }
 
 
         //Log Deletion activity

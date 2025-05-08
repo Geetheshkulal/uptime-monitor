@@ -2,6 +2,8 @@
 @section('content')
 
 @push('styles')
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"></head>
     <style>
         .nav-item{
             margin-right: 10px;
@@ -24,11 +26,6 @@
                     <li class="nav-item">
                         <button class="nav-link btn-primary" :class="{ 'active': tab === 'password' }" @click="tab = 'password'">Password</button>
                     </li>
-                    @if(!auth()->user()->hasRole('superadmin'))
-                        <li class="nav-item">
-                            <button class="nav-link btn-primary text-danger" :class="{ 'active': tab === 'delete' }" @click="tab = 'delete'">Delete</button>
-                        </li>
-                    @endif
                 </ul>
 
                 <!-- Sections -->
@@ -38,11 +35,6 @@
                 <div x-show="tab === 'password'" class="mt-4">
                     @include('profile.partials.update-password-form')
                 </div>
-                @if(!auth()->user()->hasRole('superadmin'))
-                    <div x-show="tab === 'delete'" class="mt-4">
-                        @include('profile.partials.delete-user-form')
-                    </div>
-                @endif
             </div>
         </div>
         
@@ -57,5 +49,16 @@
 </div>
 @push('scripts')
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @if(session('success'))
+        <script>
+            toastr.success("{{ session('success') }}");
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            toastr.error("{{ session('error') }}");
+        </script>
+    @endif
 @endpush
 @endsection
