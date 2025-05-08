@@ -249,7 +249,7 @@
         "closeButton": true,
         "progressBar": true,
         "positionClass": "toast-top-right", // or any other position
-        "timeOut": "4000"
+        "timeOut": "2000"
     };
 
 var count = 200;
@@ -378,7 +378,7 @@ function runConfettiPopper() {
                         setTimeout(()=>{
                     const modal = bootstrap.Modal.getInstance(document.getElementById('applyCouponModal'));
                         modal.hide();
-                    }, 2000);
+                    }, 1000);
 
                         document.querySelectorAll('.premium-highlight .display-6').forEach(el => {
                             const original = parseFloat(el.getAttribute('data-original'));
@@ -389,6 +389,8 @@ function runConfettiPopper() {
                              el.style.display = 'none';
                              el.textContent = '';
                         });
+                    
+                        window.location.reload(); 
                         
                     }
                 });
