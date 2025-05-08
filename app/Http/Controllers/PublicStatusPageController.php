@@ -23,7 +23,7 @@ class PublicStatusPageController extends Controller
                        ->orderBy('name')
                        ->get()
                        ->map(function ($monitor) use ($daysToShow) {
-                           return $this->enrichMonitorData($monitor, $daysToShow);
+                           return $this->getMonitorData($monitor, $daysToShow);
                        });
 
         return view('public-status', [
@@ -32,7 +32,7 @@ class PublicStatusPageController extends Controller
         ]);
     }
 
-    protected function enrichMonitorData($monitor, $daysToShow)
+    protected function getMonitorData($monitor, $daysToShow)
     {
         // Determine status color and icon
         $monitor->statusColor = $monitor->status == 'up' ? 'success' : 'danger';

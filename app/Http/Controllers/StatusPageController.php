@@ -20,7 +20,7 @@ class StatusPageController extends Controller
             ->orderBy('name')
             ->get()
             ->map(function ($monitor) use ($daysToShow) {
-                return $this->enrichMonitorData($monitor, $daysToShow);
+                return $this->getMonitorData($monitor, $daysToShow);
             });
             
             return view('pages.status', [
@@ -29,7 +29,7 @@ class StatusPageController extends Controller
             ]);
     }
 
-    public function enrichMonitorData($monitor, $daysToShow)
+    public function getMonitorData($monitor, $daysToShow)
     {
         // Determine status color and icon
         $monitor->statusColor = $monitor->status == 'up' ? 'success' : 'danger';
