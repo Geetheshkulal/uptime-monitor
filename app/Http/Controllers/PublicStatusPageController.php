@@ -40,7 +40,7 @@ class PublicStatusPageController extends Controller
         
         // Get data for the specified number of days
         $daysData = [];
-        $startDate = now()->subDays($daysToShow - 1);
+        $startDate = now()->subDays($daysToShow - 1)->startOfDay();
         $endDate = now();
         
         // Initialize all days with default values
