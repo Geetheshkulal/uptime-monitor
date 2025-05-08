@@ -144,6 +144,7 @@
    &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   @hasrole('user')
   <div class="dropdown">
+    <i class="fas fa-question-circle mr-2"></i> Help
     <button
       class="btn dropdown-toggle"
       type="button"
@@ -152,7 +153,6 @@
       aria-haspopup="true"
       aria-expanded="false"
     >
-      <i class="fas fa-question-circle mr-2"></i> Help
     </button>
     <div class="dropdown-menu" aria-labelledby="helpBtn">
       @if (request()->is('dashboard*') || request()->is('ssl-check*') || request()->is('monitoring/add*'))

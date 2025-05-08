@@ -48,8 +48,7 @@
             position: relative;
             background-color: whitesmoke;
             border-radius: 0.4rem;
-            overflow: hidden;
-        }
+           }
 
         .skeleton.sm { height: 16px; width: 30%; margin-bottom: 8px; }
         .skeleton.md { height: 20px; width: 60%; margin-bottom: 10px; }
@@ -80,9 +79,7 @@
             100% { left: 100%; }
         }
 
-        body.loading {
-            overflow: hidden;
-        }
+        
 
         #accordionSidebar {
             position: sticky;
@@ -99,11 +96,11 @@
             background-color: #4e73df; /* Ensure navbar has a background */
             width: 100%; /* Make sure it's full width */
         }
-        body.loading {
-    overflow-y: hidden; /* Prevent vertical scrolling only during loading */
+ 
+
+#content {
+    overflow-y: hidden; 
 }
-
-
       
     </style>
 
@@ -165,7 +162,7 @@
         window.addEventListener('load', () => {
     setTimeout(() => {
         document.body.classList.remove('loading');
-        document.body.style.overflowY = 'auto'; // Ensure scrolling is enabled
+     // Ensure scrolling is enabled
 
         const skeletons = document.querySelectorAll('.skeleton');
         skeletons.forEach(el => el.classList.remove('skeleton'));

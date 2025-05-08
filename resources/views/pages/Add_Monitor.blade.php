@@ -63,9 +63,12 @@
             background-color: #2e59d9;
             border-color: #2653d4;
         }
+        .container-fluid{
+            overflow: auto;
+        }
  </style>
 
-
+<div class="container-fluid">
     <div class="row mb-4 px-3 px-lg-4">
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
@@ -76,7 +79,9 @@
             </div>
         </div>
     </div>
+</div>
 
+    {{-- Dropdown for Monitor Types --}}
     <div class="dropdown mb-4 mx-3 mx-lg-5">
         <button class="btn btn-primary dropdown-toggle MonitorTypes" type="button" id="dropdownMenuButton" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">

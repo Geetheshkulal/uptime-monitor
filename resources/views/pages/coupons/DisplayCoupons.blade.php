@@ -44,6 +44,12 @@
     margin-left: 14px; */
 }
 
+
+.select2-container--open .select2-dropdown--below{
+    border-top: none;
+     
+}
+
 .select2-container--default .select2-selection--multiple {
   min-height: 38px;
   border: 1px solid #ced4da;
@@ -51,28 +57,36 @@
   padding: 6px 8px;
   background-color: #fff;
   box-shadow: none;
-  margin-left: 14px ;
-  margin-right: 14px ;
-   
+  margin-left: 14px;
+  margin-right: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
-
-.select2-container--open .select2-dropdown--below{
-    border-top: none;
-     
-}
-
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
   background-color: #007bff;
   border: 1px solid #007bff;
   color: #fff;
-  padding: 2px 8px;
+  padding: 4px 8px 4px 24px; /* Extra left padding for close button */
   margin-top: 4px;
   margin-right: 4px;
   border-radius: 3px;
   font-size: 0.875rem;
- 
+  position: relative;
 }
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 4px;
+  color: #000;
+}
+
 
 
 .select2-container--default .select2-selection--multiple .select2-search__field {
@@ -268,7 +282,7 @@
 
                         <div class="form-group mb-2">
                             <label for="max_uses" class="small font-weight-bold">Max Uses</label>
-                            <input id="max_uses" name="max_uses" class="form-control form-control-sm" placeholder="Enter max number of uses">
+                            <input id="max_uses" name="max_uses" class="form-control form-control-sm" placeholder="Leave blank for unlimited">
                         </div>
                     </div>
 
@@ -292,7 +306,14 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="form-group mt-2 mb-0">
+                    <label for="user_ids" class="small font-weight-bold">Assign to Users (optional)</label>
+                    <select id="user_ids" name="user_ids[]" class="form-control form-control-sm select2" multiple>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                        @endforeach
+                    </select>
+                </div>    
                 
             </div>
 
