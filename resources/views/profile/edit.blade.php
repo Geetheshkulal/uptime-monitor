@@ -26,6 +26,11 @@
                     <li class="nav-item">
                         <button class="nav-link btn-primary" :class="{ 'active': tab === 'password' }" @click="tab = 'password'">Password</button>
                     </li>
+                    @hasrole('user')
+                        <li class="nav-item">
+                            <button class="nav-link btn-primary" :class="{ 'active': tab === 'billing' }" @click="tab = 'billing'">Billing Details</button>
+                        </li>
+                    @endhasrole
                 </ul>
 
                 <!-- Sections -->
@@ -34,6 +39,9 @@
                 </div>
                 <div x-show="tab === 'password'" class="mt-4">
                     @include('profile.partials.update-password-form')
+                </div>
+                <div  x-show="tab === 'billing'" class="mt-4">
+                    @include('profile.partials.billing-details-form')   
                 </div>
             </div>
         </div>
