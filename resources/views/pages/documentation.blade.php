@@ -21,6 +21,9 @@
       font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
       background-color: #f8f9fa;
       color: #333;
+      position: sticky;
+      top: 0;
+      height: 100vh;
     }
 
     .sidebar {
@@ -286,7 +289,7 @@
 
   <!-- Main Content Area -->
   <div class="content">
-    <a href="/" class="back-btn">
+    <a href="{{ url()->previous() }}" class="back-btn">
       <i class="fas fa-arrow-left"></i> Back
     </a>
 

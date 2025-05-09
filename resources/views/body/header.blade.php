@@ -143,10 +143,12 @@
   &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
    &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   @hasrole('user')
-  <div class="dropdown">
-    <i class="fas fa-question-circle mr-2"></i> Help
+  <div class="dropdown d-flex align-items-center">
+    <span class="d-flex align-items-center mr-2">
+        <i class="fas fa-question-circle mr-1"></i> Help
+    </span>
     <button
-      class="btn dropdown-toggle"
+      class="btn btn-sm dropdown-toggle"
       type="button"
       id="helpBtn"
       data-toggle="dropdown"
@@ -155,19 +157,19 @@
     >
     </button>
     <div class="dropdown-menu" aria-labelledby="helpBtn">
-      @if (request()->is('dashboard*') || request()->is('ssl-check*') || request()->is('monitoring/add*'))
-          <button class="dropdown-item" id="startTourBtn">
-              <i class="fas fa-play mr-2"></i> Start Tour
-          </button>
-      @endif
-      <a class="dropdown-item" href="mailto:checkmysite2025@gmail.com?subject=Issue%20Report">
-          <i class="fas fa-bug mr-2"></i> Report an Issue
-      </a>
-      <a class="dropdown-item" href="{{ url('/documentation') }}">
-          <i class="fas fa-info-circle mr-2"></i> For more info
-      </a>
-  </div>
-  </div>
+        @if (request()->is('dashboard*') || request()->is('ssl-check*') || request()->is('monitoring/add*'))
+            <button class="dropdown-item" id="startTourBtn">
+                <i class="fas fa-play mr-2"></i> Start Tour
+            </button>
+        @endif
+        <a class="dropdown-item" href="mailto:checkmysite2025@gmail.com?subject=Issue%20Report">
+            <i class="fas fa-bug mr-2"></i> Report an Issue
+        </a>
+        <a class="dropdown-item" href="{{ url('/documentation') }}">
+            <i class="fas fa-info-circle mr-2"></i> For more info
+        </a>
+    </div>
+</div>
   
   @endhasrole
 
