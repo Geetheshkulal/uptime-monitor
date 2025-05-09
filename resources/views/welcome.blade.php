@@ -749,6 +749,9 @@
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> 1-Month history</li>
                 <li class="mb-3"><i class="fas fa-times-circle" style="color: #ea230d;"></i> Telegram alert unavailable</li>
                 <li class="mb-3"><i class="fas fa-times-circle" style="color: #ea230d;"></i> SSL expiry check unavailable</li>
+                <li class="mb-3">
+                  <i class="fas fa-times-circle" style="color: #ea230d;"></i>  Create and manage team members unavailable
+                </li>
             </ul>
               @if(auth()->check())
                 <a href="{{ route('monitoring.dashboard') }}" class="btn btn-outline-primary d-block">
@@ -780,6 +783,9 @@
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  Telegram bot notification alert</li>
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  4-Month history</li>
                 <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  SSL expiry check</li>
+                <li class="mb-3">
+                  <i class="fas fa-check-circle" style="color: #065bef;"></i>  Create and manage team members
+                </li>
               </ul>
               <a href="#" class="btn btn-primary d-block">Get Started</a>
             </div>
