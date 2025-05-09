@@ -9,7 +9,7 @@ class UpdateStatusDefaultInUsersTable extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('status')->default('paid')->change(); // Change default to 'paid'
+            $table->string('status')->default('free')->change(); // Change default to 'paid'
         });
     }
 
