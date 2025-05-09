@@ -100,9 +100,20 @@
 
 <!-- Apply Coupon Button -->
 <div class="text-end mb-3 me-3">
-    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#applyCouponModal">
+{{-- <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#applyCouponModal">
         Apply Coupon
+    </button> --}}
+
+    <button id="couponActionBtn" class="btn btn-outline-primary" 
+            data-bs-toggle="modal" data-bs-target="#applyCouponModal"
+            data-action="apply">
+        @if(session('applied_coupon'))
+            Remove Coupon
+        @else
+            Apply Coupon
+        @endif
     </button>
+
 </div>
 
 <div class="container-fluid">
@@ -249,7 +260,7 @@
         "closeButton": true,
         "progressBar": true,
         "positionClass": "toast-top-right", // or any other position
-        "timeOut": "4000"
+        "timeOut": "3000"
     };
 
 var count = 200;
@@ -291,8 +302,117 @@ function runConfettiPopper() {
 }
 </script>
 
-
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const couponActionBtn = document.getElementById('couponActionBtn');
+        const couponForm = document.getElementById('applyCouponForm');
+        const message = document.getElementById('couponMessage');
+        const removeWrapper = document.getElementById('removeCouponWrapper');
+        const removeBtn = document.getElementById('removeCouponBtn');
+    
+        // Initialize button state
+        @if(session('applied_coupon'))
+            couponActionBtn.textContent = 'Remove Coupon';
+            couponActionBtn.setAttribute('data-action', 'remove');
+            couponActionBtn.removeAttribute('data-bs-toggle');
+            couponActionBtn.removeAttribute('data-bs-target');
+        @endif
+    
+        couponForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const code = this.coupon_code.value;
+    
+            fetch('/apply-coupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ code })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                   
+                    document.querySelectorAll('.premium-highlight .display-6').forEach(el => {
+                        const original = parseFloat(el.getAttribute('data-original'));
+                        el.innerHTML = `<del>₹${original.toFixed(2)}</del> ₹${(original - data.discount).toFixed(2)}`;
+                    });
+    
+                    document.querySelectorAll('.premium-highlight .applied-coupon-msg').forEach(el => {
+                        el.style.display = 'block';
+                        el.textContent = `You applied coupon code "${code}"`;
+                    });
+    
+                   
+                    couponActionBtn.textContent = 'Remove Coupon';
+                    couponActionBtn.setAttribute('data-action', 'remove');
+                    couponActionBtn.removeAttribute('data-bs-toggle');
+                    couponActionBtn.removeAttribute('data-bs-target');
+                    
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('applyCouponModal'));
+                    modal.hide();
+                    toastr.success(data.message);
+                    runConfettiPopper();
+                } else {
+                    message.classList.remove('text-success');
+                    message.classList.add('text-danger');
+                    message.textContent = data.message;
+                }
+            });
+        });
+    
+        
+        couponActionBtn.addEventListener('click', function(e) {
+            if (this.getAttribute('data-action') === 'remove') {
+                e.preventDefault();
+                removeCoupon();
+            }
+            // If action is 'apply', default modal behavior will occur
+        });
+    
+        // Remove coupon function
+        function removeCoupon() {
+            fetch('/remove-coupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                   
+                    document.querySelectorAll('.premium-highlight .display-6').forEach(el => {
+                        const original = parseFloat(el.getAttribute('data-original'));
+                        el.innerHTML = `₹${original.toFixed(2)}`;
+                    });
+    
+                    document.querySelectorAll('.premium-highlight .applied-coupon-msg').forEach(el => {
+                        el.style.display = 'none';
+                        el.textContent = '';
+                    });
+    
+                    // Reset button
+                    couponActionBtn.textContent = 'Apply Coupon';
+                    couponActionBtn.setAttribute('data-action', 'apply');
+                    couponActionBtn.setAttribute('data-bs-toggle', 'modal');
+                    couponActionBtn.setAttribute('data-bs-target', '#applyCouponModal');
+                    
+                    toastr.success(data.message);
+                    window.location.reload(); 
+                }
+            });
+        }
+    
+        removeBtn.addEventListener('click', removeCoupon);
+    });
+</script>
+
+{{-- // don't remove this code, want for backup --}}
+
+{{-- <script>
     document.addEventListener('DOMContentLoaded', () => {
         const couponForm = document.getElementById('applyCouponForm');
         const message = document.getElementById('couponMessage');
@@ -306,6 +426,7 @@ function runConfettiPopper() {
             message.classList.add('text-success');
             message.textContent = 'Coupon already applied.';
         @endif
+
 
         couponForm.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -333,11 +454,6 @@ function runConfettiPopper() {
                             el.textContent = `You applied coupon code "${code}"`;
                         });
 
-                    //     confetti({
-                    // particleCount: 100,
-                    // spread: 70,
-                    // origin: { y: 0.6 }
-                    //     });
 
                         message.classList.remove('text-danger');
                         message.classList.add('text-success');
@@ -378,7 +494,7 @@ function runConfettiPopper() {
                         setTimeout(()=>{
                     const modal = bootstrap.Modal.getInstance(document.getElementById('applyCouponModal'));
                         modal.hide();
-                    }, 2000);
+                    }, 1000);
 
                         document.querySelectorAll('.premium-highlight .display-6').forEach(el => {
                             const original = parseFloat(el.getAttribute('data-original'));
@@ -389,13 +505,17 @@ function runConfettiPopper() {
                              el.style.display = 'none';
                              el.textContent = '';
                         });
+                    
+                        window.location.reload(); 
                         
                     }
                 });
         });
     });
-</script>
+</script> --}}
     
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('form[id^="paymentForm_"]').forEach(form => {

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\CouponCode;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Mail\CouponAvailableMail;
+use Illuminate\Support\Facades\Mail;
+
 
 class CouponController extends Controller
 {
@@ -30,6 +33,16 @@ public function apply(Request $request)
     if (!$coupon) {
         return response()->json(['success' => false, 'message' => 'Invalid or expired coupon.']);
     }
+
+    // for specific users if user_ids column is used
+    if(!is_null($coupon->user_ids)){
+        $allowedUserIds = json_decode($coupon->user_ids, true);
+        if(!in_array($user->id, $allowedUserIds)) {
+            return response()->json(['success' => false, 'message' => 'This coupon is not valid for your account.']);
+        }
+            
+    }
+        
 
     if ($coupon->max_uses && $coupon->uses >= $coupon->max_uses) {
         return response()->json(['success' => false, 'message' => 'Coupon usage limit reached.']);
@@ -68,10 +81,15 @@ public function remove(Request $request)
 
         if($coupon){
         // Assuming you have a pivot or tracking table
-        DB::table('coupon_user')
+        $deleted=DB::table('coupon_user')
                 ->where('user_id', $user->id)
                 ->where('coupon_code_id', $coupon->id)
                 ->delete();
+
+        if($deleted){
+            // Decrement uses if you want to track the number of times a coupon has been used
+            $coupon->decrement('uses');
+        }
         }
 
         session()->forget('applied_coupon');
@@ -108,11 +126,23 @@ public function CouponStore(Request $request)
     if($request->filled('user_ids')){
 
         $data['user_ids'] = json_encode($request->user_ids);
-    
     }
-        
+    
     // CouponCode::create($request->all());
-    CouponCode::create($data);
+    $coupon = CouponCode::create($data);
+
+    if($coupon->user_ids === null)
+    {
+        $users = User::all();
+    }else{
+        $userIds = json_decode($coupon->user_ids, true);
+        $users = User::whereIn('id', $userIds)->get();
+    }
+    // Send email to users
+
+    foreach ($users as $user) {
+        Mail::to($user->email)->queue(new CouponAvailableMail($coupon, $user));
+    }
 
     return back()->with('success', 'Coupon created successfully.');
 }
