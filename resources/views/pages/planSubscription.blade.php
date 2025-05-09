@@ -251,6 +251,8 @@
                             <thead>
                                 <tr>
                                     <th>Sl No.</th>
+                                    <th>Coupon Code</th>
+                                    <th>Flat Discount</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Payment Type</th>
@@ -265,6 +267,12 @@
                                 @forelse($subscriptions as $subscription)
                                 <tr>
                                     <td>{{ $loop->iteration}}</td>
+                                    @if ($subscription->coupon_code)
+                                        <td><span class="badge badge-success">{{ $subscription->coupon_code }}</span></td>
+                                    @else
+                                        <td><span class="">Not Applied</span></td>
+                                    @endif
+                                    <td>{{ $subscription->coupon_value ? $subscription->coupon_value: 'Not Applied' }}</td>
                                     <td>₹{{ number_format($subscription->payment_amount, 2) }}</td>
                                     <td>
                                         @if($subscription->status === 'active')

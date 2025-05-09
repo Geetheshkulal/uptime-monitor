@@ -54,10 +54,15 @@ class CashFreePaymentController extends Controller
             $query->whereNull('coupon_codes.valid_until')
                   ->orWhere('coupon_codes.valid_until', '>=', $now);
         })
-        ->select('coupon_codes.value')
+        ->select('coupon_codes.code','coupon_codes.value')
         ->first();
 
+        $couponCodeValue = null;
+        $couponCodeText = null;
+
         if ($couponCode) {
+            $couponCodeValue = $couponCode->value;
+            $couponCodeText = $couponCode->code;
             $orderAmount = max(0, $orderAmount - $couponCode->value);
         }
 
@@ -74,7 +79,8 @@ class CashFreePaymentController extends Controller
             'order_id' => $orderId,
             'order_amount' => $orderAmount,
             "order_currency" => "INR",
-            "order_note" => "subscription_id:" . $validated['subscription_id'] . "|user_id:" . auth()->id(),
+            "order_note" => "subscription_id:" . $validated['subscription_id'] . "|user_id:" . auth()->id()."|coupon:" . $couponCodeText.
+            "|value:" . $couponCodeValue,
             "customer_details" => [
                 "customer_id" => 'customer_' . rand(111111111, 999999999),
                 "customer_name" => $validated['name'],
@@ -196,6 +202,8 @@ class CashFreePaymentController extends Controller
     $orderNote = $orderDetails['order_note'] ?? '';
     $subscriptionId = null;
     $userId = null;
+    $couponCode = null;
+    $couponValue = null;
     
     $parts = explode('|', $orderNote);
     foreach ($parts as $part) {
@@ -204,6 +212,12 @@ class CashFreePaymentController extends Controller
         }
         if (Str::startsWith($part, 'user_id:')) {
             $userId = str_replace('user_id:', '', $part);
+        }
+        if (Str::startsWith($part, 'coupon:')) {
+            $couponCode = str_replace('coupon:', '', $part);
+        }
+        if (Str::startsWith($part, 'value:')) {
+            $couponValue = (float) str_replace('value:', '', $part);
         }
     }
 
@@ -215,7 +229,7 @@ class CashFreePaymentController extends Controller
     $paymentAmount = $paymentDetails[0]['payment_amount'] ?? $orderDetails['order_amount']; 
 
     // Process payment
-    return \DB::transaction(function () use ($orderId, $userId, $subscriptionId, $paymentMethod,$paymentAmount,$paymentStatus, $orderDetails) {
+    return \DB::transaction(function () use ($orderId, $userId, $subscriptionId, $paymentMethod,$paymentAmount,$paymentStatus,$couponCode,$couponValue, $orderDetails) {
         $user = \App\Models\User::find($userId);
         
         if (!$user) {
@@ -224,6 +238,8 @@ class CashFreePaymentController extends Controller
        
         // Create payment record
         $payment = Payment::create([
+            'coupon_code' => $couponCode ?: null,
+            'coupon_value' => $couponValue > 0 ? $couponValue : null,
             'payment_amount' => $paymentAmount,
             'status' => 'active',
             'user_id' => $userId,
