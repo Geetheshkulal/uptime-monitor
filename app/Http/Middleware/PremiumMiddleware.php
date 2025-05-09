@@ -32,7 +32,7 @@ class PremiumMiddleware
         }
 
         // Check if user has free status
-        if ($request->user()->status !== 'paid') {
+        if ($request->user()->status !== 'paid' && $request->user()->status !== 'free_trial') {
             return redirect()->route('premium.page')
                 ->with('error', 'This feature requires a premium subscription');
         }

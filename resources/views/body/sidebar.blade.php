@@ -292,7 +292,7 @@
         @endhasrole
 
 
-    @if ((auth()->user()->status === 'paid' || auth()->user()->status === 'free_trial')&& auth()->user()->hasRole('user'))
+    @if ((auth()->user()->status === 'paid' || auth()->user()->status === 'free_trial') && auth()->user()->hasRole('user'))
         <li class="nav-item {{ request()->routeIs('ssl.check') ? 'active' : '' }}">
             <a class="nav-link ssl" href="{{ route('ssl.check') }}">
                 <i class="fas fa-lock"></i>
@@ -395,7 +395,8 @@
                 <span>Raise Issue</span>
             </a>
         </li>
-        @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date === null)
+
+        @if ((auth()->user()->status === 'free' || auth()->user()->status === 'free_trial') && auth()->user()->hasRole('user'))
             @php
                 $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
             @endphp
