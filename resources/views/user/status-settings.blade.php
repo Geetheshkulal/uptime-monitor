@@ -2,7 +2,19 @@
 
 @section('content')
 <div class="container py-4">
-    <h1 class="mb-4">Status Page Settings</h1>
+
+     {{-- <div class="page-title-box d-flex align-items-center justify-content-between">
+                 <h1 class="mb-4">Status Page Settings</h1>
+                <a href="{{ route('monitoring.dashboard') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                    <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Status Page
+                </a>
+    </div> --}}
+    <div class="page-title-box d-flex align-items-center justify-content-between">
+    <h1 class="mb-0">Status Page Settings</h1>
+    <a href="{{ route('status') }}" class="btn btn-primary ms-3" style="padding: 0.5rem 1rem;">
+        <i class="fas fa-arrow-left me-2"></i> Back to Status Page
+    </a>
+</div><br>
 
     <div class="card shadow-sm">
         <div class="card-body">
@@ -63,6 +75,8 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
 function togglePublicStatusFields() {
     const checkbox = document.getElementById('enablePublicStatus');
@@ -81,5 +95,10 @@ function copyToClipboard(elementId) {
         alert('Copied to clipboard!');
     }
 }
+
+@if(session('success'))
+    toastr.success("{{ session('success') }}");
+@endif
+
 </script>
 @endsection
