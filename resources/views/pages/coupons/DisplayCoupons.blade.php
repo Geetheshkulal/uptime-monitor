@@ -327,7 +327,7 @@
 
   <!-- Edit Coupon Modals - One for each coupon -->
 @foreach($coupons as $coupon)
-<div class="modal fade" id="editCouponModal{{ $coupon->id }}" tabindex="-1" role="dialog" aria-labelledby="editCouponModalLabel{{ $coupon->id }}" aria-hidden="true">
+{{-- <div class="modal fade" id="editCouponModal{{ $coupon->id }}" tabindex="-1" role="dialog" aria-labelledby="editCouponModalLabel{{ $coupon->id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form class="modal-content" method="POST" action="{{ route('coupons.update', $coupon->id) }}">
             @csrf
@@ -380,7 +380,69 @@
             </div>
         </form>
     </div>
+</div> --}}
+<div class="modal fade" id="editCouponModal{{ $coupon->id }}" tabindex="-1" role="dialog" aria-labelledby="editCouponModalLabel{{ $coupon->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <form class="modal-content" method="POST" action="{{ route('coupons.update', $coupon->id) }}">
+            @csrf
+            @method('PUT')
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCouponModalLabel{{ $coupon->id }}">Edit Coupon</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-2">
+                            <label for="code{{ $coupon->id }}" class="small font-weight-bold">Coupon Code</label>
+                            <input id="code{{ $coupon->id }}" name="code" class="form-control form-control-sm" value="{{ $coupon->code }}" required>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="value{{ $coupon->id }}" class="small font-weight-bold">Discount Flat ₹</label>
+                            <input type="number" id="value{{ $coupon->id }}" name="value" class="form-control form-control-sm" value="{{ $coupon->value }}" required>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="max_uses{{ $coupon->id }}" class="small font-weight-bold">Max Uses</label>
+                            <input type="number" id="max_uses{{ $coupon->id }}" name="max_uses" class="form-control form-control-sm" value="{{ $coupon->max_uses }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-2">
+                            <label for="valid_from{{ $coupon->id }}" class="small font-weight-bold">Valid From</label>
+                            <input type="date" id="valid_from{{ $coupon->id }}" name="valid_from" class="form-control form-control-sm" value="{{ $coupon->valid_from ? \Carbon\Carbon::parse($coupon->valid_from)->format('Y-m-d') : '' }}">
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="valid_until{{ $coupon->id }}" class="small font-weight-bold">Valid Until</label>
+                            <input type="date" id="valid_until{{ $coupon->id }}" name="valid_until" class="form-control form-control-sm" value="{{ $coupon->valid_until ? \Carbon\Carbon::parse($coupon->valid_until)->format('Y-m-d') : '' }}">
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="is_active{{ $coupon->id }}" class="small font-weight-bold">Status</label>
+                            <select id="is_active{{ $coupon->id }}" name="is_active" class="form-control form-control-sm">
+                                <option value="1" {{ $coupon->is_active ? 'selected' : '' }}>Active</option>
+                                <option value="0" {{ !$coupon->is_active ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer py-2 d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary btn-sm px-4">Update Coupon</button>
+            </div>
+        </form>
+    </div>
 </div>
+
   
 <!-- Delete Coupon Modals - One for each coupon -->
 <div class="modal fade" id="deleteCouponModal{{ $coupon->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteCouponModalLabel{{ $coupon->id }}" aria-hidden="true">
