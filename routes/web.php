@@ -100,6 +100,9 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::get('/monitoring/delete/{id}',[MonitoringController::class,'MonitorDelete'])->middleware('permission:delete.monitor')->name('monitoring.delete');
     Route::post('/monitoring/edit/{id}', [MonitoringController::class,'MonitorEdit'])->middleware('permission:edit.monitor')->name('monitoring.update');
     Route::post('/monitor/pause/{id}', [MonitoringController::class, 'pauseMonitor'])->name('monitor.pause');
+    
+    
+    Route::patch('/user/update/billing', [UserController::class, 'UpdateBillingInfo'])->name('update.billing.info');
 });
 
 Route::middleware(['auth','verified','CheckUserSession'])->group(function () {

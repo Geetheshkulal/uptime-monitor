@@ -39,7 +39,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at',
         'parent_user_id',
         'status_page_hash',
-        'enable_public_status'
+        'enable_public_status',       
+        'address',        
+        'city', 
+        'state', 
+        'pincode', 
+        'country',
     ];
 
     /**
@@ -65,7 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
     
     public function monitors()
     {
-     return $this->hasMany(Monitors::class);
+        return $this->hasMany(Monitors::class);
     }
     public function sendPasswordResetNotification($token)
     {
@@ -90,7 +95,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function coupons()
 
     {
-    return $this->belongsToMany(CouponCode::class, 'coupon_user');
+        return $this->belongsToMany(CouponCode::class, 'coupon_user');
     }
 
 

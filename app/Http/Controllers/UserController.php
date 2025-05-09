@@ -351,4 +351,28 @@ class UserController extends Controller
         // Typically you would return a redirect response after an update
         return back()->with('success', 'Status page settings updated successfully');
     }
+
+    public function UpdateBillingInfo(Request $request)
+    {
+        $request->validate([
+            // Billing info validation
+            'address' => [ 'string', 'max:255'],
+            'city' => [ 'string', 'max:100'],
+            'state' => [ 'string', 'max:100'],
+            'pincode' => [ 'string', 'max:20'],
+            'country' => [ 'string', 'max:100'],
+        ]);
+
+        $user = auth()->user();
+
+        $user->update([
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'pincode' => $request->pincode,
+            'country' => $request->country,
+        ]);
+
+        return redirect()->back()->with('success', 'Billing info updated successfully!');
+    }
 }
