@@ -250,9 +250,7 @@
                         <table class="table" id="paymentsTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Sl No.</th>
-                                    <th>Coupon Code</th>
-                                    <th>Flat Discount</th>
+                                    <th>Sl No.</th>                               
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Payment Type</th>
@@ -260,6 +258,9 @@
                                     <th>Transaction Id</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
+                                    <th>Coupon Code</th>
+                                    <th>Flat Discount</th>
+                                    <th>Final Amount</th>
                                     <th>Print Bill</th>
                                 </tr>
                             </thead>
@@ -267,13 +268,7 @@
                                 @forelse($subscriptions as $subscription)
                                 <tr>
                                     <td>{{ $loop->iteration}}</td>
-                                    @if ($subscription->coupon_code)
-                                        <td><span class="badge badge-success">{{ $subscription->coupon_code }}</span></td>
-                                    @else
-                                        <td><span class="">Not Applied</span></td>
-                                    @endif
-                                    <td>{{ $subscription->coupon_value ? $subscription->coupon_value: 'Not Applied' }}</td>
-                                    <td>₹{{ number_format($subscription->payment_amount, 2) }}</td>
+                                    <td>₹{{ number_format($subscription->subscription->amount, 2) }}</td>
                                     <td>
                                         @if($subscription->status === 'active')
                                             <span class="badge badge-success">Active</span>
@@ -286,15 +281,26 @@
                                     <td>{{ strtoupper($subscription->payment_type) }}</td>
                                     <td>{{ strtoupper($subscription->payment_status) }}</td>
                                     <td>{{ $subscription->transaction_id }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($subscription->start_date)->format('d M Y, h:i A') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($subscription->start_date)->format('d M Y') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($subscription->end_date)->format('d M Y') }}</td>
+                                    @if ($subscription->coupon_code)
+                                        <td><span class="badge badge-warning">{{ $subscription->coupon_code }}</span></td>
+                                    @else
+                                        <td><span class="">Not Applied</span></td>
+                                    @endif
+                                    <td>{{ $subscription->coupon_value ? $subscription->coupon_value: 'Not Applied' }}</td>
+                                    <td>{{ $subscription->payment_amount }}</td>
                                     <td><button class="btn btn-sm btn-primary print-bill" 
                                         data-id="{{ $subscription->id }}"
                                         data-address="{{ $subscription->address }}"
                                         data-city="{{ $subscription->city }}"
                                         data-state="{{ $subscription->state }}"
                                         data-country="{{ $subscription->country }}"
-                                        data-pincode="{{ $subscription->pincode }}">Print Bill</button></td>
+                                        data-pincode="{{ $subscription->pincode }}"
+                                        data-coupon-code="{{ $subscription->coupon_code }}"
+                                        data-coupon-value="{{ $subscription->coupon_value }}"
+                                        data-final-amount="{{ $subscription->payment_amount }}"
+                                        >Print Bill</button></td>
                                 </tr>
                                 @empty
                                 <tr>
@@ -368,6 +374,10 @@
                 <tr>
                     <td>Premium Subscription Plan</td>
                     <td id="bill-amount"></td>
+                </tr>
+                <tr style="display: none;" id="bill-coupon-row">
+                    <td id="coupon-title"></td>
+                    <td id="bill-discount"></td>
                 </tr>
             </tbody>
             <tfoot>
@@ -449,6 +459,7 @@
             const transactionId = row.find('td:eq(5)').text();
             const startDate = row.find('td:eq(6)').text();
             const endDate = row.find('td:eq(7)').text();
+
             
             // Get address details from data attributes
             const address = $(this).data('address');
@@ -456,6 +467,12 @@
             const state = $(this).data('state');
             const country = $(this).data('country');
             const pincode = $(this).data('pincode');
+
+            const couponCode = $(this).data('coupon-code');
+            const couponValue = $(this).data('coupon-value');
+            const finalAmount = $(this).data('final-amount');
+
+            
             
             // Format the current date for the bill
             const today = new Date();
@@ -469,13 +486,24 @@
             $('#bill-date').text(formattedDate);
             $('#bill-transaction-id').text('INV-' + transactionId);
             $('#bill-amount').text(amount);
-            $('#bill-subtotal').text(amount);
+            $('#bill-subtotal').text(finalAmount);
             $('#bill-total').text(amount);
-            $('#bill-grand-total').text(amount);
+            $('#bill-grand-total').text(finalAmount);
             $('#bill-payment-type').text(paymentType);
             $('#bill-payment-status').text(paymentStatus);
             $('#bill-start-date').text(startDate);
             $('#bill-end-date').text(endDate);
+
+            if(couponCode && couponValue) {
+                $('#bill-coupon-row').show();
+                $('#coupon-title').text('Coupon Code-' + couponCode);
+                $('#bill-discount').text('- ₹' + couponValue);
+                $('#bill-total').text(finalAmount);
+            } else {
+                $('#bill-coupon-row').hide();
+                $('#coupon-title').text('');
+                $('#bill-discount').text('');
+            }
             
             // Populate address
             let addressHtml = '';
