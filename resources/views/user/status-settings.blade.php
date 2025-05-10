@@ -3,12 +3,6 @@
 @section('content')
 <div class="container py-4">
 
-     {{-- <div class="page-title-box d-flex align-items-center justify-content-between">
-                 <h1 class="mb-4">Status Page Settings</h1>
-                <a href="{{ route('monitoring.dashboard') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                    <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Status Page
-                </a>
-    </div> --}}
     <div class="page-title-box d-flex align-items-center justify-content-between">
     <h1 class="mb-0">Status Page Settings</h1>
     <a href="{{ route('status') }}" class="btn btn-primary ms-3" style="padding: 0.5rem 1rem;">

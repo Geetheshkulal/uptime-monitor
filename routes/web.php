@@ -197,9 +197,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/admin/comments', [TicketController::class, 'CommentStore'])->name('admin.comments.store');
     Route::get('/tickets/comments/update/{id}', [TicketController::class, 'CommentPageUpdate'])->name('tickets.comments.update');
 
-    Route::get('/display/subsusers', [UserController::class, 'DisplaySubUsers'])->name('display.sub.users');
+    Route::get('/display/subsusers', [UserController::class, 'DisplaySubUsers'])->middleware('premium_middleware')->name('display.sub.users');
 
-    Route::post('/add/subsusers', [UserController::class, 'StoreSubUser'])->name('add.sub.user');
+    Route::post('/add/subsusers', [UserController::class, 'StoreSubUser'])->middleware('premium_middleware')->name('add.sub.user');
 
     Route::get('/sub-user/{id}/edit-permissions', [UserController::class, 'EditSubUserPermissions'])->name('edit.sub.user.permissions');
     Route::post('/sub-user/{id}/update-permissions', [UserController::class, 'UpdateSubUserPermissions'])->name('update.sub.user.permissions');

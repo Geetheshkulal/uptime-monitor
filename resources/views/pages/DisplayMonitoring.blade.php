@@ -498,113 +498,75 @@
                     {{-- <input type="hidden" name="_method" value="POST">  --}}
                     <input type="hidden" name="type" value="{{ $details->type }}">
 
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Friendly name</label>
-                            <input id="name" class="form-control" name="name" type="text"
-                                placeholder="E.g. Google" value="{{ $details->name }}" required>
+                  <div class="modal-body">
+    <div class="row">
+        <div class="mb-3 col-md-6">
+            <label for="name" class="form-label">Friendly name</label>
+            <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" value="{{ $details->name }}" required>
+        </div>
 
-                        </div>
-                        <div class="mb-3">
-                            <label for="url" class="form-label">URL</label>
-                            <input id="url" class="form-control" name="url" type="text"
-                                placeholder="E.g. https://www.google.com" value="{{ $details->url }}" required>
-                            @error('url')
-                                <p style="color: red; font-size: 14px;">{{ $message }}</p>
-                            @enderror
-                        </div>
+        <div class="mb-3 col-md-6">
+            <label for="retries" class="form-label">Retries</label>
+            <input id="retries" class="form-control" name="retries" type="number" value="{{ $details->retries }}" required>
+        </div>
 
-                        @if ($details->type == 'port')
-                            <div class="mb-3">
-                                <label for="port" class="form-label">Port</label>
-                                <select id="port" class="form-control" name="port" required>
-                                    <option value="" disabled>Select Port</option>
-                                    <option value="21" {{ $details->port == '21' ? 'selected' : '' }}>FTP - 21
-                                    </option>
-                                    <option value="22" {{ $details->port == '22' ? 'selected' : '' }}>SSH / SFTP - 22
-                                    </option>
-                                    <option value="25" {{ $details->port == '25' ? 'selected' : '' }}>SMTP - 25
-                                    </option>
-                                    <option value="53" {{ $details->port == '53' ? 'selected' : '' }}>DNS - 53
-                                    </option>
-                                    <option value="80" {{ $details->port == '80' ? 'selected' : '' }}>HTTP - 80
-                                    </option>
-                                    <option value="110" {{ $details->port == '110' ? 'selected' : '' }}>POP3 - 110
-                                    </option>
-                                    <option value="143" {{ $details->port == '143' ? 'selected' : '' }}>IMAP - 143
-                                    </option>
-                                    <option value="443" {{ $details->port == '443' ? 'selected' : '' }}>HTTPS - 443
-                                    </option>
-                                    <option value="465" {{ $details->port == '465' ? 'selected' : '' }}>SMTP - 465
-                                    </option>
-                                    <option value="587" {{ $details->port == '587' ? 'selected' : '' }}>SMTP - 587
-                                    </option>
-                                    <option value="993" {{ $details->port == '993' ? 'selected' : '' }}>IMAP - 993
-                                    </option>
-                                    <option value="995" {{ $details->port == '995' ? 'selected' : '' }}>POP3 - 995
-                                    </option>
-                                    <option value="3306" {{ $details->port == '3306' ? 'selected' : '' }}>MySQL - 3306
-                                    </option>
-                                </select>
-                            </div>
-                        @endif
+        <div class="mb-3 col-md-6">
+            <label for="interval" class="form-label">Interval (in minutes)</label>
+            <input id="interval" class="form-control" name="interval" type="number" value="{{ $details->interval }}" required>
+        </div>
 
-                        <!-- Show DNS dropdown if type == 'dns' -->
-                        @if ($details->type == 'dns')
-                            <div class="mb-3">
-                                <label for="dns_resource_type" class="form-label">DNS Resource Type</label>
-                                <select id="dns_resource_type" class="form-control" name="dns_resource_type" required>
-                                    <option value="A" {{ $details->dns_resource_type == 'A' ? 'selected' : '' }}>
-                                        A
-                                    </option>
-                                    <option value="AAAA" {{ $details->dns_resource_type == 'AAAA' ? 'selected' : '' }}>
-                                        AAAA</option>
-                                    <option value="CNAME" {{ $details->dns_resource_type == 'CNAME' ? 'selected' : '' }}>
-                                        CNAME</option>
-                                    <option value="MX" {{ $details->dns_resource_type == 'MX' ? 'selected' : '' }}>MX
-                                    </option>
-                                    <option value="NS" {{ $details->dns_resource_type == 'NS' ? 'selected' : '' }}>NS
-                                    </option>
-                                    <option value="SOA" {{ $details->dns_resource_type == 'SOA' ? 'selected' : '' }}>
-                                        SOA</option>
-                                    <option value="TXT" {{ $details->dns_resource_type == 'TXT' ? 'selected' : '' }}>
-                                        TXT</option>
-                                    <option value="SRV" {{ $details->dns_resource_type == 'SRV' ? 'selected' : '' }}>
-                                        SRV</option>
-                                    <option value="DNS_ALL"
-                                        {{ $details->dns_resource_type == 'DNS_ALL' ? 'selected' : '' }}>DNS_ALL</option>
-                                </select>
-                            </div>
-                        @endif
+        <div class="mb-3 col-md-12">
+            <label for="url" class="form-label">URL</label>
+            <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" value="{{ $details->url }}" required>
+            @error('url')
+                <p style="color: red; font-size: 14px;">{{ $message }}</p>
+            @enderror
+        </div>
 
-                        <div class="mb-3">
-                            <label for="retries" class="form-label">Retries</label>
-                            <input id="retries" class="form-control" name="retries" type="number"
-                                value="{{ $details->retries }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="interval" class="form-label">Interval (in minutes)</label>
-                            <input id="interval" class="form-control" name="interval" type="number"
-                                value="{{ $details->interval }}" required>
-                        </div>
+        @if ($details->type == 'port')
+            <div class="mb-3 col-md-6">
+                <label for="port" class="form-label">Port</label>
+                <select id="port" class="form-control" name="port" required>
+                    <option value="" disabled>Select Port</option>
+                    @foreach ([21 => 'FTP', 22 => 'SSH / SFTP', 25 => 'SMTP', 53 => 'DNS', 80 => 'HTTP', 110 => 'POP3', 143 => 'IMAP', 443 => 'HTTPS', 465 => 'SMTP', 587 => 'SMTP', 993 => 'IMAP', 995 => 'POP3', 3306 => 'MySQL'] as $port => $label)
+                        <option value="{{ $port }}" {{ $details->port == $port ? 'selected' : '' }}>{{ $label }} - {{ $port }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
 
-                        <h5 class="card-title">Notification</h5>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input id="email" class="form-control" name="email" type="email"
-                                placeholder="example@gmail.com" value="{{ $details->email }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="telegram_id" class="form-label">Telegram Id (Optional)</label>
-                            <input id="telegram_id" class="form-control" name="telegram_id" type="text"
-                                value="{{ $details->telegram_id }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-                            <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text"
-                                value="{{ $details->telegram_bot_token }}">
-                        </div>
-                    </div>
+        @if ($details->type == 'dns')
+            <div class="mb-3 col-md-6">
+                <label for="dns_resource_type" class="form-label">DNS Resource Type</label>
+                <select id="dns_resource_type" class="form-control" name="dns_resource_type" required>
+                    @foreach (['A', 'AAAA', 'CNAME', 'MX', 'NS', 'SOA', 'TXT', 'SRV', 'DNS_ALL'] as $type)
+                        <option value="{{ $type }}" {{ $details->dns_resource_type == $type ? 'selected' : '' }}>{{ $type }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
+
+        <div class="col-12 mt-3">
+            <h5 class="card-title">Notification</h5>
+        </div>
+
+        <div class="mb-3 col-md-12">
+            <label for="email" class="form-label">Email</label>
+            <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" value="{{ $details->email }}" required>
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+            <input id="telegram_id" class="form-control" name="telegram_id" type="text" value="{{ $details->telegram_id }}">
+        </div>
+
+        <div class="mb-3 col-md-6">
+            <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+            <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text" value="{{ $details->telegram_bot_token }}">
+        </div>
+    </div>
+</div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" id="editConfirmButton" class="btn btn-primary">Update</button>

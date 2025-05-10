@@ -230,7 +230,7 @@ class UserController extends Controller
                 ->log('A user account was deleted');
 
 
-                return redirect()->route('display.users')
+                return redirect()->back()
                     ->with('success', 'User deleted successfully!');
                     
             } catch (\Exception $e) {

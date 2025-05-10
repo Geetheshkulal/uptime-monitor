@@ -309,14 +309,24 @@
         </li>
     @endif
 
-    @hasrole('user')
-        <li class="nav-item {{ request()->routeIs('display.sub.users') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('display.sub.users') }}">
-                <i class="fas fa-user"></i>
-                <span>My Users</span>
-            </a>
-        </li>
-    @endhasrole
+    @if( auth()->user()->hasRole('user'))
+        @if((auth()->user()->status==='paid' || auth()->user()->status === 'free_trial'))
+            <li class="nav-item {{ request()->routeIs('display.sub.users') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('display.sub.users') }}">
+                    <i class="fas fa-user"></i>
+                    <span>My Users</span>
+                </a>
+            </li>
+        @else
+            <li class="nav-item premium-feature {{ request()->routeIs('premium.page') ? 'active' : '' }}">
+                <a class="nav-link ssl text-gold" href="{{ route('premium.page') }}">
+                    <i class="fas fa-lock text-gold"></i>
+                    <span class="text-gold">My Users</span>
+                    <i class="fas fa-crown text-gold"></i>
+                </a>
+            </li>
+        @endif
+    @endif
 
    
 
