@@ -52,8 +52,17 @@ class AuthenticatedSessionController extends Controller
             }],
         ]);
 
-        
         $request->authenticate();
+        // Check if user is a subuser with parent on free plan
+         /** @var User $user */
+            $user = Auth::user();
+            if ($user->parent_user_id) {
+                $parentUser = User::find($user->parent_user_id);
+                if ($parentUser && $parentUser->status === 'free') {
+                    Auth::logout();
+                    return back()->with('error', 'Your account is currently inactive because the parent account is on free plan.');
+                }
+            }
 
         $request->session()->regenerate();
 
