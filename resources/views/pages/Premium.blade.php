@@ -7,7 +7,10 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<style>
+
+{{-- // commented for backup --}}
+
+{{-- <style>
     * { border-radius: 0 !important; }
     body {
         background-color: #f8f9fa;
@@ -95,15 +98,292 @@
         padding: 1rem 0;
         margin-top: 3rem;
     }
+</style> --}}
+
+<style>
+    :root {
+        --primary: #3498db;
+        --secondary: #2c3e50;
+        --warning: #f39c12;
+        --success: #28a745;
+        --danger: #e74c3c;
+        --light: #f8f9fa;
+        --dark: #343a40;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        color: #333;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+    }
+    
+    .upgrade-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+    
+    .page-header h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 1rem;
+        display: inline-block;
+        position: relative;
+    }
+    
+    .page-header h2 .crown-icon {
+        position: absolute;
+        top: -15px;
+        right: -25px;
+        color: gold;
+        font-size: 1.5rem;
+        transform: rotate(15deg);
+        animation: pulse 2s infinite;
+    }
+    
+    .page-header p {
+        font-size: 1.1rem;
+        color: #6c757d;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .pricing-cards {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+        perspective: 1000px;
+    }
+    
+    .pricing-card {
+        background: white;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        max-width: 350px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border: none;
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    }
+    
+    .pricing-card.basic {
+        border-top: 4px solid var(--primary);
+    }
+    
+    .pricing-card.premium {
+        border-top: 4px solid var(--warning);
+    }
+    
+    .card-badge {
+        position: absolute;
+        top: 26px;
+        right: -39px;
+        width: 163px;
+        padding: 5px 0;
+        background: var(--primary);
+        color: white;
+        text-align: center;
+        transform: rotate(45deg);
+        font-size: 0.8rem;
+        font-weight: bold;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-header {
+        padding: 1.5rem;
+        text-align: center;
+        background: transparent;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .card-header h5 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .basic .card-header h5 {
+        color: var(--primary);
+    }
+    
+    .premium .card-header h5 {
+        color: var(--warning);
+    }
+    
+    .price {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+    
+    .basic .price {
+        color: var(--primary);
+    }
+    
+    .premium .price {
+        color: var(--warning);
+    }
+    
+    .price small {
+        font-size: 1rem;
+        font-weight: normal;
+        color: #6c757d;
+    }
+    
+    .price del {
+        font-size: 1.5rem;
+        color: #6c757d;
+        margin-right: 0.5rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .features-list {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .features-list li {
+        padding: 0.5rem 0;
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .features-list i {
+        margin-right: 0.75rem;
+        margin-top: 3px;
+    }
+    
+    .text-success {
+        color: var(--success);
+    }
+    
+    .text-danger {
+        color: var(--danger);
+    }
+    
+    .btn {
+        border-radius: 6px !important;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+    }
+    
+    .btn-primary {
+        background: var(--primary);
+    }
+    
+    .btn-primary:hover {
+        background: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+    }
+    
+    .btn-warning {
+        background: var(--warning);
+    }
+    
+    .btn-warning:hover {
+        background: #e67e22;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(230, 126, 34, 0.3);
+    }
+    
+    .btn-disabled {
+        background: #95a5a6;
+        cursor: not-allowed;
+    }
+    
+    .coupon-section {
+        text-align: right;
+        margin-bottom: 2rem;
+    }
+    
+    .coupon-btn {
+        background: transparent;
+        border: 2px solid var(--primary);
+        color: var(--primary);
+        font-weight: 600;
+    }
+    
+    .coupon-btn:hover {
+        background: var(--primary);
+        color: white;
+    }
+    
+    .applied-coupon {
+        background: rgba(40, 167, 69, 0.1);
+        border: 1px dashed var(--success);
+        padding: 0.75rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-weight: 600;
+        color: var(--success);
+    }
+    
+    .premium-highlight {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .premium-highlight::before {
+        content: "POPULAR";
+        position: absolute;
+        top: 15px;
+        right: -30px;
+        width: 120px;
+        padding: 5px 0;
+        background: var(--warning);
+        color: white;
+        text-align: center;
+        transform: rotate(45deg);
+        font-size: 0.8rem;
+        font-weight: bold;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1) rotate(15deg); }
+        50% { transform: scale(1.1) rotate(15deg); }
+        100% { transform: scale(1) rotate(15deg); }
+    }
+    
+    @media (max-width: 768px) {
+        .pricing-cards {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .page-header h2 {
+            font-size: 2rem;
+        }
+    }
 </style>
+
 @endpush
 
-<!-- Apply Coupon Button -->
-<div class="text-end mb-3 me-3">
-{{-- <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#applyCouponModal">
-        Apply Coupon
-    </button> --}}
 
+{{-- <div class="text-end mb-3 me-3">
     <button id="couponActionBtn" class="btn btn-outline-primary" 
             data-bs-toggle="modal" data-bs-target="#applyCouponModal"
             data-action="apply">
@@ -143,6 +423,9 @@
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 1-Month history</li>
                                     <li class="mb-3"><i class="fas fa-times text-danger me-2"></i> Telegram bot alert unavailable</li>
                                     <li class="mb-3"><i class="fas fa-times text-danger me-2"></i> SSL expiry check unavailable</li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-times text-danger me-2"></i>  Create and manage team members unavailable
+                                    </li>
                                 </ul>
                                 <br>
                                 <button class="btn btn-primary d-block w-100" disabled>Current Plan</button>
@@ -177,13 +460,11 @@
                                     <span class="text-muted">/month</span>
                             
                                 @else
-                                    {{-- <span class="display-6 fw-bold">₹{{ number_format($originalPrice, 2) }}</span> --}}
+                                   
                                     <span class="display-6 fw-bold" data-original="{{ $plan->amount }}">₹{{ session('applied_coupon') ? ($plan->amount - session('applied_coupon.discount')) : $plan->amount }}</span>
                                     <span class="text-muted">/month</span>
                                 @endif
                                
-                                    {{-- <span class="display-6 fw-bold">₹{{ $plan->amount }}</span>
-                                    <span class="text-muted">/month</span> --}}
                                 </div>
                                 <ul class="list-unstyled mb-4">
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> All Basic features</li>
@@ -192,6 +473,9 @@
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Telegram bot alerts</li>
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 4-Month history</li>
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> SSL expiry check</li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-check text-success me-2"></i>  Create and manage team members
+                                      </li>
                                 </ul>
                                 <br>
 
@@ -222,8 +506,112 @@
             </div>
         </div>
     </section>
-</div>
+</div> --}}
 
+
+<div class="upgrade-container">
+    <!-- Coupon Section -->
+    <div class="coupon-section">
+        <button id="couponActionBtn" class="btn coupon-btn" 
+                data-bs-toggle="modal" data-bs-target="#applyCouponModal"
+                data-action="apply">
+            @if(session('applied_coupon'))
+                <i class="fas fa-tag me-2"></i>Remove Coupon
+            @else
+                <i class="fas fa-tag me-2"></i>Apply Coupon
+            @endif
+        </button>
+    </div>
+    
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2>Upgrade to Premium <i class="fas fa-crown crown-icon"></i></h2>
+        <p>Unlock advanced monitoring features and take full control of your website's uptime.</p>
+    </div>
+    
+    <!-- Pricing Cards -->
+    <div class="pricing-cards">
+        <!-- Basic Plan -->
+        <div class="pricing-card basic h-100">
+            <div class="card-badge">Your Current Plan</div>
+            <div class="card-header">
+                <h5>Basic</h5>
+                <div class="price">₹0 <small>/month</small></div>
+            </div>
+            <div class="card-body">
+                <ul class="features-list">
+                    <li><i class="fas fa-check text-success"></i>Monitor 5 websites</li>
+                    <li><i class="fas fa-check text-success"></i>5-minute check</li>
+                    <li><i class="fas fa-check text-success"></i>Email alerts</li>
+                    <li><i class="fas fa-check text-success"></i>1-Month history</li>
+                    <li><i class="fas fa-times text-danger"></i>Telegram bot alert unavailable</li>
+                    <li><i class="fas fa-times text-danger"></i>SSL expiry check unavailable</li>
+                    <li><i class="fas fa-times text-danger"></i>Create and manage team members unavailable</li>
+                </ul>
+                <button class="btn btn-primary btn-disabled d-block w-100" disabled>Current Plan</button>
+            </div>
+        </div>
+        
+        @php
+            $appliedCoupon = session('applied_coupon');
+        @endphp
+        
+        @foreach($plans as $plan)
+        <!-- Premium Plan -->
+        <div class="pricing-card premium h-100 premium-highlight">
+            <div class="card-header">
+                <h5>{{ $plan->name }}</h5>
+                <div class="price">
+                    @php
+                        $originalPrice = $plan->amount;
+                        $discount = $appliedCoupon['discount'] ?? 0;
+                        $finalPrice = max(0, $originalPrice - $discount);
+                    @endphp
+                    
+                    @if($discount > 0)
+                        <del>₹{{ number_format($originalPrice, 2) }}</del>
+                        ₹{{ number_format($finalPrice, 2) }}
+                    @else
+                        ₹{{ session('applied_coupon') ? ($plan->amount - session('applied_coupon.discount')) : $plan->amount }}
+                    @endif
+                    <small>/month</small>
+                </div>
+            </div>
+            <div class="card-body">
+                @if(session('applied_coupon'))
+                    <div class="applied-coupon">
+                        <i class="fas fa-check-circle me-2"></i>Coupon "{{ session('applied_coupon.code') }}" applied!
+                    </div>
+                @else
+                    <div class="applied-coupon" style="display: none;"></div>
+                @endif
+                
+                <ul class="features-list">
+                    <li><i class="fas fa-check text-success"></i>All Basic features</li>
+                    <li><i class="fas fa-check text-success"></i>Unlimited website monitoring</li>
+                    <li><i class="fas fa-check text-success"></i>1-minute check</li>
+                    <li><i class="fas fa-check text-success"></i>Telegram bot alerts</li>
+                    <li><i class="fas fa-check text-success"></i>4-Month history</li>
+                    <li><i class="fas fa-check text-success"></i>SSL expiry check</li>
+                    <li><i class="fas fa-check text-success"></i>Create and manage team members</li>
+                </ul>
+                
+                <form id="paymentForm_{{ $plan->id }}" action="{{ route('store') }}" method="POST" target="_blank">
+                    @csrf
+                    <input type="hidden" name="name" value="{{ auth()->user()->name }}">
+                    <input type="hidden" name="email" value="{{ auth()->user()->email }}">
+                    <input type="hidden" name="mobile" value="{{ auth()->user()->phone }}">
+                    <input type="hidden" name="subscription_id" value="{{ $plan->id }}">
+                    
+                    <button type="submit" class="btn btn-warning d-block w-100">
+                        <i class="fas fa-arrow-up me-2"></i>Upgrade Now
+                    </button>
+                </form>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
 
 <!-- Coupon Modal -->
 <div class="modal fade" id="applyCouponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">

@@ -19,6 +19,7 @@ class RolePermissionController extends Controller
         if($superadminIds->contains($id)) {
             abort(404);
         }
+        
         $role = Role::findOrFail($id); //Find role to edit permissions
         $permission_groups = Permission::select('group_name')->groupBy('group_name')->get();
         
