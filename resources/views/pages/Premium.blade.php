@@ -748,6 +748,7 @@ function runConfettiPopper() {
                     modal.hide();
                     toastr.success(data.message);
                     runConfettiPopper();
+                    window.location.reload(); 
                 } else {
                     message.classList.remove('text-success');
                     message.classList.add('text-danger');
