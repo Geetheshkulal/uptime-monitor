@@ -15,124 +15,146 @@
         --dark-color: #1e293b;
         --gray-color: #7a7d81;
         --gray-light: #e2e8f0;
+        --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.02);
     }
-    
+
     .status-header {
         background: linear-gradient(135deg, var(--primary-color), #4f46e5);
         color: white;
         border-radius: 12px;
         padding: 1.75rem 2rem;
         margin-bottom: 2rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        box-shadow: var(--card-shadow);
+        position: relative;
+        overflow: hidden;
     }
-    
+
+    .status-header::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100px;
+        background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.1));
+        transform: skewX(-20deg);
+        transform-origin: top right;
+    }
+
     .bar-segment {
-    width: {{ $user->status === 'free' ? '12px' : '7.8px' }};
-    height: 40px;
-    margin-right: {{ $user->status === 'free' ? '25px' : '3.7px' }};
-    display: inline-block;
-    border-radius: 3px;
-    transition: all 0.3s ease;
+        width: {{ $user->status === 'free' ? '12px' : '7.8px' }};
+        height: 40px;
+        margin-right: {{ $user->status === 'free' ? '25px' : '3.7px' }};
+        display: inline-block;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+        background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.1));
     }
-    
+
     .bar-segment-wrapper {
         position: relative;
         display: inline-block;
     }
-    
+
     .bar-segment-wrapper:hover .bar-segment {
         transform: scaleY(1.2) scaleX(1.5);
         opacity: 0.9;
     }
-    
+
     .tooltip-text {
         visibility: hidden;
         background-color: var(--dark-color);
         color: #fff;
         text-align: center;
-        border-radius: 6px;
-        padding: 6px 10px;
+        border-radius: 8px;
+        padding: 8px 12px;
         position: absolute;
         z-index: 10;
         bottom: 125%;
         left: 50%;
         transform: translateX(-50%);
         white-space: nowrap;
-        font-size: 11px;
+        font-size: 12px;
         opacity: 0;
         transition: opacity 0.2s ease, transform 0.2s ease;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         transform: translateX(-50%) translateY(5px);
         pointer-events: none;
         border-left: 3px solid var(--primary-color);
+        line-height: 1.4;
     }
-    
+
     .bar-segment-wrapper:hover .tooltip-text {
         visibility: visible;
         opacity: 1;
         transform: translateX(-50%) translateY(0);
     }
-    
+
     .status-badge {
         font-size: 0.7rem;
-        padding: 0.3rem 0.75rem;
+        padding: 0.35rem 0.8rem;
         border-radius: 50px;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.03em;
         display: inline-flex;
         align-items: center;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
-    
+
     .card {
         border-radius: 12px;
         overflow: hidden;
         border: none;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--card-shadow);
         transition: all 0.3s ease;
         background: white;
     }
-    
+
+    .card-header {
+        border-bottom: 1px solid var(--gray-light);
+        padding: 1.25rem 1.5rem;
+        background: white;
+        font-weight: 600;
+        color: var(--dark-color);
+    }
+
     .hover-shadow {
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
-    
+
     .hover-shadow:hover {
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+        transform: translateY(-3px);
     }
-    
+
     .monitor-card {
         background: white;
         border-radius: 12px;
-        border-left: 4px solid transparent;
         padding: 1.5rem;
-        margin-bottom: 2.5rem;
+        margin-bottom: 1.5rem;
         transition: all 0.3s ease;
         border: 1px solid var(--gray-light);
+        position: relative;
     }
-    
-    .monitor-card-up {
-        border-left-color: var(--success-color);
-    }
-    
-    .monitor-card-down {
-        border-left-color: var(--danger-color);
-    }
-    
+
     .monitor-name {
         font-size: 1rem;
         font-weight: 600;
         color: var(--dark-color);
         margin-right: 0.75rem;
     }
-    
+
     .monitor-url {
         font-size: 0.8rem;
         color: var(--gray-color);
         font-weight: 400;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 300px;
     }
-    
+
     .uptime-legend {
         display: flex;
         align-items: center;
@@ -140,64 +162,91 @@
         margin-top: 0.75rem;
         font-size: 0.7rem;
         color: var(--gray-color);
+        flex-wrap: wrap;
+        gap: 0.75rem;
     }
-    
+
     .legend-item {
         display: flex;
         align-items: center;
-        margin-left: 0.75rem;
     }
-    
+
     .legend-color {
         width: 10px;
         height: 10px;
         border-radius: 2px;
-        margin-right: 4px;
+        margin-right: 6px;
     }
-    
+
     .monitor-stats {
         display: flex;
         justify-content: space-between;
         background: var(--light-color);
-        padding: 0.75rem 1rem;
+        padding: 0.9rem 1.2rem;
         border-radius: 8px;
         margin-top: 1rem;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         color: var(--dark-color);
+        border: 1px solid var(--gray-light);
     }
-    
+
     .status-indicator {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
         display: inline-block;
-        margin-right: 0.5rem;
+        margin-right: 0.75rem;
+        position: relative;
+    }
+
+    .status-indicator::after {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
     .status-indicator-up {
         background-color: var(--success-color);
-        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .status-indicator-up::after {
+        background-color: var(--success-color);
     }
 
     .status-indicator-down {
         background-color: var(--danger-color);
-        box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
     }
-    
+
+    .status-indicator-down::after {
+        background-color: var(--danger-color);
+    }
+
+    .status-indicator:hover::after {
+        opacity: 0.3;
+    }
+
     .stat-value {
         font-weight: 600;
+        color: var(--dark-color);
     }
-    
+
     .page-title {
         font-size: 1.5rem;
         font-weight: 700;
         color: white;
         margin-bottom: 0.25rem;
     }
-    
+
     .page-subtitle {
-        color: rgba(255,255,255,0.8);
+        color: rgba(255,255,255,0.85);
         font-size: 0.9rem;
+        max-width: 600px;
     }
     
     .bars-container {
@@ -218,35 +267,59 @@
     
     /* Animations */
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(5px); }
+        from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
     
     .animate-fade-in {
         animation: fadeIn 0.4s ease-out forwards;
     }
-    
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .monitor-stats {
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
         
         .status-header {
-            padding: 1.25rem;
+            padding: 1.5rem;
         }
         
         .monitor-card {
             padding: 1.25rem;
         }
-        
-        .bar-segment {
-            width: 6px;
-            margin-right: 3px;
+
+        .monitor-url {
+            max-width: 200px;
+        }
+
+        .uptime-legend {
+            justify-content: flex-start;
         }
     }
-    </style>
+
+    @media (max-width: 576px) {
+        .monitor-card {
+            padding: 1rem;
+        }
+
+        .monitor-name, .monitor-url {
+            display: block;
+            width: 100%;
+            margin-right: 0;
+        }
+
+        .monitor-name {
+            margin-bottom: 0.25rem;
+        }
+
+        .monitor-url {
+            max-width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>
 <div class="container-fluid px-4 py-3">
     <!-- Header Section -->
     <div class="status-header rounded-lg mb-4">
@@ -307,7 +380,7 @@
                                 </div>
                                 <div class="legend-item">
                                     <div class="legend-color" style="background-color: #ef4444;"></div>
-                                    <span><80%</span>
+                                    <span><80%></span>
                                 </div>
                                 <div class="legend-item">
                                     <div class="legend-color" style="background-color: #e2e8f0;"></div>
@@ -320,12 +393,13 @@
                             </div>
                             
                             <div class="monitor-stats">
-                                <div>
-                                    <span class="mr-3">Overall Uptime: <span class="stat-value">{{ $monitor->overallUptime }}%</span></span>
-                                    <span>Total Checks: <span class="stat-value">{{ $monitor->totalChecks }}</span></span>
+                                <div class="flex items-center">
+                                    <span class="mr-4"><i class="fas fa-chart-line mr-1 text-primary"></i> Overall Uptime: <span class="stat-value">{{ $monitor->overallUptime }}%</span></span>
+                                    &nbsp;
+                                    <span><i class="fas fa-spinner fa-pulse mr-1 text-primary"></i>Total Checks: <span class="stat-value">{{ $monitor->totalChecks }}</span></span>
                                 </div>
-                                <div>
-                                    <i class="far fa-clock mr-1"></i>
+                            <div>
+                                    <i class="far fa-clock mr-1 text-primary"></i>
                                     <span>Last checked: {{ $monitor->updated_at->diffForHumans() }}</span>
                                 </div>
                             </div>
