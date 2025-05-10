@@ -120,13 +120,13 @@
     
     .upgrade-container {
         max-width: 1200px;
-        margin: 0 auto;
+        margin: -3rem auto;
         padding: 2rem 1rem;
     }
     
     .page-header {
         text-align: center;
-        margin-bottom: 3rem;
+        margin-bottom: 1rem;
         position: relative;
     }
     
@@ -162,6 +162,8 @@
         flex-wrap: wrap;
         gap: 2rem;
         perspective: 1000px;
+        position: relative;
+
     }
     
     .pricing-card {
@@ -169,11 +171,14 @@
         border-radius: 12px !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         width: 100%;
-        max-width: 350px;
+        max-width: 500px;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
         border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
     .pricing-card:hover {
@@ -208,7 +213,7 @@
         padding: 1.5rem;
         text-align: center;
         background: transparent;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
     }
     
     .card-header h5 {
@@ -261,7 +266,7 @@
     }
     
     .features-list li {
-        padding: 0.5rem 0;
+        padding: 0.25rem 0;
         display: flex;
         align-items: flex-start;
     }
@@ -338,6 +343,8 @@
         text-align: center;
         font-weight: 600;
         color: var(--success);
+        font-size: small;
+        box-sizing: content-box;
     }
     
     .premium-highlight {
@@ -376,6 +383,9 @@
         
         .page-header h2 {
             font-size: 2rem;
+        }
+        .page-header{
+            top:0;
         }
     }
 </style>
@@ -575,17 +585,16 @@
                         ₹{{ session('applied_coupon') ? ($plan->amount - session('applied_coupon.discount')) : $plan->amount }}
                     @endif
                     <small>/month</small>
+                    @if(session('applied_coupon'))
+                        <div class="applied-coupon">
+                            <i class="fas fa-check-circle me-2"></i>Coupon "{{ session('applied_coupon.code') }}" applied!
+                        </div>
+                    @else
+                        <div class="applied-coupon" style="display: none;"></div>
+                    @endif
                 </div>
             </div>
-            <div class="card-body">
-                @if(session('applied_coupon'))
-                    <div class="applied-coupon">
-                        <i class="fas fa-check-circle me-2"></i>Coupon "{{ session('applied_coupon.code') }}" applied!
-                    </div>
-                @else
-                    <div class="applied-coupon" style="display: none;"></div>
-                @endif
-                
+            <div class="card-body">          
                 <ul class="features-list">
                     <li><i class="fas fa-check text-success"></i>All Basic features</li>
                     <li><i class="fas fa-check text-success"></i>Unlimited website monitoring</li>

@@ -118,8 +118,9 @@
                 <!-- Page Content -->
                 @yield('content')
             </div>
-
-            @include('body.footer')
+            @if(!request()->routeIs('premium.page'))
+                @include('body.footer')
+            @endif
         </div>
     </div>
 
