@@ -2,6 +2,7 @@
 @section('content')
 
 @push('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <style>
     .form-check-label {
         text-transform: capitalize;
@@ -87,7 +88,32 @@
 </div>
 
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <script>
+     toastr.options = {
+        "closeButton": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    // Show toastr messages from session
+    @if(Session::has('success'))
+        toastr.success("{{ Session::get('success') }}");
+    @endif
+
+    @if(Session::has('error'))
+        toastr.error("{{ Session::get('error') }}");
+    @endif
+
     $(document).ready(function() {
         // Select all permissions
         $('#selectAll').click(function() {

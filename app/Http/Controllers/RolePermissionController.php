@@ -66,9 +66,8 @@ class RolePermissionController extends Controller
             ])
             ->log('Updated role permissions');
 
-            return redirect()->route('roles.index')
-                   ->with('success', 'Permissions updated successfully!');
-                   
+            return back()->with('success', 'Permissions updated successfully!');
+            
         } catch (\Exception $e) {
             return back()->with('error', 'Error updating permissions: '.$e->getMessage());
         }
