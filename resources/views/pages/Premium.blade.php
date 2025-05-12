@@ -334,7 +334,7 @@
         color: white;
     }
     
-    .applied-coupon {
+    .applied-coupon-msg {
         background: rgba(40, 167, 69, 0.1);
         border: 1px dashed var(--success);
         padding: 0.75rem;
@@ -586,11 +586,11 @@
                     @endif
                     <small>/month</small>
                     @if(session('applied_coupon'))
-                        <div class="applied-coupon">
+                        <div class="applied-coupon-msg">
                             <i class="fas fa-check-circle me-2"></i>Coupon "{{ session('applied_coupon.code') }}" applied!
                         </div>
                     @else
-                        <div class="applied-coupon" style="display: none;"></div>
+                        <div class="applied-coupon-msg" style="display: none;"></div>
                     @endif
                 </div>
             </div>
@@ -757,7 +757,7 @@ function runConfettiPopper() {
                     modal.hide();
                     toastr.success(data.message);
                     runConfettiPopper();
-                    window.location.reload(); 
+                    // window.location.reload(); 
                 } else {
                     message.classList.remove('text-success');
                     message.classList.add('text-danger');
