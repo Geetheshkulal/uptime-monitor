@@ -1,30 +1,6 @@
 <style>
     /* ========== SIDEBAR STYLES ========== */
-    .sidebar {
-        background: linear-gradient(180deg, #4e73df 0%, #224abe 100%);
-        min-height: 100vh;
-        transition: all 0.3s;
-    }
-
-    .sidebar-brand {
-        height: 4.375rem;
-      
-    }
-
-    .sidebar-brand-icon {
-        font-size: 1.2rem;
-    }
-
-    .sidebar-brand-text {
-        font-size: 1rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-    }
-
-    .sidebar-divider {
-        border-top: 1px solid rgba(255, 255, 255, 0.15);
-        margin: 1rem 0;
-    }
+ 
 
     .nav-item {
         position: relative;
@@ -209,30 +185,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 992px) {
-    .trial-banner {
-        padding: 0.4rem !important;
-    }
-    .trial-badge {
-        font-size: 0.55rem !important;
-        padding: 0.1rem 0.3rem !important;
-        top: -6px !important;
-    }
-    .trial-icon {
-        width: 26px !important;
-        height: 26px !important;
-    }
-    .trial-icon i {
-        font-size: 0.9rem !important;
-    }
-    .trial-notice span {
-        font-size: 0.75rem !important;
-    }
-    .upgrade-btn {
-        padding: 0.3rem 0.8rem;
-        font-size: 0.65rem;
-    }
-}
+
         
 
 </style>

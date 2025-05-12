@@ -111,18 +111,6 @@
     background-color: #444 !important;
   }
 
-  header.navbar {
-  position: fixed;
-  top: 0 ;
-  left: 0 ;
-  right: 0 ;
-  z-index: 1030!;
-  width: 100%;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-left: 0 !important;
-}  
-
   </style>
 {{-- @if (auth()->user()->status === 'paid' && auth()->user()->premium_end_date===Null)
 @php
@@ -139,10 +127,11 @@
 
 
 
-<header class="navbar navbar-expand navbar-light bg-white topbar mb-4 shadow fixed-top">
-  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-   &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  @hasrole('user')
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+ <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+  {{-- @hasrole('user')
   <div class="dropdown d-flex align-items-center">
     <span class="d-flex align-items-center mr-2">
         <i class="fas fa-question-circle mr-1"></i> Help
@@ -171,7 +160,7 @@
     </div>
 </div>
   
-  @endhasrole
+  @endhasrole --}}
 
   <!-- Topbar Navbar -->
   <ul class="navbar-nav ml-auto">
@@ -197,6 +186,7 @@
 
   </ul>
 
-</header>
+</nav>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+ <script src="js/sb-admin-2.min.js"></script>
+ <script src="js/demo/chart-area-demo.js"></script>
