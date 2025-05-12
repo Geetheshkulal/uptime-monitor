@@ -65,8 +65,8 @@
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-  background-color: #007bff;
-  border: 1px solid #007bff;
+   background-color: #2e59d9;
+   border-color: #2653d4;
   color: #fff;
   padding: 4px 8px 4px 24px; /* Extra left padding for close button */
   margin-top: 4px;
@@ -75,6 +75,10 @@
   font-size: 0.875rem;
   position: relative;
 }
+ .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2653d4;
+        }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
   position: absolute;
@@ -167,7 +171,7 @@
                                     <td>
                                         <div class="d-flex justify-content-center">
                                         <a href="#" data-toggle="modal" data-target="#editCouponModal{{ $coupon->id }}">
-                                            <i class="fas fa-edit" style="color: #1e67e6; cursor: pointer;"></i>
+                                            <i class="fas fa-edit" style="color: #2653d4; cursor: pointer;"></i>
                                         </a>
 
                                         <a href="#" data-toggle="modal" data-target="#deleteCouponModal{{ $coupon->id }}" class="ml-2">
