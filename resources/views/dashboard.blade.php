@@ -88,9 +88,9 @@
             z-index: 1040;
             background-color: #4e73df; /* Match your current sidebar background */
         }
-        header.navbar, nav.navbar 
+        .navbar, nav.navbar 
         {
-            position: fixed!important;
+            position: sticky
             top: 0; /* Ensure it's at the top */
             z-index: 1030; /* Ensure it's above other elements */
             background-color: #4e73df; /* Ensure navbar has a background */
@@ -114,7 +114,7 @@
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 @include('body.header')
-<br><br><br><br>
+
                 <!-- Page Content -->
                 @yield('content')
             </div>
@@ -151,7 +151,6 @@
     <script src="{{ asset('frontend/assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/vendor/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
