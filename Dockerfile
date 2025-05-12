@@ -18,6 +18,7 @@ WORKDIR /var/www/html
 
 # Copy all project files
 COPY . .
+COPY .env.example .env
 
 # Give proper permissions to storage and bootstrap cache
 RUN chown -R www-data:www-data storage bootstrap/cache
