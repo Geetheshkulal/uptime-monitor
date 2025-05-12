@@ -188,5 +188,4 @@
 
 </nav>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
- <script src="js/sb-admin-2.min.js"></script>
- <script src="js/demo/chart-area-demo.js"></script>
+ 

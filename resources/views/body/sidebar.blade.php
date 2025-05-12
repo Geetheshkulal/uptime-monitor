@@ -94,31 +94,7 @@
         font-size: 0.8rem;
         margin-left: 0.5rem;
     }
-    @media (max-width: 767.98px) {
-    .sidebar .nav-link {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        font-size: 0.75rem;
-        padding: 0.5rem 0.25rem;
-        text-align: center;
-    }
-
-    .sidebar .nav-link i {
-        margin-right: 0;
-        margin-bottom: 0.25rem;
-        font-size: 1rem;
-    }
-    .sidebar-brand {
-        width: 105px;
-        justify-content: center;
-    }
-
-    .sidebar-brand-text {
-        display: none;
-    }
-
-    }
+    
     .text-gold {
         color: gold !important;
     }
