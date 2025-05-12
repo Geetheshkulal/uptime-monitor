@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Login to your dashboard">
     <meta name="author" content="Your App">
-
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Login</title>
     <script async src="https://www.google.com/recaptcha/api.js"></script>
 

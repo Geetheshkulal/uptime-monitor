@@ -40,7 +40,7 @@ Route::get('/Product_documentation', function () {
 
 Route::get('/status',[StatusPageController::class,'index'])->middleware('role:user|subuser')->middleware('permission:see.statuspage')->name('status');
 
-Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])
+Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])  
      ->name('public.status');
      Route::prefix('user')->group(function () {
         Route::get('/status-settings', [UserController::class, 'statusPageSettings'])
