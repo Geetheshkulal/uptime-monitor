@@ -251,7 +251,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted">No subscription plans available</td>
+                                        <td colspan="10" class="text-center text-muted">No tickets data available</td>
                                     </tr>
                                 @endforelse
                             </tbody>
