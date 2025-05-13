@@ -147,7 +147,7 @@
     </div>
 <br>
 <br>
-<button id="historyDropdownBtn" class="btn btn-link text-primary p-0 border-0 bg-transparent dropdown-toggle" type="button">
+<button id="historyDropdownBtn" class="btn btn-link text-primary p-0 border-0 bg-transparent dropdown-toggle SslCheck" type="button">
     <i class="fas fa-history mr-2"></i>View history
 </button>
 
