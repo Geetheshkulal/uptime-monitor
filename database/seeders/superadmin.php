@@ -17,6 +17,8 @@ class SuperAdmin extends Seeder
 
         Role::firstOrCreate(['name' => 'user']);
         Role::firstOrCreate(['name' => 'subuser']);
+        Role::firstOrCreate(['name' => 'support']);
+
 
         // Create or update superadmin user
         $user = User::updateOrCreate(
