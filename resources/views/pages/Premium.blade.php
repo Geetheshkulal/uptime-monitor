@@ -581,8 +581,10 @@
                     @if($discount > 0)
                         <del>₹{{ number_format($originalPrice, 2) }}</del>
                         ₹{{ number_format($finalPrice, 2) }}
+                        
                     @else
-                        ₹{{ session('applied_coupon') ? ($plan->amount - session('applied_coupon.discount')) : $plan->amount }}
+                        {{-- ₹{{ session('applied_coupon') ? ($plan->amount - session('applied_coupon.discount')) : $plan->amount }} --}}
+                        <span class="display-6 fw-bold" data-original="{{ $plan->amount }}">₹{{ session('applied_coupon') ? ($plan->amount - session('applied_coupon.discount')) : $plan->amount }}</span>
                     @endif
                     <small>/month</small>
                     @if(session('applied_coupon'))
@@ -736,11 +738,11 @@ function runConfettiPopper() {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                   
-                    document.querySelectorAll('.premium-highlight .display-6').forEach(el => {
-                        const original = parseFloat(el.getAttribute('data-original'));
-                        el.innerHTML = `<del>₹${original.toFixed(2)}</del> ₹${(original - data.discount).toFixed(2)}`;
-                    });
+
+                    document.querySelectorAll('.premium-highlight .display-6').forEach(el => {0
+                            const original = parseFloat(el.getAttribute('data-original'));
+                            el.innerHTML = `<del>₹${original.toFixed(2)}</del> ₹${(original - data.discount).toFixed(2)}`;
+                        });
     
                     document.querySelectorAll('.premium-highlight .applied-coupon-msg').forEach(el => {
                         el.style.display = 'block';
@@ -848,7 +850,7 @@ function runConfettiPopper() {
                 .then(data => {
                     if (data.success) {
                         
-                        document.querySelectorAll('.premium-highlight .display-6').forEach(el => {
+                        document.querySelectorAll('.premium-highlight .display-6').forEach(el => {0
                             const original = parseFloat(el.getAttribute('data-original'));
                             el.innerHTML = `<del>₹${original.toFixed(2)}</del> ₹${(original - data.discount).toFixed(2)}`;
                         });
