@@ -7,9 +7,7 @@
 
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
@@ -75,10 +73,6 @@
   font-size: 0.875rem;
   position: relative;
 }
- .btn-primary:hover {
-            background-color: #2e59d9;
-            border-color: #2653d4;
-        }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
   position: absolute;

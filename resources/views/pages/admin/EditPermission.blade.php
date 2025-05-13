@@ -12,7 +12,7 @@
             <div class="col-12">
                 <div class="page-title-box d-flex align-items-center justify-content-between">
                     <h4 class="mb-0">Edit Permission</h4>
-                    <a href="{{ route('display.permissions') }}" class="btn btn-secondary">
+                    <a href="{{ route('display.permissions') }}" class="btn btn-primary">
                         <i class="fas fa-arrow-left mr-1"></i> Back
                     </a>
                 </div>
