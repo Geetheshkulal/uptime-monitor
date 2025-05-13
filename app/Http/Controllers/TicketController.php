@@ -22,6 +22,8 @@ class TicketController extends Controller
         $OpenTickets = Ticket::where('status', 'open')->count();
         $ClosedTickets = Ticket::where('status', 'closed')->count();
         $OnHoldTickets = Ticket::where('status', 'on hold')->count();
+
+        \App\Models\Ticket::where('is_read', false)->update(['is_read' => true]);
         
         return view('pages.admin.TicketDisplayAdmin', compact('tickets','TotalTickets','OpenTickets','ClosedTickets','OnHoldTickets'));
     }

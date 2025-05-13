@@ -160,9 +160,6 @@
     background: linear-gradient(to right, #a1ffce, #faffd1) !important;
 }
 
-/* Responsive adjustments */
-
-        
 
 </style>
 
@@ -294,10 +291,17 @@
             </a>
         </li>
     @hasrole('superadmin')
+    @php
+    $unreadTickets = \App\Models\Ticket::where('is_read', false)->count();
+    @endphp
     <li class="nav-item {{ request()->routeIs('tickets') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('tickets') }}">
+            
             <i class="fas fa-ticket-alt"></i>
             <span>Tickets</span>
+            @if($unreadTickets > 0)
+            <span class="badge badge-danger ml-2" style="font-size: 10px; padding: 2px 5px;">New {{$unreadTickets}}</span>
+            @endif
         </a>
     </li>
 
