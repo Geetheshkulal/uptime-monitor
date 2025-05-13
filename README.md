@@ -87,7 +87,7 @@ CASHFREE_API_SECRET=
 
 ### 📍 **Dashboard**  
 <!-- ![Dashboard](your-screenshot-path/dashboard.png)   -->
-![alt text](dashbpeoard.png)
+![alt text](dashboard.png)
 
 ### 🔍 **Monitor List**  
 <!-- ![Monitor List](your-screenshot-path/monitor-list.png)   -->
