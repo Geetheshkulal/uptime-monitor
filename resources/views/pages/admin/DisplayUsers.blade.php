@@ -6,9 +6,38 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
     <style>
         * {
-    border-radius: 0 !important;
-    }
+        border-radius: 0 !important;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 40px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+        label {
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
     </style>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     @endpush
 </head>
 
@@ -127,6 +156,7 @@
                             <div class="form-group">
                                 <label for="password">Password*</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
+                                <span class="fas fa-eye password-toggle" id="togglePassword"></span>
                             </div>
                         </div>
 
@@ -198,6 +228,16 @@
             ]
         });
     });
+
+    document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Toggle the eye icon
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
 </script>
 
 @if(session('success'))
