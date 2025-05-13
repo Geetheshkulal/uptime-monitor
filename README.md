@@ -99,7 +99,7 @@ CASHFREE_API_SECRET=
 
 ### 💳 **Cashfree Payment Integration**  
 <!-- ![Payment](your-screenshot-path/payment.png)   -->
-![alt text](preimum.png)
+![alt text](premium.png)
 
 ![alt text](payemtt222.png)
 
