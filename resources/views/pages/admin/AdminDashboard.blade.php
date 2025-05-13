@@ -2,6 +2,7 @@
 @section('content')
 
 @push('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <style>
         .card-counter {
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
@@ -172,6 +173,7 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             // User Growth Chart
@@ -251,6 +253,18 @@
                 }
             });
         });
+
+          // Show success message if exists
+    document.addEventListener("DOMContentLoaded", function() {
+        @if(session('success'))
+            toastr.success("{{ session('success') }}", "Success", {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: 5000
+            });
+        @endif
+    });
     </script>
 @endpush
 
