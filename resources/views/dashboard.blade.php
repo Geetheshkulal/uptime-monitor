@@ -101,6 +101,7 @@
 
 #content {
     overflow-y: hidden; 
+    overflow-x: hidden;
 }
       
     </style>
