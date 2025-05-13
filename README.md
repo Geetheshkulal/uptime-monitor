@@ -87,7 +87,7 @@ CASHFREE_API_SECRET=
 
 ### 📍 **Dashboard**  
 <!-- ![Dashboard](your-screenshot-path/dashboard.png)   -->
-![alt text](dashbpeoard.png)
+![alt text](dashboard.png)
 
 ### 🔍 **Monitor List**  
 <!-- ![Monitor List](your-screenshot-path/monitor-list.png)   -->
@@ -99,7 +99,7 @@ CASHFREE_API_SECRET=
 
 ### 💳 **Cashfree Payment Integration**  
 <!-- ![Payment](your-screenshot-path/payment.png)   -->
-![alt text](preimum.png)
+![alt text](premium.png)
 
 ![alt text](payemtt222.png)
 
