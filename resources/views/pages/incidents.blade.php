@@ -125,7 +125,7 @@
     <div class="custom-spacing">
     <div class="row">
         <div class="col-12">
-            <div class="card shadow mb-4" data-aos="fade-up">
+            <div class="card shadow mb-4">
                 
                 <!-- Card Body -->
                 <div class="card-body skeleton">
