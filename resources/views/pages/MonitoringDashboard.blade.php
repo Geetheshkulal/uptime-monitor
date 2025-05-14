@@ -308,13 +308,13 @@
             </div>
 
             <!-- Monitors Section -->
-            <div class="fade-in">
-                <div data-aos="fade-up" class="d-flex align-items-center justify-content-between mb-3">
+            
+                <div  class="d-flex align-items-center justify-content-between mb-3">
                     <h1 class="h3 mb-0 font-300">My Monitors</h1>
                 </div>
 
                 @if(auth()->user()->status === 'free' && $hasMoreMonitors && auth()->user()->hasRole('user'))
-                    <div data-aos="fade-up" class="card bg-primary text-white mb-4">
+                    <div  class="card bg-primary text-white mb-4">
                         <div class="card-body py-3">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">
@@ -349,7 +349,7 @@
                 @endif
 
                 <!-- Monitors Table -->
-                <div data-aos="fade-up" class="card mb-4 px-4 skeleton" id="skeletonCard">
+                <div  class="card mb-4 px-4 skeleton">
                     <br>
                     <div class="card-body p-0">
                         <div class="table-responsive"style="min-width: 100%;">
@@ -420,7 +420,7 @@
                     </div>
                     <br>
                 </div>
-            </div>
+            
         </div>
     </div>
 </div>
