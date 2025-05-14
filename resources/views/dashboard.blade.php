@@ -235,7 +235,7 @@
         window.addEventListener('load', matchSidebarBrandWidth);
         window.addEventListener('resize', matchSidebarBrandWidth);
     </script>
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function () {
             const drawer = document.getElementById("sidebarDrawer");
             const overlay = document.createElement("div");
@@ -257,7 +257,7 @@
                 this.classList.remove("show");
             });
         });
-    </script>
+    </script> --}}
     
 </body>
 </html>
