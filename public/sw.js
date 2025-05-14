@@ -2,7 +2,6 @@ const filesToCache = [
     '/',
     '/manifest.json',
     'mainlogo.png',
-    'offline.html'
 ];
 
 const preLoad = function() {
