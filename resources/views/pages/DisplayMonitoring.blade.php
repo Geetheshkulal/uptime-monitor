@@ -30,7 +30,7 @@
         .btn-primary:hover {
             background-color: #2e59d9;
             border-color: #2653d4;
-        }
+        }  
         </style>
     <!-- Page Heading -->
     <div class="container-fluid">
@@ -79,12 +79,11 @@
 
                 {{-- back button --}}
                 <div class="ml-md-auto ">
-                    <a href="{{ route('monitoring.dashboard') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                        <i class="fas fa-arrow-left mr-1"></i>
+                    <a href="{{ route('monitoring.dashboard') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm text-nowrap">
+                        <i class="fas fa-arrow-left fa-sm text-white-50"></i> Back to Dashboard
                     </a>
                 </div>
             </div>
-
         </div>
 
 
