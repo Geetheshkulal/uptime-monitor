@@ -73,6 +73,7 @@ public function remove(Request $request)
                 ->where('coupon_code_id', $coupon->id)
                 ->delete();
         }
+        $coupon->decrement('uses');
 
         session()->forget('applied_coupon');
 
