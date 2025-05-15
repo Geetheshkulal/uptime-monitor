@@ -273,7 +273,7 @@
                             }
                         },
                         scales: {
-                            xAxes: [{
+                            x: {
                                 time: {
                                     unit: 'date'
                                 },
@@ -282,10 +282,10 @@
                                     drawBorder: true
                                 },
                                 ticks: {
-                                    maxTicksLimit: 10
+                                    maxTicksLimit: 20
                                 }
-                            }],
-                            yAxes: [{
+                            },
+                            y:{
                                 ticks: {
                                     maxTicksLimit: 5,
                                     padding: 10,
@@ -300,7 +300,7 @@
                                     borderDash: [2],
                                     zeroLineBorderDash: [2]
                                 }
-                            }],
+                            },
                         },
                         legend: {
                             display: true
@@ -499,73 +499,73 @@
                     <input type="hidden" name="type" value="{{ $details->type }}">
 
                   <div class="modal-body">
-    <div class="row">
-        <div class="mb-3 col-md-6">
-            <label for="name" class="form-label">Friendly name</label>
-            <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" value="{{ $details->name }}" required>
-        </div>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="name" class="form-label">Friendly name</label>
+                                <input id="name" class="form-control" name="name" type="text" placeholder="E.g. Google" value="{{ $details->name }}" required>
+                            </div>
 
-        <div class="mb-3 col-md-6">
-            <label for="retries" class="form-label">Retries</label>
-            <input id="retries" class="form-control" name="retries" type="number" value="{{ $details->retries }}" required>
-        </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="retries" class="form-label">Retries</label>
+                                <input id="retries" class="form-control" name="retries" type="number" value="{{ $details->retries }}" required>
+                            </div>
 
-        <div class="mb-3 col-md-6">
-            <label for="interval" class="form-label">Interval (in minutes)</label>
-            <input id="interval" class="form-control" name="interval" type="number" value="{{ $details->interval }}" required>
-        </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="interval" class="form-label">Interval (in minutes)</label>
+                                <input id="interval" class="form-control" name="interval" type="number" value="{{ $details->interval }}" required>
+                            </div>
 
-        <div class="mb-3 col-md-12">
-            <label for="url" class="form-label">URL</label>
-            <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" value="{{ $details->url }}" required>
-            @error('url')
-                <p style="color: red; font-size: 14px;">{{ $message }}</p>
-            @enderror
-        </div>
+                            <div class="mb-3 col-md-12">
+                                <label for="url" class="form-label">URL</label>
+                                <input id="url" class="form-control" name="url" type="text" placeholder="E.g. https://www.google.com" value="{{ $details->url }}" required>
+                                @error('url')
+                                    <p style="color: red; font-size: 14px;">{{ $message }}</p>
+                                @enderror
+                            </div>
 
-        @if ($details->type == 'port')
-            <div class="mb-3 col-md-6">
-                <label for="port" class="form-label">Port</label>
-                <select id="port" class="form-control" name="port" required>
-                    <option value="" disabled>Select Port</option>
-                    @foreach ([21 => 'FTP', 22 => 'SSH / SFTP', 25 => 'SMTP', 53 => 'DNS', 80 => 'HTTP', 110 => 'POP3', 143 => 'IMAP', 443 => 'HTTPS', 465 => 'SMTP', 587 => 'SMTP', 993 => 'IMAP', 995 => 'POP3', 3306 => 'MySQL'] as $port => $label)
-                        <option value="{{ $port }}" {{ $details->port == $port ? 'selected' : '' }}>{{ $label }} - {{ $port }}</option>
-                    @endforeach
-                </select>
-            </div>
-        @endif
+                            @if ($details->type == 'port')
+                                <div class="mb-3 col-md-6">
+                                    <label for="port" class="form-label">Port</label>
+                                    <select id="port" class="form-control" name="port" required>
+                                        <option value="" disabled>Select Port</option>
+                                        @foreach ([21 => 'FTP', 22 => 'SSH / SFTP', 25 => 'SMTP', 53 => 'DNS', 80 => 'HTTP', 110 => 'POP3', 143 => 'IMAP', 443 => 'HTTPS', 465 => 'SMTP', 587 => 'SMTP', 993 => 'IMAP', 995 => 'POP3', 3306 => 'MySQL'] as $port => $label)
+                                            <option value="{{ $port }}" {{ $details->port == $port ? 'selected' : '' }}>{{ $label }} - {{ $port }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endif
 
-        @if ($details->type == 'dns')
-            <div class="mb-3 col-md-6">
-                <label for="dns_resource_type" class="form-label">DNS Resource Type</label>
-                <select id="dns_resource_type" class="form-control" name="dns_resource_type" required>
-                    @foreach (['A', 'AAAA', 'CNAME', 'MX', 'NS', 'SOA', 'TXT', 'SRV', 'DNS_ALL'] as $type)
-                        <option value="{{ $type }}" {{ $details->dns_resource_type == $type ? 'selected' : '' }}>{{ $type }}</option>
-                    @endforeach
-                </select>
-            </div>
-        @endif
+                            @if ($details->type == 'dns')
+                                <div class="mb-3 col-md-6">
+                                    <label for="dns_resource_type" class="form-label">DNS Resource Type</label>
+                                    <select id="dns_resource_type" class="form-control" name="dns_resource_type" required>
+                                        @foreach (['A', 'AAAA', 'CNAME', 'MX', 'NS', 'SOA', 'TXT', 'SRV', 'DNS_ALL'] as $type)
+                                            <option value="{{ $type }}" {{ $details->dns_resource_type == $type ? 'selected' : '' }}>{{ $type }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endif
 
-        <div class="col-12 mt-3">
-            <h5 class="card-title">Notification</h5>
-        </div>
+                            <div class="col-12 mt-3">
+                                <h5 class="card-title">Notification</h5>
+                            </div>
 
-        <div class="mb-3 col-md-12">
-            <label for="email" class="form-label">Email</label>
-            <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" value="{{ $details->email }}" required>
-        </div>
+                            <div class="mb-3 col-md-12">
+                                <label for="email" class="form-label">Email</label>
+                                <input id="email" class="form-control" name="email" type="email" placeholder="example@gmail.com" value="{{ $details->email }}" required>
+                            </div>
 
-        <div class="mb-3 col-md-6">
-            <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
-            <input id="telegram_id" class="form-control" name="telegram_id" type="text" value="{{ $details->telegram_id }}">
-        </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="telegram_id" class="form-label">Telegram ID (Optional)</label>
+                                <input id="telegram_id" class="form-control" name="telegram_id" type="text" value="{{ $details->telegram_id }}">
+                            </div>
 
-        <div class="mb-3 col-md-6">
-            <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
-            <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text" value="{{ $details->telegram_bot_token }}">
-        </div>
-    </div>
-</div>
+                            <div class="mb-3 col-md-6">
+                                <label for="telegram_bot_token" class="form-label">Telegram Bot Token (Optional)</label>
+                                <input id="telegram_bot_token" class="form-control" name="telegram_bot_token" type="text" value="{{ $details->telegram_bot_token }}">
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -579,103 +579,6 @@
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-        <script>
-
-            // let isPaused = false;
-
-            // function pauseMonitor(monitorId, button) {
-                
-            //     fetch(`/monitor/pause/${monitorId}`, {
-            //             method: 'POST',
-            //             headers: {
-            //                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
-            //                 'Content-Type': 'application/json',
-            //             },
-            //         })
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             if (data.success) {
-                           
-            //                 button.innerHTML = data.paused ?
-            //                     '<i class="fas fa-play fa-1x"></i> Resume' :
-            //                     '<i class="fas fa-pause fa-1x"></i> Pause';
-
-                         
-            //                 button.classList.toggle('btn-success', !data.paused);
-            //                 button.classList.toggle('btn-warning', data.paused);
-
-                           
-            //         const statusElement = document.getElementById('statusElement');
-            //         if (statusElement) {
-            //             statusElement.textContent = data.paused ? 'Paused' : data.status;
-            //         }
-
-            //             isPaused=data.paused;
-
-                          
-            //                 toastr.success(data.message);
-            //             } else {
-            //                 toastr.error('Failed to update monitor status.');
-            //             }
-            //         })
-            //         .catch(error => {
-            //             console.error('Error:', error);
-            //             toastr.error('An error occurred.');
-            //         });
-            // }
-
-    // document.addEventListener("DOMContentLoaded", function () {
-    //     const statusElement = document.getElementById('statusElement');
-    //     const currentResponseElement = document.getElementById('currentResponse');
-    //     const averageResponseElement = document.getElementById('averageResponse');
-
-    //     setInterval(function () {
-    //         if (!isPaused) { 
-    //             $.ajax({
-    //                 url: "{{ route('display.chart.update', [$details->id, $details->type]) }}",
-    //                 type: "GET",
-    //                 dataType: "json",
-    //                 success: function (response) {
-    //                     var maxDataPoints = 20;
-    //                     var responseTimes = response.responses.map(item => item.response_time).slice(-maxDataPoints);
-    //                     var timestamps = response.responses.map(item => new Date(item.created_at).toLocaleString("en-IN", {
-    //                         timeZone: "Asia/Kolkata"
-    //                     })).slice(-maxDataPoints);
-
-    //                     myLineChart.data.datasets[0].data = responseTimes;
-    //                     myLineChart.data.labels = timestamps;
-    //                     myLineChart.update();
-
-                      
-    //                     if (statusElement) {
-    //                         statusElement.textContent = response.status;
-    //                     }
-
-                       
-    //                     if (responseTimes.length > 0) {
-    //                         currentResponseElement.textContent = responseTimes[responseTimes.length - 1] + " ms";
-    //                     } else {
-    //                         currentResponseElement.textContent = "No Data";
-    //                     }
-
-                       
-    //                     if (responseTimes.length > 0) {
-    //                         let sum = responseTimes.reduce((a, b) => a + b, 0);
-    //                         let average = (sum / responseTimes.length).toFixed(2); // Round to 2 decimal places
-    //                         averageResponseElement.textContent = average + " ms";
-    //                     } else {
-    //                         averageResponseElement.textContent = "No Data";
-    //                     }
-    //                 },
-    //                 error: function (xhr, status, error) {
-    //                     console.error("Error fetching data:", error);
-    //                 }
-    //             });
-    //         }
-    //     }, 3000); 
-    // });
-        </script>
 
         <script>
             function setEditUrl(id) {
