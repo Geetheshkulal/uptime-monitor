@@ -55,35 +55,6 @@
         margin: 0 auto;
         display: block;
     }
-    .sidebar-brand {
-  
-  height: 4.375rem;
-  margin: 0;
-  width: 225px; /* same as .sidebar */
-  padding: 0 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  text-decoration: none;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center; 
-}
-
-
-.sidebar-brand-icon {
-  font-size: 1.2rem;
-  color: white;
-  margin-right: 0.5rem; /* spacing between icon and text */
-}
-
-.sidebar-brand-text {
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  color: white;
-  white-space: nowrap; /* Prevent text from wrapping */
-}
 
     /* Premium feature indicator */
     .premium-feature {
@@ -177,7 +148,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Wrapper for main nav items -->
-    <div class="flex-grow-1">
+
         @hasanyrole(['user','subuser'])
             @can('see.monitors')
                 <li class="nav-item {{ request()->is('dashboard*') ? 'active' : '' }}">
@@ -374,7 +345,7 @@
             @endhasrole
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
-    </div>
+    
 
 
 
