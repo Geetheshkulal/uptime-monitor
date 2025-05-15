@@ -92,28 +92,30 @@
                 <h5 class="text-gray-800 font-weight-bold mb-3">
                     {{-- <span class="text-secondary">URL:</span> --}}
 
-                    @if($details->status === 'up')
-                    <svg xmlns="http://www.w3.org/2000/svg">
-                        <circle fill="#059212" stroke="none" cx="60" cy="60" r="17" opacity="0.5">
-                          <animate attributeName="opacity" dur="1s" values="0;0.5;0" repeatCount="indefinite" begin="0s" />
-                        </circle>
-                        <circle fill="#059212" stroke="none" cx="60" cy="60" r="9">
-                          <animate attributeName="opacity" dur="2s" values="0;1;0" repeatCount="indefinite" begin="2s"/>
-                        </circle>
-                      </svg>
+                    <span id="status-heartbeat">
+                        @if($details->status === 'up')
+                        <svg xmlns="http://www.w3.org/2000/svg">
+                            <circle fill="#059212" stroke="none" cx="60" cy="60" r="17" opacity="0.5">
+                            <animate attributeName="opacity" dur="1s" values="0;0.5;0" repeatCount="indefinite" begin="0s" />
+                            </circle>
+                            <circle fill="#059212" stroke="none" cx="60" cy="60" r="9">
+                            <animate attributeName="opacity" dur="2s" values="0;1;0" repeatCount="indefinite" begin="2s"/>
+                            </circle>
+                        </svg>
 
-                      @else
+                        @else
 
-                      <svg xmlns="http://www.w3.org/2000/svg">
+                        <svg xmlns="http://www.w3.org/2000/svg">
 
-                        <circle fill="#ff0000" stroke="none" cx="60" cy="60" r="17" opacity="0.5">
-                          <animate attributeName="opacity" dur="1s" values="0;0.5;0" repeatCount="indefinite" begin="0s" />
-                        </circle>
-                        <circle fill="#ff0000" stroke="none" cx="60" cy="60" r="9">
-                          <animate attributeName="opacity" dur="2s" values="0;1;0" repeatCount="indefinite" begin="2s"/>
-                        </circle>
-                      </svg>
-                      @endif
+                            <circle fill="#ff0000" stroke="none" cx="60" cy="60" r="17" opacity="0.5">
+                            <animate attributeName="opacity" dur="1s" values="0;0.5;0" repeatCount="indefinite" begin="0s" />
+                            </circle>
+                            <circle fill="#ff0000" stroke="none" cx="60" cy="60" r="9">
+                            <animate attributeName="opacity" dur="2s" values="0;1;0" repeatCount="indefinite" begin="2s"/>
+                            </circle>
+                        </svg>
+                        @endif
+                      </span>
 
                     <span class="text-primary">{{ $details->url }}</span>
                 </h5>
@@ -238,6 +240,7 @@
                 var statusElement = document.getElementById('statusElement');
                 var currentResponseElement = document.getElementById('currentResponse');
                 var averageResponseElement = document.getElementById('averageResponse');
+                var statusHeartbeat = document.getElementById('status-heartbeat');
 
                 var myLineChart = new Chart(ctx, {
                     type: 'line',
@@ -404,6 +407,30 @@
                         }
                         // Update status display whether paused or not
                         statusElement.textContent = isPaused ? 'Paused' : response.status;
+
+                        switch(response.status){
+                            case 'up':
+                                statusHeartbeat.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg">
+                                    <circle fill="#059212" stroke="none" cx="60" cy="60" r="17" opacity="0.5">
+                                    <animate attributeName="opacity" dur="1s" values="0;0.5;0" repeatCount="indefinite" begin="0s" />
+                                    </circle>
+                                    <circle fill="#059212" stroke="none" cx="60" cy="60" r="9">
+                                    <animate attributeName="opacity" dur="2s" values="0;1;0" repeatCount="indefinite" begin="2s"/>
+                                    </circle>
+                                </svg>`;
+                                break;
+                            case 'down':
+                                 statusHeartbeat.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg">
+                                    <circle fill="#ff0000" stroke="none" cx="60" cy="60" r="17" opacity="0.5">
+                                    <animate attributeName="opacity" dur="1s" values="0;0.5;0" repeatCount="indefinite" begin="0s" />
+                                    </circle>
+                                    <circle fill="#ff0000" stroke="none" cx="60" cy="60" r="9">
+                                    <animate attributeName="opacity" dur="2s" values="0;1;0" repeatCount="indefinite" begin="2s"/>
+                                    </circle>
+                                </svg>`
+                                break;
+
+                        }
                     },
                         error: function(xhr, status, error) {
                             console.error("Error fetching data:", error);
