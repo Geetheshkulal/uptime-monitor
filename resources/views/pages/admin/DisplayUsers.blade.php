@@ -90,8 +90,10 @@
                                         @elseif($user->status === 'subuser')
                                             @if($user->parentUser->status === 'paid')
                                                 <span class="badge badge-success">Paid</span>
+                                            @elseif($user->parentUser->status === 'free_trial')
+                                                <span class="badge badge-warning">Free Trial</span> 
                                             @else
-                                                <span class="badge badge-secondary">Free Trial</span> 
+                                                <span class="badge badge-warning">Free</span> 
                                             @endif
                                         @endif
                                     </td>
