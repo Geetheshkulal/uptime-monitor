@@ -25,8 +25,8 @@
 
     <!-- Fonts and styles -->
     <link href="{{ asset('frontend/assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
     <link href="{{ asset('frontend/assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
 
     <!-- Skeleton Loader Styles -->
     <style>
@@ -82,21 +82,7 @@
 
         
 
-        #accordionSidebar {
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            z-index: 1040;
-            background-color: #4e73df; /* Match your current sidebar background */
-        }
-        .navbar, nav.navbar 
-        {
-            position: sticky
-            top: 0; /* Ensure it's at the top */
-            z-index: 1030; /* Ensure it's above other elements */
-            background-color: #4e73df; /* Ensure navbar has a background */
-            width: 100%; /* Make sure it's full width */
-        }
+       
  
 
         #content {
@@ -147,17 +133,6 @@
             </div>
         </div>
     </div>
-
-    <!-- JS Scripts -->
-    <script src="{{ asset('frontend/assets/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/vendor/chart.js/Chart.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-    @stack('scripts')
 
     <!-- Remove skeletons after load -->
     <script>
@@ -221,42 +196,17 @@
             subscribeUser();
         });
     </script>
-    <script>
-        function matchSidebarBrandWidth() {
-            const sidebar = document.querySelector('.sidebar');
-            const brand = document.querySelector('.sidebar-brand');
-    
-            if (sidebar && brand) {
-                brand.style.width = sidebar.offsetWidth + 'px';
-            }
-        }
-    
-        window.addEventListener('load', matchSidebarBrandWidth);
-        window.addEventListener('resize', matchSidebarBrandWidth);
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const drawer = document.getElementById("sidebarDrawer");
-            const overlay = document.createElement("div");
-            overlay.className = "drawer-overlay";
-            document.body.appendChild(overlay);
-    
-            document.getElementById("sidebarToggleDrawer").addEventListener("click", function () {
-                drawer.classList.add("open");
-                overlay.classList.add("show");
-            });
-    
-            document.getElementById("closeDrawer").addEventListener("click", function () {
-                drawer.classList.remove("open");
-                overlay.classList.remove("show");
-            });
-    
-            overlay.addEventListener("click", function () {
-                drawer.classList.remove("open");
-                this.classList.remove("show");
-            });
-        });
-    </script>
-    
+        <!-- JS Scripts -->
+    <script src="{{ asset('frontend/assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/sb-admin-2.min.js') }}"></script>
+
+    <!-- Additional Scripts -->
+    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="{{ asset('frontend/assets/vendor/chart.js/Chart.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    @stack('scripts')
 </body>
 </html>
