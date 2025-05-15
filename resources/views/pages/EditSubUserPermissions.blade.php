@@ -26,7 +26,7 @@
                             <h4 class="card-title mb-0">
                                 Modify Permissions for User: <strong>{{ $user->name }}</strong>
                             </h4>
-                            <a href="{{ route('display.sub.users') }}" class="btn btn-secondary">
+                            <a href="{{ route('display.sub.users') }}" class="btn btn-primary">
                                 <i class="fas fa-arrow-left"></i> Back
                             </a>
                         </div>
