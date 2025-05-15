@@ -55,6 +55,18 @@
                         </div>
                     </div>
 
+                    <div class="mb-4">
+                        White List
+                        <div class="container px-0">
+                            <div class="row">
+                                <div class="col-md-6 d-flex">
+                                    <input type="text" class="form-control me-2" placeholder="Enter something">
+                                    <button class="btn btn-primary">Add</button>
+                                </div>
+                        </div>
+                    </div>
+                    </div>
+
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
                         <strong>Note:</strong> All your monitors will be visible on the page where you will embed this code 
@@ -79,7 +91,7 @@ function togglePublicStatusFields() {
 }
 
 function copyToClipboard(elementId) {
-    const element = document.getElementById(elementId);
+    const element = document.getElemengivr giigtById(elementId);
     element.select();
     document.execCommand('copy');
     
