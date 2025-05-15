@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
+use App\Models\Whitelist;
 
 //Controller to manage users
 class UserController extends Controller
@@ -322,6 +323,8 @@ class UserController extends Controller
         {
             /** @var \App\Models\User $user */
             $user = auth()->user();
+            $whitelistedIPs = Whitelist::where('user_id',$user->id)->first();
+
         
             // Auto-generate unique hash if doesn't exist
             if (!$user->status_page_hash) {
@@ -332,7 +335,8 @@ class UserController extends Controller
             return view('user.status-settings', [
                 'user' => $user,
                 'publicUrl' => route('public.status', $user->status_page_hash),
-                'iframeCode' => '<iframe src="'.route('public.status', $user->status_page_hash).'" width="100%" height="600" style="border:none;"></iframe>'
+                'iframeCode' => '<iframe src="'.route('public.status', $user->status_page_hash).'" width="100%" height="600" style="border:none;"></iframe>',
+                'whitelist' => $whitelistedIPs
             ]);
         }
 
@@ -344,6 +348,11 @@ class UserController extends Controller
         /** @var \App\Models\User $user */
         $user = auth()->user();
         
+        $whitelist = Whitelist::where('user_id',$user->id)->first();
+
+        $whitelist->whitelist = json_decode($request->whitelist, true);
+        $whitelist->save();
+
         $user->update([
             'enable_public_status' => $request->has('enable_public_status')
         ]);

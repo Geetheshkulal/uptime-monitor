@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Monitors;
+use App\Models\Whitelist;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+
 
 class PublicStatusPageController extends Controller
 {
-    public function show($hash)
+    public function show(Request $request,$hash)
     {
         $user = User::where('status_page_hash', $hash)
                   ->where('enable_public_status', true)
                   ->firstOrFail();
+
+        $whitelistRecord = Whitelist::where('user_id',$user->id)->first();
+        $whitelistedIPs = $whitelistRecord->whitelist;
+
+        $ip = $request->ip();
+        if(!in_array($ip, $whitelistedIPs)){
+            return view('pages.StatusPageNotAllowed');
+        }
+
 
         // Get days to show based on user status
         $daysToShow = $user->status === 'free' ? 30 : 120;
