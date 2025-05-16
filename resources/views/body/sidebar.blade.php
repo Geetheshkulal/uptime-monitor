@@ -131,6 +131,72 @@
     background: linear-gradient(to right, #a1ffce, #faffd1) !important;
 }
 
+.alert-info {
+    background: linear-gradient(135deg, #8597df 0%, #2f07f9 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 20px 25px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
+    /* animation: slideIn 0.6s ease-out; */
+    margin: 15px 0;
+    /* border-left: 5px solid #f89603; */
+}
+
+.alert-info::before {
+    content: "🎉";
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.2rem;
+    opacity: 0.3;
+}
+
+.alert-info strong {
+    color: #fff;
+    font-size: 1.3em;
+    letter-spacing: 1.5px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    position: relative;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+}
+
+.alert-info strong:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Optional: Add if you want a confetti effect */
+.alert-info::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: radial-gradient(circle, transparent 20%, rgba(255,255,255,0.1) 20%);
+    background-size: 10px 10px;
+    opacity: 0.2;
+    pointer-events: none;
+}
 
 </style>
 
@@ -314,6 +380,11 @@
             @php
                 $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
             @endphp
+
+            @php
+            $availableCoupons = \App\Helpers\CouponHelper::getAvailableCouponsForUser();
+            @endphp
+
             @hasrole('user')
                 @if ($trialDaysLeft > 0)
                     <li class="nav-item trial-notice mt-2 mb-2">
@@ -341,6 +412,13 @@
                         </div>
                     </li>
                     @endif
+
+                    @if($availableCoupons->count())
+                        <div class="alert alert-info">
+                            🎁 New Coupon: <strong>{{ $availableCoupons->first()->code }}</strong> available for you!
+                        </div>
+                    @endif
+
                 @endif
             @endhasrole
         <!-- Divider -->

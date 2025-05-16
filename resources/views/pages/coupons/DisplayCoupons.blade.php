@@ -149,10 +149,10 @@
                                         <i class="fas fa-copy ml-2 text-primary" style="cursor: pointer;" onclick="copyToClipboard('{{$coupon->code}}')" title="Copy code"></i>
                                     </td>
                                     <td>{{ $coupon->value }}</td>
-                                    <td>{{ $coupon->max_uses }}</td>
+                                    <td>{{ $coupon->max_uses ? $coupon->max_uses : 'N/A'}}</td>
                                     <td>{{ $coupon->uses }}</td>
-                                    <td>{{ $coupon->valid_from ? \Carbon\Carbon::parse($coupon->valid_from)->format('d M y') : ''  }}</td>
-                                    <td>{{ $coupon->valid_until ? \Carbon\Carbon::parse($coupon->valid_until)->format('d M y') : '' }}</td>
+                                    <td>{{ $coupon->valid_from ? \Carbon\Carbon::parse($coupon->valid_from)->format('d M y') : 'N/A'  }}</td>
+                                    <td>{{ $coupon->valid_until ? \Carbon\Carbon::parse($coupon->valid_until)->format('d M y') : 'N/A' }}</td>
                                     <td>
                                         @if($coupon->is_active)
                                             <span class="badge badge-success">Active</span>
