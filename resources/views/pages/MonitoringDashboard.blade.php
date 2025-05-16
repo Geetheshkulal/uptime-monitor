@@ -444,6 +444,7 @@
         once: true
     });
 
+    
     // Initialize DataTable
     $(document).ready(function() {
         $('#dataTable').DataTable({

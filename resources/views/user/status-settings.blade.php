@@ -88,13 +88,18 @@
                         </div>
 
 
-                        <div class="container px-0 mt-2">
-                            <div class="row">
-                                <div class="col-md-6 d-flex">
-                                    <input type="text" class="form-control me-2" id="ipInput" placeholder="Enter IP Address">
+                        <div class="d-flex my-4">
+                            <div class="d-flex justify-content-center flex-wrap align-items-center">
+                                <div class="d-inline-flex">
+                                    <input type="text" class="form-control " id="ipInput" placeholder="Enter IP Address">
                                     <button class="btn btn-primary" id="addIP">Add</button>
                                 </div>
-                        </div>
+                                <div class="mx-4">OR</div>
+                                <div class="d-inline-flex">
+                                    <input type="text" class="form-control" id="hostInput" placeholder="Enter Host name to resolve">
+                                    <button class="btn btn-primary" id="addHost">Add</button>
+                                </div>
+                            </div>
                     </div>
                     </div>
 
@@ -148,6 +153,27 @@
         return regex.test(ip);
     }
 
+    function isLikelyURL(string) {
+        const pattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+        return pattern.test(string);
+    }
+
+    async function resolveHostnameToIP(hostname) {
+        const response = await fetch(`https://dns.google/resolve?name=${hostname}&type=A`);
+        const data = await response.json();
+
+        if (data.Status !== 0 || !data.Answer) {
+            return false;
+        }
+
+        // Get the first IPv4 address (type 1 = A record)
+        const ip = data.Answer.find(ans => ans.type === 1)?.data;
+        return ip;
+    }
+
+  
+
+
 
     function renderIPs(){
         $('#tag-container').empty();
@@ -179,10 +205,38 @@
             toastr.error('This IP already exists.')
         }else{
             whitelistedIPs.push(val);
-             $('#ipInput').val('');
+            $('#ipInput').val('');
         }
         renderIPs();
-    })
+    });
+
+
+
+    $('#addHost').click(async function(event){
+            event.preventDefault();
+            const val = $('#hostInput').val().trim();
+            if (!isLikelyURL(val)) {
+                toastr.error('Invalid URL structure.');
+                return;
+            }
+
+            const ipdata= await resolveHostnameToIP(val);
+            if(ipdata){
+                if(whitelistedIPs.includes(val)){
+                    toastr.error('This IP already exists.')
+                }else{
+                    console.log(ipdata)
+                    whitelistedIPs.push(ipdata);
+                    $('#hostInput').val('');
+                }
+                renderIPs();
+            }else{
+                toastr.error('Could not resolve ip')
+            }
+        }
+    );
+
+
 
       $(document).on('click', '.remove-btn', function (event) {
         event.preventDefault();

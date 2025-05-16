@@ -34,8 +34,8 @@
             border-radius: 0 !important;
         }
         * {
-  font-family: "Nunito", sans-serif;
-}
+            font-family: "Nunito", sans-serif;
+        }
 
 
         .scroll-to-top {
