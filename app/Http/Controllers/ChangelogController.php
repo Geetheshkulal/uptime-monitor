@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Changelog;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
+
 class ChangelogController extends Controller
 {
     //
@@ -17,7 +19,7 @@ class ChangelogController extends Controller
     public function AddChangelog(Request $request)
     {
         $request->validate([
-            'versionNumber' => 'required',
+            'versionNumber' => 'required|unique:changelogs,version',
             'versionTitle' => 'required',
             'description' => 'required'
         ]);
@@ -41,11 +43,13 @@ class ChangelogController extends Controller
 
     public function update(Request $request, Changelog $changelog)
     {
-        // Debug to check incoming data
-        // dd($request->all());
-
         $validated = $request->validate([
-            'editversionNumber' => 'required|string|max:255|unique:changelogs,version',
+            'editversionNumber' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('changelogs', 'version')->ignore($changelog->id),
+            ],
             'editversionTitle' => 'required|string|max:255',
             'editdescription' => 'required|string', // assuming your input name is description
         ]);

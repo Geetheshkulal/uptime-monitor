@@ -222,7 +222,7 @@
                       <input type="text" class="form-control" id="editVersionTitle{{ $changelog->id }}" name="editversionTitle" value="{{ $changelog->title }}"  />
                        @error('editversionTitle')
                             <div class="text-danger mt-1">{{ $message }}</div>
-                         @enderror
+                       @enderror
                     </div>
                     <div class="mb-3">
                       <label class="form-label">Description*</label>
@@ -300,16 +300,27 @@
           <div class="modal-body">
             <div class="mb-3">
               <label for="addVersionNumber" class="form-label">Version Number</label>
-              <input type="text" class="form-control" id="addVersionNumber" name="versionNumber" placeholder="e.g., 1.0.0"  />
+              <input type="text" class="form-control @error('versionNumber') is-invalid @enderror" id="addVersionNumber" name="versionNumber" value="{{ old('versionNumber') }}" placeholder="e.g., 1.0.0"  />
+              @error('versionNumber')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
+
             <div class="mb-3">
               <label for="addVersionTitle" class="form-label">Version Title</label>
-              <input type="text" class="form-control" id="addVersionTitle" name="versionTitle" placeholder="Short description"  />
+              <input type="text" class="form-control @error('versionTitle') is-invalid @enderror" value="{{ old('versionTitle') }}" id="addVersionTitle" name="versionTitle" placeholder="Short description"  />
+              @error('versionTitle')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
+
             <div class="mb-3">
               <label class="form-label">Description*</label>
-              <div id="add-editor-container"></div>
-              <input type="hidden" id="add-description" name="description" />
+              <div id="add-editor-container" class="@error('description') is-invalid @enderror"></div>
+              <input type="hidden" id="add-description" name="description" value="{{ old('description') }}"/>
+              @error('description')
+                <div class="invalid-feedback">{{ $message }}</div>
+              @enderror
             </div>
           </div>
           <div class="modal-footer">
@@ -343,9 +354,18 @@
       theme: 'snow'
     });
 
+    function stripTags(original) {
+      return original.replace(/(<([^>]+)>)/gi, "");
+    }
+
     // On Add form submit, sync Quill content to hidden input
     document.getElementById('addChangelogForm').addEventListener('submit', function(e) {
-      document.getElementById('add-description').value = addQuill.root.innerHTML.trim();
+      const value= addQuill.root.innerHTML.trim();
+      if(stripTags(value).trim()===''){
+        document.getElementById('add-description').value = '';
+      }else{
+        document.getElementById('add-description').value = value;
+      } 
     });
 
     // Keep track of initialized edit editors to avoid duplicates
@@ -374,10 +394,8 @@
           const descInput = document.getElementById(`edit-description-${id}`);
           descInput.value = editEditors[id].root.innerHTML.trim();
 
-          if (!descInput.value || descInput.value === '<p><br></p>') {
-            e.preventDefault();
-            alert('Description cannot be empty.');
-            return false;
+          if (stripTags(descInput.value).trim()==='') {
+            descInput.value = ''
           }
         });
       }
