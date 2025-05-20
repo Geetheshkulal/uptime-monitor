@@ -16,6 +16,8 @@
   <!-- Quill Editor CSS -->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -246,27 +248,27 @@
           </div>
 
       <!-- Delete Modal -->
-<div class="modal fade" id="deleteChangelogModal{{ $changelog->id }}" tabindex="-1" aria-labelledby="deleteChangelogModalLabel{{ $changelog->id }}" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form action="{{ route('changelog.destroy', $changelog->id) }}" method="POST">
-        @csrf
-        @method('DELETE')
-        <div class="modal-header">
-          <h5 class="modal-title" id="deleteChangelogModalLabel{{ $changelog->id }}">Delete Changelog - Version {{ $changelog->version }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Are you sure you want to permanently delete changelog version <strong>{{ $changelog->version }}</strong>?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-danger">Yes, Delete</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+          <div class="modal fade" id="deleteChangelogModal{{ $changelog->id }}" tabindex="-1" aria-labelledby="deleteChangelogModalLabel{{ $changelog->id }}" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form action="{{ route('changelog.destroy', $changelog->id) }}" method="POST">
+                  @csrf
+                  @method('DELETE')
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deleteChangelogModalLabel{{ $changelog->id }}">Delete Changelog - Version {{ $changelog->version }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to permanently delete changelog version <strong>{{ $changelog->version }}</strong>?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
 
           @endforeach
 
@@ -364,6 +366,10 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Quill JS -->
   <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
   <script>
     // Initialize Quill editor for Add modal
@@ -475,5 +481,18 @@
       });
     });
   </script>
+
+  @if(session('success'))
+    <script>
+        toastr.success("{{ session('success') }}");
+    </script>
+  @endif
+
+  @if ($errors->any())
+    <script>
+        toastr.error("{{ $errors->first() }}");
+    </script>
+  @endif
+
 </body>
 </html>

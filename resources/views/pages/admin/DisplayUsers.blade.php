@@ -248,10 +248,10 @@
         });
 </script>
 
-@if(session('success'))
-<script>
-    toastr.success("{{ session('success') }}");
-</script>
-@endif
+    @if(session('success'))
+    <script>
+        toastr.success("{{ session('success') }}");
+    </script>
+    @endif
 @endpush
 @endsection
