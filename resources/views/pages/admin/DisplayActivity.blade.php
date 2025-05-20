@@ -4,8 +4,9 @@
 @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css"> --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
     <style>
         .select2-container--default .select2-selection--single {
             height: 38px;
@@ -35,16 +36,17 @@
         }
     </style>
 @endpush
+<div class="page-content">
+<div class="container-fluid">
 
-<div id="content-wrapper" class="d-flex flex-column">
-    <div id="content">
-        <div class="container-fluid">
+ 
+        
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Activity Log</h1>
     </div>
             <!-- Activity Log Table -->
             <div class="card shadow mb-4">
-                <div class="card-body">
+                <div class="card-body px-4 py-4">
                     <div class="filter-container">
                         <label for="userFilter">Filter by User:</label>
                         <select class="js-example-basic-single form-control" id="userFilter" style="width: 300px;">
@@ -93,9 +95,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+</div></div>
 
 <!-- Bootstrap 4 Modal -->
 <div class="modal fade" id="propertiesModal" tabindex="-1" role="dialog" aria-labelledby="propertiesModalLabel" aria-hidden="true">

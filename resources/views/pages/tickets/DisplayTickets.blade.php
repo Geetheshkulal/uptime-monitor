@@ -164,7 +164,7 @@
                     <br>
                     <div class="card-body p-0">
                         <div class="table-responsive" style="min-width: 100%;">
-                            <table class="table mb-0" id="ticketsTable">
+                            <table class="table table-bordered" id="ticketsTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Ticket ID</th>
