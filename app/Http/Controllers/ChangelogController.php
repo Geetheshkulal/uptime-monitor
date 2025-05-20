@@ -17,11 +17,13 @@ class ChangelogController extends Controller
     $query = Changelog::orderBy('release_date', 'desc');
     
     if ($search) {
-        $query->where(function($q) use ($search) {
-            $q->where('version', 'like', "%{$search}%");
-        });
-    }
-    
+    $query->where(function($q) use ($search) {
+        $q->where('version', 'like', "%{$search}%")
+          ->orWhere('title', 'like', "%{$search}%")
+          ->orWhere('description', 'like', "%{$search}%");
+    });
+}
+  
     $changelogs = $query->paginate(10);
     $latestDate = Carbon::parse(Changelog::max('release_date'));
     

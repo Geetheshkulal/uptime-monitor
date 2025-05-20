@@ -148,7 +148,7 @@
   <section class="custom-section">
     <div class="container">
       <div class="action-buttons mb-4">
-        <a href="/" class="btn btn-secondary">
+        <a href="/" class="btn btn-primary">
           <i class="fas fa-arrow-left me-2"></i> Back
         </a>
         @hasrole('superadmin')
@@ -338,12 +338,13 @@
          <!-- Sidebar -->
 <div class="col-lg-3">
     <div class="changelog-sidebar card p-3 shadow-sm rounded">
-        <h5 class="mb-3">Versions</h5>
-        {{-- <form id="versionSearchForm" method="GET" action="{{ route('changelog.page') }}"> --}}
+        {{-- <h5 class="mb-3">Search filter</h5> --}}
+        <h5 class="mb-3"><i class="fa fa-search me-2"></i>Search filter</h5>
                 <form id="versionSearchForm" method="GET" action="{{ url()->current() }}">
-                  <input type="text" id="searchVersion" name="search" class="form-control mb-3" 
-                        placeholder="Search version..." aria-label="Search versions"
-                        value="{{ $search ?? '' }}" />
+                        <input type="text" id="searchVersion" name="search" class="form-control mb-3" 
+                            placeholder="Search by title/description/version" aria-label="Search versions"
+                            value="{{ $search ?? '' }}"
+                            style="font-size: 0.85rem;" />
               </form>
 
               <!-- NEW VERSION NAVIGATION -->
