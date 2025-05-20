@@ -13,6 +13,7 @@ class Changelog extends Model
     protected $fillable = [
         'title',
         'description',
-        'version'
+        'version',
+        'release_date'
     ];
 }

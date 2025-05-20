@@ -9,17 +9,12 @@ use Illuminate\Validation\Rule;
 
 class ChangelogController extends Controller
 {
-    //
-    // public function ChangelogPage(){
-    //     $changelogs =  Changelog::orderBy('created_at', 'desc')->paginate(10);
-    //     $latestDate = Carbon::parse(Changelog::max('created_at'));
-    //     return view('pages.Changelog',compact('changelogs','latestDate'));
-    // }
+
 
     public function ChangelogPage(Request $request){
     $search = $request->input('search');
     
-    $query = Changelog::orderBy('created_at', 'desc');
+    $query = Changelog::orderBy('release_date', 'desc');
     
     if ($search) {
         $query->where(function($q) use ($search) {
@@ -29,7 +24,7 @@ class ChangelogController extends Controller
     }
     
     $changelogs = $query->paginate(10);
-    $latestDate = Carbon::parse(Changelog::max('created_at'));
+    $latestDate = Carbon::parse(Changelog::max('release_date'));
     
     return view('pages.Changelog', compact('changelogs', 'latestDate', 'search'));
 }
@@ -40,13 +35,15 @@ class ChangelogController extends Controller
         $request->validate([
             'versionNumber' => 'required|unique:changelogs,version',
             'versionTitle' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'releaseDate' => 'required'
         ]);
     
         Changelog::create([
             'version' => $request->versionNumber,
             'title' => $request->versionTitle,
-            'description'=>$request->description
+            'description'=>$request->description,
+            'release_date'=>$request->releaseDate
         ]);
     
         return redirect()->back()->with('success', 'Comment added successfully.');
@@ -62,12 +59,13 @@ class ChangelogController extends Controller
 
     public function update(Request $request, Changelog $changelog)
     {
+        // dd($changelog->id);
         $validated = $request->validate([
             'editversionNumber' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('changelogs', 'version')->ignore($changelog->id),
+                Rule::unique('changelogs', 'version')->ignore($changelog->id,'id'),
             ],
             'editversionTitle' => 'required|string|max:255',
             'editdescription' => 'required|string', // assuming your input name is description

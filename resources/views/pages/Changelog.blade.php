@@ -171,7 +171,7 @@
             <div class="d-flex gap-2 align-items-center flex-wrap">
               <h3 class="version-title mb-0">
                 Version {{ $changelog->version }}
-                @if($latestDate->eq($changelog->created_at))
+                @if($latestDate->eq($changelog->release_date))
                 <span class="badge bg-primary ms-2">Latest</span>
                 @endif
               </h3>
@@ -195,7 +195,7 @@
               @endhasrole
             </div>
             <p class="version-date mt-2">
-              Released on {{ \Carbon\Carbon::parse($changelog->created_at)->format('j F, Y') }}
+              Released on {{ ($changelog->release_date)?(\Carbon\Carbon::parse($changelog->release_date)->format('j F, Y')):'null' }}
             </p>
             <h4 class="version-subtitle">{{ $changelog->title }}</h4>
             <div class="change-content">
@@ -386,14 +386,23 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="mb-3">
-              <label for="addVersionNumber" class="form-label">Version Number</label>
-              <input type="text" class="form-control @error('versionNumber') is-invalid @enderror" id="addVersionNumber" name="versionNumber" value="{{ old('versionNumber') }}" placeholder="e.g., 1.0.0"  />
-              @error('versionNumber')
-                <div class="invalid-feedback">{{ $message }}</div>
-              @enderror
-            </div>
+            <div class="row">
+              <div class="mb-3 col-md-6">
+                <label for="addVersionNumber" class="form-label">Version Number</label>
+                <input type="text" class="form-control @error('versionNumber') is-invalid @enderror" id="addVersionNumber" name="versionNumber" value="{{ old('versionNumber') }}" placeholder="e.g., 1.0.0" />
+                @error('versionNumber')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+              </div>
 
+              <div class="mb-3 col-md-6">
+                <label for="addReleaseDate" class="form-label">Release Date</label>
+                <input type="date" class="form-control @error('releaseDate') is-invalid @enderror" id="addReleaseDate" name="releaseDate" value="{{ old('releaseDate') }}" />
+                @error('releaseDate')
+                  <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+              </div>
+            </div>
             <div class="mb-3">
               <label for="addVersionTitle" class="form-label">Version Title</label>
               <input type="text" class="form-control @error('versionTitle') is-invalid @enderror" value="{{ old('versionTitle') }}" id="addVersionTitle" name="versionTitle" placeholder="Short description"  />
@@ -526,20 +535,6 @@
         titleInput.value = titleInput.value;
       });
     });
-
-    // Version sidebar search filter
-    // document.getElementById('searchVersion').addEventListener('input', function() {
-    //   const filter = this.value.toLowerCase();
-    //   document.querySelectorAll('.version-link').forEach(link => {
-    //     const version = link.getAttribute('data-version').toLowerCase();
-    //     if (version.includes(filter)) {
-    //       link.style.display = '';
-    //     } else {
-    //       link.style.display = 'none';
-    //     }
-    //   });
-    // });
-
 
 
      // Version sidebar search filter
