@@ -271,7 +271,7 @@
           @endforeach
 
           <!-- Pagination -->
-          @if ($changelogs->lastPage() > 1)
+          {{-- @if ($changelogs->lastPage() > 1)
           <nav aria-label="Changelog pagination">
             <ul class="pagination">
               <li class="page-item {{ $changelogs->onFirstPage() ? 'disabled' : '' }}">
@@ -292,11 +292,33 @@
             </ul>
             <p class="pagination-info">Page {{ $changelogs->currentPage() }} of {{ $changelogs->lastPage() }}</p>
           </nav>
-          @endif
+          @endif --}}
+           @if ($changelogs->lastPage() > 1)
+            <nav aria-label="Changelog pagination">
+                <ul class="pagination">
+                    <li class="page-item {{ $changelogs->onFirstPage() ? 'disabled' : '' }}">
+                        <a class="page-link" href="{{ $changelogs->previousPageUrl() }}{{ $search ? '&search='.$search : '' }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    @for ($page = 1; $page <= $changelogs->lastPage(); $page++)
+                    <li class="page-item {{ $changelogs->currentPage() == $page ? 'active' : '' }}">
+                        <a class="page-link" href="{{ $changelogs->url($page) }}{{ $search ? '&search='.$search : '' }}">{{ $page }}</a>
+                    </li>
+                    @endfor
+                    <li class="page-item {{ $changelogs->hasMorePages() ? '' : 'disabled' }}">
+                        <a class="page-link" href="{{ $changelogs->nextPageUrl() }}{{ $search ? '&search='.$search : '' }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+                <p class="pagination-info">Page {{ $changelogs->currentPage() }} of {{ $changelogs->lastPage() }}</p>
+            </nav>
+            @endif
         </div>
 
         <!-- Sidebar -->
-        <div class="col-lg-3">
+        {{-- <div class="col-lg-3">
           <div class="changelog-sidebar card p-3 shadow-sm rounded">
             <h5 class="mb-3">Versions</h5>
             <input type="text" id="searchVersion" class="form-control mb-3" placeholder="Search version..." aria-label="Search versions" />
@@ -309,7 +331,44 @@
               @endforeach
             </nav>
           </div>
-        </div>
+        </div> --}}
+
+         <!-- Sidebar -->
+<div class="col-lg-3">
+    <div class="changelog-sidebar card p-3 shadow-sm rounded">
+        <h5 class="mb-3">Versions</h5>
+        {{-- <form id="versionSearchForm" method="GET" action="{{ route('changelog.page') }}"> --}}
+                <form id="versionSearchForm" method="GET" action="{{ url()->current() }}">
+                  <input type="text" id="searchVersion" name="search" class="form-control mb-3" 
+                        placeholder="Search version..." aria-label="Search versions"
+                        value="{{ $search ?? '' }}" />
+              </form>
+
+              <!-- NEW VERSION NAVIGATION -->
+              <nav id="versionNav" class="version-nav">
+                  @if($search ?? false)
+                      <!-- When searching, show all matching versions -->
+                      @foreach($changelogs as $changelog)
+                          <a href="{{ $changelogs->url($changelogs->currentPage()) }}#v{{ str_replace('.', '-', $changelog->version) }}" 
+                            class="nav-link version-link" 
+                            data-version="{{ $changelog->version }}">
+                              {{ $changelog->version }}
+                          </a>
+                      @endforeach
+                  @else
+                      <!-- Normal paginated view -->
+                      @foreach($changelogs as $changelog)
+                          <a href="#v{{ str_replace('.', '-', $changelog->version) }}" 
+                            class="nav-link version-link" 
+                            data-version="{{ $changelog->version }}">
+                              {{ $changelog->version }}
+                          </a>
+                      @endforeach
+                  @endif
+              </nav>
+          </div>
+      </div>
+
       </div>
     </div>
   </section>
@@ -463,17 +522,28 @@
     });
 
     // Version sidebar search filter
-    document.getElementById('searchVersion').addEventListener('input', function() {
-      const filter = this.value.toLowerCase();
-      document.querySelectorAll('.version-link').forEach(link => {
-        const version = link.getAttribute('data-version').toLowerCase();
-        if (version.includes(filter)) {
-          link.style.display = '';
-        } else {
-          link.style.display = 'none';
-        }
-      });
-    });
+    // document.getElementById('searchVersion').addEventListener('input', function() {
+    //   const filter = this.value.toLowerCase();
+    //   document.querySelectorAll('.version-link').forEach(link => {
+    //     const version = link.getAttribute('data-version').toLowerCase();
+    //     if (version.includes(filter)) {
+    //       link.style.display = '';
+    //     } else {
+    //       link.style.display = 'none';
+    //     }
+    //   });
+    // });
+
+
+
+     // Version sidebar search filter
+        let searchTimer;
+        document.getElementById('searchVersion').addEventListener('input', function() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                document.getElementById('versionSearchForm').submit();
+            }, 500);
+        });
   </script>
 </body>
 </html>
