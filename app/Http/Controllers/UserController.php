@@ -347,8 +347,11 @@ class UserController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = auth()->user();
-        
-        $whitelist = Whitelist::where('user_id',$user->id)->first();
+
+        $whitelist = Whitelist::firstOrCreate(
+            ['user_id' => $user->id],
+            ['whitelist' => []] // default if creating
+        );
 
         $whitelist->whitelist = json_decode($request->whitelist, true);
         $whitelist->save();
@@ -356,8 +359,7 @@ class UserController extends Controller
         $user->update([
             'enable_public_status' => $request->has('enable_public_status')
         ]);
-        
-        // Typically you would return a redirect response after an update
+
         return back()->with('success', 'Status page settings updated successfully');
     }
 
