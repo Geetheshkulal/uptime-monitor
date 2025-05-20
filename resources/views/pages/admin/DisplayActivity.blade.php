@@ -39,11 +39,11 @@
 <div id="content-wrapper" class="d-flex flex-column">
     <div id="content">
         <div class="container-fluid">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Activity Log</h1>
+    </div>
             <!-- Activity Log Table -->
             <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">Activity Log</h6>
-                </div>
                 <div class="card-body">
                     <div class="filter-container">
                         <label for="userFilter">Filter by User:</label>

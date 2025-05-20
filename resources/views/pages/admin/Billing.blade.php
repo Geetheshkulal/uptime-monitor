@@ -11,28 +11,21 @@
 @endpush
 
 <div class="page-content">
+      <div class="container-fluid">
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4 mx-3 mt-3">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Subscription Plans</h1>
     </div>
 
     <!-- Content Row -->
-    <div class="row mx-3">
-        <div class="col-12">
+ 
             <div class="card shadow mb-4">
-                <!-- Card Header -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white px-4">
-                    <h6 class="m-0 font-weight-bold text-primary">All Subscription Plans</h6>
-                    <!-- <a href="#" class="btn btn-primary btn-sm">
-                        <i class="fas fa-plus"></i> Add New
-                    </a> -->
-                </div>
                 
                 <!-- Card Body -->
                 <div class="card-body px-4 py-4">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead class="thead-light">
+                            <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Amount</th>
@@ -67,8 +60,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+
+</div>
 </div>
 
 <!-- Edit Subscription Modal -->
