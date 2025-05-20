@@ -95,7 +95,7 @@
                             <div class="h5 mb-0 font-weight-bold text-gray-800">₹ {{$total_revenue}}</div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-dollar-sign text-warning"></i>
+                            <i class="fas fa-rupee-sign text-warning"></i>
                         </div>
                     </div>
                 </div>
@@ -208,6 +208,7 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
+                                stepSize: 1,
                                 callback: function(value) {
                                     return value.toLocaleString();
                                 }
@@ -226,7 +227,7 @@
                 data: {
                     labels: month_labels,
                     datasets: [{
-                        label: 'Revenue ($)',
+                        label: 'Revenue (₹)',
                         data: revenue_by_month,
                         backgroundColor: 'rgba(54, 185, 204, 0.5)',
                         borderColor: 'rgba(54, 185, 204, 1)',
@@ -244,8 +245,9 @@
                         y: {
                             beginAtZero: true,
                             ticks: {
+                                stepSize: 100,
                                 callback: function(value) {
-                                    return '$' + value.toLocaleString();
+                                    return '₹' + value.toLocaleString();
                                 }
                             }
                         }

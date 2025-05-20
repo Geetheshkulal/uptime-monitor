@@ -116,7 +116,7 @@
             font-weight: 700;
             color: var(--gray);
             padding: 1rem;
-            background: #f8f9fc;
+
         }
 
         .table td {
@@ -151,7 +151,7 @@
     <div id="content">
         <div class="container-fluid">
             <!-- Page Header -->
-            <div data-aos="fade-up" class="d-flex align-items-center justify-content-between mb-4 fade-in">
+            <div class="d-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800 font-600">Support Tickets</h1>
                 <a class="btn btn-primary" href="{{route('raise.tickets')}}">
                     <i class="fas fa-plus fa-sm"></i> Raise Ticket
@@ -159,8 +159,8 @@
             </div>
 
             <!-- Tickets Table -->
-            <div class="fade-in">
-                <div data-aos="fade-up" class="card mb-4 px-4 skeleton">
+       
+                <div class="card mb-4 px-4">
                     <br>
                     <div class="card-body p-0">
                         <div class="table-responsive" style="min-width: 100%;">
@@ -213,7 +213,7 @@
                     </div>
                     <br>
                 </div>
-            </div>
+           
         </div>
     </div>
 </div>

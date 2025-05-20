@@ -114,14 +114,16 @@
     <div id="content">
         <div class="container-fluid">
             <!-- Activity Log Table -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">Manage Coupon Codes</h6>
+            
+              <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Manage Coupon Codes</h1>
+  
             
                     <button class="btn btn-primary" data-toggle="modal" data-target="#addCouponModal">
                         Create Coupon Codes
                       </button>
-                </div>
+              </div>
+              <div class="card shadow mb-4">
                 <div class="card-body">
                     
                     <div class="table-responsive">
@@ -164,17 +166,16 @@
                                     <td>{{ $coupon->updated_at->format('d M Y, h:i A') }}</td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                        <a href="#" data-toggle="modal" data-target="#editCouponModal{{ $coupon->id }}">
+                                             <a href="{{ route('view.claimed.users', ['coupon_id' => $coupon->id]) }}">
+                                            <i class="fas fa-eye" style="color: #2dce89; cursor: pointer;" title="View Coupon claimed users"></i>
+                                        </a>
+
+                                        <a href="#" data-toggle="modal" data-target="#editCouponModal{{ $coupon->id }}"class="ml-2">
                                             <i class="fas fa-edit" style="color: #2653d4; cursor: pointer;"></i>
                                         </a>
 
                                         <a href="#" data-toggle="modal" data-target="#deleteCouponModal{{ $coupon->id }}" class="ml-2">
                                             <i class="fas fa-trash" style="color: #e74a3b; cursor: pointer;"></i>
-                                        </a>
-
-                                        <a href="{{ route('view.claimed.users', ['coupon_id' => $coupon->id]) }}" class="ml-2">
-                                        {{-- <a href="#" class="ml-2"> --}}
-                                            <i class="fas fa-eye" style="color: #2dce89; cursor: pointer;" title="View Coupon claimed users"></i>
                                         </a>
                                         </div>
 

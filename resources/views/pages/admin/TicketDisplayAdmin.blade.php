@@ -29,13 +29,24 @@
     .tippy-box[data-theme~='custom'] .tippy-arrow {
         color: #0e55e1; 
     }
-
+    .card-counter {
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .card-counter:hover {
+            transform: translateY(-5px);
+            box-shadow: 2px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .card-counter i {
+            font-size: 2.5rem;
+            opacity: 0.3;
+        }
 </style>
 
 
-<div class="page-content">
+<div class="container-fluid">
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4 mx-3 mt-3">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Tickets</h1>
     </div>
 
@@ -185,8 +196,6 @@
 
 
     <!-- Content Row -->
-    <div class="row mx-3">
-        <div class="col-12">
             <div class="card shadow mb-4">
                 <!-- Card Header -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white px-4">
@@ -200,7 +209,7 @@
                 <div class="card-body px-4 py-4">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead class="thead-light">
+                            <thead>
                                 <tr>
                                     <th>SL No</th>
                                     <th>Ticket Id</th>
@@ -260,8 +269,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
 
 <!-- Edit Subscription Modal -->
 <div class="modal fade" id="editSubscriptionModal" tabindex="-1" role="dialog" aria-labelledby="editSubscriptionModalLabel" aria-hidden="true">

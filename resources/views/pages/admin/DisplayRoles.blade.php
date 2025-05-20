@@ -10,10 +10,11 @@
     }
 </style>
 @endpush
-
+<div id="content-wrapper" class="d-flex flex-column">
 <div class="page-content">
+    <div class="container-fluid">
     <!-- Page Heading with proper margins -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4 mx-3 mt-3">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Roles Management</h1>
         @can('add.role')
             <a href="{{ route('add.role') }}" class="d-sm-inline-block btn btn-primary shadow-sm mt-2 mt-md-0">
@@ -23,19 +24,12 @@
     </div>
 
     <!-- Content Row with container margins -->
-    <div class="row mx-3">
-        <div class="col-12">
+
             <div class="card shadow mb-4">
-                <!-- Card Header with padding -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white px-4">
-                    <h6 class="m-0 font-weight-bold text-primary">All Roles</h6>
-                </div>
-                
-                <!-- Card Body with consistent padding -->
                 <div class="card-body px-4 py-4">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="rolesTable" width="100%" cellspacing="0">
-                            <thead class="thead-light">
+                            <thead>
                                 <tr>
                                     <th width="5%">#</th>
                                     <th>Role Name</th>
@@ -86,9 +80,10 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+  
 
+</div>
+</div>
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
