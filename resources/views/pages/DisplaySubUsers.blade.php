@@ -175,7 +175,7 @@
             "info": false,
             "order": [[0, "asc"]],
             "columnDefs": [
-                { "orderable": false, "targets": [6] } // Disable sorting for action column
+                { "orderable": false, "targets": [3] } // Disable sorting for action column
             ]
         });
     });

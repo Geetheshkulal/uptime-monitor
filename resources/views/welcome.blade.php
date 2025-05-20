@@ -850,14 +850,8 @@
             <a href="#pricing" class="text-light text-decoration-none hover-text-primary transition">
               <i class="fas fa-chevron-right me-1 text-primary opacity-50 fs-8"></i> Pricing
             </a>
-            <a href="#" class="text-light text-decoration-none hover-text-primary transition">
-              <i class="fas fa-chevron-right me-1 text-primary opacity-50 fs-8"></i> Integrations
-            </a>
-            <a href="#" class="text-light text-decoration-none hover-text-primary transition">
-              <i class="fas fa-chevron-right me-1 text-primary opacity-50 fs-8"></i> API
-            </a>
-            <a href="#" class="text-light text-decoration-none hover-text-primary transition">
-              <i class="fas fa-chevron-right me-1 text-primary opacity-50 fs-8"></i> Status
+            <a href="/changelog" class="text-light text-decoration-none hover-text-primary transition">
+              <i class="fas fa-chevron-right me-1 text-primary opacity-50 fs-8"></i> Changelog
             </a>
           </div>
         </div>

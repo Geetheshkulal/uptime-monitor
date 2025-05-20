@@ -32,6 +32,7 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\StatusPageController;
 use App\Http\Controllers\PublicStatusPageController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\ChangelogController;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
@@ -80,6 +81,10 @@ Route::post('/email/verification-notification',function (Request $request) {
     return back()->with('message','Verification Email Sent.');
 })->middleware(['auth','throttle:6,1'])->name('verification.send');
 // end
+
+
+
+Route::get('/changelog',[ChangelogController::class,'ChangelogPage']);
 
 Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     
@@ -204,6 +209,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/sub-user/{id}/edit-permissions', [UserController::class, 'EditSubUserPermissions'])->name('edit.sub.user.permissions');
     Route::post('/sub-user/{id}/update-permissions', [UserController::class, 'UpdateSubUserPermissions'])->name('update.sub.user.permissions');
 
+    Route::post('add/changelog',[ChangelogController::class,'AddChangelog'])->name('add.changelog');
+    Route::delete('/changelog/{id}', [ChangelogController::class, 'destroy'])->name('changelog.destroy');
+    Route::put('/changelogs/{changelog}', [ChangelogController::class, 'update'])->name('changelog.update');
 });
 
 

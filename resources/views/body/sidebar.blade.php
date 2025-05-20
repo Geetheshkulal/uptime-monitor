@@ -1,6 +1,5 @@
 <style>
     /* ========== SIDEBAR STYLES ========== */
- 
 
     .nav-item {
         position: relative;
@@ -71,132 +70,132 @@
     }
 
     .trial-banner {
-    border: 1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 4px 15px rgba(106, 63, 186, 0.25);
-    transition: all 0.3s ease;
-    margin: 0 0.25rem;
-    overflow: hidden;
-    background: linear-gradient(135deg, #6e45e2 0%, #88d3ce 100%);
-    border-radius: 8px !important;
-}
-.trial-banner:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(106, 63, 186, 0.35);
-}
-
-.trial-badge {
-    background: linear-gradient(to right, #f6d365 0%, #fda085 100%) !important;
-    color: #3a3a3a !important;
-    font-weight: 700 !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.trial-icon {
-    background: rgba(255,255,255,0.25) !important;
-    color: #fff !important;
-}
-
-.trial-notice span {
-    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
-
-.upgrade-btn {
-    background: linear-gradient(to right, #f83600 0%, #f9d423 100%);
-    color: white !important;
-    font-weight: 600;
-    padding: 0.4rem 1rem;
-    border: none;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    margin-top: 0.5rem;
-    transition: all 0.3s ease;
-    font-size: 0.7rem;
-    text-decoration: none !important; 
-    display: inline-block;
-}
-
-.upgrade-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-    color: white !important;
-    text-decoration: none !important; 
-}
-
-.progress {
-    background: rgba(0,0,0,0.15) !important;
-    height: 4px !important;
-}
-
-.progress-bar {
-    background: linear-gradient(to right, #a1ffce, #faffd1) !important;
-}
-
-.alert-info {
-    background: linear-gradient(135deg, #8597df 0%, #2f07f9 100%);
-    color: white;
-    border: none;
-    border-radius: 15px;
-    padding: 20px 25px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
-    /* animation: slideIn 0.6s ease-out; */
-    margin: 15px 0;
-    /* border-left: 5px solid #f89603; */
-}
-
-.alert-info::before {
-    content: "🎉";
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2.2rem;
-    opacity: 0.3;
-}
-
-.alert-info strong {
-    color: #fff;
-    font-size: 1.3em;
-    letter-spacing: 1.5px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    position: relative;
-    padding: 5px 10px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 6px;
-    margin-left: 8px;
-    transition: all 0.3s ease;
-}
-
-.alert-info strong:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.25);
-}
-
-@keyframes slideIn {
-    0% {
-        transform: translateX(100%);
-        opacity: 0;
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 4px 15px rgba(106, 63, 186, 0.25);
+        transition: all 0.3s ease;
+        margin: 0 0.25rem;
+        overflow: hidden;
+        background: linear-gradient(135deg, #6e45e2 0%, #88d3ce 100%);
+        border-radius: 8px !important;
     }
-    100% {
-        transform: translateX(0);
-        opacity: 1;
+    .trial-banner:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(106, 63, 186, 0.35);
     }
-}
 
-/* Optional: Add if you want a confetti effect */
-.alert-info::after {
-    content: "";
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
-    background: radial-gradient(circle, transparent 20%, rgba(255,255,255,0.1) 20%);
-    background-size: 10px 10px;
-    opacity: 0.2;
-    pointer-events: none;
-}
+    .trial-badge {
+        background: linear-gradient(to right, #f6d365 0%, #fda085 100%) !important;
+        color: #3a3a3a !important;
+        font-weight: 700 !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .trial-icon {
+        background: rgba(255,255,255,0.25) !important;
+        color: #fff !important;
+    }
+
+    .trial-notice span {
+        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .upgrade-btn {
+        background: linear-gradient(to right, #f83600 0%, #f9d423 100%);
+        color: white !important;
+        font-weight: 600;
+        padding: 0.4rem 1rem;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        margin-top: 0.5rem;
+        transition: all 0.3s ease;
+        font-size: 0.7rem;
+        text-decoration: none !important; 
+        display: inline-block;
+    }
+
+    .upgrade-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        color: white !important;
+        text-decoration: none !important; 
+    }
+
+    .progress {
+        background: rgba(0,0,0,0.15) !important;
+        height: 4px !important;
+    }
+
+    .progress-bar {
+        background: linear-gradient(to right, #a1ffce, #faffd1) !important;
+    }
+
+    .alert-info {
+        background: linear-gradient(135deg, #8597df 0%, #2f07f9 100%);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 20px 25px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
+        /* animation: slideIn 0.6s ease-out; */
+        margin: 15px 0;
+        /* border-left: 5px solid #f89603; */
+    }
+
+    .alert-info::before {
+        content: "🎉";
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2.2rem;
+        opacity: 0.3;
+    }
+
+    .alert-info strong {
+        color: #fff;
+        font-size: 1.3em;
+        letter-spacing: 1.5px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        position: relative;
+        padding: 5px 10px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 6px;
+        margin-left: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .alert-info strong:hover {
+        transform: scale(1.05);
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    @keyframes slideIn {
+        0% {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    /* Optional: Add if you want a confetti effect */
+    .alert-info::after {
+        content: "";
+        position: absolute;
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
+        background: radial-gradient(circle, transparent 20%, rgba(255,255,255,0.1) 20%);
+        background-size: 10px 10px;
+        opacity: 0.2;
+        pointer-events: none;
+    }
 
 </style>
 
@@ -293,79 +292,78 @@
 
    
 
-        @hasrole('superadmin')
+    @hasrole('superadmin')
         <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('admin.dashboard') }}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
         </li>
-        @endhasrole
+    @endhasrole
 
-        @can('see.users')
+    @can('see.users')
         <li class="nav-item {{ request()->routeIs('display.users') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('display.users') }}">
                 <i class="fas fa-user"></i>
                 <span>Users</span>
             </a>
         </li>
-        @endcan
+    @endcan
 
-        @can('see.roles')
+    @can('see.roles')
         <li class="nav-item {{ request()->routeIs('display.roles') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('display.roles') }}">
                 <i class="fas fa-user-tag"></i>
                 <span>Roles</span>
             </a>
         </li>
-        @endcan
+    @endcan
 
         @hasrole('superadmin')
-        <li class="nav-item {{ request()->routeIs('display.permissions') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('display.permissions') }}">
-                <i class="fas fa-door-open"></i>
-                <span>Permissions</span>
-            </a>
-        </li>
-    @hasrole('superadmin')
-    @php
-    $unreadTickets = \App\Models\Ticket::where('is_read', false)->count();
-    @endphp
-    <li class="nav-item {{ request()->routeIs('tickets') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('tickets') }}">
-            
-            <i class="fas fa-ticket-alt"></i>
-            <span>Tickets</span>
-            @if($unreadTickets > 0)
-            <span class="badge badge-danger ml-2" style="font-size: 10px; padding: 2px 5px;">New {{$unreadTickets}}</span>
-            @endif
-        </a>
-    </li>
+            <li class="nav-item {{ request()->routeIs('display.permissions') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('display.permissions') }}">
+                    <i class="fas fa-door-open"></i>
+                    <span>Permissions</span>
+                </a>
+            </li>
+            @hasrole('superadmin')
+                @php
+                    $unreadTickets = \App\Models\Ticket::where('is_read', false)->count();
+                @endphp
+                <li class="nav-item {{ request()->routeIs('tickets') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('tickets') }}">
+                        
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>Tickets</span>
+                        @if($unreadTickets > 0)
+                        <span class="badge badge-danger ml-2" style="font-size: 10px; padding: 2px 5px;">New {{$unreadTickets}}</span>
+                        @endif
+                    </a>
+                </li>
 
-    <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
-        <a class="nav-link" href="{{ route('display.coupons') }}">
-            <i class="fas fa-percent"></i>
-            <span>Coupons</span>
-        </a>
-    </li>
+                <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('display.coupons') }}">
+                        <i class="fas fa-percent"></i>
+                        <span>Coupons</span>
+                    </a>
+                </li>
+            @endhasrole
 
-    @endhasrole
-
-        <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('billing') }}">
-                <i class="fas fa-money-bill"></i>
-                <span>Billing</span>
-            </a>
-        </li>
+            <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('billing') }}">
+                    <i class="fas fa-money-bill"></i>
+                    <span>Billing</span>
+                </a>
+            </li>
         @endhasrole
 
         @can('see.activity')
-        <li class="nav-item {{ request()->routeIs('display.activity') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('display.activity') }}">
-                <i class="fas fa-chart-line"></i>
-                <span>Activity Log</span>
-            </a>
-        </li>
+            <li class="nav-item {{ request()->routeIs('display.activity') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('display.activity') }}">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Activity Log</span>
+                </a>
+            </li>
         @endcan
 
             <!-- Helpdesk item at bottom -->
@@ -419,7 +417,7 @@
                         </div>
                     @endif
 
-                @endif
+        @endif
             @endhasrole
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
