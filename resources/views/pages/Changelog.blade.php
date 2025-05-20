@@ -175,15 +175,18 @@
               </h3>
 
               @hasrole('superadmin')
-                <form action="{{ route('changelog.destroy', $changelog->id) }}" method="POST" class="d-inline-block ms-auto" onsubmit="return confirm('Are you sure you want to delete version {{ $changelog->version }}?');">
+                {{-- <form action="{{ route('changelog.destroy', $changelog->id) }}" method="POST" class="d-inline-block ms-auto" onsubmit="return confirm('Are you sure you want to delete version {{ $changelog->version }}?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-danger me-2">
                     <i class="fas fa-trash-alt"></i> Delete
                     </button>
-                </form>
+                </form> --}}
+                  
+                <button type="button" class="btn btn-sm btn-danger me-2 d-inline-block ms-auto" data-bs-toggle="modal" data-bs-target="#deleteChangelogModal{{ $changelog->id }}">
+                  <i class="fas fa-trash-alt"></i> Delete
+                </button>
               
-
               <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editChangelogModal{{ $changelog->id }}">
                 <i class="fas fa-edit"></i> Edit
               </button>
@@ -241,6 +244,30 @@
               </div>
             </div>
           </div>
+
+      <!-- Delete Modal -->
+<div class="modal fade" id="deleteChangelogModal{{ $changelog->id }}" tabindex="-1" aria-labelledby="deleteChangelogModalLabel{{ $changelog->id }}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="{{ route('changelog.destroy', $changelog->id) }}" method="POST">
+        @csrf
+        @method('DELETE')
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteChangelogModalLabel{{ $changelog->id }}">Delete Changelog - Version {{ $changelog->version }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to permanently delete changelog version <strong>{{ $changelog->version }}</strong>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
           @endforeach
 
           <!-- Pagination -->
