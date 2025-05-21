@@ -56,7 +56,7 @@
     
     .search-box {
         position: relative;
-        min-width: 250px;
+        min-width: 290px;
     }
     
     .search-box input {
@@ -80,18 +80,23 @@
     .search-box .btn i {
         font-size: 16px;
     }
+     .small-placeholder::placeholder {
+        font-size: 0.7rem;
+        color: #6c757d; 
+    }
 
 </style>
 @endpush
 
 <div class="container-fluid">
     <div class="search-header">
-        <h4>Visitor Traffic Logs</h4>
+        <h1 class="h3 mb-0 text-gray-800">Visitor Traffic Logs</h1>
         <div class="search-box">
             <form method="GET" action="" class="d-flex">
-                <input type="text" name="search" class="form-control" 
-                       value="{{ request('search') }}" 
-                       placeholder="Search by IP, Browser, Platform, URL or Method">
+                <input type="text" name="search" class="form-control small-placeholder" 
+                    value="{{ request('search') }}" 
+                    placeholder="Search by IP, Browser, URL, Platform or Method">
+  
                 <button type="submit" class="btn">
                     <i class="fas fa-search"></i>
                 </button>
@@ -119,7 +124,7 @@
                         </div>
                         <div class="col-md-2">
                             <strong>Method:</strong>
-                            <span class="badge bg-primary">{{ $log->method }}</span>
+                            <span class="badge">{{ $log->method }}</span>
                         </div>
                         <div class="col-md-2">
                             <strong>Time:</strong> {{ $log->created_at->format('Y-m-d H:i') }}
