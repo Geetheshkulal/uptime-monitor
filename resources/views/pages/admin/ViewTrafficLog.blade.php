@@ -105,13 +105,33 @@
     </div>
 
     <div class="row g-3">
-    @foreach($trafficLogs as $log)
-    <div class="col-12">
-        <div class="card shadow-sm traffic-item mb-3">
-            <div class="card-body">
-                <div class="row text-sm align-items-center">
-                    <div class="col-md-2">
-                        <strong>IP:</strong> <span class="text-primary">{{ $log->ip }}</span>
+        @foreach($trafficLogs as $log)
+        <div class="col-12">
+            <div class="card shadow-sm traffic-item mb-3">
+                <div class="card-body">
+                    <div class="row text-sm">
+                        <div class="col-md-2">
+                            <strong>ID:</strong> {{ $log->id }}
+                        </div>
+                        <div class="col-md-2">
+                            <strong>IP:</strong> <span class="text-primary">{{ $log->ip }}</span>
+                            @if (!empty($log->country))
+                        <img src="https://flagcdn.com/24x18/{{ strtolower($log->country) }}.png" alt="{{ $log->country_code }}" width="24" height="18">
+                            @endif
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Browser:</strong> {{ $log->browser }}
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Platform:</strong> {{ $log->platform }}
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Method:</strong>
+                            <span class="badge bg-primary">{{ $log->method }}</span>
+                        </div>
+                        <div class="col-md-2">
+                            <strong>Time:</strong> {{ $log->created_at->format('Y-m-d H:i') }}
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <strong>Browser:</strong> {{ $log->browser }}

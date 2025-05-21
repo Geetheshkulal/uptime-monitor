@@ -25,6 +25,7 @@ class LogTraffic
             if($response->successful()){
                 $data=$response->json();
                 $isp = $data['org'] ?? 'Unknown ISP'; 
+                $country = $data['country'] ?? 'Unknown';
             }      
         }catch(\Exception $e){
 
@@ -34,6 +35,7 @@ class LogTraffic
         $log->ip = $request->ip();
         $log->user_agent = $request->userAgent();
         $log->isp = $isp;
+        $log->country = $country;
         $log->browser = $agent->browser();
         $log->platform = $agent->platform();
         $log->referrer = $request->headers->get('referer');
