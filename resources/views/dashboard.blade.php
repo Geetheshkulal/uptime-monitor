@@ -55,15 +55,8 @@
     display: none; /* Hides the scrollbar */
 }
 
-/* Hide scrollbar for Firefox */
-#accordionSidebar {
-    scrollbar-width: none; /* Hides the scrollbar */
-}
 
-/* Optional: Prevent content from being hidden by the scrollbar */
-#accordionSidebar > * {
-    margin-right: -15px; /* Adjust content to prevent overlap */
-}
+
         .scroll-to-top {
             width: 40px;
             height: 40px;

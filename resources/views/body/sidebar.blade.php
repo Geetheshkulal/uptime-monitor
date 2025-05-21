@@ -170,16 +170,6 @@
         background: rgba(255, 255, 255, 0.25);
     }
 
-    @keyframes slideIn {
-        0% {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        100% {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
 
     /* Optional: Add if you want a confetti effect */
     .alert-info::after {
