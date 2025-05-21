@@ -212,7 +212,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('add/changelog',[ChangelogController::class,'AddChangelog'])->name('add.changelog');
     Route::delete('/changelog/{id}', [ChangelogController::class, 'destroy'])->name('changelog.destroy');
     Route::put('/changelogs/{changelog}', [ChangelogController::class, 'update'])->name('changelog.update');
-    
+    Route::get('/changelog', [ChangelogController::class, 'ChangelogPage'])->name('changelog.page');
 });
 
 
@@ -220,8 +220,6 @@ Route::post('/subscribe', [PushNotificationController::class , 'subscribe']);
 
 
 Route::get('/track/{token}.png', [TrackingController::class, 'pixel'])->withoutMiddleware(['web', 'verified', 'auth', \App\Http\Middleware\VerifyCsrfToken::class]);
-
-Route::get('/changelog', [ChangelogController::class, 'ChangelogPage'])->name('changelog.page');
 
 require __DIR__.'/auth.php';
 

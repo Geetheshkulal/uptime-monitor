@@ -14,6 +14,7 @@ class Changelog extends Model
         'title',
         'description',
         'version',
-        'release_date'
+        'release_date',
+        'type',
     ];
 }

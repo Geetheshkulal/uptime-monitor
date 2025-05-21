@@ -127,9 +127,16 @@
       }
 
       .changelog-sidebar {
-        position: static;
+        position: fixed;
         max-height: none;
       }
+        .form-check {
+          display: inline-block;
+          margin-right: 15px;
+        }
+        .form-check-input {
+            margin-top: 0.15em;
+        }
     }
   </style>
 </head>
@@ -194,9 +201,25 @@
               </button>
               @endhasrole
             </div>
-            <p class="version-date mt-2">
-              Released on {{ ($changelog->release_date)?(\Carbon\Carbon::parse($changelog->release_date)->format('j F, Y')):'null' }}
-            </p>
+           <div class="d-flex align-items-center flex-wrap gap-2 mt-2 mb-2">
+    <p class="version-date mb-0">
+        Released on {{ $changelog->release_date ? \Carbon\Carbon::parse($changelog->release_date)->format('j F, Y') : 'null' }}
+    </p>
+
+    @if($changelog->type)
+        @foreach(explode(',', $changelog->type) as $type)
+            <span class="badge text-white
+                @if($type === 'new') bg-success
+                @elseif($type === 'improved') bg-info
+                @elseif($type === 'fixed') bg-warning text-dark
+                @endif">
+                {{ ucfirst($type) }}
+            </span>
+        @endforeach
+    @endif
+</div>
+
+
             <h4 class="version-subtitle">{{ $changelog->title }}</h4>
             <div class="change-content">
               {!! $changelog->description !!}
@@ -229,6 +252,33 @@
                             <div class="text-danger mt-1">{{ $message }}</div>
                        @enderror
                     </div>
+  <div class="mb-3">
+    <label class="form-label">Type</label>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="edittypes[]" value="new" id="editTypeNew{{ $changelog->id }}" 
+            {{ str_contains($changelog->type, 'new') ? 'checked' : '' }}>
+        <label class="form-check-label" for="editTypeNew{{ $changelog->id }}">
+            New
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="edittypes[]" value="improved" id="editTypeImproved{{ $changelog->id }}"
+            {{ str_contains($changelog->type, 'improved') ? 'checked' : '' }}>
+        <label class="form-check-label" for="editTypeImproved{{ $changelog->id }}">
+            Improved
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="edittypes[]" value="fixed" id="editTypeFixed{{ $changelog->id }}"
+            {{ str_contains($changelog->type, 'fixed') ? 'checked' : '' }}>
+        <label class="form-check-label" for="editTypeFixed{{ $changelog->id }}">
+            Fixed
+        </label>
+    </div>
+    @error('edittypes')
+        <div class="text-danger mt-1">{{ $message }}</div>
+    @enderror
+</div>
                     <div class="mb-3">
                       <label class="form-label">Description*</label>
                       <div id="edit-editor-container-{{ $changelog->id }}"></div>
@@ -269,84 +319,83 @@
               </div>
             </div>
           </div>
-
           @endforeach
 
-          <!-- Pagination -->
-          {{-- @if ($changelogs->lastPage() > 1)
-          <nav aria-label="Changelog pagination">
-            <ul class="pagination">
-              <li class="page-item {{ $changelogs->onFirstPage() ? 'disabled' : '' }}">
-                <a class="page-link" href="{{ $changelogs->previousPageUrl() }}" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              @for ($page = 1; $page <= $changelogs->lastPage(); $page++)
-              <li class="page-item {{ $changelogs->currentPage() == $page ? 'active' : '' }}">
-                <a class="page-link" href="{{ $changelogs->url($page) }}">{{ $page }}</a>
-              </li>
-              @endfor
-              <li class="page-item {{ $changelogs->hasMorePages() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $changelogs->nextPageUrl() }}" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
-            <p class="pagination-info">Page {{ $changelogs->currentPage() }} of {{ $changelogs->lastPage() }}</p>
-          </nav>
-          @endif --}}
-           @if ($changelogs->lastPage() > 1)
-            <nav aria-label="Changelog pagination">
-                <ul class="pagination">
-                    <li class="page-item {{ $changelogs->onFirstPage() ? 'disabled' : '' }}">
-                        <a class="page-link" href="{{ $changelogs->previousPageUrl() }}{{ $search ? '&search='.$search : '' }}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    @for ($page = 1; $page <= $changelogs->lastPage(); $page++)
-                    <li class="page-item {{ $changelogs->currentPage() == $page ? 'active' : '' }}">
-                        <a class="page-link" href="{{ $changelogs->url($page) }}{{ $search ? '&search='.$search : '' }}">{{ $page }}</a>
-                    </li>
-                    @endfor
-                    <li class="page-item {{ $changelogs->hasMorePages() ? '' : 'disabled' }}">
-                        <a class="page-link" href="{{ $changelogs->nextPageUrl() }}{{ $search ? '&search='.$search : '' }}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-                <p class="pagination-info">Page {{ $changelogs->currentPage() }} of {{ $changelogs->lastPage() }}</p>
-            </nav>
-            @endif
+
+
+          @if ($changelogs->lastPage() > 1)
+              <nav aria-label="Changelog pagination">
+                  <ul class="pagination">
+                      <li class="page-item {{ $changelogs->onFirstPage() ? 'disabled' : '' }}">
+                          <a class="page-link" 
+                            href="{{ $changelogs->previousPageUrl() }}{{ request('types') ? '&' . http_build_query(['types' => request('types')]) : '' }}{{ request('search') ? '&search=' . request('search') : '' }}" 
+                            aria-label="Previous">
+                              <span aria-hidden="true">&laquo;</span>
+                          </a>
+                      </li>
+                      @for ($page = 1; $page <= $changelogs->lastPage(); $page++)
+                          <li class="page-item {{ $changelogs->currentPage() == $page ? 'active' : '' }}">
+                              <a class="page-link" 
+                                href="{{ $changelogs->url($page) }}{{ request('types') ? '&' . http_build_query(['types' => request('types')]) : '' }}{{ request('search') ? '&search=' . request('search') : '' }}">
+                                  {{ $page }}
+                              </a>
+                          </li>
+                      @endfor
+                      <li class="page-item {{ $changelogs->hasMorePages() ? '' : 'disabled' }}">
+                          <a class="page-link" 
+                            href="{{ $changelogs->nextPageUrl() }}{{ request('types') ? '&' . http_build_query(['types' => request('types')]) : '' }}{{ request('search') ? '&search=' . request('search') : '' }}" 
+                            aria-label="Next">
+                              <span aria-hidden="true">&raquo;</span>
+                          </a>
+                      </li>
+                  </ul>
+              </nav>
+          @endif
         </div>
 
-        <!-- Sidebar -->
-        {{-- <div class="col-lg-3">
-          <div class="changelog-sidebar card p-3 shadow-sm rounded">
-            <h5 class="mb-3">Versions</h5>
-            <input type="text" id="searchVersion" class="form-control mb-3" placeholder="Search version..." aria-label="Search versions" />
-
-            <nav id="versionNav" class="version-nav">
-              @foreach($changelogs as $changelog)
-              <a href="#v{{ str_replace('.', '-', $changelog->version) }}" class="nav-link version-link" data-version="{{ $changelog->version }}">
-                {{ $changelog->version }}
-              </a>
-              @endforeach
-            </nav>
-          </div>
-        </div> --}}
-
          <!-- Sidebar -->
-<div class="col-lg-3">
-    <div class="changelog-sidebar card p-3 shadow-sm rounded">
-        {{-- <h5 class="mb-3">Search filter</h5> --}}
-        <h5 class="mb-3"><i class="fa fa-search me-2"></i>Search filter</h5>
-                <form id="versionSearchForm" method="GET" action="{{ url()->current() }}">
-                        <input type="text" id="searchVersion" name="search" class="form-control mb-3" 
-                            placeholder="Search by title/description/version" aria-label="Search versions"
-                            value="{{ $search ?? '' }}"
-                            style="font-size: 0.85rem;" />
-              </form>
+            <div class="col-lg-3">
+                <div class="changelog-sidebar card p-3 shadow-sm rounded">
+                    <h6 class="mb-2"><i class="fa fa-filter me-1"></i>Filter by Type</h6>
+                    
+                    <!-- Type Filter Checkboxes -->
+            <form id="typeFilterForm" method="GET" action="{{ url()->current() }}">
+                <div class="mb-3 d-flex gap-3 flex-wrap">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="types[]" value="new" id="filterTypeNew" 
+                            {{ in_array('new', request('types', [])) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="filterTypeNew">
+                            <span class="text-dark" style="font-size: 0.9rem;">New</span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="types[]" value="improved" id="filterTypeImproved"
+                            {{ in_array('improved', request('types', [])) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="filterTypeImproved">
+                            <span class="text-dark" style="font-size: 0.9rem;">Improved</span>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="types[]" value="fixed" id="filterTypeFixed"
+                            {{ in_array('fixed', request('types', [])) ? 'checked' : '' }}>
+                        <label class="form-check-label" for="filterTypeFixed">
+                            <span class="text-dark" style="font-size: 0.9rem;">Fixed</span>
+                        </label>
+                    </div>
+                </div>
 
+                <h6 class="mb-3"><i class="fa fa-search me-2"></i>Search</h6>
+                
+                <input type="text" id="searchVersion" name="search" class="form-control mb-3" 
+                  placeholder="Search by title/description/version" 
+                  value="{{ $search ?? '' }}" 
+                  style="font-size: 0.8rem;" />
+                    
+                <button type="submit" class="btn btn-primary btn-sm">Apply Filters</button>
+                @if(request('types') || request('search'))
+                    <a href="{{ url()->current() }}" class="btn btn-outline-secondary btn-sm ms-2">Clear</a>
+                @endif
+            </form>
               <!-- NEW VERSION NAVIGATION -->
               <nav id="versionNav" class="version-nav">
                   @if($search ?? false)
@@ -412,6 +461,30 @@
               @enderror
             </div>
 
+ <div class="mb-3">
+    <label class="form-label d-block mb-2">Type</label>
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="types[]" value="new" id="typeNew">
+        <label class="form-check-label" for="typeNew">New</label>
+    </div>
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="types[]" value="improved" id="typeImproved">
+        <label class="form-check-label" for="typeImproved">Improved</label>
+    </div>
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="types[]" value="fixed" id="typeFixed">
+        <label class="form-check-label" for="typeFixed">Fixed</label>
+    </div>
+
+    @error('types')
+        <div class="invalid-feedback d-block mt-1">{{ $message }}</div>
+    @enderror
+</div>
+
+
             <div class="mb-3">
               <label class="form-label">Description*</label>
               <div id="add-editor-container" class="@error('description') is-invalid @enderror"></div>
@@ -455,6 +528,7 @@
       placeholder: 'Describe the changes in detail...',
       theme: 'snow'
     });
+    
 
     function stripTags(original) {
       return original.replace(/(<([^>]+)>)/gi, "");
