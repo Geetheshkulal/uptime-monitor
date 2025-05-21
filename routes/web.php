@@ -160,12 +160,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/display/roles', action: [RoleController::class,'DisplayRoles'])->middleware('permission:see.roles')->name('display.roles');
     Route::get('/admin/display/permissions', [PermissionController::class, 'DisplayPermissions'])->middleware('role:superadmin')->name('display.permissions');
     Route::get('/admin/display/user/{id}', action: [UserController::class,'ShowUser'])->middleware('permission:see.users')->name('show.user');
+   
 
     // Route::get('/admin/users', [AdminController::class, 'AddUser'])->name('add.user.form');
     Route::post('/admin/add/users', [UserController::class, 'storeUser'])->middleware('permission:add.user')->name('add.user');
     Route::get('/admin/edit/user/{id}', [UserController::class, 'EditUsers'])->middleware('permission:edit.user')->name('edit.user');
     Route::put('/admin/edit/user/{id}', [UserController::class, 'UpdateUsers'])->middleware('permission:edit.user')->name('update.user');
-    Route::delete('/admin/delete/user/{id}', [UserController::class, 'DeleteUser'])->middleware('permission:delete.user')->name('delete.user');
+    Route::delete('/admin/delete/user/{id}', [UserController::class, 'DeleteUser'])->middleware('permission:delete.user')->name('delete.user'); 
+    Route::post('/admin/restore/user/{id}',[UserController::class, 'RestoreUser'])->name('restore.user');
 
     Route::get('/admin/add/roles', [RoleController::class, 'AddRole'])->middleware(middleware: 'permission:add.role')->name('add.role');
     Route::post('/roles', [RoleController::class, 'StoreRole'])->middleware('permission:add.role')->name('store.role');
@@ -205,6 +207,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/display/subsusers', [UserController::class, 'DisplaySubUsers'])->middleware('premium_middleware')->name('display.sub.users');
 
     Route::post('/add/subsusers', [UserController::class, 'StoreSubUser'])->middleware('premium_middleware')->name('add.sub.user');
+    Route::delete('/delete/subsuser/${id}', [UserController::class, 'DeleteSubUser'])->middleware('premium_middleware')->name('delete.sub.user');
+
 
     Route::get('/sub-user/{id}/edit-permissions', [UserController::class, 'EditSubUserPermissions'])->name('edit.sub.user.permissions');
     Route::post('/sub-user/{id}/update-permissions', [UserController::class, 'UpdateSubUserPermissions'])->name('update.sub.user.permissions');
@@ -213,6 +217,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/changelog/{id}', [ChangelogController::class, 'destroy'])->name('changelog.destroy');
     Route::put('/changelogs/{changelog}', [ChangelogController::class, 'update'])->name('changelog.update');
     
+
 });
 
 

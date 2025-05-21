@@ -82,7 +82,7 @@ class UserController extends Controller
             // Basic search functionality
             $search = $request->input('search');
             
-            $users = User::with('roles')
+            $users = User::withTrashed()->with('roles')
                         ->when($search, function($query) use ($search) {
                             $query->where('name', 'like', "%{$search}%")
                                 ->orWhere('email', 'like', "%{$search}%")
@@ -98,7 +98,7 @@ class UserController extends Controller
 
         public function ShowUser($id)
         {
-            $user = User::with('roles')->findOrFail($id);
+            $user = User::withTrashed()->with('roles')->findOrFail($id);
 
             activity()
             ->causedBy(auth()->user()) // super admin
@@ -120,7 +120,7 @@ class UserController extends Controller
          //Edit user data page
         public function EditUsers($id)
         {
-            $user = User::findOrFail($id);
+            $user = User::withTrashed()->findOrFail($id);
             $roles = Role::whereNot('name','superadmin')->get();
 
             if($user->hasRole('user')||$user->hasRole('superadmin')){
@@ -133,7 +133,7 @@ class UserController extends Controller
         //Update User
         public function UpdateUsers(Request $request, $id)
         {
-            $user = User::findOrFail($id);
+            $user = User::withTrashed()->findOrFail($id);
 
             $oldValues = [
                 'name' => $user->name,
@@ -195,7 +195,7 @@ class UserController extends Controller
             try {
                 // Prevent deleting yourself
                 if ($id === auth()->id()) {
-                    return redirect()->back()->with('error', 'You cannot delete your own account!');
+                    return redirect()->route('display.users')->with('error', 'You cannot delete your own account!');
                 }
 
                 $user = User::findOrFail($id);
@@ -205,7 +205,7 @@ class UserController extends Controller
 
                 //cannot delete superadmin
                 if($user->hasRole('superadmin')){
-                    return redirect()->back()->with('error', 'Superadmin cannot be deleted.');
+                    return redirect()->route('display.users')->with('error', 'Superadmin cannot be deleted.');
 
                 }
 
@@ -231,11 +231,11 @@ class UserController extends Controller
                 ->log('A user account was deleted');
 
 
-                return redirect()->back()
+                return redirect()->route('display.users')
                     ->with('success', 'User deleted successfully!');
                     
             } catch (\Exception $e) {
-                return redirect()->back()
+                return redirect()->route('display.users')
                     ->with('error', 'Error deleting user: ' . $e->getMessage());
             }
         }
@@ -248,7 +248,7 @@ class UserController extends Controller
                 abort(403, 'Sub-users cannot view other sub-users.');
             }
 
-            $subUsers = User::where('parent_user_id', $user->id)->get();
+            $subUsers = User::withTrashed()->where('parent_user_id', $user->id)->get();
 
             return view('pages.DisplaySubUsers', compact('subUsers'));
         }
@@ -385,5 +385,23 @@ class UserController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Billing info updated successfully!');
+    }
+
+    public function RestoreUser($id){
+        $user = User::withTrashed()->findOrFail($id);
+
+        if ($user->trashed()) {
+            $user->restore();
+        }
+
+        return redirect()->route('display.users')
+                    ->with('success', 'User restored successfully!');
+    }
+
+    public function DeleteSubUser($id){
+        $user = User::findOrFail($id);
+        $user->forceDelete();
+        return redirect()->route('display.sub.users')
+                    ->with('success', 'User deleted successfully!');
     }
 }

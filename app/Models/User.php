@@ -10,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\CustomResetPassword;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use App\Notifications\CustomVerifyEmail;
 
 // use Spatie\Activitylog\Traits\LogsActivity;
@@ -21,6 +23,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
     use HasRoles;
+    use SoftDeletes;
+    
 
     /**
      * The attributes that are mass assignable.
@@ -84,7 +88,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function parentUser()
     {
-        return $this->belongsTo(User::class, 'parent_user_id');
+        return $this->belongsTo(User::class, 'parent_user_id')->withTrashed();
     }
 
     // Sub-users created by this parent user

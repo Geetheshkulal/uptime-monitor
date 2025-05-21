@@ -92,13 +92,22 @@
                                 
                                     @if(!$user->hasRole('superadmin'))
                                         @can('delete.user')
-                                            <form action="{{ route('delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to delete this user?')">
-                                                    <i class="fas fa-trash"></i> Delete User
-                                                </button>
-                                            </form>
+                                            @if($user->trashed())
+                                                <form action="{{ route('restore.user', $user->id) }}" method="POST" class="d-inline-block w-100">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary btn-block" onclick="return confirm('Are you sure you want to restore this user?')">
+                                                        <i class="fas fa-door-open"></i> Enable User
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to delete this user?')">
+                                                        <i class="fas fa-ban"></i> Disable User
+                                                    </button>
+                                                </form>
+                                            @endif
                                         @endcan
                                     @endif
                                 </div>
