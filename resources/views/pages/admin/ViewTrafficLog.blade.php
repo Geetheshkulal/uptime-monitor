@@ -105,58 +105,87 @@
     </div>
 
     <div class="row g-3">
-        @foreach($trafficLogs as $log)
-        <div class="col-12">
-            <div class="card shadow-sm traffic-item mb-3">
-                <div class="card-body">
-                    <div class="row text-sm">
-                        <div class="col-md-2">
-                            <strong>ID:</strong> {{ $log->id }}
-                        </div>
-                        <div class="col-md-2">
-                            <strong>IP:</strong> <span class="text-primary">{{ $log->ip }}</span>
-                        </div>
-                        <div class="col-md-2">
-                            <strong>Browser:</strong> {{ $log->browser }}
-                        </div>
-                        <div class="col-md-2">
-                            <strong>Platform:</strong> {{ $log->platform }}
-                        </div>
-                        <div class="col-md-2">
-                            <strong>Method:</strong>
-                            <span class="badge">{{ $log->method }}</span>
-                        </div>
-                        <div class="col-md-2">
-                            <strong>Time:</strong> {{ $log->created_at->format('Y-m-d H:i') }}
-                        </div>
+    @foreach($trafficLogs as $log)
+    <div class="col-12">
+        <div class="card shadow-sm traffic-item mb-3">
+            <div class="card-body">
+                <div class="row text-sm align-items-center">
+                    <div class="col-md-2">
+                        <strong>IP:</strong> <span class="text-primary">{{ $log->ip }}</span>
                     </div>
-
-                    <div class="row mt-2 text-sm">
-                        <div class="col-md-6">
-                            <strong>URL:</strong>
-                            <div class="text-truncate">{{ $log->url }}</div>
-                        </div>
-                        <div class="col-md-6">
-                            <strong>Referrer:</strong>
-                            <div class="text-truncate">{{ $log->referrer ?? 'Direct access' }}</div>
-                        </div>
+                    <div class="col-md-2">
+                        <strong>Browser:</strong> {{ $log->browser }}
                     </div>
-
-                    <div class="row mt-2">
-                        <div class="col-12">
-                            <strong>User Agent:</strong>
-                            <div class="user-agent"><code>{{ $log->user_agent }}</code></div>
+                    <div class="col-md-2">
+                        <strong>Platform:</strong> {{ $log->platform }}
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Method:</strong>
+                        <span class="badge bg-primary">{{ $log->method }}</span>
+                    </div>
+                    <div class="col-md-2">
+                        <strong>Time:</strong> {{ $log->created_at->format('Y-m-d H:i') }}
+                    </div>
+                     @if(in_array($log->ip, $blocked_ips))
+                        <div class="col-md-2 text-end">
+                            <strong>ISP:</strong> {{ $log->isp }}
+                            <form method="POST" action="{{ route('unblock.ip', $log->ip) }}" class="d-inline ms-2">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-primary">Unblock IP</button>
+                            </form>
                         </div>
+                     @else
+                        <div class="col-md-2 text-end">
+                            <strong>ISP:</strong> {{ $log->isp }}
+                            <form method="POST" action="{{ route('block.ip', $log->ip) }}" class="d-inline ms-2">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-danger">Block IP</button>
+                            </form>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="row mt-2 text-sm">
+                    <div class="col-md-6">
+                        <strong>URL:</strong>
+                        <div class="text-truncate">{{ $log->url }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Referrer:</strong>
+                        <div class="text-truncate">{{ $log->referrer ?? 'Direct access' }}</div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <strong>User Agent:</strong>
+                        <div class="user-agent"><code>{{ $log->user_agent }}</code></div>
                     </div>
                 </div>
             </div>
         </div>
-        @endforeach
     </div>
+    @endforeach
+</div>
+
 
     <div class="mt-4 d-flex justify-content-center">
     {{ $trafficLogs->appends(request()->query())->links('pagination::bootstrap-4') }}
 </div>
+
+@push('scripts')
+@if(session('success'))
+    <script>
+        toastr.success("{{ session('success') }}");
+    </script>
+  @endif
+
+  @if ($errors->any())
+    <script>
+        toastr.error("{{ $errors->first() }}");
+    </script>
+  @endif
+@endpush
 </div>
 
 @endsection

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TrafficLog;
+use App\Models\BlockedIP;
+
 
 class TrafficLogController extends Controller
 {
@@ -23,12 +25,14 @@ class TrafficLogController extends Controller
         });
     }
 
+    $blocked_ips = BlockedIP::all()->pluck('ip_address')->toArray();
+
     $trafficLogs = $query->latest()->paginate(10);
 
     // Keep the search value in pagination links
     $trafficLogs->appends($request->only('search'));
 
-    return view('pages.admin.ViewTrafficLog', compact('trafficLogs'));
+    return view('pages.admin.ViewTrafficLog', compact('trafficLogs','blocked_ips'));
 }
 
 }

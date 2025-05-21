@@ -22,7 +22,7 @@ use App\Http\Controllers\CashFreePaymentController;
 use App\Http\Controllers\PlanSubscriptionController;
 // for ticket and comments
 use App\Http\Controllers\TicketController;
-
+use App\Http\Controllers\BlockController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -220,6 +220,10 @@ Route::group(['middleware' => ['auth']], function () {
     
 
     Route::get('/changelog', [ChangelogController::class, 'ChangelogPage'])->name('changelog.page');
+
+    Route::post('block/ip/${ip}',[BlockController::class,'BlockIP'])->name('block.ip');
+    Route::post('unblock/ip/${ip}',[BlockController::class,'UnblockIP'])->name('unblock.ip');
+
 });
 
 
