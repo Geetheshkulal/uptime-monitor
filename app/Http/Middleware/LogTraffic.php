@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\TrafficLog;
 use Jenssegers\Agent\Agent;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class LogTraffic
 {
@@ -14,10 +15,25 @@ class LogTraffic
    
     if (!Auth::check()) {
         $agent = new Agent();
+        $ip = $request->ip();
+        $isp = 'Unknown ISP'; 
 
+        try{
+            $token=env('IPINFO_TOKEN');
+            $response=Http::get("https://ipinfo.io/{$ip}?token={$token}");
+
+            if($response->successful()){
+                $data=$response->json();
+                $isp = $data['org'] ?? 'Unknown ISP'; 
+            }      
+        }catch(\Exception $e){
+
+        }
+            
         $log = new TrafficLog();
         $log->ip = $request->ip();
         $log->user_agent = $request->userAgent();
+        $log->isp = $isp;
         $log->browser = $agent->browser();
         $log->platform = $agent->platform();
         $log->referrer = $request->headers->get('referer');
