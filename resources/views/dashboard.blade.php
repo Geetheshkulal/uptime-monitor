@@ -45,7 +45,6 @@
     z-index: 100;
     overflow-y: scroll; /* Enable vertical scrolling */
     overflow-x: hidden; /* Prevent horizontal scrolling */
-    padding-right: 15px; /* Prevent content from being hidden by the scrollbar */
     background-color: #4e73df;
      /* Sidebar background color */
      
@@ -106,17 +105,6 @@
             0% { left: -150px; }
             100% { left: 100%; }
         }
-
-.align-items-center {
-    align-items: center !important;
-}
-.justify-content-center {
-    justify-content: center !important;
-}
-.d-flex {
-    display: flex !important
-;
-}
        
  
 
