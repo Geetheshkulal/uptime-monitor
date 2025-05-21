@@ -37,7 +37,7 @@ use App\Http\Controllers\TrafficLogController;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
-})->name('product.documentation');
+})->name('product.documentation')->middleware('blockIp');
 
 
 Route::get('/status',[StatusPageController::class,'index'])->middleware('role:user|subuser')->middleware('permission:see.statuspage')->name('status');
@@ -50,7 +50,7 @@ Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])
         Route::post('/status-settings', [UserController::class, 'updateStatusPageSettings'])
              ->name('user.status-settings.update');
     });
-Route::middleware('auth')->group(function () {
+Route::middleware('auth','blockIp')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
@@ -87,7 +87,7 @@ Route::post('/email/verification-notification',function (Request $request) {
 
 Route::get('/changelog',[ChangelogController::class,'ChangelogPage']);
 
-Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
+Route::middleware(['auth','verified','CheckUserSession','blockIp'])->group(function () {
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

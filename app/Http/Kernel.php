@@ -77,6 +77,7 @@ class Kernel extends HttpKernel
         'disable_cookies' => \App\Http\Middleware\DisableCookies::class,
         'CheckUserSession'=>\App\Http\Middleware\CheckUserSession::class,
         'log.traffic' => \App\Http\Middleware\LogTraffic::class,
+        'blockIp'=> \App\Http\Middleware\BlockSuspiciousTraffic::class,
     ];
 
     protected $routeMiddleware = [
