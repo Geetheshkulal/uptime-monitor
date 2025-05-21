@@ -10,6 +10,7 @@
         border: 1px solid rgba(0,0,0,0.1);
         transition: transform 0.2s;
         border-radius: 8px;
+        margin-bottom: 20px;
     }
 
     .traffic-item:hover {
@@ -40,10 +41,6 @@
         padding: 0;
         font-size: 13px;
     }
-
-    .card-body .row + .row {
-        margin-top: 10px;
-    }
     
     .search-header {
         display: flex;
@@ -57,6 +54,8 @@
     .search-box {
         position: relative;
         min-width: 290px;
+        flex-grow: 1;
+        max-width: 400px;
     }
     
     .search-box input {
@@ -80,13 +79,39 @@
     .search-box .btn i {
         font-size: 16px;
     }
-     .small-placeholder::placeholder {
+    
+    .small-placeholder::placeholder {
         font-size: 0.7rem;
         color: #6c757d; 
     }
-
+    
+    .log-detail-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+    
+    .log-detail-col {
+        padding: 5px 10px;
+    }
+    
+    .ip-block-section {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    
+    .flag-img {
+        margin-left: 5px;
+        vertical-align: middle;
+    }
+    
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
 </style>
-@endpush
 
 <div class="container-fluid">
     <div class="search-header">
@@ -96,7 +121,6 @@
                 <input type="text" name="search" class="form-control small-placeholder" 
                     value="{{ request('search') }}" 
                     placeholder="Search by IP, Browser, URL, Platform or Method">
-  
                 <button type="submit" class="btn">
                     <i class="fas fa-search"></i>
                 </button>
@@ -104,73 +128,75 @@
         </div>
     </div>
 
-    <div class="row g-3">
-    @foreach($trafficLogs as $log)
-    <div class="col-12">
-        <div class="card shadow-sm traffic-item mb-3">
-            <div class="card-body">
-                <div class="row text-sm align-items-center">
-                    <div class="col-md-2">
-                        <strong>IP:</strong> <span class="text-primary">{{ $log->ip }}</span>
-                    </div>
-                    <div class="col-md-2">
-                        <strong>Browser:</strong> {{ $log->browser }}
-                    </div>
-                    <div class="col-md-2">
-                        <strong>Platform:</strong> {{ $log->platform }}
-                    </div>
-                    <div class="col-md-2">
-                        <strong>Method:</strong>
-                        <span class="badge bg-primary text-white">{{ $log->method }}</span>
-                    </div>
-                    <div class="col-md-2">
-                        <strong>Time:</strong> {{ $log->created_at->format('Y-m-d H:i') }}
-                    </div>
-                     @if(in_array($log->ip, $blocked_ips))
-                        <div class="col-md-2 text-end">
-                            <strong>ISP:</strong> {{ $log->isp }}
-                            <form method="POST" action="{{ route('unblock.ip', $log->ip) }}" class="d-inline ms-2">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-primary">Unblock IP</button>
-                            </form>
+    <div class="row">
+        @foreach($trafficLogs as $log)
+        <div class="col-12">
+            <div class="card shadow-sm traffic-item">
+                <div class="card-body">
+                    <div class="log-detail-row">
+                        {{-- <div class="log-detail-col">
+                            <strong>ID:</strong> {{ $log->id }}
+                        </div> --}}
+                        <div class="log-detail-col">
+                            <strong>IP:</strong> 
+                            <span class="text-primary">{{ $log->ip }}</span>
+                            @if (!empty($log->country))
+                                <img src="https://flagcdn.com/24x18/{{ strtolower($log->country) }}.png" 
+                                     alt="{{ $log->country_code }}" 
+                                     class="flag-img">
+                            @endif
                         </div>
-                     @else
-                        <div class="col-md-2 text-end">
-                            <strong>ISP:</strong> {{ $log->isp }}
-                            <form method="POST" action="{{ route('block.ip', $log->ip) }}" class="d-inline ms-2">
-                                @csrf
-                                <button type="submit" class="btn btn-sm btn-danger">Block IP</button>
-                            </form>
+                        <div class="log-detail-col">
+                            <strong>Browser:</strong> {{ $log->browser }}
                         </div>
-                    @endif
-                </div>
-
-                <div class="row mt-2 text-sm">
-                    <div class="col-md-6">
-                        <strong>URL:</strong>
-                        <div class="text-truncate">{{ $log->url }}</div>
+                        <div class="log-detail-col">
+                            <strong>Platform:</strong> {{ $log->platform }}
+                        </div>
+                        <div class="log-detail-col">
+                            <strong>Time:</strong> {{ $log->created_at->format('Y-m-d H:i') }}
+                        </div>
+                        <div class="log-detail-col ip-block-section">
+                            <strong>ISP:</strong> {{ $log->isp }}
+                            @if(in_array($log->ip, $blocked_ips))
+                                <form method="POST" action="{{ route('unblock.ip', $log->ip) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-primary">Unblock IP</button>
+                                </form>
+                            @else
+                                <form method="POST" action="{{ route('block.ip', $log->ip) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-danger">Block IP</button>
+                                </form>
+                            @endif
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <strong>Referrer:</strong>
-                        <div class="text-truncate">{{ $log->referrer ?? 'Direct access' }}</div>
-                    </div>
-                </div>
 
-                <div class="row mt-2">
-                    <div class="col-12">
-                        <strong>User Agent:</strong>
-                        <div class="user-agent"><code>{{ $log->user_agent }}</code></div>
+                    <div class="log-detail-row">
+                        <div class="log-detail-col" style="flex: 1 1 50%; min-width: 300px;">
+                            <strong>URL:</strong>
+                            <div class="text-truncate">{{ $log->url }}</div>
+                        </div>
+                        <div class="log-detail-col" style="flex: 1 1 50%; min-width: 300px;">
+                            <strong>Referrer:</strong>
+                            <div class="text-truncate">{{ $log->referrer ?? 'Direct access' }}</div>
+                        </div>
+                    </div>
+
+                    <div class="log-detail-row">
+                        <div class="log-detail-col" style="width: 100%;">
+                            <strong>User Agent:</strong>
+                            <div class="user-agent"><code>{{ $log->user_agent }}</code></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
-    @endforeach
-</div>
-
 
     <div class="mt-4 d-flex justify-content-center">
-    {{ $trafficLogs->appends(request()->query())->links('pagination::bootstrap-4') }}
+        {{ $trafficLogs->appends(request()->query())->links('pagination::bootstrap-4') }}
+    </div>
 </div>
 
 @push('scripts')
@@ -186,6 +212,6 @@
     </script>
   @endif
 @endpush
-</div>
+
 
 @endsection
