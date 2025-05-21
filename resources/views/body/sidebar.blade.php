@@ -24,9 +24,7 @@
         color: rgba(255, 255, 255, 0.8) !important;
         font-size: 0.85rem;
         font-weight: 500;
-        padding: 0.75rem 1rem;
-        display: flex;
-        align-items: center;
+       
     }
 
     .nav-link i {

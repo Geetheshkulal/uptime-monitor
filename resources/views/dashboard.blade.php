@@ -36,8 +36,34 @@
         * {
             font-family: "Nunito", sans-serif;
         }
+/* Hide Scrollbar but Allow Scrolling */
+#accordionSidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 100;
+    overflow-y: scroll; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    background-color: #4e73df;
+     /* Sidebar background color */
+     
+}
 
+/* Hide scrollbar for WebKit Browsers (Chrome, Edge, Safari) */
+#accordionSidebar::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar */
+}
 
+/* Hide scrollbar for Firefox */
+#accordionSidebar {
+    scrollbar-width: none; /* Hides the scrollbar */
+}
+
+/* Optional: Prevent content from being hidden by the scrollbar */
+#accordionSidebar > * {
+    margin-right: -15px; /* Adjust content to prevent overlap */
+}
         .scroll-to-top {
             width: 40px;
             height: 40px;
@@ -79,9 +105,6 @@
             0% { left: -150px; }
             100% { left: 100%; }
         }
-
-        
-
        
  
 

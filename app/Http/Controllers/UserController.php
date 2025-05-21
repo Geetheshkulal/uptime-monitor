@@ -38,7 +38,8 @@ class UserController extends Controller
                 'phone' => $validated['phone'] ?? null,
                 'status' => $validated['status'],
                 'premium_end_date' => $validated['premium_end_date'] ?? null,
-                'last_login_ip' => $request->ip()
+                'last_login_ip' => $request->ip(),
+                'status_page_hash' => Str::random(32)
             ]);
 
             // Find role and attach to user
@@ -323,10 +324,17 @@ class UserController extends Controller
         {
             /** @var \App\Models\User $user */
             $user = auth()->user();
+
+            if($user->hasRole('subuser')){
+                $user = $user->parentUser;
+            }
+
             $whitelistedIPs = Whitelist::where('user_id',$user->id)->first();
 
         
             // Auto-generate unique hash if doesn't exist
+
+            
             if (!$user->status_page_hash) {
                 $user->status_page_hash = Str::random(32);
                 $user->save(); 
@@ -347,6 +355,10 @@ class UserController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = auth()->user();
+
+        if($user->hasRole('subuser')){
+            $user = $user->parentUser;
+        }
 
         $whitelist = Whitelist::firstOrCreate(
             ['user_id' => $user->id],
