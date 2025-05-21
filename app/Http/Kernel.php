@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckUserSession::class,
+            \App\Http\Middleware\LogTraffic::class
         ],
 
         'api' => [
@@ -75,6 +76,7 @@ class Kernel extends HttpKernel
         'monitor.limit' => \App\Http\Middleware\LimitMonitorMiddleware::class,
         'disable_cookies' => \App\Http\Middleware\DisableCookies::class,
         'CheckUserSession'=>\App\Http\Middleware\CheckUserSession::class,
+        'log.traffic' => \App\Http\Middleware\LogTraffic::class,
     ];
 
     protected $routeMiddleware = [
