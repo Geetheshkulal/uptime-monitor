@@ -22,6 +22,18 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+.user-agent {
+    max-width: 100%;
+    font-size: 0.85em;
+    word-break: break-all;
+    white-space: pre-wrap;
+}
+
+.user-agent code {
+    background: transparent;
+    color: #333;
+    padding: 0;
+}
 </style>
     
 @endpush
@@ -88,6 +100,14 @@
                             <div class="text-muted small">Referrer</div>
                             <div class="text-truncate">
                                 {{ $log->referrer ?? 'Direct access' }}
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <div class="text-muted small">User Agent</div>
+                                <div class="user-agent text-truncate bg-light  rounded">
+                                    <code>{{ $log->user_agent }}</code>
+                                </div>
                             </div>
                         </div>
                     </div>
