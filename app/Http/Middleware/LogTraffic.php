@@ -11,6 +11,7 @@ class LogTraffic
 {
     public function handle(Request $request, Closure $next)
     {
+   
     if (!Auth::check()) {
         $agent = new Agent();
 
@@ -24,7 +25,9 @@ class LogTraffic
         $log->method = $request->method();
         $log->save();
 
+    }
+
         return $next($request);
-        }
+       
     }
 }
