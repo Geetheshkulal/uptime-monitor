@@ -121,7 +121,7 @@
                     </div>
                     <div class="col-md-2">
                         <strong>Method:</strong>
-                        <span class="badge bg-primary">{{ $log->method }}</span>
+                        <span class="badge bg-primary text-white">{{ $log->method }}</span>
                     </div>
                     <div class="col-md-2">
                         <strong>Time:</strong> {{ $log->created_at->format('Y-m-d H:i') }}

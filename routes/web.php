@@ -40,9 +40,9 @@ Route::get('/Product_documentation', function () {
 })->name('product.documentation')->middleware('blockIp');
 
 
-Route::get('/status',[StatusPageController::class,'index'])->middleware('role:user|subuser')->middleware('permission:see.statuspage')->name('status');
+Route::get('/status',[StatusPageController::class,'index'])->middleware('role:user|subuser')->middleware('permission:see.statuspage')->middleware('blockIp')->name('status');
 
-Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])  
+Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])->middleware('blockIp')  
      ->name('public.status');
      Route::prefix('user')->group(function () {
         Route::get('/status-settings', [UserController::class, 'statusPageSettings'])
@@ -64,15 +64,15 @@ Route::get('/', function()
 {
     $plans = Subscriptions::all();
     return view('welcome', compact('plans'));
-});
+})->middleware('blockIp');
 
-Route::get('latestUpdates',function(){return view('pages.latestUpdates');})->name('latest.page');
+Route::get('latestUpdates',function(){return view('pages.latestUpdates');})->name('latest.page')->middleware('blockIp');
 
 Route::get('documentation',function()
 {
     $plans = Subscriptions::all();
     return view('pages.documentation', compact('plans'));
-})->name('documentation.page');
+})->middleware('blockIp')->name('documentation.page');
 
 
 // email verify and register route
@@ -85,7 +85,7 @@ Route::post('/email/verification-notification',function (Request $request) {
 
 
 
-Route::get('/changelog',[ChangelogController::class,'ChangelogPage']);
+Route::get('/changelog',[ChangelogController::class,'ChangelogPage'])->middleware('blockIp');
 
 Route::middleware(['auth','verified','CheckUserSession','blockIp'])->group(function () {
     
@@ -111,7 +111,7 @@ Route::middleware(['auth','verified','CheckUserSession','blockIp'])->group(funct
     Route::patch('/user/update/billing', [UserController::class, 'UpdateBillingInfo'])->name('update.billing.info');
 });
 
-Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
+Route::middleware(['auth','verified','CheckUserSession','blockIp'])->group(function () {
 
     Route::get('/ssl-check', [SslCheckController::class, 'index'])->middleware('premium_middleware')->name('ssl.check');
     Route::get('/ssl/history', [SslCheckController::class, 'history'])->middleware('premium_middleware')->name('ssl.history');
@@ -152,7 +152,7 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
 
 
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth','blockIp']], function () {
     // Routes accessible only by superadmin
     Route::get('/admin/dashboard',[AdminController::class,'AdminDashboard'])->middleware('role:superadmin')->name('admin.dashboard');
     Route::get('/admin/display/users', action: [UserController::class,'DisplayUsers'])->middleware('permission:see.users')->name('display.users');
