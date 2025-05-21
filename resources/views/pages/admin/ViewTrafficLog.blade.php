@@ -110,6 +110,9 @@
                         </div>
                         <div class="col-md-2">
                             <strong>IP:</strong> <span class="text-primary">{{ $log->ip }}</span>
+                            @if (!empty($log->country))
+                        <img src="https://flagcdn.com/24x18/{{ strtolower($log->country) }}.png" alt="{{ $log->country_code }}" width="24" height="18">
+                            @endif
                         </div>
                         <div class="col-md-2">
                             <strong>Browser:</strong> {{ $log->browser }}
