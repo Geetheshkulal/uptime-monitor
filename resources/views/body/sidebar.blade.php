@@ -372,12 +372,14 @@
             </a>
         </li>
 
-        <li class="nav-item {{ request()->routeIs('display.trafficLog') ? 'active' : '' }}">
-            <a class="nav-link" href="{{route('display.trafficLog')}}">
-                <i class="fas fa-headset"></i>
-                <span>Traffic Log</span>
-            </a>
-        </li>
+        @hasrole('superadmin')
+            <li class="nav-item {{ request()->routeIs('display.trafficLog') ? 'active' : '' }}">
+                <a class="nav-link" href="{{route('display.trafficLog')}}">
+                    <i class="fas fa-headset"></i>
+                    <span>Traffic Log</span>
+                </a>
+            </li>
+        @endhasrole
 
         @if ((auth()->user()->status === 'free' || auth()->user()->status === 'free_trial') && auth()->user()->hasRole('user'))
             @php
