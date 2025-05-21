@@ -152,7 +152,7 @@
         <div class="container-fluid">
             <!-- Page Header -->
             <div class="d-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800 font-600">Support Tickets</h1>
+                <h1 class="h3 mb-0 text-gray-800">Support Tickets</h1>
                 <a class="btn btn-primary" href="{{route('raise.tickets')}}">
                     <i class="fas fa-plus fa-sm"></i> Raise Ticket
                 </a>
