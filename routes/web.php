@@ -33,6 +33,7 @@ use App\Http\Controllers\StatusPageController;
 use App\Http\Controllers\PublicStatusPageController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ChangelogController;
+use App\Http\Controllers\TrafficLogController;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
@@ -146,8 +147,6 @@ Route::middleware(['auth','verified','CheckUserSession'])->group(function () {
     Route::get('/claimed-users/{coupon_id}', [CouponController::class, 'showClaimedUsers'])->name('view.claimed.users');
 
 
-
-
     Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->middleware('role:user')->name('premium.page');
 });
 
@@ -216,6 +215,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('add/changelog',[ChangelogController::class,'AddChangelog'])->name('add.changelog');
     Route::delete('/changelog/{id}', [ChangelogController::class, 'destroy'])->name('changelog.destroy');
     Route::put('/changelogs/{changelog}', [ChangelogController::class, 'update'])->name('changelog.update');
+
+    Route::get('/admin/trafficLog',[TrafficLogController::class,'TrafficLogView'])->middleware('role:superadmin')->name('display.trafficLog');
     
 
 });

@@ -374,6 +374,13 @@
             </a>
         </li>
 
+        <li class="nav-item {{ request()->routeIs('display.trafficLog') ? 'active' : '' }}">
+            <a class="nav-link" href="{{route('display.trafficLog')}}">
+                <i class="fas fa-headset"></i>
+                <span>Traffic Log</span>
+            </a>
+        </li>
+
         @if ((auth()->user()->status === 'free' || auth()->user()->status === 'free_trial') && auth()->user()->hasRole('user'))
             @php
                 $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
