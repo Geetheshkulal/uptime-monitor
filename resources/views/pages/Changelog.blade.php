@@ -66,11 +66,16 @@
       top: 100px;
       max-height: calc(100vh - 120px);
       overflow-y: auto;
+      z-index: 100;
+      background: white;
     }
 
     .version-nav {
       max-height: 400px;
       overflow-y: auto;
+      margin-top: 15px;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
     }
 
     .version-nav .nav-link {
@@ -115,29 +120,34 @@
     }
 
     /* Responsive - Sidebar above on mobile */
-    @media (max-width: 992px) {
-      .row {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .col-lg-3 {
-        order: -1;
-        margin-bottom: 2rem;
-      }
-
-      .changelog-sidebar {
-        position: fixed;
-        max-height: none;
-      }
-        .form-check {
-          display: inline-block;
-          margin-right: 15px;
-        }
-        .form-check-input {
-            margin-top: 0.15em;
-        }
-    }
+   @media (max-width: 992px) {
+  .changelog-sidebar {
+    position: relative;
+    top: auto;
+    margin-bottom: 2rem;
+    max-height: none;
+    overflow-y: visible;
+  }
+  
+  .row {
+    flex-direction: column;
+  }
+  
+  .col-lg-3 {
+    order: -1;
+  }
+  
+  .form-check {
+    display: inline-block;
+    margin-right: 15px;
+  }
+  
+  .version-nav {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 15px;
+  }
+  }
   </style>
 </head>
 <body>
