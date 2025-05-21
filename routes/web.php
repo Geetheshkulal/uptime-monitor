@@ -219,6 +219,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/trafficLog',[TrafficLogController::class,'TrafficLogView'])->middleware('role:superadmin')->name('display.trafficLog');
     
 
+    Route::get('/changelog', [ChangelogController::class, 'ChangelogPage'])->name('changelog.page');
 });
 
 
@@ -226,8 +227,6 @@ Route::post('/subscribe', [PushNotificationController::class , 'subscribe']);
 
 
 Route::get('/track/{token}.png', [TrackingController::class, 'pixel'])->withoutMiddleware(['web', 'verified', 'auth', \App\Http\Middleware\VerifyCsrfToken::class]);
-
-Route::get('/changelog', [ChangelogController::class, 'ChangelogPage'])->name('changelog.page');
 
 require __DIR__.'/auth.php';
 
