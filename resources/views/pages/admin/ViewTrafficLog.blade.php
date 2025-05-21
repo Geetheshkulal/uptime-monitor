@@ -44,11 +44,60 @@
     .card-body .row + .row {
         margin-top: 10px;
     }
+    
+    .search-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .search-box {
+        position: relative;
+        min-width: 250px;
+    }
+    
+    .search-box input {
+        padding-right: 40px;
+    }
+    
+    .search-box .btn {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        border: none;
+        background: transparent;
+        color: #6c757d;
+    }
+    
+    .search-box .btn:hover {
+        color: #495057;
+    }
+    
+    .search-box .btn i {
+        font-size: 16px;
+    }
+
 </style>
 @endpush
 
 <div class="container-fluid">
-    <h4 class="mb-4">Visitor Traffic Logs</h4>
+    <div class="search-header">
+        <h4>Visitor Traffic Logs</h4>
+        <div class="search-box">
+            <form method="GET" action="" class="d-flex">
+                <input type="text" name="search" class="form-control" 
+                       value="{{ request('search') }}" 
+                       placeholder="Search by IP, Browser, Platform, URL or Method">
+                <button type="submit" class="btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
 
     <div class="row g-3">
         @foreach($trafficLogs as $log)
@@ -100,9 +149,9 @@
         @endforeach
     </div>
 
-    <div class="mt-4">
-        {{ $trafficLogs->links('pagination::bootstrap-5') }}
-    </div>
+    <div class="mt-4 d-flex justify-content-center">
+    {{ $trafficLogs->appends(request()->query())->links('pagination::bootstrap-4') }}
+</div>
 </div>
 
 @endsection
