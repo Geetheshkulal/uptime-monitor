@@ -101,7 +101,7 @@
     </div>
 
     <div class="mt-4">
-        {{ $trafficLogs->links() }}
+        {{ $trafficLogs->links('pagination::bootstrap-5') }}
     </div>
 </div>
 
