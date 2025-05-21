@@ -9,6 +9,27 @@
 
 <!-- Styling -->
 <style>
+    /* History Button Styling */
+#historyDropdownBtn {
+    font-size: 1rem; /* Adjust font size */
+    font-weight: 600; /* Make the text bold */
+    color:#4e73df /* Primary color */
+    text-decoration: none; /* Remove underline */
+    padding: 0.5rem 1rem; /* Add padding for better spacing */
+    border: 1px solid #4e73df; /* Add a border */
+    border-radius: 25px; /* Rounded corners */
+    background-color: #ffffff; /* White background */
+    transition: all 0.3s ease; /* Smooth hover effect */
+    display: inline-flex; /* Align icon and text */
+    align-items: center; /* Center-align icon and text */
+    gap: 0.5rem; /* Add spacing between icon and text */
+}
+
+#historyDropdownBtn:hover {
+    background-color: #4e73df; /* Change background on hover */
+    color: #ffffff; /* Change text color on hover */
+    text-decoration: none; /* Ensure no underline on hover */
+}
     body {
         background: linear-gradient(135deg, #c3eaff, #f6f8ff);
     }
@@ -16,15 +37,7 @@
         background: #ffffff;
         border-radius: 15px;
     }
-    .btn-primary {
-        background: linear-gradient(135deg, #4a90e2, #007bff);
-        border: none;
-        transition: 0.3s;
-    }
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #007bff, #4a90e2);
-        box-shadow: 0px 4px 10px rgba(0, 123, 255, 0.3);
-    }
+    
 
     .custom-bg-danger{
         background-color:  #ff4d4d;
@@ -147,10 +160,12 @@
     </div>
 <br>
 <br>
-<button id="historyDropdownBtn" class="btn btn-link text-primary p-0 border-0 bg-transparent dropdown-toggle SslCheck" type="button">
-    <i class="fas fa-history mr-2"></i>View history
+<button id="historyDropdownBtn" class="btn">
+    <i class="fas fa-history"></i> View History
 </button>
-
+<br>
+<br>
+<!-- SSL History Table -->
 <div id="historyTable" class="row mx-3" style="display: none;">
     <div class="col-12">
         <div class="card shadow mb-4">
