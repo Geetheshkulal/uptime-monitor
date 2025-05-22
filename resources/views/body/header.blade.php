@@ -192,7 +192,7 @@
                 <i class="fas fa-play mr-2"></i> Start Tour
             </button>
         @endif
-        <a class="dropdown-item" href="mailto:checkmysite2025@gmail.com?subject=Issue%20Report">
+        <a class="dropdown-item" href="{{url('/raise/tickets')}}">
             <i class="fas fa-bug mr-2"></i> Report an Issue
         </a>
         <a class="dropdown-item" href="{{ url('/documentation') }}">
