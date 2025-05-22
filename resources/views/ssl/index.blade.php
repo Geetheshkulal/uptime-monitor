@@ -160,8 +160,8 @@
     </div>
 <br>
 <br>
-<button id="historyDropdownBtn" class="btn">
-    <i class="fas fa-history"></i> View History
+<button id="historyDropdownBtn" class="btn SslCheck">
+    <i class="fas fa-history" ></i> View History
 </button>
 <br>
 <br>
