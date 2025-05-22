@@ -605,13 +605,15 @@
             <div class="card-body">
               <h4 class="card-title pricing-card-title">₹0<small class="text-muted fw-light">/month</small></h4>
               <ul class="list-unstyled mt-3 mb-4">
-                <li><i class="fas fa-check text-success me-2"></i> 5 monitors</li>
-                <li><i class="fas fa-check text-success me-2"></i> HTTP/Ping/Port/DNS checks</li>
-                <li><i class="fas fa-check text-success me-2"></i> Email notifications</li>
-                <li><i class="fas fa-check text-success me-2"></i> Incident tracking</li>
-                <li><i class="fas fa-check text-success me-2"></i> Telegram notifications</li>
-                <li><i class="fas fa-times text-danger me-2"></i> SSL monitoring</li>
-                <li><i class="fas fa-times text-danger me-2"></i>Unlimited monitors</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> Monitor 5 websites</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> 5-minute check</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> Email alerts</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> 1-Month history</li>
+                <li class="mb-3"><i class="fas fa-times-circle" style="color: #ea230d;"></i> Telegram alert unavailable</li>
+                <li class="mb-3"><i class="fas fa-times-circle" style="color: #ea230d;"></i> SSL expiry check unavailable</li>
+                <li class="mb-3">
+                  <i class="fas fa-times-circle" style="color: #ea230d;"></i>  Create and manage team members unavailable
+                </li>
               </ul>
             </div>
           </div>
@@ -627,9 +629,15 @@
               <h4 class="card-title pricing-card-title">₹{{$plan->amount}}<small class="text-muted fw-light">/month</small></h4>
               <ul class="list-unstyled mt-3 mb-4">
                 @endforeach
-                <li><i class="fas fa-check text-success me-2"></i> Unlimited monitors</li>
-                <li><i class="fas fa-check text-success me-2"></i> All features included in Basic plan</li>
-                <li><i class="fas fa-check text-success me-2"></i> SSL certificate monitoring</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  All basic features</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  Monitor unlimited websites</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  1-minute check</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  Telegram bot notification alert</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  4-Month history</li>
+                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  SSL expiry check</li>
+                <li class="mb-3">
+                  <i class="fas fa-check-circle" style="color: #065bef;"></i>  Create and manage team members
+                </li>
               </ul>
             </div>
           </div>
