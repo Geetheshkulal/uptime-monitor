@@ -156,4 +156,18 @@ class TicketController extends Controller
 
         return redirect()->route('display.tickets')->with('success', 'Ticket created successfully');
     }
+
+    
+    public function DeleteComment($id)
+    {
+        $ticket = Comment::find($id);
+
+        if (!$ticket) {
+            return redirect()->back()->with('error', 'Comment not found.');
+        }
+
+        $ticket->delete();
+
+        return redirect()->back()->with('success', 'Comment deleted successfully.');
+    }
 }

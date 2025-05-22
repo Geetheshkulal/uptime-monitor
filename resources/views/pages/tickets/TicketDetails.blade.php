@@ -387,8 +387,7 @@
                         <span class="comment-meta">commented on {{ $comment->created_at->format('M j, Y') }}</span>
                         @if(auth()->id() == $comment->user_id)
                         <div class="ml-auto">
-                            <button class="btn btn-sm btn-outline mr-1 edit-comment-btn"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-outline delete-comment-btn"><i class="fas fa-trash"></i></button>
+                                <button class="btn btn-sm btn-outline delete-comment-btn"><i class="fas fa-trash"></i></button>
                         </div>
                         @endif
                     </div>
@@ -577,6 +576,10 @@
             theme: 'snow'
         });
 
+        function stripTags(original) {
+            return original.replace(/(<([^>]+)>)/gi, "");
+        }
+
         // Update hidden input with Quill content when form is submitted
         const form = document.getElementById('ticketForm');
         form.onsubmit = function() {
@@ -646,7 +649,6 @@
                                                 <span class="comment-meta">commented on ${formattedDate}</span>
                                                 ${comment.user_id == {{ auth()->id() }} ? `
                                                     <div class="ml-auto">
-                                                        <button class="btn btn-sm btn-outline mr-1 edit-comment-btn"><i class="fas fa-edit"></i></button>
                                                         <button class="btn btn-sm btn-outline delete-comment-btn"><i class="fas fa-trash"></i></button>
                                                     </div>` : ''}
                                             </div>
@@ -687,6 +689,10 @@
             const form = $(this);
             const descriptionInput = form.find('input[name=description]');
             descriptionInput.val(quill.root.innerHTML);
+            if(stripTags(descriptionInput.val()).trim()===''){
+                toastr.warning('Comment field should not be empty.')
+                return false
+            }
             
             $.ajax({
                 url: form.attr('action'),
@@ -719,23 +725,19 @@
             
             if (confirm('Are you sure you want to delete this comment?')) {
                 $.ajax({
-                    url: `/admin/comments/${commentId}`,
-                    type: "DELETE",
+                    url: `/delete/comment/${commentId}`,
+                    type: "POST",
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        toastr.success('Comment deleted successfully!');
                         commentItem.remove();
-                        
+                        toastr.success("Comment removed successfully")
                         // Update comment count
                         const commentsCount = $('#comments-count');
                         const currentCount = parseInt(commentsCount.text().split(' ')[0]);
                         commentsCount.text(`${currentCount - 1} ${currentCount - 1 === 1 ? 'Comment' : 'Comments'}`);
                     },
-                    error: function() {
-                        toastr.error('Error deleting comment!');
-                    }
                 });
             }
         });

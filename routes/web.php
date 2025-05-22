@@ -202,6 +202,7 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
     Route::put('/display/tickets/{id}', [TicketController::class, 'UpdateTicket'])->name('tickets.update');
     Route::post('/admin/comments', [TicketController::class, 'CommentStore'])->name('admin.comments.store');
     Route::get('/tickets/comments/update/{id}', [TicketController::class, 'CommentPageUpdate'])->name('tickets.comments.update');
+    Route::post('/delete/comment/{id}',[TicketController::class,'DeleteComment'])->name('delete.comment');
 
     Route::get('/display/subsusers', [UserController::class, 'DisplaySubUsers'])->middleware('premium_middleware')->name('display.sub.users');
 
