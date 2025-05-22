@@ -303,13 +303,13 @@
                 </a>
             </div>
         @endif
-        @hasrole('superadmin')
+        @hasanyrole(['superadmin','support'])
         <div>
             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editTicketModal">
                 <i class="fas fa-pencil-alt"></i> Edit Ticket
             </button>
         </div>
-        @endhasrole
+        @endhasanyrole
     </div>
 
     <div class="issue-header">
