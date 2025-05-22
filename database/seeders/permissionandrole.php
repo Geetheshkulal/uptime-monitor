@@ -63,5 +63,9 @@ class permissionandrole extends Seeder
             ]);
         }
 
+         Role::firstOrCreate(
+            ['name' => 'support'],
+            ['guard_name' => 'web']
+        );
     }
 }
