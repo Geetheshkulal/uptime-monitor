@@ -116,16 +116,31 @@
 <div class="container-fluid">
     <div class="search-header">
         <h1 class="h3 mb-0 text-gray-800">Visitor Traffic Logs</h1>
-        <div class="search-box">
-            <form method="GET" action="" class="d-flex">
-                <input type="text" name="search" class="form-control small-placeholder" 
-                    value="{{ request('search') }}" 
-                    placeholder="Search by IP, Browser, URL, Platform or Method">
-                <button type="submit" class="btn">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
+       <div class="card shadow-sm p-2 mb-4">
+    <form method="GET" action="" class="row g-2 align-items-center">
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control small-placeholder"
+                   value="{{ request('search') }}"
+                   placeholder="Search IP, Browser, URL, Platform or Method">
         </div>
+
+        <div class="col-md-3">
+            <input type="date" name="from_date" class="form-control"
+                   value="{{ request('from_date') }}" title="From Date">
+        </div>
+
+        <div class="col-md-3">
+            <input type="date" name="to_date" class="form-control"
+                   value="{{ request('to_date') }}" title="To Date">
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-search me-1"></i> Filter
+            </button>
+        </div>
+    </form>
+</div>
     </div>
 
     <div class="row">
