@@ -116,16 +116,53 @@
 <div class="container-fluid">
     <div class="search-header">
         <h1 class="h3 mb-0 text-gray-800">Visitor Traffic Logs</h1>
-        <div class="search-box">
-            <form method="GET" action="" class="d-flex">
-                <input type="text" name="search" class="form-control small-placeholder" 
-                    value="{{ request('search') }}" 
-                    placeholder="Search by IP, Browser, URL, Platform or Method">
-                <button type="submit" class="btn">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
+       
+<form method="GET" action="" class="row g-3 align-items-end mb-4 p-1 bg-light rounded">
+    <!-- Search Input -->
+    <div class="col-md-4">
+        <label for="search" class="form-label fw-semibold text-muted small">Search</label>
+        <div class="input-group">
+            <span class="input-group-text bg-white">
+                <i class="fas fa-search text-muted"></i>
+            </span>
+            <input type="text" id="search" name="search" class="form-control small-placeholder border-start-0"
+                   value="{{ request('search') }}"
+                   placeholder="IP, Browser, URL, Platform, or Method">
         </div>
+    </div>
+
+    <!-- From Date -->
+    <div class="col-md-3">
+        <label for="from_date" class="form-label fw-semibold text-muted small">From Date</label>
+        <div class="input-group">
+            <span class="input-group-text bg-white">
+                <i class="fas fa-calendar-alt text-muted"></i>
+            </span>
+            <input type="date" id="from_date" name="from_date" class="form-control"
+                   value="{{ request('from_date') }}">
+        </div>
+    </div>
+
+    <!-- To Date -->
+    <div class="col-md-3">
+        <label for="to_date" class="form-label fw-semibold text-muted small">To Date</label>
+        <div class="input-group">
+            <span class="input-group-text bg-white">
+                <i class="fas fa-calendar-alt text-muted"></i>
+            </span>
+            <input type="date" id="to_date" name="to_date" class="form-control"
+                   value="{{ request('to_date') }}">
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100 py-2">
+            <i class="fas fa-filter me-2"></i> Filter
+        </button>
+    </div>
+</form>
+
     </div>
 
     <div class="row">
