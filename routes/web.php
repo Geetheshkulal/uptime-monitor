@@ -140,11 +140,11 @@ Route::middleware(['auth','verified','CheckUserSession','blockIp'])->group(funct
     
 
     // for super admin coupon
-    Route::get('/coupons', [CouponController::class, 'DisplayCoupons'])->name('display.coupons');
-    Route::post('/coupons', [CouponController::class, 'CouponStore'])->name('coupons.store');
-    Route::put('/coupons/{id}', [CouponController::class, 'CouponUpdate'])->name('coupons.update');
-    Route::delete('/coupons/{id}', [CouponController::class, 'destroy'])->name('coupons.destroy');
-    Route::get('/claimed-users/{coupon_id}', [CouponController::class, 'showClaimedUsers'])->name('view.claimed.users');
+    Route::get('/coupons', [CouponController::class, 'DisplayCoupons'])->middleware('role:support|superadmin')->name('display.coupons');
+    Route::post('/coupons', [CouponController::class, 'CouponStore'])->middleware('role:support|superadmin')->name('coupons.store');
+    Route::put('/coupons/{id}', [CouponController::class, 'CouponUpdate'])->middleware('role:support|superadmin')->name('coupons.update');
+    Route::delete('/coupons/{id}', [CouponController::class, 'destroy'])->middleware('role:support|superadmin')->name('coupons.destroy');
+    Route::get('/claimed-users/{coupon_id}', [CouponController::class, 'showClaimedUsers'])->middleware('role:support|superadmin')->name('view.claimed.users');
 
 
     Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->middleware('role:user')->name('premium.page');

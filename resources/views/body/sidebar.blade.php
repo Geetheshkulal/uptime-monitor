@@ -202,6 +202,7 @@
 
     <!-- Wrapper for main nav items -->
 
+        @if(!auth()->user()->hasrole('support'))
         @hasanyrole(['user','subuser'])
             @can('see.monitors')
                 <li class="nav-item {{ request()->is('dashboard*') ? 'active' : '' }}">
@@ -329,12 +330,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('display.coupons') }}">
-                        <i class="fas fa-percent"></i>
-                        <span>Coupons</span>
-                    </a>
-                </li>
+                
             @endhasrole
 
             <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}">
@@ -370,6 +366,17 @@
                 </a>
             </li>
         @endhasrole
+
+        @endif
+
+        @hasanyrole(['support','superadmin'])
+            <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('display.coupons') }}">
+                    <i class="fas fa-percent"></i>
+                    <span>Coupons</span>
+                </a>
+            </li>
+        @endhasanyrole
 
         @hasrole('support')
             <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">

@@ -99,7 +99,18 @@ class AuthenticatedSessionController extends Controller
             Cookie::queue(Cookie::forget('remember_password'));
         }
 
-        $redirectRoute=($user->hasRole('superadmin'))?RouteServiceProvider::ADMIN_DASHBOARD:RouteServiceProvider::HOME;
+        $redirect_route = '';
+
+        switch($user->roles->first()->name){
+            case 'superadmin':
+                $redirectRoute= RouteServiceProvider::ADMIN_DASHBOARD;
+                break;
+            case 'support':
+                $redirectRoute = '/display/tickets';
+                break;
+            default:
+                $redirectRoute= RouteServiceProvider::HOME;
+        }
 
         Log::info('Session data in login controller:', session()->all());
         return redirect()->intended($redirectRoute)->with('success', 'Login Successfully');;
