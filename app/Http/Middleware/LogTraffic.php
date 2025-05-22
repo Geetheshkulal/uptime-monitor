@@ -7,6 +7,7 @@ use App\Models\TrafficLog;
 use Jenssegers\Agent\Agent;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class LogTraffic
 {
@@ -16,16 +17,18 @@ class LogTraffic
     if (!Auth::check()) {
         $agent = new Agent();
         $ip = $request->ip();
+        Log::info('IP Address: ' . $ip);
         $isp = 'Unknown ISP'; 
 
         try{
             $token=env('IPINFO_TOKEN');
             $response=Http::get("https://ipinfo.io/{$ip}?token={$token}");
+            Log::info($response->json());
 
             if($response->successful()){
                 $data=$response->json();
                 $isp = $data['org'] ?? 'Unknown ISP'; 
-                $country = $data['country'] ?? 'Unknown';
+                $country = $data['country'] ?? '';
             }      
         }catch(\Exception $e){
 
