@@ -17,6 +17,11 @@ class SslCheckController extends Controller
         $sslChecks = Ssl::where('user_id', Auth::id())->latest()->get();
         return view('ssl.index', compact('sslChecks'));
     }
+  public function history()
+{
+    $sslChecks = Ssl::where('user_id', Auth::id())->latest()->get(); // Fetch the latest SSL checks
+    return response()->json($sslChecks);
+}
 
     //Check for SSL validity.
     public function check(Request $request)
