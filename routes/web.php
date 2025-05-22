@@ -50,7 +50,7 @@ Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])->
         Route::post('/status-settings', [UserController::class, 'updateStatusPageSettings'])
              ->name('user.status-settings.update');
     });
-Route::middleware('auth','blockIp')->group(function () {
+Route::middleware(['auth','blockIp'])->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 
