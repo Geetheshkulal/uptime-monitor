@@ -27,7 +27,7 @@
                             <h4 class="card-title mb-0">
                                 Modify Permissions for Role: <strong>{{ $role->name }}</strong>
                             </h4>
-                            <a href="{{ route('display.roles') }}" class="btn btn-secondary">
+                            <a href="{{ route('display.roles') }}" class="btn btn-primary">
                                 <i class="fas fa-arrow-left"></i> Back
                             </a>
                         </div>

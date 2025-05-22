@@ -103,16 +103,16 @@ class PublicStatusPageController extends Controller
         // Process days data for visualization
         $monitor->daysData = collect($daysData)->map(function ($day) {
             // Determine color based on uptime percentage
-            $day['color'] = '#10b981'; // green (good)
+            $day['color'] = '#10b981'; 
             if ($day['uptime_percentage'] < 95) {
-                $day['color'] = '#f59e0b'; // yellow (warning)
+                $day['color'] = '#f59e0b'; 
             }
             if ($day['uptime_percentage'] < 80) {
-                $day['color'] = '#ef4444'; // red (bad)
+                $day['color'] = '#ef4444';
             }
             // If no checks that day, show gray
             if ($day['total_checks'] === 0) {
-                $day['color'] = '#e2e8f0'; // gray (no data)
+                $day['color'] = '#e2e8f0'; 
             }
             
             $day['height'] = 40;
