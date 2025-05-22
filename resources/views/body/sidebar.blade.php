@@ -365,7 +365,7 @@
         @hasrole('superadmin')
             <li class="nav-item {{ request()->routeIs('display.trafficLog') ? 'active' : '' }}">
                 <a class="nav-link" href="{{route('display.trafficLog')}}">
-                    <i class="fas fa-headset"></i>
+                    <i class="fas fa-network-wired"></i>
                     <span>Traffic Log</span>
                 </a>
             </li>
