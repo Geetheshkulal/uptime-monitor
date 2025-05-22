@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
 use App\Models\Whitelist;
+use Illuminate\Support\Carbon;
 
 //Controller to manage users
 class UserController extends Controller
@@ -26,7 +27,7 @@ class UserController extends Controller
             'phone' => 'nullable|string',
             'role' => 'required|exists:roles,id',  // Ensure role exists
             'status' => 'required|in:free,paid',
-            'premium_end_date' => 'nullable|date'
+            'premium_end_date' => 'nullable|date',
         ]);
 
         try {
@@ -39,7 +40,8 @@ class UserController extends Controller
                 'status' => $validated['status'],
                 'premium_end_date' => $validated['premium_end_date'] ?? null,
                 'last_login_ip' => $request->ip(),
-                'status_page_hash' => Str::random(32)
+                'status_page_hash' => Str::random(32),
+                'email_verified_at'=>now()
             ]);
 
             // Find role and attach to user

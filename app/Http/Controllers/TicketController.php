@@ -90,7 +90,7 @@ class TicketController extends Controller
 
     public function CommentPageUpdate($id){
         $ticket = Ticket::findOrFail($id);
-        $comments = $ticket->comments()->with('user')->orderBy('created_at', 'asc')->get();
+        $comments = $ticket->comments()->with('user.roles')->orderBy('created_at', 'asc')->get();
 
     
         $comments->each(function ($comment) {
@@ -106,7 +106,14 @@ class TicketController extends Controller
 
     public function ViewTicketsUser()
     {
-        $tickets = Ticket::all();
+         $user = auth()->user();
+         $tickets = Ticket::where('user_id',$user->id)->get();
+
+         if($user->hasRole('support')){
+             $tickets = Ticket::where('assigned_user_id',$user->id)->get();
+         }
+
+       
         
         return view('pages.tickets.DisplayTickets', compact('tickets'));
     }

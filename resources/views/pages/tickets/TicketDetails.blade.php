@@ -290,11 +290,19 @@
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between mb-3">
-        <div>
-            <a href="{{ route('display.tickets') }}" class="btn btn-primary">
-                <i class="fas fa-arrow-left"></i> Back to tickets
-            </a>
-        </div>
+        @if(auth()->user()->hasRole('superadmin'))
+            <div>
+                <a href="{{ route('tickets') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to tickets
+                </a>
+            </div>
+        @else
+            <div>
+                <a href="{{ route('display.tickets') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to tickets
+                </a>
+            </div>
+        @endif
         @hasrole('superadmin')
         <div>
             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editTicketModal">
@@ -383,7 +391,7 @@
                 <div class="comment">
                     <div class="comment-header">
                         <img src="{{ Avatar::create($comment->user->name)->toBase64() }}" class="comment-avatar" alt="{{ $comment->user->name }}">
-                        <span class="comment-author">{{ $comment->user->name }}</span>
+                        <span class="comment-author">{{ $comment->user->name }}{{$comment->user->hasRole('support')?'(Support)':''}}</span>
                         <span class="comment-meta">commented on {{ $comment->created_at->format('M j, Y') }}</span>
                         @if(auth()->id() == $comment->user_id)
                         <div class="ml-auto">
@@ -645,7 +653,7 @@
                                         <div class="comment">
                                             <div class="comment-header">
                                                 <img src="${comment.user.avatar_url}" class="comment-avatar" alt="${comment.user.name}">
-                                                <span class="comment-author">${comment.user.name}</span>
+                                                <span class="comment-author">${comment.user.name}${comment.user.roles.map(role => role.name).includes('support')?'(Support)':''}</span>
                                                 <span class="comment-meta">commented on ${formattedDate}</span>
                                                 ${comment.user_id == {{ auth()->id() }} ? `
                                                     <div class="ml-auto">

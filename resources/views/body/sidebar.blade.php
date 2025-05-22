@@ -371,6 +371,15 @@
             </li>
         @endhasrole
 
+        @hasrole('support')
+            <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">
+                <a class="nav-link" href="{{route('display.tickets')}}">
+                    <i class="fas fa-headset"></i>
+                    <span>My Tickets</span>
+                </a>
+            </li>
+        @endhasrole
+
         @if ((auth()->user()->status === 'free' || auth()->user()->status === 'free_trial') && auth()->user()->hasRole('user'))
             @php
                 $trialDaysLeft = now()->diffInDays(auth()->user()->created_at->addDays(10), false);
