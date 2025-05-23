@@ -112,7 +112,13 @@ class RoleController extends Controller
     //Edit Role Page
     public function EditRole($id)
     {
+        $system_roles = ['user','subuser','support'];
         $role = Role::findOrFail($id);
+
+        if(in_array($role->name,$system_roles)){
+            abort(404,'System roles cannot be modified');
+        }
+
         return view('pages.admin.EditRole', compact('role'));
     }
 

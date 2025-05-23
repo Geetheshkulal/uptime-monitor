@@ -40,7 +40,7 @@
         margin-right: 10px;
     }
     .nav-link.active {
-        background-color: #4e73df !important;
+        background-color: #06357f !important;
         color: white !important;
     }
     .dataTables_filter input {
