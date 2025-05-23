@@ -129,6 +129,15 @@
         background: #38a169;
         color: white;
     }
+    .container-fluid {
+        min-height: calc(100vh - 200px);
+        padding-bottom: 60px;
+    }
+
+    .traffic-list {
+        min-height: 300px; 
+    }
+
     
     @media (max-width: 768px) {
         .client-row, .request-row {
@@ -199,7 +208,7 @@
 
     <!-- Logs List -->
                 <div class="traffic-list">
-                    @foreach($trafficLogs as $log)
+                   @forelse($trafficLogs as $log)
                     <div class="traffic-card">
                     <!-- New Header with IP and Time -->
                     <div class="traffic-header">
@@ -272,7 +281,11 @@
                     </div>
                 </div>
             </div>
-            @endforeach
+           @empty
+            <div class="text-center p-4 bg-light border rounded">
+        <p>No traffic logs available.</p>
+    </div>
+@endforelse
         </div>
 
     <!-- Pagination -->
