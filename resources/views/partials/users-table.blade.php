@@ -7,7 +7,6 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Status</th>
                         <th>Role</th>
                         <th>Action</th>
                     </tr>
@@ -19,13 +18,7 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone ?? 'N/A' }}</td>
-                            <td>
-                                @if($user->status === 'active')
-                                    <span class="badge badge-success">Active</span>
-                                @else
-                                    <span class="badge badge-secondary">Inactive</span>
-                                @endif
-                            </td>
+                        
                             <td>
                                 @foreach($user->roles as $role)
                                     <span class="badge badge-info">{{ $role->name }}</span>

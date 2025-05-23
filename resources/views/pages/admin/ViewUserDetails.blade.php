@@ -45,6 +45,7 @@
                                 <th>Phone</th>
                                 <td>{{ $user->phone ?? 'N/A' }}</td>
                             </tr>
+                            @if($user->hasRole('user'))
                             <tr>
                                 <th>Status</th>
                                 <td>
@@ -53,6 +54,7 @@
                                     </span>
                                 </td>
                             </tr>
+                            @endif
                             <tr>
                                 <th>Roles</th>
                                 <td>
