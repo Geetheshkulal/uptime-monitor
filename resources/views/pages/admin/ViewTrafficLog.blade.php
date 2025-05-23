@@ -2,253 +2,297 @@
 @section('content')
 
 @push('styles')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
 <style>
-    .traffic-item {
-        border: 1px solid rgba(0,0,0,0.1);
-        transition: transform 0.2s;
+    .traffic-card {
+        background: white;
         border-radius: 8px;
-        margin-bottom: 20px;
-    }
-
-    .traffic-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    }
-
-    .text-truncate {
-        max-width: 100%;
-        white-space: nowrap;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 1rem;
         overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .user-agent {
-        font-size: 0.85em;
-        word-break: break-word;
-        white-space: pre-wrap;
-        background-color: #f8f9fa;
-        padding: 10px;
-        border-radius: 4px;
-        margin-top: 10px;
-    }
-
-    .user-agent code {
-        background: none;
-        color: #333;
-        padding: 0;
-        font-size: 13px;
     }
     
-    .search-header {
+    /* New Header Styling */
+    .traffic-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-        gap: 15px;
+        padding: 0.75rem 1rem;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     }
     
-    .search-box {
-        position: relative;
-        min-width: 290px;
-        flex-grow: 1;
-        max-width: 400px;
-    }
-    
-    .search-box input {
-        padding-right: 40px;
-    }
-    
-    .search-box .btn {
-        position: absolute;
-        right: 0;
-        top: 0;
-        height: 100%;
-        border: none;
-        background: transparent;
-        color: #6c757d;
-    }
-    
-    .search-box .btn:hover {
-        color: #495057;
-    }
-    
-    .search-box .btn i {
-        font-size: 16px;
-    }
-    
-    .small-placeholder::placeholder {
-        font-size: 0.7rem;
-        color: #6c757d; 
-    }
-    
-    .log-detail-row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-bottom: 10px;
-    }
-    
-    .log-detail-col {
-        padding: 5px 10px;
-    }
-    
-    .ip-block-section {
+    .ip-display {
         display: flex;
         align-items: center;
-        justify-content: flex-end;
-        gap: 10px;
+        gap: 0.5rem;
     }
     
-    .flag-img {
-        margin-left: 5px;
-        vertical-align: middle;
+    .ip-address {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.875rem;
+        color: #3182ce;
+        font-weight: 500;
     }
     
-    .btn-sm {
-        padding: 0.25rem 0.5rem;
+    .flag {
+        width: 20px;
+        height: 15px;
+        border-radius: 2px;
+    }
+    
+    .header-time {
         font-size: 0.75rem;
+        color: #64748b;
+    }
+    
+    /* Rest of the existing styles remain exactly the same */
+    .traffic-body {
+        padding: 1rem;
+    }
+    
+    .client-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 0.75rem;
+        align-items: center;
+    }
+    
+    .request-row {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .user-agent-row {
+        margin-bottom: 0.75rem;
+    }
+    
+    .detail-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .detail-label {
+        font-size: 0.75rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+    
+    .detail-value {
+        font-size: 0.8125rem;
+        color: #1a202c;
+    }
+    
+    .url-group, .referrer-group {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .url-value, .referrer-value, .user-agent {
+        font-family: 'Roboto Mono', monospace;
+        font-size: 0.75rem;
+        background: #f8fafc;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #e2e8f0;
+        word-break: break-all;
+        white-space: pre-wrap;
+    }
+    
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 0.5rem;
+    }
+    
+    .action-btn {
+        border: none;
+        padding: 0.375rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+    
+    .block-btn {
+        background: #e53e3e;
+        color: white;
+    }
+    
+    .unblock-btn {
+        background: #38a169;
+        color: white;
+    }
+    
+    @media (max-width: 768px) {
+        .client-row, .request-row {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+        
+        .url-group, .referrer-group {
+            width: 100%;
+        }
+        
+        .traffic-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
     }
 </style>
+@endpush
 
 <div class="container-fluid">
+    <h1 class="h3 mb-0 text-gray-800">Visitor Traffic Logs</h1><br>
     <div class="search-header">
-        <h1 class="h3 mb-0 text-gray-800">Visitor Traffic Logs</h1>
-       
-<form method="GET" action="" class="row g-3 align-items-end mb-4 p-1 bg-light rounded">
-    <!-- Search Input -->
-    <div class="col-md-4">
-        <label for="search" class="form-label fw-semibold text-muted small">Search</label>
-        <div class="input-group">
-            <span class="input-group-text bg-white">
-                <i class="fas fa-search text-muted"></i>
-            </span>
-            <input type="text" id="search" name="search" class="form-control small-placeholder border-start-0"
-                   value="{{ request('search') }}"
-                   placeholder="IP, Browser, URL, Platform, or Method">
-        </div>
-    </div>
-
-    <!-- From Date -->
-    <div class="col-md-3">
-        <label for="from_date" class="form-label fw-semibold text-muted small">From Date</label>
-        <div class="input-group">
-            <span class="input-group-text bg-white">
-                <i class="fas fa-calendar-alt text-muted"></i>
-            </span>
-            <input type="date" id="from_date" name="from_date" class="form-control"
-                   value="{{ request('from_date') }}">
-        </div>
-    </div>
-
-    <!-- To Date -->
-    <div class="col-md-3">
-        <label for="to_date" class="form-label fw-semibold text-muted small">To Date</label>
-        <div class="input-group">
-            <span class="input-group-text bg-white">
-                <i class="fas fa-calendar-alt text-muted"></i>
-            </span>
-            <input type="date" id="to_date" name="to_date" class="form-control"
-                   value="{{ request('to_date') }}">
-        </div>
-    </div>
-
-    <!-- Submit Button -->
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-primary w-100 py-2">
-            <i class="fas fa-filter me-2"></i> Filter
-        </button>
-    </div>
-</form>
-
-    </div>
-
-    <div class="row">
-        @foreach($trafficLogs as $log)
-        <div class="col-12">
-            <div class="card shadow-sm traffic-item">
+        
+    
+                <!-- Filter Section -->
+            <div class="card filter-card">
                 <div class="card-body">
-                    <div class="log-detail-row">
-                        {{-- <div class="log-detail-col">
-                            <strong>ID:</strong> {{ $log->id }}
-                        </div> --}}
-                        <div class="log-detail-col">
-                            <strong>IP:</strong> 
-                            <span class="text-primary">{{ $log->ip }}</span>
-                            @if (!empty($log->country))
-                                <img src="https://flagcdn.com/24x18/{{ strtolower($log->country) }}.png" 
-                                     alt="{{ $log->country_code }}" 
-                                     class="flag-img">
-                            @endif
+                    <form method="GET" action="">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <label class="form-label small text-muted">Search</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-white border-end-0">
+                                        <i class="fas fa-search fa-xs"></i>
+                                    </span>
+                                    <input type="text" name="search" class="form-control form-control-sm" 
+                                        value="{{ request('search') }}" 
+                                        placeholder="IP, Browser, URL ,Platform...">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">From Date</label>
+                                <input type="date" name="from_date" class="form-control form-control-sm" 
+                                    value="{{ request('from_date') }}">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small text-muted">To Date</label>
+                                <input type="date" name="to_date" class="form-control form-control-sm" 
+                                    value="{{ request('to_date') }}">
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <button type="submit" class="btn btn-sm btn-primary w-100">
+                                    <i class="fas fa-filter fa-xs me-1"></i> Filter
+                                </button>
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <a href="{{ url()->current() }}" class="btn btn-sm btn-secondary w-100">
+                                    Clear
+                                </a>
+                            </div>
                         </div>
-                        <div class="log-detail-col">
-                            <strong>Browser:</strong> {{ $log->browser }}
-                        </div>
-                        <div class="log-detail-col">
-                            <strong>Platform:</strong> {{ $log->platform }}
-                        </div>
-                        <div class="log-detail-col">
-                            <strong>Time:</strong> {{ $log->created_at->format('Y-m-d H:i') }}
-                        </div>
-                        <div class="log-detail-col ip-block-section">
-                            <strong>ISP:</strong> {{ $log->isp }}
-                            @if(in_array($log->ip, $blocked_ips))
-                                <form method="POST" action="{{ route('unblock.ip', $log->ip) }}" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-primary">Unblock IP</button>
-                                </form>
-                            @else
-                                <form method="POST" action="{{ route('block.ip', $log->ip) }}" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-danger">Block IP</button>
-                                </form>
-                            @endif
-                        </div>
-                    </div>
+                    </form>
+                </div>
+            </div>
 
-                    <div class="log-detail-row">
-                        <div class="log-detail-col" style="flex: 1 1 50%; min-width: 300px;">
-                            <strong>URL:</strong>
-                            <div class="text-truncate">{{ $log->url }}</div>
-                        </div>
-                        <div class="log-detail-col" style="flex: 1 1 50%; min-width: 300px;">
-                            <strong>Referrer:</strong>
-                            <div class="text-truncate">{{ $log->referrer ?? 'Direct access' }}</div>
-                        </div>
-                    </div>
 
-                    <div class="log-detail-row">
-                        <div class="log-detail-col" style="width: 100%;">
-                            <strong>User Agent:</strong>
-                            <div class="user-agent"><code>{{ $log->user_agent }}</code></div>
-                        </div>
+    <!-- Logs List -->
+                <div class="traffic-list">
+                    @foreach($trafficLogs as $log)
+                    <div class="traffic-card">
+                    <!-- New Header with IP and Time -->
+                    <div class="traffic-header">
+                        <div class="ip-display">
+                            <span class="detail-label">IP:</span>
+                            <span class="ip-address">{{ $log->ip }}</span>
+                            @if(!empty($log->country))
+                            <img src="https://flagcdn.com/20x15/{{ strtolower($log->country) }}.png" 
+                                alt="{{ $log->country }}" 
+                                class="flag">
+                            @endif
+                    </div>
+                    <div class="header-time">
+                        {{ $log->created_at->format('M j, Y H:i:s') }}
+                    </div>
+                    </div>
+                    
+            <div class="traffic-body">
+                <!-- First Row: Browser, Platform, ISP -->
+                <div class="client-row">
+                    <div class="detail-group">
+                        <span class="detail-label">Browser:</span>
+                        <span class="detail-value">{{ $log->browser }}</span>
+                    </div>
+                    <div class="detail-group">
+                        <span class="detail-label">Platform:</span>
+                        <span class="detail-value">{{ $log->platform }}</span>
+                    </div>
+                    <div class="detail-group">
+                        <span class="detail-label">ISP:</span>
+                        <span class="detail-value">{{ $log->isp ?? 'Unknown' }}</span>
+                    </div>
+                </div>
+                
+                <!-- Second Row: URL and Referrer -->
+                <div class="request-row">
+                    <div class="url-group">
+                        <span class="detail-label">URL:</span>
+                        <div class="url-value">{{ $log->url }}</div>
+                    </div>
+                    <div class="referrer-group">
+                        <span class="detail-label">Referrer:</span>
+                        <div class="referrer-value">{{ $log->referrer ?? 'Direct access' }}</div>
+                    </div>
+                </div>
+                
+                <!-- Third Row: User Agent -->
+                <div class="user-agent-row">
+                    <span class="detail-label">User Agent:</span>
+                    <div class="user-agent">{{ $log->user_agent }}</div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    @if(in_array($log->ip, $blocked_ips))
+                        <form method="POST" action="{{ route('unblock.ip', $log->ip) }}">
+                            @csrf
+                            <button type="submit" class="action-btn unblock-btn">
+                                <i class="fas fa-unlock fa-xs"></i> Unblock
+                            </button>
+                        </form>
+                    @else
+                        <form method="POST" action="{{ route('block.ip', $log->ip) }}">
+                            @csrf
+                            <button type="submit" class="action-btn block-btn">
+                                <i class="fas fa-ban fa-xs"></i> Block
+                            </button>
+                        </form>
+                        @endif
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
-        @endforeach
-    </div>
 
-    <div class="mt-4 d-flex justify-content-center">
+    <!-- Pagination -->
+    <div class="mt-3 d-flex justify-content-center">
         {{ $trafficLogs->appends(request()->query())->links('pagination::bootstrap-4') }}
+     </div>
     </div>
-</div>
 
-@push('scripts')
-@if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-  @endif
+    @push('scripts')
+    @if(session('success'))
+        <script>
+            toastr.success("{{ session('success') }}");
+        </script>
+    @endif
 
-  @if ($errors->any())
-    <script>
-        toastr.error("{{ $errors->first() }}");
-    </script>
-  @endif
+    @if ($errors->any())
+        <script>
+            toastr.error("{{ $errors->first() }}");
+        </script>
+    @endif
 @endpush
-
 
 @endsection
