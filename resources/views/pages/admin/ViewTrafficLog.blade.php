@@ -215,11 +215,10 @@
                         <div class="ip-display">
                             <span class="detail-label">IP:</span>
                             <span class="ip-address">{{ $log->ip }}</span>
-                            @if(!empty($log->country))
-                            <img src="https://flagcdn.com/20x15/{{ strtolower($log->country) }}.png" 
-                                alt="{{ $log->country }}" 
-                                class="flag">
-                            @endif
+                            @if($log->country !== 'Unknown')
+                            <img src="https://flagcdn.com/16x12/{{ strtolower($log->country) }}.png" class="flag">
+                        @endif
+                        
                     </div>
                     <div class="header-time">
                         {{ $log->created_at->format('M j, Y H:i:s') }}
