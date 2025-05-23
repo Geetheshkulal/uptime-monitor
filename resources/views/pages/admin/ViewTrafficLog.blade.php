@@ -83,7 +83,7 @@
     }
     
     .detail-value {
-        font-size: 0.8125rem;
+        font-size: 0.9rem;
         color: #1a202c;
     }
     
@@ -190,17 +190,15 @@
                                 <input type="date" name="to_date" class="form-control form-control-sm" 
                                     value="{{ request('to_date') }}">
                             </div>
-                            <div class="col-md-1 d-flex align-items-end">
-                                <button type="submit" class="btn btn-sm btn-primary w-100">
-                                    <i class="fas fa-filter fa-xs me-1"></i> Filter
+                             <div class="col-md-2 d-flex flex-column align-items-stretch">
+                                <button type="submit" class="btn btn-primary w-100 mb-2">
+                                    <i class="fas fa-filter"></i> Filter
                                 </button>
-                            </div>
-                            <div class="col-md-1 d-flex align-items-end">
-                                <a href="{{ url()->current() }}" class="btn btn-sm btn-secondary w-100">
-                                    Clear
+                                <a href="{{ url()->current() }}" class="btn btn-secondary w-100">
+                                    <i class="fas fa-times"></i> Clear
                                 </a>
                             </div>
-                        </div>
+                            </div>
                     </form>
                 </div>
             </div>
