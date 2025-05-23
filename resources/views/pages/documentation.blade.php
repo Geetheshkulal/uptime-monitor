@@ -7,9 +7,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #0d6efd;
+      --primary-color: #4e73df;;
       --primary-dark: #0a58ca;
       --accent-color: #ffc107;
+      --white: #ffffff;
       --sidebar-width: 280px;
     }
     
@@ -26,104 +27,125 @@
       height: 100vh;
     }
 
-    .sidebar {
-      width: var(--sidebar-width);
-      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-      color: white;
-      padding: 30px 0;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 10;
-    }
-
-    .sidebar-header {
-      padding: 0 25px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    .sidebar h4 {
-      font-weight: 600;
-      margin: 0;
-      font-size: 1.25rem;
-    }
-
-    .sidebar .nav-menu {
-      padding: 20px 0;
-    }
-
-    .sidebar a {
-      color: rgba(255,255,255,0.9);
-      text-decoration: none;
-      padding: 12px 25px;
-      display: flex;
-      align-items: center;
-      font-size: 15px;
-      transition: all 0.3s ease;
-      border-left: 4px solid transparent;
-      margin: 2px 0;
-    }
-
-    .sidebar a i {
-      margin-right: 12px;
-      width: 20px;
-      text-align: center;
-    }
-
-    .sidebar a:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-left: 4px solid var(--accent-color);
-      color: white;
-    }
-
-    .sidebar a.active {
-      background-color: rgba(255, 255, 255, 0.15);
-      border-left: 4px solid var(--accent-color);
-      color: white;
-    }
-
-    .badge-premium {
-      background-color: rgba(255, 193, 7, 0.2);
-      color: gold;
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 4px;
-      margin-left: 8px;
-      text-transform: uppercase;
-    }
-
-    .content {
-      flex: 1;
-      padding: 40px;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    .back-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  text-decoration: none; /* Add this line to remove underline */
+ /* Sidebar Container */
+.sidebar {
+    width: var(--sidebar-width);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: white;
+    padding: 20px 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    height: 100vh;
+    z-index: 10;
+    overflow-y: auto;
+    top: 0;
+    left: 0;
 }
 
-    .back-btn:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-1px);
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+/* Content Area */
+.content {
+    margin-left: var(--sidebar-width); /* Offset content to the right of the sidebar */
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    position: relative;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
 
-    .back-btn i {
-      margin-right: 6px;
-    }
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 0 25px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.sidebar-header h4 {
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.25rem;
+    color: white;
+}
+
+.sidebar-header a {
+    text-decoration: none;
+    color: white;
+}
+
+/* Navigation Menu */
+.nav-menu {
+    padding: 20px 0;
+}
+
+.nav-menu a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    padding: 12px 25px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    margin: 2px 0;
+}
+
+.nav-menu a i {
+    margin-right: 12px;
+    width: 20px;
+    text-align: center;
+}
+
+.nav-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 4px solid var(--white);
+    color: white;
+}
+
+.nav-menu a.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-left: 4px solid var(--white);
+    color: white;
+}
+
+/* Premium Badge */
+.badge-premium {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: gold;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    text-transform: uppercase;
+}
+
+/* Back Button */
+.back-btn {
+    margin: 20px 25px;
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn i {
+    margin-right: 8px;
+}
+
+ 
 
     .tab-content {
       display: none;
@@ -219,40 +241,48 @@
       body {
         flex-direction: column;
       }
-      
-      .sidebar {
+    .sidebar {
         width: 100%;
         max-width: 100%;
         padding: 15px 0;
-      }
-      
-      .sidebar-header {
+        position: relative;
+        height: auto;
+    }
+
+    .sidebar-header {
         padding: 0 15px 10px;
-      }
-      
-      .nav-menu {
+    }
+
+    .nav-menu {
         display: flex;
         overflow-x: auto;
         padding: 10px 0 !important;
         white-space: nowrap;
-      }
-      
-      .nav-menu a {
+    }
+
+    .nav-menu a {
         padding: 8px 15px;
         display: inline-block;
         border-left: none;
         border-bottom: 3px solid transparent;
-      }
-      
-      .nav-menu a:hover, 
-      .nav-menu a.active {
+    }
+
+    .nav-menu a:hover,
+    .nav-menu a.active {
         border-left: none;
         border-bottom: 3px solid var(--accent-color);
-      }
-      
+    }
+
+    .back-btn {
+        margin: 10px auto;
+        width: 90%;
+        text-align: center;
+    }
+     
       .content {
+        margin-left: 0; /* Remove offset for smaller screens */
         padding: 30px 20px;
-      }
+    }
       
     }
   </style>
@@ -260,38 +290,49 @@
 <body>
 
   <!-- Sidebar Navigation -->
-  <div class="sidebar">
+ <div class="sidebar">
     <div class="sidebar-header">
-      <a href = "/"><h4><i class="fas fa-heartbeat me-2"></i>CheckMySite</h4></a>
+        <a>
+            <h4><i class="fas fa-heartbeat me-2"></i>CheckMySite</h4>
+        </a>
     </div>
     <div class="nav-menu">
-      <a href="#" onclick="showTab('tab1')" class="active">
-        <i class="fas fa-home"></i> Overview
-      </a>
-      <a href="#" onclick="showTab('tab2')">
-        <i class="fas fa-globe"></i> Website Monitoring
-      </a>
-      <a href="#" onclick="showTab('tab3')">
-        <i class="fas fa-lock"></i> SSL Monitoring 
-        <span class="badge-premium">Premium</span>
-      </a>      
-      <a href="#" onclick="showTab('tab4')">
-        <i class="fas fa-exclamation-triangle"></i> Incident Tracking
-      </a>
-      <a href="#" onclick="showTab('tab5')">
-        <i class="fas fa-bell"></i> Alert Notifications
-      </a>
-      <a href="#" onclick="showTab('tab6')">
-        <i class="fas fa-credit-card"></i> Plan & Subscription
-      </a>
+        <a href="#" onclick="showTab('tab1')" class="active">
+            <i class="fas fa-home"></i> Overview
+        </a>
+        <a href="#" onclick="showTab('tab2')">
+            <i class="fas fa-globe"></i> Website Monitoring
+        </a>
+        <a href="#" onclick="showTab('tab3')">
+            <i class="fas fa-lock"></i> SSL Monitoring 
+            <span class="badge-premium">Premium</span>
+        </a>
+        <a href="#" onclick="showTab('tab4')">
+            <i class="fas fa-exclamation-triangle"></i> Incident Tracking
+        </a>
+        <a href="#" onclick="showTab('tab5')">
+            <i class="fas fa-bell"></i> Alert Notifications
+        </a>
+        <a href="#" onclick="showTab('tab6')">
+            <i class="fas fa-user-plus"></i> Add User
+            <span class="badge-premium">Premium</span>
+        </a>
+        <a href="#" onclick="showTab('tab7')">
+            <i class="fas fa-ticket-alt"></i> Raise Ticket
+        </a>
+        <a href="#" onclick="showTab('tab8')">
+            <i class="fas fa-credit-card"></i> Plan & Subscription
+        </a>
     </div>
-  </div>
+
+    <!-- Back Button -->
+    <a href="{{ url()->previous() }}" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+</div>
 
   <!-- Main Content Area -->
   <div class="content">
-    <a href="{{ url()->previous() }}" class="back-btn">
-      <i class="fas fa-arrow-left"></i> Back
-    </a>
 
     <!-- Overview Tab -->
     <div id="tab1" class="tab-content active">
@@ -587,9 +628,111 @@
         </div>
       </div>
     </div>
-
-    <!-- Plan & Subscription Tab -->
+    <!--Subuser Tab-->
     <div id="tab6" class="tab-content">
+      <div class="content-header">
+        <h2><i class="fas fa-user-plus feature-icon"></i> Add User</h2>
+      </div>
+      
+      <p class="lead">Manage your team by adding users and assigning them specific permissions.</p>
+      
+      <div class="row mt-4">
+        <div class="col-lg-12">
+          <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-users me-2"></i> User Management</h5>
+            </div>
+            <div class="card-body">
+              <p>To add a new user, follow these steps:</p>
+              <ol>
+                <li>Navigate to the User Management section</li>
+                <li>Click on "Add User"</li>
+                <li>Fill in the user details (name, email, etc.)</li>
+                <li>Select permissions for the user</li>
+                <li>Click "Save" to create the user</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-lg-12">
+          <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-user-cog me-2"></i> User Permissions</h5>
+            </div>
+            <div class="card-body">
+              <p>Permissions can be set for each user to control their access level:</p>
+              <ul>
+                <li><strong>User:</strong> Full access to all features</li>
+                <li><strong>SubUser:</strong> Access to Features that the user gives permission's like dashboard,Incident,Status page</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <!--Raise Ticket Tab-->
+  <div id="tab7" class="tab-content">
+      <div class="content-header">
+        <h2><i class="fas fa-ticket-alt feature-icon"></i> Raise Ticket</h2>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-lg-12">
+          <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-ticket-alt me-2"></i> Ticket Management</h5>
+            </div>
+            <div class="card-body">
+              <p>To raise a ticket, follow these steps:</p>
+              <ol>
+                <li>Navigate to the Raise Issue section</li>
+                <li>Click on "Raise Ticket"</li>
+                <li>Fill in the ticket details (subject, description, etc.)</li>
+                <li>Click "Submit" to create the ticket</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-lg-12">
+          <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-history me-2"></i> Ticket History</h5>
+            </div>
+            <div class="card-body">
+              <p>View your ticket history and track the status of your requests:</p>
+              <ul>
+                <li><strong>Open Tickets:</strong> The user or subuser can view all tickets that are currently open</li>
+                <li><strong>Closed Tickets:</strong> View all tickets that have been resolved</li>
+                <li><strong>Ticket Details:</strong> Click on a ticket to view its details and responses</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-lg-12">
+          <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-comments me-2"></i> Ticket Responses</h5>
+            </div>
+            <div class="card-body">
+              <p>Communicate with our support team through ticket responses:</p>
+              <ul>
+                <li><strong>View Responses:</strong> Check the responses from our support team</li>
+                <li><strong>Add Comments:</strong> Add comments or additional information to your ticket</li>
+                <li><strong>Close Ticket:</strong> The ticket is closed once the user issue is resolved</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Plan & Subscription Tab -->
+    <div id="tab8" class="tab-content">
       <div class="content-header">
         <h2><i class="fas fa-credit-card feature-icon"></i> Plan & Subscription</h2>
       </div>
@@ -646,7 +789,7 @@
       
       
     </div>
-  </div>
+
 
   <script>
     function showTab(tabId) {
@@ -666,6 +809,42 @@
       document.querySelector('.content').scrollTo(0, 0);
     }
   </script>
+  <!--script so that tab remains active even after refresh-->
+<script>
+    // Function to show a specific tab
+    function showTab(tabId) {
+        // Hide all tab contents
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // Show the selected tab
+        document.getElementById(tabId).classList.add('active');
+        
+        // Update active nav link
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => link.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        
+        // Save the active tab ID to localStorage
+        localStorage.setItem('activeTab', tabId);
+        
+        // Scroll to top of content
+        document.querySelector('.content').scrollTo(0, 0);
+    }
 
+    // Restore the active tab on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTab = localStorage.getItem('activeTab') || 'tab1'; // Default to 'tab1' if no tab is saved
+        showTab(savedTab);
+
+        // Highlight the corresponding nav link
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        navLinks.forEach(link => {
+            if (link.getAttribute('onclick').includes(savedTab)) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
 </body>
 </html>
