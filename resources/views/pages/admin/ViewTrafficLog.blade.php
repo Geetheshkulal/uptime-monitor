@@ -247,10 +247,10 @@
                 </div>
                 
                 <!-- Third Row: User Agent -->
-                <div class="user-agent-row">
+                {{-- <div class="user-agent-row">
                     <span class="detail-label">User Agent:</span>
                     <div class="user-agent">{{ $log->user_agent }}</div>
-                </div>
+                </div> --}}
                 
                 <!-- Action Buttons -->
                 <div class="action-buttons">
@@ -269,6 +269,31 @@
                             </button>
                         </form>
                         @endif
+                    <div class="log-detail-row">
+                        <div class="log-detail-col">
+                            @if (!empty($log->email))
+                            <strong>User email :</strong> 
+                            <span class="text-primary">{{ $log->email }}</span>
+                            @endif
+                        </div>
+                        <div class="log-detail-col">
+                            @if (!empty($log->status))
+                            <strong>Status :</strong> 
+                            <span class="text-primary">{{ $log->status }}</span>
+                            @endif
+                        </div>
+                        <div class="log-detail-col">
+                            @if (!empty($log->reason))
+                            <strong>Reason:</strong> {{ $log->reason }}
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="log-detail-row">
+                        <div class="log-detail-col" style="width: 100%;">
+                            <strong>User Agent:</strong>
+                            <div class="user-agent"><code>{{ $log->user_agent }}</code></div>
+                        </div>
                     </div>
                 </div>
             </div>
