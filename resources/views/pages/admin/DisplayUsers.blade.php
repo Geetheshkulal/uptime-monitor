@@ -157,25 +157,6 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="status">Account Status*</label>
-                                <select class="form-control" id="status" name="status" required>
-                                    <option value="free">Free</option>
-                                    <option value="paid">Paid</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="premium_end_date">Premium End Date</label>
-                                <input type="date" class="form-control" id="premium_end_date" name="premium_end_date">
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
