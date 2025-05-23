@@ -19,6 +19,12 @@
          * {
     border-radius: 0 !important;
 }
+button.btn-light {
+    box-shadow: none !important; /* Remove shadow */
+    border: none !important; /* Remove border */
+    background-color: transparent !important; /* Make background transparent */
+    color:blue !important; /* Change text color */
+}
     </style>
 @endpush
 
@@ -144,9 +150,19 @@
         <!-- User Growth Chart -->
         <div class="col-xl-6 col-lg-6">
             <div class="card shadow mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">User Growth (Last 12 Months)</h6>
-                </div>
+               <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <h6 class="m-0 font-weight-bold text-primary">User Growth</h6>
+   <div class="dropdown">
+    <button class="btn btn-sm btn-light" type="button" id="userGrowthMenu" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userGrowthMenu">
+        <li><a class="dropdown-item" href="#" data-value="12">Last 12 Months</a></li>
+        <li><a class="dropdown-item" href="#" data-value="6">Last 6 Months</a></li>
+        <li><a class="dropdown-item" href="#" data-value="3">Last 3 Months</a></li>
+    </ul>
+</div>
+</div>
                 <div class="card-body">
                     <div class="chart-area">
                         <canvas id="userGrowthChart"></canvas>
@@ -159,8 +175,18 @@
         <div class="col-xl-6 col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Revenue Growth (Last 12 Months)</h6>
-                </div>
+    <h6 class="m-0 font-weight-bold text-primary">Revenue Growth</h6>
+   <div class="dropdown">
+    <button class="btn btn-sm btn-light " type="button" id="revenueGrowthMenu" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-ellipsis-v"></i>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="revenueGrowthMenu">
+        <li><a class="dropdown-item" href="#" data-value="12">Last 12 Months</a></li>
+        <li><a class="dropdown-item" href="#" data-value="6">Last 6 Months</a></li>
+        <li><a class="dropdown-item" href="#" data-value="3">Last 3 Months</a></li>
+    </ul>
+</div>
+</div>
                 <div class="card-body">
                     <div class="chart-area">
                         <canvas id="revenueGrowthChart"></canvas>
@@ -172,91 +198,137 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // User Growth Chart
-            const userCtx = document.getElementById('userGrowthChart').getContext('2d');
-            const month_labels = @json($month_labels);
-            const user_data = @json($user_data);
-            const userGrowthChart = new Chart(userCtx, {
-                type: 'line',
-                data: {
-                    labels: month_labels, // e.g., ['Apr', 'May', ..., 'Mar']
-                    datasets: [{
-                        label: 'New Users',
-                        data: user_data,    // e.g., [12, 23, 45, ..., 89]
-                        backgroundColor: 'rgba(78, 115, 223, 0.05)',
-                        borderColor: 'rgba(78, 115, 223, 1)',
-                        pointBackgroundColor: 'rgba(78, 115, 223, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
-                        tension: 0.3,
-                        fill: true
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1,
-                                callback: function(value) {
-                                    return value.toLocaleString();
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        
+    document.addEventListener("DOMContentLoaded", function () {
+    const userCtx = document.getElementById('userGrowthChart').getContext('2d');
+    const month_labels = @json($month_labels); // Original labels
+    const user_data = @json($user_data);       // Original data
 
-            // Revenue Growth Chart
-            const revenueCtx = document.getElementById('revenueGrowthChart').getContext('2d');
-            const revenue_by_month = @json($monthly_revenue);
-            const revenueGrowthChart = new Chart(revenueCtx, {
-                type: 'bar',
-                data: {
-                    labels: month_labels,
-                    datasets: [{
-                        label: 'Revenue (₹)',
-                        data: revenue_by_month,
-                        backgroundColor: 'rgba(54, 185, 204, 0.5)',
-                        borderColor: 'rgba(54, 185, 204, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 100,
-                                callback: function(value) {
-                                    return '₹' + value.toLocaleString();
-                                }
-                            }
+    let filteredLabels = [...month_labels]; // Clone original labels
+    let filteredData = [...user_data];      // Clone original data
+
+    const userGrowthChart = new Chart(userCtx, {
+        type: 'line',
+        data: {
+            labels: filteredLabels,
+            datasets: [{
+                label: 'New Users',
+                data: filteredData,
+                backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                borderColor: 'rgba(78, 115, 223, 1)',
+                pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function (value) {
+                            return value.toLocaleString();
                         }
                     }
                 }
-            });
+            }
+        }
+    });
+
+    // Filter Logic for User Growth Chart
+    const userGrowthMenuItems = document.querySelectorAll('#userGrowthMenu + .dropdown-menu .dropdown-item');
+    userGrowthMenuItems.forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const selectedValue = parseInt(this.getAttribute('data-value')); // Get selected timeline (e.g., 12, 6, 3)
+
+            // Filter data based on the selected timeline
+            const startIndex = Math.max(filteredLabels.length - selectedValue, 0);
+            const newLabels = month_labels.slice(startIndex);
+            const newData = user_data.slice(startIndex);
+
+            // Update the chart
+            userGrowthChart.data.labels = newLabels;
+            userGrowthChart.data.datasets[0].data = newData;
+            userGrowthChart.update();
         });
+    });
+});
+document.addEventListener("DOMContentLoaded", function () {
+    const revenueCtx = document.getElementById('revenueGrowthChart').getContext('2d');
+    const month_labels = @json($month_labels); // Original labels
+    const revenue_data = @json($monthly_revenue); // Original revenue data
 
-          // Show success message if exists
+    let filteredLabels = [...month_labels]; // Clone original labels
+    let filteredData = [...revenue_data];   // Clone original data
+
+    const revenueGrowthChart = new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: filteredLabels,
+            datasets: [{
+                label: 'Revenue (₹)',
+                data: filteredData,
+                backgroundColor: 'rgba(54, 185, 204, 0.5)',
+                borderColor: 'rgba(54, 185, 204, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 100,
+                        callback: function (value) {
+                            return '₹' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Filter Logic for Revenue Growth Chart
+    const revenueGrowthMenuItems = document.querySelectorAll('#revenueGrowthMenu + .dropdown-menu .dropdown-item');
+    revenueGrowthMenuItems.forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const selectedValue = parseInt(this.getAttribute('data-value')); // Get selected timeline (e.g., 12, 6, 3)
+
+            // Filter data based on the selected timeline
+            const startIndex = Math.max(filteredLabels.length - selectedValue, 0);
+            const newLabels = month_labels.slice(startIndex);
+            const newData = revenue_data.slice(startIndex);
+
+            // Update the chart
+            revenueGrowthChart.data.labels = newLabels;
+            revenueGrowthChart.data.datasets[0].data = newData;
+            revenueGrowthChart.update();
+        });
+    });
+});
+// Show success message if exists
     document.addEventListener("DOMContentLoaded", function() {
         @if(session('success'))
             toastr.success("{{ session('success') }}", "Success", {

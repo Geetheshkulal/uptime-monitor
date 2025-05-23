@@ -56,22 +56,27 @@
                                             </a>
                                         </td>
                                     @endcan
+                                    @if(in_array($role->name,['user','subuser','support']))
+                                        <td class="text-center">System Role</td>
+                                    @else
+                                        @canany(['edit.role','delete.role'])
+                                            <td class="text-center">
+                                                @can('edit.role')
+                                                    <a href="{{ route('edit.role',$role->id) }}" class="btn btn-sm btn-primary px-3 py-1 mr-1">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                @endcan
 
-                                    @canany(['edit.role','delete.role'])
-                                        <td class="text-center">
-                                            @can('edit.role')
-                                                <a href="{{ route('edit.role',$role->id) }}" class="btn btn-sm btn-primary px-3 py-1 mr-1">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                            @endcan
+                                                @can('delete.role')
+                                                    <a href="{{ route('delete.role',$role->id) }}" class="btn btn-sm btn-danger px-3 py-1" onclick="return confirm('Are you sure?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                @endcan
+                                        </td>
+                                        @endcanany
 
-                                            @can('delete.role')
-                                                <a href="{{ route('delete.role',$role->id) }}" class="btn btn-sm btn-danger px-3 py-1" onclick="return confirm('Are you sure?')">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            @endcan
-                                    </td>
-                                    @endcanany
+                                    @endif
+
                                 </tr>
                                 @endforeach
                             </tbody>
