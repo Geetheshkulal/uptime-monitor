@@ -45,5 +45,13 @@ class AssignDefaultPermissions extends Seeder
         $supportPermissions = [
             'manage.coupons',
         ];
+
+        foreach($supportPermissions as $permission){
+
+        if ($permission && !$supportRole->hasPermissionTo($permission)) {
+                // Assign the permission to the role
+                $supportRole->givePermissionTo($permission);
+            }
+        }
     }
 }

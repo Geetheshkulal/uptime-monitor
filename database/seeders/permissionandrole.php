@@ -45,6 +45,7 @@ class permissionandrole extends Seeder
             'edit.monitor' => 'monitor',
             'delete.monitor' => 'monitor',
             'add.monitor'=>'monitor',
+            
 
             
             
@@ -53,6 +54,8 @@ class permissionandrole extends Seeder
 
             'see.statuspage'=>'status_page',
             'see.incidents'=>'incident',
+
+            'manage.coupons'=>'coupons'
         ];
 
         // Create permissions
