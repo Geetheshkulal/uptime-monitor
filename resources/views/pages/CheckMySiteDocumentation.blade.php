@@ -2042,6 +2042,330 @@
             </div>
         </div>
     
+    </div>
+    <div id="tab11" class="tab-content">
+        <div class="monitor-module-doc">
+            <!-- Title Section -->
+            <div class="doc-header">
+                <h2>Status page Module</h2>
+                <p>This section describes the functionality of the Monitor Module in the CheckMySite application, covering monitor creation, management, and response handling for different monitor types (Ping, Port, HTTP, and DNS).</p>
+            </div>
+
+            <!-- Monitor Creation Section -->
+            <div class="doc-section">
+                <h3>Monitor Creation</h3>
+                <p>To create a new monitor, navigate to the <strong>Monitor Dashboard</strong> page, click <strong>Add Monitor</strong>, and fill in the monitor type (Ping, Port, HTTP, DNS).</p>
+            </div>
+
+            <!-- HTTP Monitor Section -->
+            <div class="doc-section">
+                <h3>HTTP Monitor</h3>
+                <p>The HTTP monitor checks the status and response time of a URL. It sends a request to the given URL and tracks the response time and status code.</p>
+
+                <!-- Code Snippet for HTTP Monitor Handling -->
+                <pre><code>
+                    
+                    public function checkHttp(Monitors $monitor)
+                    {
+                        $start = microtime(true); // Record start time
+                    
+                        try {
+                            // Send HTTP GET request to the monitor's URL
+                            $response = Http::timeout(10)->get($monitor->url);
+                            $end = microtime(true); // Record end time
+                    
+                            // Save HTTP response details in database
+                            HttpResponse::create([
+                                'monitor_id'    => $monitor->id,
+                                'status_code'   => $response->status(), // HTTP status code
+                                'response_time' => round(($end - $start) * 1000, 2), // ms
+                                'checked_at'    => now(), // Timestamp of the check
+                            ]);
+                        } catch (\Exception $e) {
+                            $end = microtime(true);
+                    
+                            // Store failed response with null status code
+                            HttpResponse::create([
+                                'monitor_id'    => $monitor->id,
+                                'status_code'   => null,
+                                'response_time' => round(($end - $start) * 1000, 2),
+                                'checked_at'    => now(),
+                            ]);
+                        }
+                    }                
+                </code></pre>
+
+                <p>The above method checkHttp function is designed to perform an HTTP check for a given monitor. It verifies the status of the service by sending an HTTP GET request to the monitor's URL and records the response details, including the response time and HTTP status code. <strong>HttpResponse</strong> table.</p>
+            </div>
+
+            <!-- Ping Monitor Section -->
+            <div class="doc-section">
+                <h3>Ping Monitor</h3>
+                <p>The Ping monitor checks the response time of a network ping to a server's IP address. It helps to determine if a server is reachable.</p>
+
+                <!-- Code Snippet for Ping Monitor Handling -->
+                <pre><code>
+
+                    public function checkPing(Monitors $monitor)
+                    {
+                        // Extract host from URL or use as-is
+                        $host = parse_url($monitor->url, PHP_URL_HOST) ?? $monitor->url;
+                    
+                        $start = microtime(true); // Start timing
+                    
+                        // Detect OS type to use correct ping command
+                        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+                    
+                        // Use OS-specific ping command
+                        $command = $isWindows ? "ping -n 1 $host" : "ping -c 1 $host";
+                    
+                        // Execute ping command
+                        exec($command, $output, $status);
+                    
+                        $end = microtime(true); // End timing
+                    
+                        // Store ping response in database
+                        PingResponse::create([
+                            'monitor_id'    => $monitor->id,
+                            'status'        => $status === 0 ? 'up' : 'down', // Status 0 = success
+                            'response_time' => round(($end - $start) * 1000, 2),
+                            'checked_at'    => now(),
+                        ]);
+                    }
+                    
+                </code></pre>
+
+                <p>The above method is designed to monitor the availability of a service by performing a ping test to the target URL of a given monitor. It checks the response time and the availability (up or down) of the service based on the result of the ping command<strong>PingResponse</strong> table.</p>
+            </div>
+
+            <!-- Port Monitor Section -->
+            <div class="doc-section">
+                <h3>Port Monitor</h3>
+                <p>The Port monitor checks whether a specific port is open on a given server. It attempts to connect to the server on the specified port.</p>
+
+                <!-- Code Snippet for Port Monitor Handling -->
+                <pre><code>
+
+                    public function checkPort(Monitors $monitor)
+                    {
+                        $start = microtime(true); // Start timing
+                    
+                        // Try opening the given host:port with a timeout
+                        $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, 10);
+                        $end = microtime(true); // End timing
+                    
+                        // Save port status and response time
+                        PortResponse::create([
+                            'monitor_id'    => $monitor->id,
+                            'port'          => $monitor->port,
+                            'status'        => $connection ? 'up' : 'down', // Based on connection
+                            'response_time' => round(($end - $start) * 1000, 2),
+                            'checked_at'    => now(),
+                        ]);
+                    
+                        // Close connection if successful
+                        if ($connection) {
+                            fclose($connection);
+                        }
+                    }
+                    
+                </code></pre>
+
+                <p>function is responsible for checking the availability of a specific port on a given host (e.g., a server). It attempts to establish a connection to the provided host and port, measures the response time, and records whether the port is open (up) or closed (down)</strong> table.</p>
+            </div>
+
+            <!-- DNS Monitor Section -->
+            <div class="doc-section">
+                <h3>DNS Monitor</h3>
+                <p>The DNS monitor checks the DNS resolution time for a domain. It ensures that the domain can be resolved correctly to an IP address.</p>
+
+                <!-- Code Snippet for DNS Monitor Handling -->
+                <pre><code>
+
+                    public function checkDnsRecords(Monitors $monitor)
+                    {
+                        $start = microtime(true); // Start timing
+                    
+                        // Parse host from URL or fallback to plain domain
+                        $parsed = parse_url($monitor->url);
+                        $host = $parsed['host'] ?? $monitor->url;
+                    
+                        // Default to 'A' record type if not specified
+                        $type = $monitor->dns_record_type ?? 'A';
+                    
+                        // Perform DNS lookup of specified type
+                        $records = dns_get_record($host, constant("DNS_{$type}"));
+                        $end = microtime(true); // End timing
+                    
+                        // Store DNS response data in database
+                        DnsResponse::create([
+                            'monitor_id'    => $monitor->id,
+                            'record_type'   => $type,
+                            'found_records' => json_encode($records), // Save records as JSON
+                            'response_time' => round(($end - $start) * 1000, 2),
+                            'checked_at'    => now(),
+                        ]);
+                    }
+                    
+                </code></pre>
+
+                <p>function is responsible for checking DNS records for a given host (domain) to ensure that it resolves correctly and to gather data about the specified record type (e.g., A record, MX record). The function measures the time it takes to perform the DNS lookup and stores the results</strong> table.</p>
+            </div>
+
+            <!-- Monitor Management Section -->
+            <div class="doc-section">
+                <h3>Monitor Management</h3>
+                <p>Monitors can be edited, paused, resumed, or deleted from the Monitor Dashboard. Each action triggers the appropriate method to update the monitor's status.</p>
+
+                <!-- Code Snippet for Pausing a Monitor -->
+                <pre><code>
+                    public function pauseMonitor(Request $request, $id)
+                    {
+                        // Get the currently authenticated user
+                        $user = auth()->user();
+                    
+                        // Retrieve the monitor by its ID, or fail if it does not exist
+                        $monitor = Monitors::findOrFail($id);
+                    
+                        // Toggle the 'paused' status of the monitor (if paused, resume it, if not paused, pause it)
+                        $monitor->paused = !$monitor->paused;
+                    
+                        // Save the updated monitor status to the database
+                        $monitor->save();
+                    
+                        // Determine the status message based on whether the monitor is paused or resumed
+                        $status = $monitor->paused ? 'paused' : 'resumed';
+                    
+                        // Log the activity with the details of the action (pausing/resuming the monitor)
+                        activity()
+                            ->performedOn($monitor) // Specify the monitor object being affected
+                            ->causedBy(auth()->user()) // Log the user who performed the action
+                            ->inLog('monitor_management') // Log category for monitoring actions
+                            ->event($status) // Event name based on whether the monitor is paused or resumed
+                            ->withProperties([ // Attach properties to the log entry
+                                'name' => $user->name, // The name of the user performing the action
+                                'monitor_id' => $monitor->id, // The ID of the monitor being paused/resumed
+                                'monitor_name' => $monitor->name, // The name of the monitor
+                                'status' => $status, // The new status (paused/resumed)
+                            ])
+                            ->log("Monitor {$monitor->name} has been {$status}"); // Custom log message
+                    
+                        // Return a JSON response with the result of the action (success status, message, and updated monitor status)
+                        return response()->json([
+                            'success' => true,
+                            'message' => "Monitor has been {$status} successfully.",
+                            'paused' => $monitor->paused, // Include the current paused status of the monitor
+                        ]);
+                    }
+                    
+                </code></pre>
+
+                <p>function is responsible for toggling the "paused" status of a specific monitor. When a monitor is paused, it stops being checked for availability, and when resumed, it starts being monitored again.</p>
+
+                <!-- Code Snippet for Deleting a Monitor -->
+                <pre><code>
+                    public function MonitorDelete($id)
+                    {
+                        // Retrieve the monitor by its ID, or fail if it does not exist
+                        $DeleteMonitor = Monitors::findOrFail($id);
+                    
+                        // If the monitor doesn't exist (though findOrFail would have already returned an error)
+                        if (!$DeleteMonitor) {
+                            // Redirect back with an error message if the monitor was not found
+                            return redirect()->back()->with('error', 'Monitoring data not found.');
+                        }
+                    
+                        // Proceed to delete the monitor from the database
+                        $DeleteMonitor->delete();
+                    
+                        // Log the deletion activity with relevant details
+                        activity()
+                            ->performedOn($DeleteMonitor) // Specify the monitor object being deleted
+                            ->causedBy(auth()->user()) // Log the user who performed the action
+                            ->inLog('monitor_management') // Log category for monitoring actions
+                            ->event('monitor deleted') // Event name for the deletion action
+                            ->withProperties([ // Attach properties to the log entry
+                                'monitor_name' => $DeleteMonitor->name, // Name of the monitor being deleted
+                                'monitor_type' => $DeleteMonitor->type, // Type of monitor (HTTP, DNS, etc.)
+                                'user_id' => auth()->id(), // ID of the user who deleted the monitor
+                                'ip' => request()->ip(), // IP address of the user performing the action
+                            ])
+                            ->log("User deleted {$DeleteMonitor->type} monitor"); // Custom log message
+                    
+                        // Redirect to the monitoring dashboard with a success message after deletion
+                        return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring data deleted successfully.');
+                    }
+                    
+                </code></pre>
+
+                <p>function is responsible for deleting a monitor from the database. This method ensures that a monitor can be safely removed, logs the action for auditing purposes, and provides user feedback.</p>
+                <p>To edit monitor</p>
+                <pre><code>
+                    public function MonitorEdit(Request $request, $id)
+                    {
+                        // Validate the incoming request data to ensure proper format and types.
+                        $request->validate([
+                            'name' => 'required|string|max:255', // Name must be a string and a max of 255 characters
+                            'url' => 'required|url', // URL must be a valid URL
+                            'retries' => 'required|integer|min:1', // Retries must be an integer greater than or equal to 1
+                            'interval' => 'required|integer|min:1', // Interval must be an integer greater than or equal to 1
+                            'email' => 'required|email', // Email must be a valid email
+                            'port' => 'nullable|integer', // Port is optional but must be an integer if provided
+                            'dns_resource_type' => 'nullable|string', // DNS resource type is optional but must be a string if provided
+                            'telegram_id' => 'nullable|string', // Telegram ID is optional but must be a string if provided
+                            'telegram_bot_token' => 'nullable|string', // Telegram bot token is optional but must be a string if provided
+                            'type' => 'string' // Type must be a string
+                        ]);
+                    
+                        // Find the monitor by its ID, or fail if not found
+                        $EditMonitoring = Monitors::findOrFail($id);
+                    
+                        // Get the original values of the monitor before updating, to compare later
+                        $original = $EditMonitoring->getOriginal();
+                    
+                        // Update the monitor's attributes with the request data
+                        $EditMonitoring->update($request->all());
+                    
+                        // Initialize the changes array to track old and new values
+                        $changes = [
+                            'old' => [],
+                            'new' => [],
+                        ];
+                    
+                        // Loop through all the incoming request data and compare it with the original values
+                        foreach ($request->all() as $key => $value) {
+                            // If the key exists in the original monitor and the value has changed
+                            if (array_key_exists($key, $original) && $original[$key] != $value) {
+                                // Add the old value and new value to the changes array for logging
+                                $changes['old'][$key] = $original[$key];
+                                $changes['new'][$key] = $value;
+                            }
+                        }
+                    
+                        // Log the activity, indicating that the monitor was updated
+                        activity()
+                            ->performedOn($EditMonitoring) // Specify the object being updated
+                            ->causedBy(auth()->user()) // Log the user who made the change
+                            ->inLog('monitor_management') // Specify the log type/category
+                            ->event('updated monitor') // Specify the event name
+                            ->withProperties($changes) // Attach the changes (old and new data) to the log entry
+                            ->log('Monitoring details updated'); // Log the message
+                    
+                        // Redirect back to the previous page with a success message
+                        return redirect()->back()->with('success', 'Monitoring details updated successfully.');
+                    }
+                    
+                </code></pre>
+                <p> function is designed to handle the editing and updating of a monitor's details in the system. It ensures that the incoming data is valid, updates the monitor record with the new values, and logs the changes for auditing purposes.</p>
+            </div>
+
+            <!-- Conclusion Section -->
+            <div class="doc-footer">
+                <h4>Conclusion</h4>
+                <p>The Monitor Module in CheckMySite provides a comprehensive solution for tracking the status of various services using Ping, Port, HTTP, and DNS monitors. Each type of monitor is handled with specific logic tailored to its purpose, ensuring accurate monitoring and reliable alerting.</p>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     function showTab(tabId) {
