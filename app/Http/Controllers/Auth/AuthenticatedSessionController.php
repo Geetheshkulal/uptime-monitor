@@ -15,6 +15,8 @@ use Illuminate\View\View;
 use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
+use Jenssegers\Agent\Agent;
+use App\Models\TrafficLog;
 
 
 class AuthenticatedSessionController extends Controller
@@ -31,90 +33,203 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
 
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-            'g-recaptcha-response' => ['required', function ($attribute, $value, $fail) {
-                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-                    'secret' => config('services.recaptcha.secret'),
-                    'response' => $value,
-                    'remoteip' => request()->ip(),
-                ]);
-        
-                $responseBody = $response->json();
-        
-                if (!($responseBody['success'] ?? false)) {
-                    $fail('reCAPTCHA verification failed.');
-                }
-            }],
+     public function store(LoginRequest $request): RedirectResponse
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+        'g-recaptcha-response' => ['required', function ($attribute, $value, $fail) {
+            $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret' => config('services.recaptcha.secret'),
+                'response' => $value,
+                'remoteip' => request()->ip(),
+            ]);
+
+            $responseBody = $response->json();
+
+            if (!($responseBody['success'] ?? false)) {
+                $fail('reCAPTCHA verification failed.');
+            }
+        }],
+    ]);
+
+    try {
+        $request->authenticate();
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Log failed login attempt
+        $agent = new Agent();
+        $ip = $request->ip();
+        $isp = 'Unknown ISP';
+        $country = '';
+
+        try {
+            $token = env('IPINFO_TOKEN');
+            $response = Http::get("https://ipinfo.io/{$ip}?token={$token}");
+            if ($response->successful()) {
+                $data = $response->json();
+                $isp = $data['org'] ?? 'Unknown ISP';
+                $country = $data['country'] ?? '';
+            }
+        } catch (\Exception $ex) {}
+
+        TrafficLog::create([
+            'ip' => $ip,
+            'email' => $request->email,
+            'status' => 'failed_login',
+            'reason' => 'Invalid credentials',
+            'isp' => $isp,
+            'country' => $country,
+            'browser' => $agent->browser(),
+            'platform' => $agent->platform(),
+            'user_agent' => $request->userAgent(),
+            'url' => $request->fullUrl(),
+            'method' => $request->method(),
         ]);
 
-        $request->authenticate();
-        // Check if user is a subuser with parent on free plan
-         /** @var User $user */
-            $user = Auth::user();
-            if ($user->parent_user_id) {
-                $parentUser = User::find($user->parent_user_id);
-                if ($parentUser && $parentUser->status === 'free') {
-                    Auth::logout();
-                    return back()->with('error', 'Your account is currently inactive because the parent account is on free plan.');
-                }
-            }
+        throw $e; // re-throw to let Laravel handle validation redirect
+    }
 
-        $request->session()->regenerate();
+    // Proceed with successful login logic
+    $user = Auth::user();
 
-        /** @var User $user */
-        $user = Auth::user(); 
+    if ($user->parent_user_id) {
+        $parentUser = User::find($user->parent_user_id);
+        if ($parentUser && $parentUser->status === 'free') {
+            Auth::logout();
+            return back()->with('error', 'Your account is currently inactive because the parent account is on free plan.');
+        }
+    }
 
-     if ($user instanceof User) {
+    $request->session()->regenerate();
 
-            $user->session_id = Session::getId();
-            // $user->last_activity = now();
-            $user->last_login_ip = $request->ip();
-            $user->save(); 
-
+    if ($user instanceof User) {
+        $user->session_id = Session::getId();
+        $user->last_login_ip = $request->ip();
+        $user->save();
     }
 
     activity()
-            ->causedBy($user)
-            ->inLog('auth')
-            ->event('login')
-            ->withProperties([
-                'name'       => $user->name,
-                'email'      => $user->email,
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent()
-            ])
-            ->log('User logged in');
+        ->causedBy($user)
+        ->inLog('auth')
+        ->event('login')
+        ->withProperties([
+            'name'       => $user->name,
+            'email'      => $user->email,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ])
+        ->log('User logged in');
 
-
-        if ($request->has('remember')) {
-            Cookie::queue('remember_email', $request->email, 1440); // for 1 days
-            Cookie::queue('remember_password', $request->password, 1440); 
-        } else {
-            Cookie::queue(Cookie::forget('remember_email'));
-            Cookie::queue(Cookie::forget('remember_password'));
-        }
-
-        $redirect_route = '';
-
-        switch($user->roles->first()->name){
-            case 'superadmin':
-                $redirectRoute= RouteServiceProvider::ADMIN_DASHBOARD;
-                break;
-            case 'support':
-                $redirectRoute = '/display/tickets';
-                break;
-            default:
-                $redirectRoute= RouteServiceProvider::HOME;
-        }
-
-        Log::info('Session data in login controller:', session()->all());
-        return redirect()->intended($redirectRoute)->with('success', 'Login Successfully');;
+    if ($request->has('remember')) {
+        Cookie::queue('remember_email', $request->email, 1440);
+        Cookie::queue('remember_password', $request->password, 1440);
+    } else {
+        Cookie::queue(Cookie::forget('remember_email'));
+        Cookie::queue(Cookie::forget('remember_password'));
     }
+
+    $redirectRoute = '';
+    switch ($user->roles->first()->name) {
+        case 'superadmin':
+            $redirectRoute = RouteServiceProvider::ADMIN_DASHBOARD;
+            break;
+        case 'support':
+            $redirectRoute = '/display/tickets';
+            break;
+        default:
+            $redirectRoute = RouteServiceProvider::HOME;
+    }
+
+    Log::info('Session data in login controller:', session()->all());
+
+    return redirect()->intended($redirectRoute)->with('success', 'Login Successfully');
+}
+
+    // public function store(LoginRequest $request): RedirectResponse
+    // {
+
+    //     $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required',
+    //         'g-recaptcha-response' => ['required', function ($attribute, $value, $fail) {
+    //             $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+    //                 'secret' => config('services.recaptcha.secret'),
+    //                 'response' => $value,
+    //                 'remoteip' => request()->ip(),
+    //             ]);
+        
+    //             $responseBody = $response->json();
+        
+    //             if (!($responseBody['success'] ?? false)) {
+    //                 $fail('reCAPTCHA verification failed.');
+    //             }
+    //         }],
+    //     ]);
+
+    //     $request->authenticate();
+    //     // Check if user is a subuser with parent on free plan
+    //      /** @var User $user */
+    //         $user = Auth::user();
+    //         if ($user->parent_user_id) {
+    //             $parentUser = User::find($user->parent_user_id);
+    //             if ($parentUser && $parentUser->status === 'free') {
+    //                 Auth::logout();
+    //                 return back()->with('error', 'Your account is currently inactive because the parent account is on free plan.');
+    //             }
+    //         }
+
+    //     $request->session()->regenerate();
+
+    //     /** @var User $user */
+    //     $user = Auth::user(); 
+
+    //  if ($user instanceof User) {
+
+    //         $user->session_id = Session::getId();
+    //         // $user->last_activity = now();
+    //         $user->last_login_ip = $request->ip();
+    //         $user->save(); 
+
+    // }
+
+    // activity()
+    //         ->causedBy($user)
+    //         ->inLog('auth')
+    //         ->event('login')
+    //         ->withProperties([
+    //             'name'       => $user->name,
+    //             'email'      => $user->email,
+    //             'ip' => $request->ip(),
+    //             'user_agent' => $request->userAgent()
+    //         ])
+    //         ->log('User logged in');
+
+
+    //     if ($request->has('remember')) {
+    //         Cookie::queue('remember_email', $request->email, 1440); // for 1 days
+    //         Cookie::queue('remember_password', $request->password, 1440); 
+    //     } else {
+    //         Cookie::queue(Cookie::forget('remember_email'));
+    //         Cookie::queue(Cookie::forget('remember_password'));
+    //     }
+
+    //     $redirect_route = '';
+
+    //     switch($user->roles->first()->name){
+    //         case 'superadmin':
+    //             $redirectRoute= RouteServiceProvider::ADMIN_DASHBOARD;
+    //             break;
+    //         case 'support':
+    //             $redirectRoute = '/display/tickets';
+    //             break;
+    //         default:
+    //             $redirectRoute= RouteServiceProvider::HOME;
+    //     }
+
+    //     Log::info('Session data in login controller:', session()->all());
+    //     return redirect()->intended($redirectRoute)->with('success', 'Login Successfully');;
+    // }
 
    
     public function destroy(Request $request): RedirectResponse

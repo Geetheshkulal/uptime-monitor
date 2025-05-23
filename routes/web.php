@@ -64,7 +64,7 @@ Route::get('/', function()
 {
     $plans = Subscriptions::all();
     return view('welcome', compact('plans'));
-})->middleware('blockIp');
+})->middleware('blockIp','log.traffic');
 
 Route::get('latestUpdates',function(){return view('pages.latestUpdates');})->name('latest.page')->middleware('blockIp');
 
