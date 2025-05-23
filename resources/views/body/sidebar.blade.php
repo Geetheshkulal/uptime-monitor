@@ -294,7 +294,7 @@
         <li class="nav-item {{ request()->routeIs('display.users') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('display.users') }}">
                 <i class="fas fa-user"></i>
-                <span>Users</span>
+                <span>Users & Customers</span>
             </a>
         </li>
     @endcan

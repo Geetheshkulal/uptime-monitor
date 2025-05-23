@@ -81,7 +81,7 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Actions</h6>
                                 </div>
                                 <div class="card-body text-center">
-                                    @if(!$user->hasRole('user'))
+                                    @if(!$user->hasAnyRole(['user', 'subuser']))
                                         @can('edit.user')
                                             <a href="{{ route('edit.user', $user->id) }}" class="btn btn-primary btn-block mb-3">
                                                 <i class="fas fa-edit"></i> Edit User
@@ -92,19 +92,29 @@
                                 
                                     @if(!$user->hasRole('superadmin'))
                                         @can('delete.user')
-                                            @if($user->trashed())
-                                                <form action="{{ route('restore.user', $user->id) }}" method="POST" class="d-inline-block w-100">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-primary btn-block" onclick="return confirm('Are you sure you want to restore this user?')">
-                                                        <i class="fas fa-door-open"></i> Enable User
-                                                    </button>
-                                                </form>
+                                            @if($user->hasRole('user')||$user->hasRole('subuser'))
+                                                @if($user->trashed())
+                                                    <form action="{{ route('restore.user', $user->id) }}" method="POST" class="d-inline-block w-100">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-primary btn-block" onclick="return confirm('Are you sure you want to restore this user?')">
+                                                            <i class="fas fa-door-open"></i> Enable Customer
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <form action="{{ route('delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to delete this user?')">
+                                                            <i class="fas fa-ban"></i> Disable Customer
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             @else
                                                 <form action="{{ route('delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to delete this user?')">
-                                                        <i class="fas fa-ban"></i> Disable User
+                                                        <i class="fas fa-ban"></i> Delete User
                                                     </button>
                                                 </form>
                                             @endif
@@ -135,63 +145,65 @@
         </div>
     </div>
     @can('see.monitors')
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">User Monitors</h6>
-                <span class="badge badge-primary">{{ $user->monitors->count() }} Monitors</span>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover" id="monitorsTable" width="100%" cellspacing="0">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Name</th>
-                                <th>URL</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Created Date</th>
-                                @can('see.monitor.details')
-                                    <th>Action</th>
-                                @endcan
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($user->monitors as $monitor)
-                            <tr>
-                                <td>{{ $monitor->name }}</td>
-                                <td>{{ Str::limit($monitor->url, 30) }}</td>
-                                <td>
-                                    @if($monitor->type === 'port')
-                                        {{ $monitor->type }} ({{ $monitor->port }})
-                                    @else
-                                        {{ $monitor->type }}
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($monitor->status === 'up')
-                                        <span class="badge badge-success">Up</span>
-                                    @else
-                                        <span class="badge badge-danger">Down</span>
-                                    @endif
-                                </td>
-                                <td data-order="{{ $monitor->created_at->timestamp }}">
-                                    {{ $monitor->created_at->format('M d, Y') }}
-                                </td>
-                                @can('see.monitor.details')
+        @if($user->hasRole('user'))
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">User Monitors</h6>
+                    <span class="badge badge-primary">{{ $user->monitors->count() }} Monitors</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="monitorsTable" width="100%" cellspacing="0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>URL</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Created Date</th>
+                                    @can('see.monitor.details')
+                                        <th>Action</th>
+                                    @endcan
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($user->monitors as $monitor)
+                                <tr>
+                                    <td>{{ $monitor->name }}</td>
+                                    <td>{{ Str::limit($monitor->url, 30) }}</td>
                                     <td>
-                                        <a href="{{ route('display.monitoring', ['id' => $monitor->id, 'type' => $monitor->type]) }}" 
-                                        class="btn btn-sm btn-primary" title="View Monitor">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
+                                        @if($monitor->type === 'port')
+                                            {{ $monitor->type }} ({{ $monitor->port }})
+                                        @else
+                                            {{ $monitor->type }}
+                                        @endif
                                     </td>
-                                @endcan
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    <td>
+                                        @if ($monitor->status === 'up')
+                                            <span class="badge badge-success">Up</span>
+                                        @else
+                                            <span class="badge badge-danger">Down</span>
+                                        @endif
+                                    </td>
+                                    <td data-order="{{ $monitor->created_at->timestamp }}">
+                                        {{ $monitor->created_at->format('M d, Y') }}
+                                    </td>
+                                    @can('see.monitor.details')
+                                        <td>
+                                            <a href="{{ route('display.monitoring', ['id' => $monitor->id, 'type' => $monitor->type]) }}" 
+                                            class="btn btn-sm btn-primary" title="View Monitor">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    @endcan
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
     @endcan
 </div>
 

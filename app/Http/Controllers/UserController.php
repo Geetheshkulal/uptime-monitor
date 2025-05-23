@@ -78,9 +78,9 @@ class UserController extends Controller
     }
 
         //Display all users  (for superadmin)
-        public function DisplayUsers(Request $request)
+        public function DisplayCustomers(Request $request)
         {
-            $roles = Role::whereNot('name','superadmin')->get();
+            $roles = Role::whereNot('name','superadmin')->whereNot('name','subuser')->whereNot('name','user')->get();
 
             // Basic search functionality
             $search = $request->input('search');
@@ -94,7 +94,13 @@ class UserController extends Controller
                         ->orderBy('name')
                         ->paginate(10); // 10 users per page
 
-            return view('pages.admin.DisplayUsers', compact('users','roles'));
+            $customerCount = User::withTrashed()->role('user')->count();
+
+            $userCount =    User::whereDoesntHave('roles', function ($q) {
+                                $q->where('name', 'user');
+                            })->count();
+
+            return view('pages.admin.DisplayUsers', compact('users','roles','customerCount','userCount'));
         }
 
         //Show details of a particular user
@@ -192,7 +198,7 @@ class UserController extends Controller
             }
         }
 
-        //Delete a particular user
+        //Disable (soft delete) a particular user
         public function DeleteUser($id)
         {
             try {
@@ -235,11 +241,11 @@ class UserController extends Controller
 
 
                 return redirect()->route('display.users')
-                    ->with('success', 'User deleted successfully!');
+                    ->with('success', 'User disabled successfully!');
                     
             } catch (\Exception $e) {
                 return redirect()->route('display.users')
-                    ->with('error', 'Error deleting user: ' . $e->getMessage());
+                    ->with('error', 'Error disabling user: ' . $e->getMessage());
             }
         }
 
@@ -247,7 +253,7 @@ class UserController extends Controller
         {
             $user = auth()->user();
 
-            if ($user->is_sub_user) {
+            if ($user->is_sub_user){
                 abort(403, 'Sub-users cannot view other sub-users.');
             }
 

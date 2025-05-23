@@ -155,7 +155,7 @@ Route::middleware(['auth','verified','CheckUserSession','blockIp'])->group(funct
 Route::group(['middleware' => ['auth','blockIp']], function () {
     // Routes accessible only by superadmin
     Route::get('/admin/dashboard',[AdminController::class,'AdminDashboard'])->middleware('role:superadmin')->name('admin.dashboard');
-    Route::get('/admin/display/users', action: [UserController::class,'DisplayUsers'])->middleware('permission:see.users')->name('display.users');
+    Route::get('/admin/display/users', action: [UserController::class,'DisplayCustomers'])->middleware('permission:see.users')->name('display.users');
     Route::get('/admin/display/roles', action: [RoleController::class,'DisplayRoles'])->middleware('permission:see.roles')->name('display.roles');
     Route::get('/admin/display/permissions', [PermissionController::class, 'DisplayPermissions'])->middleware('role:superadmin')->name('display.permissions');
     Route::get('/admin/display/user/{id}', action: [UserController::class,'ShowUser'])->middleware('permission:see.users')->name('show.user');
