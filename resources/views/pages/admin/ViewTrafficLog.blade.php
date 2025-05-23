@@ -77,7 +77,7 @@
     }
     
     .detail-label {
-        font-size: 15px;
+        font-size: 17px;
         color: #64748b;
         font-weight: 700;
     }
@@ -241,6 +241,24 @@
                         <span class="detail-label">ISP:</span>
                         <span class="detail-value">{{ $log->isp ?? 'Unknown' }}</span>
                     </div>
+                    <div class="detail-group">
+                        @if (!empty($log->email))
+                                        <strong class="detail-label">User email :</strong> 
+                                        <span class="detail-value">{{ $log->email }}</span>
+                                        @endif
+                    </div>
+                    <div class="detail-group">
+                        @if (!empty($log->status))
+                                        <strong class="detail-label">Status :</strong> 
+                                        <span class="detail-value">{{ $log->status }}</span>
+                                        @endif
+                    </div>
+                    <div class="detail-group">
+                        @if (!empty($log->reason))
+                                        <strong class="detail-label">Reason:</strong><span class="detail-value"> {{ $log->reason }}</span>
+                                        @endif
+            
+                    </div>
                 </div>
                 
                 <!-- Second Row: URL and Referrer -->
@@ -254,7 +272,8 @@
                         <div class="referrer-value">{{ $log->referrer ?? 'Direct access' }}</div>
                     </div>
                 </div>
-                
+
+               
                 <!-- Third Row: User Agent -->
                 <div class="user-agent-row">
                     <span class="detail-label">User Agent:</span>
@@ -287,70 +306,12 @@
     </div>
 @endforelse
         </div>
-    </div>
-    
-    <!-- Second Row: URL and Referrer -->
-    <div class="request-row">
-        <div class="url-group">
-            <span class="detail-label">URL:</span>
-            <div class="url-value">{{ $log->url }}</div>
-        </div>
-        <div class="referrer-group">
-            <span class="detail-label">Referrer:</span>
-            <div class="referrer-value">{{ $log->referrer ?? 'Direct access' }}</div>
-        </div>
-    </div>
 
-    <div class="client-row">
-        <div class="detail-group">
-            @if (!empty($log->email))
-                            <strong class="detail-label">User email :</strong> 
-                            <span class="detail-value">{{ $log->email }}</span>
-                            @endif
-        </div>
-        <div class="detail-group">
-            @if (!empty($log->status))
-                            <strong class="detail-label">Status :</strong> 
-                            <span class="detail-value">{{ $log->status }}</span>
-                            @endif
-        </div>
-        <div class="detail-group">
-            @if (!empty($log->reason))
-                            <strong class="detail-label">Reason:</strong><span class="detail-value"> {{ $log->reason }}</span>
-                            @endif
-
-        </div>
+    <!-- Pagination -->
+    <div class="mt-3 d-flex justify-content-center">
+        {{ $trafficLogs->appends(request()->query())->links('pagination::bootstrap-4') }}
+     </div>
     </div>
-    
-    <!-- Third Row: User Agent -->
-    <div class="user-agent-row">
-        <span class="detail-label">User Agent:</span>
-        <div class="user-agent">{{ $log->user_agent }}</div>
-    </div>
-    
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-        @if(in_array($log->ip, $blocked_ips))
-            <form method="POST" action="{{ route('unblock.ip', $log->ip) }}">
-                @csrf
-                <button type="submit" class="action-btn unblock-btn">
-                    <i class="fas fa-unlock fa-xs"></i> Unblock
-                </button>
-            </form>
-        @else
-            <form method="POST" action="{{ route('block.ip', $log->ip) }}">
-                @csrf
-                <button type="submit" class="action-btn block-btn">
-                    <i class="fas fa-ban fa-xs"></i> Block
-                </button>
-            </form>
-            @endif
-        </div>
-    </div>
-</div>
-@endforeach
-</div>
-
 
     @push('scripts')
     @if(session('success'))
