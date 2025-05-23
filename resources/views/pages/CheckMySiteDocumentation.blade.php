@@ -2048,13 +2048,7 @@
             <!-- Title Section -->
             <div class="doc-header">
                 <h2>Status page Module</h2>
-                <p>This section describes the functionality of the Monitor Module in the CheckMySite application, covering monitor creation, management, and response handling for different monitor types (Ping, Port, HTTP, and DNS).</p>
-            </div>
-
-            <!-- Monitor Creation Section -->
-            <div class="doc-section">
-                <h3>Monitor Creation</h3>
-                <p>To create a new monitor, navigate to the <strong>Monitor Dashboard</strong> page, click <strong>Add Monitor</strong>, and fill in the monitor type (Ping, Port, HTTP, DNS).</p>
+                <p> </p>
             </div>
 
             <!-- HTTP Monitor Section -->
