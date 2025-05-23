@@ -20,8 +20,7 @@ class TrafficLogController extends Controller
             $q->where('ip', 'like', "%{$search}%")
               ->orWhere('browser', 'like', "%{$search}%")
               ->orWhere('platform', 'like', "%{$search}%")
-              ->orWhere('url', 'like', "%{$search}%")
-              ->orWhere('method', 'like', "%{$search}%");
+              ->orWhere('url', 'like', "%{$search}%");
         });
     }
 
