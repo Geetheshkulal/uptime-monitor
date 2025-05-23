@@ -81,7 +81,7 @@
                                             </a>
                                         </div>
                                         <div class="btn-group" role="group">
-                                            <form action="{{ route('delete.sub.user', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?')">
+                                            <form action="{{ route('delete.completely.user', $user->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this user?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger" title="Delete">

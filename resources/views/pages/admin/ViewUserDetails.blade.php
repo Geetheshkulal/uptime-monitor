@@ -110,7 +110,7 @@
                                                     </form>
                                                 @endif
                                             @else
-                                                <form action="{{ route('delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
+                                                <form action="{{ route('completely.delete.user', $user->id) }}" method="POST" class="d-inline-block w-100">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-block" onclick="return confirm('Are you sure you want to delete this user?')">

@@ -26,7 +26,6 @@ class UserController extends Controller
             'password' => 'required|min:3',
             'phone' => 'nullable|string',
             'role' => 'required|exists:roles,id',  // Ensure role exists
-            'status' => 'required|in:free,paid',
             'premium_end_date' => 'nullable|date',
         ]);
 
@@ -37,8 +36,8 @@ class UserController extends Controller
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
                 'phone' => $validated['phone'] ?? null,
-                'status' => $validated['status'],
-                'premium_end_date' => $validated['premium_end_date'] ?? null,
+                'status' => 'free',
+                'premium_end_date' => null,
                 'last_login_ip' => $request->ip(),
                 'status_page_hash' => Str::random(32),
                 'email_verified_at'=>now()
@@ -422,6 +421,13 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->forceDelete();
         return redirect()->route('display.sub.users')
+                    ->with('success', 'User deleted successfully!');
+    }
+
+    public function CompletelyDeleteUser($id){
+        $user = User::withTrashed()->findOrFail($id);
+        $user->forceDelete();
+        return redirect()->route('display.users')
                     ->with('success', 'User deleted successfully!');
     }
 }

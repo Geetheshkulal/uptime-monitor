@@ -209,6 +209,9 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
     Route::post('/add/subsusers', [UserController::class, 'StoreSubUser'])->middleware('premium_middleware')->name('add.sub.user');
     Route::delete('/delete/subsuser/${id}', [UserController::class, 'DeleteSubUser'])->middleware('premium_middleware')->name('delete.sub.user');
 
+    Route::delete('/completely/delete/user/${id}', [UserController::class, 'CompletelyDeleteUser'])->middleware('premium_middleware')->name('completely.delete.user');
+
+
 
     Route::get('/sub-user/{id}/edit-permissions', [UserController::class, 'EditSubUserPermissions'])->name('edit.sub.user.permissions');
     Route::post('/sub-user/{id}/update-permissions', [UserController::class, 'UpdateSubUserPermissions'])->name('update.sub.user.permissions');
