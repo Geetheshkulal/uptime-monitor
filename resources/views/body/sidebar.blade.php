@@ -350,6 +350,7 @@
         @endcan
 
         <!-- Helpdesk item at bottom -->
+        @hasrole('user')
         @can('raise.issue')
             <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">
                 <a class="nav-link" href="{{route('display.tickets')}}">
@@ -358,7 +359,7 @@
                 </a>
             </li>
         @endcan
-
+        @endhasrole
         @hasrole('superadmin')
             <li class="nav-item {{ request()->routeIs('display.trafficLog') ? 'active' : '' }}">
                 <a class="nav-link" href="{{route('display.trafficLog')}}">
