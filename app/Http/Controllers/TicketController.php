@@ -33,7 +33,13 @@ class TicketController extends Controller
         $ticket = Ticket::findOrFail($id);
         $comments = $ticket->comments()->with('user')->orderBy('created_at', 'asc')->get();
 
+        $user =  auth()->user();
         $supportUsers = User::role('support')->get();
+
+        if($user->hasRole('support') && !($ticket->assigned_user_id===$user->id)){
+            abort(404);
+        }
+        
 
         return view('pages.tickets.TicketDetails', compact('ticket', 'comments','supportUsers'));
     }

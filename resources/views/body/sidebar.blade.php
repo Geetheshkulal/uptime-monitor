@@ -202,7 +202,6 @@
 
     <!-- Wrapper for main nav items -->
 
-        @if(!auth()->user()->hasrole('support'))
         @hasanyrole(['user','subuser'])
             @can('see.monitors')
                 <li class="nav-item {{ request()->is('dashboard*') ? 'active' : '' }}">
@@ -350,13 +349,15 @@
             </li>
         @endcan
 
-            <!-- Helpdesk item at bottom -->
-        <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">
-            <a class="nav-link" href="{{route('display.tickets')}}">
-                <i class="fas fa-headset"></i>
-                <span>Raise Issue</span>
-            </a>
-        </li>
+        <!-- Helpdesk item at bottom -->
+        @can('raise.issue')
+            <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">
+                <a class="nav-link" href="{{route('display.tickets')}}">
+                    <i class="fas fa-headset"></i>
+                    <span>Raise Issue</span>
+                </a>
+            </li>
+        @endcan
 
         @hasrole('superadmin')
             <li class="nav-item {{ request()->routeIs('display.trafficLog') ? 'active' : '' }}">
@@ -367,16 +368,15 @@
             </li>
         @endhasrole
 
-        @endif
 
-        @hasanyrole(['support','superadmin'])
+        @can('manage.coupons')
             <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('display.coupons') }}">
                     <i class="fas fa-percent"></i>
                     <span>Coupons</span>
                 </a>
             </li>
-        @endhasanyrole
+        @endcan
 
         @hasrole('support')
             <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">

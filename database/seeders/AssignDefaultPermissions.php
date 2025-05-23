@@ -24,7 +24,7 @@ class AssignDefaultPermissions extends Seeder
             'add.monitor',      
             'see.statuspage',     
             'delete.user',      
-            
+            'raise.issue'
         ];
         
         // 3. Loop through each permission and assign it to the role
@@ -39,5 +39,11 @@ class AssignDefaultPermissions extends Seeder
             }
         }
         $this->command->info('Default permissions assigned to user role.');
+
+        $supportRole = Role::where('name', 'support')->firstOrFail();
+
+        $supportPermissions = [
+            'manage.coupons',
+        ];
     }
 }
