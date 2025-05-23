@@ -77,9 +77,9 @@
     }
     
     .detail-label {
-        font-size: 0.75rem;
+        font-size: 17px;
         color: #64748b;
-        font-weight: 500;
+        font-weight: 700;
     }
     
     .detail-value {
@@ -241,6 +241,24 @@
                         <span class="detail-label">ISP:</span>
                         <span class="detail-value">{{ $log->isp ?? 'Unknown' }}</span>
                     </div>
+                    <div class="detail-group">
+                        @if (!empty($log->email))
+                                        <strong class="detail-label">User email :</strong> 
+                                        <span class="detail-value">{{ $log->email }}</span>
+                                        @endif
+                    </div>
+                    <div class="detail-group">
+                        @if (!empty($log->status))
+                                        <strong class="detail-label">Status :</strong> 
+                                        <span class="detail-value">{{ $log->status }}</span>
+                                        @endif
+                    </div>
+                    <div class="detail-group">
+                        @if (!empty($log->reason))
+                                        <strong class="detail-label">Reason:</strong><span class="detail-value"> {{ $log->reason }}</span>
+                                        @endif
+            
+                    </div>
                 </div>
                 
                 <!-- Second Row: URL and Referrer -->
@@ -254,7 +272,8 @@
                         <div class="referrer-value">{{ $log->referrer ?? 'Direct access' }}</div>
                     </div>
                 </div>
-                
+
+               
                 <!-- Third Row: User Agent -->
                 <div class="user-agent-row">
                     <span class="detail-label">User Agent:</span>

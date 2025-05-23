@@ -52,19 +52,19 @@ const returnFromCache = function(request) {
 };
 
 self.addEventListener("fetch", function(event) {
-    // Let non-GET requests and non-http requests pass through
+  
     if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) {
         event.respondWith(fetch(event.request));
         return;
     }
 
-    // For HTML requests, try network first, then cache, then offline page
+  
     if (event.request.mode === 'navigate') {
         event.respondWith(
             fetch(event.request).catch(() => returnFromCache(event.request))
         );
     } 
-    // For other requests, try cache first, then network
+   
     else {
         event.respondWith(
             caches.match(event.request).then(function(response) {
@@ -73,7 +73,7 @@ self.addEventListener("fetch", function(event) {
         );
     }
     
-    // Update cache in the background for successful requests
+  
     event.waitUntil(
         fetch(event.request).then(function(response) {
             if (response && response.status === 200) {
@@ -94,7 +94,7 @@ self.addEventListener('push', function(event) {
             body: data.body || "You've got a new message!",
             icon: data.icon || '/logo.png',
             data: {
-                url: data.url || '/' // This will now contain '/dashboard/{token}'
+                url: data.url || '/' 
             }
         };
         event.waitUntil(self.registration.showNotification(title, options));
