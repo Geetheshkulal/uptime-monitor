@@ -95,6 +95,7 @@ public function CouponStore(Request $request)
 {
     $request->validate([
         'code' => 'required|unique:coupon_codes,code',
+        'discount_type' => 'required|in:flat,percentage',
         'value' => 'required|numeric',
         'max_uses' => 'nullable|integer',
         'valid_from' => 'nullable|date',
