@@ -583,7 +583,6 @@
                         ₹{{ number_format($finalPrice, 2) }}
                         
                     @else
-                        {{-- ₹{{ session('applied_coupon') ? ($plan->amount - session('applied_coupon.discount')) : $plan->amount }} --}}
                         <span class="display-6 fw-bold" data-original="{{ $plan->amount }}">₹{{ session('applied_coupon') ? ($plan->amount - session('applied_coupon.discount')) : $plan->amount }}</span>
                     @endif
                     <small>/month</small>

@@ -11,7 +11,7 @@ class CouponCode extends Model
     use HasFactory;
 
     protected $fillable = [
-        'code','user_ids','value','max_uses', 'valid_from', 'valid_until', 'is_active','subscription_id'
+        'code','user_ids','discount_type','value','max_uses', 'valid_from', 'valid_until', 'is_active', 
     ];
     protected $casts = [
         'user_ids' => 'array',

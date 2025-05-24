@@ -132,7 +132,8 @@
                                 <tr>
                                     <th>SL no</th>
                                     <th>Coupon Code</th>
-                                    <th>Discount Flat</th>
+                                    <th>Discount Type</th>
+                                    <th>Discount Value</th>
                                     <th>Max uses</th>
                                     <th>Used</th>
                                     <th>Valid from</th>
@@ -150,7 +151,15 @@
                                         {{ $coupon->code }}
                                         <i class="fas fa-copy ml-2 text-primary" style="cursor: pointer;" onclick="copyToClipboard('{{$coupon->code}}')" title="Copy code"></i>
                                     </td>
-                                    <td>{{ $coupon->value }}</td>
+                                    <td>{{ $coupon->discount_type }}</td>
+                                    <td>
+                                        @if ($coupon->discount_type == 'percentage')
+                                            {{ $coupon->value }}%
+                                        @else
+                                            ₹{{ $coupon->value }}       
+                                            
+                                        @endif
+                                    </td>
                                     <td>{{ $coupon->max_uses ? $coupon->max_uses : 'N/A'}}</td>
                                     <td>{{ $coupon->uses }}</td>
                                     <td>{{ $coupon->valid_from ? \Carbon\Carbon::parse($coupon->valid_from)->format('d M y') : 'N/A'  }}</td>
@@ -213,9 +222,22 @@
                             <input id="code" name="code" class="form-control form-control-sm" placeholder="e.g. SUMMER20" >
                         </div>
 
-                        <div class="form-group mb-2">
+                        {{-- <div class="form-group mb-2">
                             <label for="value" class="small font-weight-bold">Discount (₹)</label>
                             <input id="value" name="value" class="form-control form-control-sm" placeholder="Amount" >
+                        </div> --}}
+
+                        <div class="form-group mb-2">
+                            <label for="discount_type" class="small font-weight-bold">Discount Type</label>
+                            <select id="discount_type" name="discount_type" class="form-control form-control-sm">
+                                <option value="flat">Flat (₹)</option>
+                                <option value="percentage">Percentage (%)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group mb-2">
+                            <label for="value" class="small font-weight-bold">Discount Value</label>
+                            <input id="value" name="value" class="form-control form-control-sm" placeholder="e.g. 100 or 20%" min="1">
                         </div>
 
                         <div class="form-group mb-2">
