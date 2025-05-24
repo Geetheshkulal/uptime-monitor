@@ -28,7 +28,7 @@ class CouponCode extends Model
 
     public function subscription()
     {
-        return $this->belongsTo(Subscriptions::class);
+        return $this->belongsTo(Subscriptions::class, 'subscription_id');
     }
 
 

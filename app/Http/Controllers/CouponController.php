@@ -7,6 +7,7 @@ use App\Models\CouponCode;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Models\Subscriptions;
+use Illuminate\Support\Facades\Log;
 
 class CouponController extends Controller
 {
@@ -40,11 +41,16 @@ public function apply(Request $request)
     if ($coupon->users()->where('user_id', $user->id)->exists()) {
         return response()->json(['success' => false, 'message' => 'You already used this coupon.']);
     }
-    
-    $planAmount=$coupon->subscription()->amount;
- 
 
-    // Store in pivot table
+    $planAmount = $coupon->subscription->amount;
+    
+    $discountAmount = 0;
+    if ($coupon->discount_type === 'percentage') {
+        $discountAmount = ($planAmount * $coupon->value) / 100;
+    } else {
+        $discountAmount = $coupon->value;
+    }
+
     $coupon->users()->attach($user->id);
 
     // Increment uses
@@ -53,12 +59,20 @@ public function apply(Request $request)
     session([
         'applied_coupon' => [
             'code' => $coupon->code,
-            'discount' => $coupon->value
+            // 'discount' => $coupon->value
+            'discount' => $discountAmount,
+            'discount_type' => $coupon->discount_type
         ]
+
     ]);
     
-
-    return response()->json(['success' => true, 'discount' => $coupon->value,'message' => 'Coupon applied successfully!']);
+    // return response()->json(['success' => true, 'discount' => $coupon->value,'message' => 'Coupon applied successfully!']);
+    return response()->json([
+        'success' => true,
+        'discount' => $discountAmount,
+        'discount_type' => $coupon->discount_type,
+        'message' => 'Coupon applied successfully!'
+    ]);
 }
 
 public function remove(Request $request)
