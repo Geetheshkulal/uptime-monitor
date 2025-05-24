@@ -513,35 +513,34 @@
 
                 <!-- Code Snippet for HTTP Monitor Handling -->
                 <pre><code>
-                    
-                    public function checkHttp(Monitors $monitor)
-                    {
-                        $start = microtime(true); // Record start time
-                    
-                        try {
-                            // Send HTTP GET request to the monitor's URL
-                            $response = Http::timeout(10)->get($monitor->url);
-                            $end = microtime(true); // Record end time
-                    
-                            // Save HTTP response details in database
-                            HttpResponse::create([
-                                'monitor_id'    => $monitor->id,
-                                'status_code'   => $response->status(), // HTTP status code
-                                'response_time' => round(($end - $start) * 1000, 2), // ms
-                                'checked_at'    => now(), // Timestamp of the check
-                            ]);
-                        } catch (\Exception $e) {
-                            $end = microtime(true);
-                    
-                            // Store failed response with null status code
-                            HttpResponse::create([
-                                'monitor_id'    => $monitor->id,
-                                'status_code'   => null,
-                                'response_time' => round(($end - $start) * 1000, 2),
-                                'checked_at'    => now(),
-                            ]);
-                        }
-                    }                
+public function checkHttp(Monitors $monitor)
+{
+    $start = microtime(true); // Record start time
+        
+    try {
+        // Send HTTP GET request to the monitor's URL
+        $response = Http::timeout(10)->get($monitor->url);
+        $end = microtime(true); // Record end time
+        
+        // Save HTTP response details in database
+        HttpResponse::create([
+            'monitor_id'    => $monitor->id,
+            'status_code'   => $response->status(), // HTTP status code
+            'response_time' => round(($end - $start) * 1000, 2), // ms
+            'checked_at'    => now(), // Timestamp of the check
+                ]);
+        } catch (\Exception $e) {
+            $end = microtime(true);
+        
+            // Store failed response with null status code
+            HttpResponse::create([
+                'monitor_id'    => $monitor->id,
+                'status_code'   => null,
+                'response_time' => round(($end - $start) * 1000, 2),
+                'checked_at'    => now(),
+                ]);
+        }
+}                   
                 </code></pre>
 
                 <p>The above method checkHttp function is designed to perform an HTTP check for a given monitor. It verifies the status of the service by sending an HTTP GET request to the monitor's URL and records the response details, including the response time and HTTP status code. <strong>HttpResponse</strong> table.</p>
@@ -554,34 +553,32 @@
 
                 <!-- Code Snippet for Ping Monitor Handling -->
                 <pre><code>
+public function checkPing(Monitors $monitor)
+{
+    // Extract host from URL or use as-is
+    $host = parse_url($monitor->url, PHP_URL_HOST) ?? $monitor->url;
 
-                    public function checkPing(Monitors $monitor)
-                    {
-                        // Extract host from URL or use as-is
-                        $host = parse_url($monitor->url, PHP_URL_HOST) ?? $monitor->url;
-                    
-                        $start = microtime(true); // Start timing
-                    
-                        // Detect OS type to use correct ping command
-                        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-                    
-                        // Use OS-specific ping command
-                        $command = $isWindows ? "ping -n 1 $host" : "ping -c 1 $host";
-                    
-                        // Execute ping command
-                        exec($command, $output, $status);
-                    
-                        $end = microtime(true); // End timing
-                    
-                        // Store ping response in database
-                        PingResponse::create([
-                            'monitor_id'    => $monitor->id,
-                            'status'        => $status === 0 ? 'up' : 'down', // Status 0 = success
-                            'response_time' => round(($end - $start) * 1000, 2),
-                            'checked_at'    => now(),
-                        ]);
-                    }
-                    
+    $start = microtime(true); // Start timing
+
+    // Detect OS type to use correct ping command
+    $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+
+    // Use OS-specific ping command
+    $command = $isWindows ? "ping -n 1 $host" : "ping -c 1 $host";
+
+    // Execute ping command
+    exec($command, $output, $status);
+
+    $end = microtime(true); // End timing
+
+    // Store ping response in database
+    PingResponse::create([
+        'monitor_id'    => $monitor->id,
+        'status'        => $status === 0 ? 'up' : 'down', // Status 0 = success
+        'response_time' => round(($end - $start) * 1000, 2),
+        'checked_at'    => now(),
+    ]);
+}    
                 </code></pre>
 
                 <p>The above method is designed to monitor the availability of a service by performing a ping test to the target URL of a given monitor. It checks the response time and the availability (up or down) of the service based on the result of the ping command<strong>PingResponse</strong> table.</p>
@@ -594,30 +591,28 @@
 
                 <!-- Code Snippet for Port Monitor Handling -->
                 <pre><code>
+public function checkPort(Monitors $monitor)
+{
+    $start = microtime(true); // Start timing
 
-                    public function checkPort(Monitors $monitor)
-                    {
-                        $start = microtime(true); // Start timing
-                    
-                        // Try opening the given host:port with a timeout
-                        $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, 10);
-                        $end = microtime(true); // End timing
-                    
-                        // Save port status and response time
-                        PortResponse::create([
-                            'monitor_id'    => $monitor->id,
-                            'port'          => $monitor->port,
-                            'status'        => $connection ? 'up' : 'down', // Based on connection
-                            'response_time' => round(($end - $start) * 1000, 2),
-                            'checked_at'    => now(),
-                        ]);
-                    
-                        // Close connection if successful
-                        if ($connection) {
-                            fclose($connection);
-                        }
-                    }
-                    
+    // Try opening the given host:port with a timeout
+    $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, 10);
+    $end = microtime(true); // End timing
+
+    // Save port status and response time
+    PortResponse::create([
+        'monitor_id'    => $monitor->id,
+        'port'          => $monitor->port,
+        'status'        => $connection ? 'up' : 'down', // Based on connection
+        'response_time' => round(($end - $start) * 1000, 2),
+        'checked_at'    => now(),
+    ]);
+
+    // Close connection if successful
+    if ($connection) {
+        fclose($connection);
+    }
+}   
                 </code></pre>
 
                 <p>function is responsible for checking the availability of a specific port on a given host (e.g., a server). It attempts to establish a connection to the provided host and port, measures the response time, and records whether the port is open (up) or closed (down)</strong> table.</p>
@@ -630,32 +625,30 @@
 
                 <!-- Code Snippet for DNS Monitor Handling -->
                 <pre><code>
+public function checkDnsRecords(Monitors $monitor)
+{
+    $start = microtime(true); // Start timing
 
-                    public function checkDnsRecords(Monitors $monitor)
-                    {
-                        $start = microtime(true); // Start timing
-                    
-                        // Parse host from URL or fallback to plain domain
-                        $parsed = parse_url($monitor->url);
-                        $host = $parsed['host'] ?? $monitor->url;
-                    
-                        // Default to 'A' record type if not specified
-                        $type = $monitor->dns_record_type ?? 'A';
-                    
-                        // Perform DNS lookup of specified type
-                        $records = dns_get_record($host, constant("DNS_{$type}"));
-                        $end = microtime(true); // End timing
-                    
-                        // Store DNS response data in database
-                        DnsResponse::create([
-                            'monitor_id'    => $monitor->id,
-                            'record_type'   => $type,
-                            'found_records' => json_encode($records), // Save records as JSON
-                            'response_time' => round(($end - $start) * 1000, 2),
-                            'checked_at'    => now(),
-                        ]);
-                    }
-                    
+    // Parse host from URL or fallback to plain domain
+    $parsed = parse_url($monitor->url);
+    $host = $parsed['host'] ?? $monitor->url;
+
+    // Default to 'A' record type if not specified
+    $type = $monitor->dns_record_type ?? 'A';
+
+    // Perform DNS lookup of specified type
+    $records = dns_get_record($host, constant("DNS_{$type}"));
+    $end = microtime(true); // End timing
+
+    // Store DNS response data in database
+    DnsResponse::create([
+        'monitor_id'    => $monitor->id,
+        'record_type'   => $type,
+        'found_records' => json_encode($records), // Save records as JSON
+        'response_time' => round(($end - $start) * 1000, 2),
+        'checked_at'    => now(),
+    ]);
+}   
                 </code></pre>
 
                 <p>function is responsible for checking DNS records for a given host (domain) to ensure that it resolves correctly and to gather data about the specified record type (e.g., A record, MX record). The function measures the time it takes to perform the DNS lookup and stores the results</strong> table.</p>
@@ -668,44 +661,44 @@
 
                 <!-- Code Snippet for Pausing a Monitor -->
                 <pre><code>
-                    public function pauseMonitor(Request $request, $id)
-                    {
-                        // Get the currently authenticated user
-                        $user = auth()->user();
-                    
-                        // Retrieve the monitor by its ID, or fail if it does not exist
-                        $monitor = Monitors::findOrFail($id);
-                    
-                        // Toggle the 'paused' status of the monitor (if paused, resume it, if not paused, pause it)
-                        $monitor->paused = !$monitor->paused;
-                    
-                        // Save the updated monitor status to the database
-                        $monitor->save();
-                    
-                        // Determine the status message based on whether the monitor is paused or resumed
-                        $status = $monitor->paused ? 'paused' : 'resumed';
-                    
-                        // Log the activity with the details of the action (pausing/resuming the monitor)
-                        activity()
-                            ->performedOn($monitor) // Specify the monitor object being affected
-                            ->causedBy(auth()->user()) // Log the user who performed the action
-                            ->inLog('monitor_management') // Log category for monitoring actions
-                            ->event($status) // Event name based on whether the monitor is paused or resumed
-                            ->withProperties([ // Attach properties to the log entry
-                                'name' => $user->name, // The name of the user performing the action
-                                'monitor_id' => $monitor->id, // The ID of the monitor being paused/resumed
-                                'monitor_name' => $monitor->name, // The name of the monitor
-                                'status' => $status, // The new status (paused/resumed)
-                            ])
-                            ->log("Monitor {$monitor->name} has been {$status}"); // Custom log message
-                    
-                        // Return a JSON response with the result of the action (success status, message, and updated monitor status)
-                        return response()->json([
-                            'success' => true,
-                            'message' => "Monitor has been {$status} successfully.",
-                            'paused' => $monitor->paused, // Include the current paused status of the monitor
-                        ]);
-                    }
+public function pauseMonitor(Request $request, $id)
+{
+    // Get the currently authenticated user
+    $user = auth()->user();
+
+    // Retrieve the monitor by its ID, or fail if it does not exist
+    $monitor = Monitors::findOrFail($id);
+
+    // Toggle the 'paused' status of the monitor (if paused, resume it, if not paused, pause it)
+    $monitor->paused = !$monitor->paused;
+
+    // Save the updated monitor status to the database
+    $monitor->save();
+
+    // Determine the status message based on whether the monitor is paused or resumed
+    $status = $monitor->paused ? 'paused' : 'resumed';
+
+    // Log the activity with the details of the action (pausing/resuming the monitor)
+    activity()
+        ->performedOn($monitor) // Specify the monitor object being affected
+        ->causedBy(auth()->user()) // Log the user who performed the action
+        ->inLog('monitor_management') // Log category for monitoring actions
+        ->event($status) // Event name based on whether the monitor is paused or resumed
+        ->withProperties([ // Attach properties to the log entry
+            'name' => $user->name, // The name of the user performing the action
+            'monitor_id' => $monitor->id, // The ID of the monitor being paused/resumed
+            'monitor_name' => $monitor->name, // The name of the monitor
+            'status' => $status, // The new status (paused/resumed)
+        ])
+        ->log("Monitor {$monitor->name} has been {$status}"); // Custom log message
+
+    // Return a JSON response with the result of the action (success status, message, and updated monitor status)
+    return response()->json([
+        'success' => true,
+        'message' => "Monitor has been {$status} successfully.",
+        'paused' => $monitor->paused, // Include the current paused status of the monitor
+    ]);
+}
                     
                 </code></pre>
 
@@ -713,97 +706,95 @@
 
                 <!-- Code Snippet for Deleting a Monitor -->
                 <pre><code>
-                    public function MonitorDelete($id)
-                    {
-                        // Retrieve the monitor by its ID, or fail if it does not exist
-                        $DeleteMonitor = Monitors::findOrFail($id);
-                    
-                        // If the monitor doesn't exist (though findOrFail would have already returned an error)
-                        if (!$DeleteMonitor) {
-                            // Redirect back with an error message if the monitor was not found
-                            return redirect()->back()->with('error', 'Monitoring data not found.');
-                        }
-                    
-                        // Proceed to delete the monitor from the database
-                        $DeleteMonitor->delete();
-                    
-                        // Log the deletion activity with relevant details
-                        activity()
-                            ->performedOn($DeleteMonitor) // Specify the monitor object being deleted
-                            ->causedBy(auth()->user()) // Log the user who performed the action
-                            ->inLog('monitor_management') // Log category for monitoring actions
-                            ->event('monitor deleted') // Event name for the deletion action
-                            ->withProperties([ // Attach properties to the log entry
-                                'monitor_name' => $DeleteMonitor->name, // Name of the monitor being deleted
-                                'monitor_type' => $DeleteMonitor->type, // Type of monitor (HTTP, DNS, etc.)
-                                'user_id' => auth()->id(), // ID of the user who deleted the monitor
-                                'ip' => request()->ip(), // IP address of the user performing the action
-                            ])
-                            ->log("User deleted {$DeleteMonitor->type} monitor"); // Custom log message
-                    
-                        // Redirect to the monitoring dashboard with a success message after deletion
-                        return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring data deleted successfully.');
-                    }
-                    
+public function MonitorDelete($id)
+{
+    // Retrieve the monitor by its ID, or fail if it does not exist
+    $DeleteMonitor = Monitors::findOrFail($id);
+
+    // If the monitor doesn't exist (though findOrFail would have already returned an error)
+    if (!$DeleteMonitor) {
+        // Redirect back with an error message if the monitor was not found
+        return redirect()->back()->with('error', 'Monitoring data not found.');
+    }
+
+    // Proceed to delete the monitor from the database
+    $DeleteMonitor->delete();
+
+    // Log the deletion activity with relevant details
+    activity()
+        ->performedOn($DeleteMonitor) // Specify the monitor object being deleted
+        ->causedBy(auth()->user()) // Log the user who performed the action
+        ->inLog('monitor_management') // Log category for monitoring actions
+        ->event('monitor deleted') // Event name for the deletion action
+        ->withProperties([ // Attach properties to the log entry
+            'monitor_name' => $DeleteMonitor->name, // Name of the monitor being deleted
+            'monitor_type' => $DeleteMonitor->type, // Type of monitor (HTTP, DNS, etc.)
+            'user_id' => auth()->id(), // ID of the user who deleted the monitor
+            'ip' => request()->ip(), // IP address of the user performing the action
+        ])
+        ->log("User deleted {$DeleteMonitor->type} monitor"); // Custom log message
+
+    // Redirect to the monitoring dashboard with a success message after deletion
+    return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring data deleted successfully.');
+} 
                 </code></pre>
 
                 <p>function is responsible for deleting a monitor from the database. This method ensures that a monitor can be safely removed, logs the action for auditing purposes, and provides user feedback.</p>
                 <p>To edit monitor</p>
                 <pre><code>
-                    public function MonitorEdit(Request $request, $id)
-                    {
-                        // Validate the incoming request data to ensure proper format and types.
-                        $request->validate([
-                            'name' => 'required|string|max:255', // Name must be a string and a max of 255 characters
-                            'url' => 'required|url', // URL must be a valid URL
-                            'retries' => 'required|integer|min:1', // Retries must be an integer greater than or equal to 1
-                            'interval' => 'required|integer|min:1', // Interval must be an integer greater than or equal to 1
-                            'email' => 'required|email', // Email must be a valid email
-                            'port' => 'nullable|integer', // Port is optional but must be an integer if provided
-                            'dns_resource_type' => 'nullable|string', // DNS resource type is optional but must be a string if provided
-                            'telegram_id' => 'nullable|string', // Telegram ID is optional but must be a string if provided
-                            'telegram_bot_token' => 'nullable|string', // Telegram bot token is optional but must be a string if provided
-                            'type' => 'string' // Type must be a string
-                        ]);
-                    
-                        // Find the monitor by its ID, or fail if not found
-                        $EditMonitoring = Monitors::findOrFail($id);
-                    
-                        // Get the original values of the monitor before updating, to compare later
-                        $original = $EditMonitoring->getOriginal();
-                    
-                        // Update the monitor's attributes with the request data
-                        $EditMonitoring->update($request->all());
-                    
-                        // Initialize the changes array to track old and new values
-                        $changes = [
-                            'old' => [],
-                            'new' => [],
-                        ];
-                    
-                        // Loop through all the incoming request data and compare it with the original values
-                        foreach ($request->all() as $key => $value) {
-                            // If the key exists in the original monitor and the value has changed
-                            if (array_key_exists($key, $original) && $original[$key] != $value) {
-                                // Add the old value and new value to the changes array for logging
-                                $changes['old'][$key] = $original[$key];
-                                $changes['new'][$key] = $value;
-                            }
-                        }
-                    
-                        // Log the activity, indicating that the monitor was updated
-                        activity()
-                            ->performedOn($EditMonitoring) // Specify the object being updated
-                            ->causedBy(auth()->user()) // Log the user who made the change
-                            ->inLog('monitor_management') // Specify the log type/category
-                            ->event('updated monitor') // Specify the event name
-                            ->withProperties($changes) // Attach the changes (old and new data) to the log entry
-                            ->log('Monitoring details updated'); // Log the message
-                    
-                        // Redirect back to the previous page with a success message
-                        return redirect()->back()->with('success', 'Monitoring details updated successfully.');
-                    }
-                    
+public function MonitorEdit(Request $request, $id)
+{
+    // Validate the incoming request data to ensure proper format and types.
+    $request->validate([
+        'name' => 'required|string|max:255', // Name must be a string and a max of 255 characters
+        'url' => 'required|url', // URL must be a valid URL
+        'retries' => 'required|integer|min:1', // Retries must be an integer greater than or equal to 1
+        'interval' => 'required|integer|min:1', // Interval must be an integer greater than or equal to 1
+        'email' => 'required|email', // Email must be a valid email
+        'port' => 'nullable|integer', // Port is optional but must be an integer if provided
+        'dns_resource_type' => 'nullable|string', // DNS resource type is optional but must be a string if provided
+        'telegram_id' => 'nullable|string', // Telegram ID is optional but must be a string if provided
+        'telegram_bot_token' => 'nullable|string', // Telegram bot token is optional but must be a string if provided
+        'type' => 'string' // Type must be a string
+    ]);
+
+    // Find the monitor by its ID, or fail if not found
+    $EditMonitoring = Monitors::findOrFail($id);
+
+    // Get the original values of the monitor before updating, to compare later
+    $original = $EditMonitoring->getOriginal();
+
+    // Update the monitor's attributes with the request data
+    $EditMonitoring->update($request->all());
+
+    // Initialize the changes array to track old and new values
+    $changes = [
+        'old' => [],
+        'new' => [],
+    ];
+
+    // Loop through all the incoming request data and compare it with the original values
+    foreach ($request->all() as $key => $value) {
+        // If the key exists in the original monitor and the value has changed
+        if (array_key_exists($key, $original) && $original[$key] != $value) {
+            // Add the old value and new value to the changes array for logging
+            $changes['old'][$key] = $original[$key];
+            $changes['new'][$key] = $value;
+        }
+    }
+
+    // Log the activity, indicating that the monitor was updated
+    activity()
+        ->performedOn($EditMonitoring) // Specify the object being updated
+        ->causedBy(auth()->user()) // Log the user who made the change
+        ->inLog('monitor_management') // Specify the log type/category
+        ->event('updated monitor') // Specify the event name
+        ->withProperties($changes) // Attach the changes (old and new data) to the log entry
+        ->log('Monitoring details updated'); // Log the message
+
+    // Redirect back to the previous page with a success message
+    return redirect()->back()->with('success', 'Monitoring details updated successfully.');
+}   
                 </code></pre>
                 <p> function is designed to handle the editing and updating of a monitor's details in the system. It ensures that the incoming data is valid, updates the monitor record with the new values, and logs the changes for auditing purposes.</p>
             </div>
@@ -839,99 +830,99 @@
     
                 <!-- Code Snippet for HTTP Monitor Handling -->
                 <pre><code>
-                    public function check(Request $request)
-                    {
-                        //Validate the incoming request to ensure 'domain' is present and is a valid URL
-                        $request->validate([
-                            'domain' => 'required|url',
-                        ]);
-                    
-                        //Get the input domain from the form and extract just the host (e.g., example.com)
-                        $inputUrl = $request->domain;
-                        $host = parse_url($inputUrl, PHP_URL_HOST); // Extract host from full URL
-                    
-                        // If host is not extracted properly, try extracting manually (handles edge cases)
-                        if (!$host) {
-                            $inputUrl = preg_replace('#^https?://#', '', $inputUrl); // Remove http:// or https://
-                            $host = explode('/', $inputUrl)[0]; // Get only the domain part
-                        }
-                    
-                        try {
-                            Create a stream context to capture SSL certificate information
-                            $context = stream_context_create([
-                                "ssl" => ["capture_peer_cert" => true]
-                            ]);
-                    
-                            Open an SSL connection to the domain on port 443 (HTTPS)
-                            $stream = @stream_socket_client(
-                                "ssl://{$host}:443",  // Target SSL address
-                                $errno,               // Error number (if any)
-                                $errstr,              // Error string (if any)
-                                10,                   // Timeout: 10 seconds
-                                STREAM_CLIENT_CONNECT,// Connect mode
-                                $context              // Stream context with SSL capture
-                            );
-                    
-                            // If unable to connect, throw an exception
-                            if (!$stream) {
-                                throw new \Exception("Could not connect to '{$host}' ({$errstr})");
-                            }
-                    
-                            // Retrieve the stream context parameters, including SSL certificate data
-                            $params = stream_context_get_params($stream);
-                    
-                            // Parse the SSL certificate into readable array using OpenSSL
-                            $cert = openssl_x509_parse($params['options']['ssl']['peer_certificate']);
-                    
-                            //  Extract relevant dates and compute certificate status
-                            $validFrom = Carbon::createFromTimestamp($cert['validFrom_time_t']); // Start date
-                            $validTo = Carbon::createFromTimestamp($cert['validTo_time_t']);     // Expiry date
-                            $daysRemaining = Carbon::now()->diffInDays($validTo, false);         // Days left
-                            $status = $daysRemaining <= 0 ? 'Expired' : 'Valid';                 // Set status
-                    
-                            // Store the SSL data in the database for future reference
-                            $ssl = Ssl::create([
-                                'user_id'        => Auth::id(),                                // Owner
-                                'url'            => $host,                                     // Domain
-                                'issuer'         => $cert['issuer']['CN'] ?? 'Unknown',        // Cert issuer
-                                'valid_from'     => $validFrom,                                // Start date
-                                'valid_to'       => $validTo,                                  // Expiry date
-                                'days_remaining' => $daysRemaining,                            // Days left
-                                'status'         => $status                                    // Valid/Expired
-                            ]);
-                    
-                            //  Log this monitoring activity for auditing purposes
-                            activity()
-                                ->causedBy(auth()->user())           // Who performed the action
-                                ->performedOn($ssl)                  // What the action was on
-                                ->inLog('ssl_monitoring')            // Log channel
-                                ->event('created')                   // Type of event
-                                ->withProperties([                   // Additional metadata
-                                    'url' => $host,
-                                    'issuer' => $cert['issuer']['CN'] ?? 'Unknown',
-                                    'valid_to' => $validTo->toDateString(),
-                                    'status' => $status
-                                ])
-                                ->log('SSL certificate monitored and logged.');
-                    
-                            // Redirect back with success message and certificate details
-                            return redirect()->back()->with([
-                                'success' => 'SSL check successful!',
-                                'ssl_details' => [
-                                    'domain'         => $host,
-                                    'issuer'         => $cert['issuer']['CN'] ?? 'Unknown',
-                                    'valid_from'     => $validFrom->toDateString(),
-                                    'valid_to'       => $validTo->toDateString(),
-                                    'days_remaining' => $daysRemaining,
-                                    'status'         => $status
-                                ]
-                            ]);
-                    
-                        } catch (\Exception $e) {
-                            //Catch errors and redirect back with a failure message
-                            return redirect()->back()->with('error', "No valid SSL certificate found for '{$host}'.");
-                        }
-                    }                                                      
+public function check(Request $request)
+{
+    //Validate the incoming request to ensure 'domain' is present and is a valid URL
+    $request->validate([
+        'domain' => 'required|url',
+    ]);
+
+    //Get the input domain from the form and extract just the host (e.g., example.com)
+    $inputUrl = $request->domain;
+    $host = parse_url($inputUrl, PHP_URL_HOST); // Extract host from full URL
+
+    // If host is not extracted properly, try extracting manually (handles edge cases)
+    if (!$host) {
+        $inputUrl = preg_replace('#^https?://#', '', $inputUrl); // Remove http:// or https://
+        $host = explode('/', $inputUrl)[0]; // Get only the domain part
+    }
+
+    try {
+        Create a stream context to capture SSL certificate information
+        $context = stream_context_create([
+            "ssl" => ["capture_peer_cert" => true]
+        ]);
+
+        Open an SSL connection to the domain on port 443 (HTTPS)
+        $stream = @stream_socket_client(
+            "ssl://{$host}:443",  // Target SSL address
+            $errno,               // Error number (if any)
+            $errstr,              // Error string (if any)
+            10,                   // Timeout: 10 seconds
+            STREAM_CLIENT_CONNECT,// Connect mode
+            $context              // Stream context with SSL capture
+        );
+
+        // If unable to connect, throw an exception
+        if (!$stream) {
+            throw new \Exception("Could not connect to '{$host}' ({$errstr})");
+        }
+
+        // Retrieve the stream context parameters, including SSL certificate data
+        $params = stream_context_get_params($stream);
+
+        // Parse the SSL certificate into readable array using OpenSSL
+        $cert = openssl_x509_parse($params['options']['ssl']['peer_certificate']);
+
+        //  Extract relevant dates and compute certificate status
+        $validFrom = Carbon::createFromTimestamp($cert['validFrom_time_t']); // Start date
+        $validTo = Carbon::createFromTimestamp($cert['validTo_time_t']);     // Expiry date
+        $daysRemaining = Carbon::now()->diffInDays($validTo, false);         // Days left
+        $status = $daysRemaining <= 0 ? 'Expired' : 'Valid';                 // Set status
+
+        // Store the SSL data in the database for future reference
+        $ssl = Ssl::create([
+            'user_id'        => Auth::id(),                                // Owner
+            'url'            => $host,                                     // Domain
+            'issuer'         => $cert['issuer']['CN'] ?? 'Unknown',        // Cert issuer
+            'valid_from'     => $validFrom,                                // Start date
+            'valid_to'       => $validTo,                                  // Expiry date
+            'days_remaining' => $daysRemaining,                            // Days left
+            'status'         => $status                                    // Valid/Expired
+        ]);
+
+        //  Log this monitoring activity for auditing purposes
+        activity()
+            ->causedBy(auth()->user())           // Who performed the action
+            ->performedOn($ssl)                  // What the action was on
+            ->inLog('ssl_monitoring')            // Log channel
+            ->event('created')                   // Type of event
+            ->withProperties([                   // Additional metadata
+                'url' => $host,
+                'issuer' => $cert['issuer']['CN'] ?? 'Unknown',
+                'valid_to' => $validTo->toDateString(),
+                'status' => $status
+            ])
+            ->log('SSL certificate monitored and logged.');
+
+        // Redirect back with success message and certificate details
+        return redirect()->back()->with([
+            'success' => 'SSL check successful!',
+            'ssl_details' => [
+                'domain'         => $host,
+                'issuer'         => $cert['issuer']['CN'] ?? 'Unknown',
+                'valid_from'     => $validFrom->toDateString(),
+                'valid_to'       => $validTo->toDateString(),
+                'days_remaining' => $daysRemaining,
+                'status'         => $status
+            ]
+        ]);
+
+    } catch (\Exception $e) {
+        //Catch errors and redirect back with a failure message
+        return redirect()->back()->with('error', "No valid SSL certificate found for '{$host}'.");
+    }
+}                                                      
                 </code></pre>
                 <p>The `check()` function is responsible for monitoring the SSL certificate of a user-submitted domain. It begins by validating the input URL and extracting the host name. It then attempts to establish a secure connection to the domain on port 443 and captures the SSL certificate using a stream context. Once the certificate is retrieved, it parses the data to extract the issuer's name, validity period (from and to dates), and calculates how many days remain until the certificate expires. Based on this, it determines whether the certificate is still valid or expired. The certificate details are then stored in the database, linked to the currently authenticated user. Additionally, the function logs this SSL monitoring activity for auditing purposes. If the certificate cannot be retrieved, a user-friendly error message is displayed.</p>
                 <h2>Additional feature </h2>
@@ -939,15 +930,15 @@
                 <h3>SSL History</h3>
             <p>Below is the code for the SSL history page:</p>
             <pre><code>
-                public function history()
-                {
-                    // Retrieve all SSL check records for the currently authenticated user,
-                    // ordered by the most recent entries first.
-                    $sslChecks = Ssl::where('user_id', Auth::id())->latest()->get();
-                
-                    // Pass the retrieved records to the 'ssl.history' Blade view.
-                    return view('ssl.history', compact('sslChecks'));
-                }
+public function history()
+{
+    // Retrieve all SSL check records for the currently authenticated user,
+    // ordered by the most recent entries first.
+    $sslChecks = Ssl::where('user_id', Auth::id())->latest()->get();
+
+    // Pass the retrieved records to the 'ssl.history' Blade view.
+    return view('ssl.history', compact('sslChecks'));
+}
             </code></pre>    
             <p>This history() function retrieves the SSL check history for the currently authenticated user. It queries the Ssl table to get all SSL records associated with the logged-in user (user_id), orders them by the latest entry first using latest(), and passes the results to the ssl.history Blade view using the compact() function. This allows the user to view a list of all SSL monitoring checks they have previously performed.</p>
             </div>
@@ -980,46 +971,46 @@
 
             <!-- Code Snippet for Incident Creation -->
             <pre><code>
-                private function createIncident(Monitors $monitor, string $status, string $monitorType)
-                {
-                    // If the status is 'down', we create an incident
-                    if ($status === 'down') {
-                        // Check if there's an existing 'down' incident for the same monitor that's still open (no end_timestamp)
-                        $existingIncident = Incident::where('monitor_id', $monitor->id)
-                            ->where('status', 'down')  // Looking for incidents that are 'down'
-                            ->whereNull('end_timestamp')  // Ensure that the incident is still open
-                            ->first();
-                        
-                        // If no existing open incident, create a new one
-                        if (!$existingIncident) {
-                            Incident::create([
-                                'monitor_id' => $monitor->id,
-                                'status' => 'down',
-                                'root_cause' => "{$monitorType} Monitoring Failed",  // Log the type of failure (e.g., Ping, DNS, HTTP)
-                                'start_timestamp' => now(),
-                                'updated_at' => now(),
-                            ]);
-                        }
-                    }
+private function createIncident(Monitors $monitor, string $status, string $monitorType)
+{
+    // If the status is 'down', we create an incident
+    if ($status === 'down') {
+        // Check if there's an existing 'down' incident for the same monitor that's still open (no end_timestamp)
+        $existingIncident = Incident::where('monitor_id', $monitor->id)
+            ->where('status', 'down')  // Looking for incidents that are 'down'
+            ->whereNull('end_timestamp')  // Ensure that the incident is still open
+            ->first();
+        
+        // If no existing open incident, create a new one
+        if (!$existingIncident) {
+            Incident::create([
+                'monitor_id' => $monitor->id,
+                'status' => 'down',
+                'root_cause' => "{$monitorType} Monitoring Failed",  // Log the type of failure (e.g., Ping, DNS, HTTP)
+                'start_timestamp' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    }
 
-                    // If the status is 'up', we check and close any open incidents
-                    elseif ($status === 'up') {
-                        // Check for any open incidents (status = 'down' and no end_timestamp)
-                        $incident = Incident::where('monitor_id', $monitor->id)
-                            ->where('status', 'down')
-                            ->whereNull('end_timestamp')  // Ensure it's open (still 'down')
-                            ->first();
+    // If the status is 'up', we check and close any open incidents
+    elseif ($status === 'up') {
+        // Check for any open incidents (status = 'down' and no end_timestamp)
+        $incident = Incident::where('monitor_id', $monitor->id)
+            ->where('status', 'down')
+            ->whereNull('end_timestamp')  // Ensure it's open (still 'down')
+            ->first();
 
-                        // If an open incident is found, mark it as resolved
-                        if ($incident) {
-                            $incident->update([
-                                'status' => 'up',
-                                'end_timestamp' => now(),  // Set the time the monitor came back up
-                                'updated_at' => now(),
-                            ]);
-                        }
-                    }
-                }
+        // If an open incident is found, mark it as resolved
+        if ($incident) {
+            $incident->update([
+                'status' => 'up',
+                'end_timestamp' => now(),  // Set the time the monitor came back up
+                'updated_at' => now(),
+            ]);
+        }
+    }
+}
             </code></pre>
             <p>The `createIncident()` function handles the creation and resolution of incidents based on the status of a monitor. When the status is 'down', it checks if there are any open incidents for the same monitor. If no incident is found, a new one is created with the appropriate status and root cause. If the status changes to 'up', the system searches for any open 'down' incidents for the monitor and resolves them by updating the status and setting the end timestamp.</p>
         
@@ -1029,37 +1020,37 @@
     
                 <!-- Code Snippet for Fetching Incidents -->
                 <pre><code>
-                    public function incidents()
-                    {
-                        // Get the logged-in user's ID
-                        $userId = Auth::id();
+public function incidents()
+{
+    // Get the logged-in user's ID
+    $userId = Auth::id();
+
+    // Get the monitor IDs associated with the logged-in user
+    $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
+
+    // Fetch incidents that belong to the logged-in user's monitors
+    $incidents = Incident::with('monitor') // Load incidents with associated monitors
+        ->whereIn('monitor_id', $userMonitors) // Filter incidents by monitor IDs
+        ->get();
     
-                        // Get the monitor IDs associated with the logged-in user
-                        $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
-    
-                        // Fetch incidents that belong to the logged-in user's monitors
-                        $incidents = Incident::with('monitor') // Load incidents with associated monitors
-                            ->whereIn('monitor_id', $userMonitors) // Filter incidents by monitor IDs
-                            ->get();
-                        
-                        // Log the user's visit to the incidents page
-                        $tempMonitor = Monitors::where('user_id', $userId)->first();
-                        if ($tempMonitor) {
-                            activity()
-                                ->performedOn($tempMonitor)
-                                ->causedBy(auth()->user())
-                                ->inLog('incident monitoring')
-                                ->event('visited')
-                                ->withProperties([
-                                    'name' => auth()->user()->name,
-                                    'email' => auth()->user()->email,
-                                    'page' => 'Incidents Page'
-                                ])
-                                ->log('Visited the incidents page');
-                        }
-    
-                        return view('pages.incidents', compact('incidents'));
-                    }
+    // Log the user's visit to the incidents page
+    $tempMonitor = Monitors::where('user_id', $userId)->first();
+    if ($tempMonitor) {
+        activity()
+            ->performedOn($tempMonitor)
+            ->causedBy(auth()->user())
+            ->inLog('incident monitoring')
+            ->event('visited')
+            ->withProperties([
+                'name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+                'page' => 'Incidents Page'
+            ])
+            ->log('Visited the incidents page');
+    }
+
+    return view('pages.incidents', compact('incidents'));
+}
                 </code></pre>
                 <p>The `incidents()` function retrieves the incidents related to the user's monitors and passes them to a Blade view for display. The function also logs the user's activity for auditing purposes.</p>
     
@@ -1072,20 +1063,20 @@
     
                 <!-- Code Snippet for Fetching Incidents Dynamically -->
                 <pre><code>
-                    public function fetchIncidents()
-                    {
-                        $userId = Auth::id();
-    
-                        // Get the monitor IDs associated with the logged-in user
-                        $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
-    
-                        // Fetch incidents with related monitor data
-                        $incidents = Incident::with('monitor')
-                            ->whereIn('monitor_id', $userMonitors)
-                            ->get();
-    
-                        return response()->json(['incidents' => $incidents]);
-                    }
+public function fetchIncidents()
+{
+    $userId = Auth::id();
+
+    // Get the monitor IDs associated with the logged-in user
+    $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
+
+    // Fetch incidents with related monitor data
+    $incidents = Incident::with('monitor')
+        ->whereIn('monitor_id', $userMonitors)
+        ->get();
+
+    return response()->json(['incidents' => $incidents]);
+}
                 </code></pre>
                 <p>The `fetchIncidents()` method fetches incidents dynamically and returns them as a JSON response. This method is typically used with AJAX for real-time updates of the incident list without reloading the page.</p>
                 
@@ -1116,29 +1107,29 @@
     
                 <!-- Code Snippet for Alert Triggering -->
                 <pre><code>
-                    private function sendAlert(Monitors $monitor, string $status, string $monitorType)
-                    {
-                        // Only send alert if the monitor status changes from 'up' to 'down'
-                        if ($status === 'down') {
-                            // Create a new alert record in the Notification table
-                            Notification::create([
-                                'monitor_id' => $monitor->id,
-                                'status' => 'down',
-                                'message' => "{$monitorType} Monitoring Failed",  // Log the type of failure
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]);
-    
-                            // Send email notification
-                            $this->sendEmailNotification($monitor);
-    
-                            // Send Telegram notification if enabled
-                            $this->sendTelegramNotification($monitor);
-    
-                            // Send PWA push notification if the user is subscribed
-                            $this->sendPwaNotification($monitor);
-                        }
-                    }
+private function sendAlert(Monitors $monitor, string $status, string $monitorType)
+{
+    // Only send alert if the monitor status changes from 'up' to 'down'
+    if ($status === 'down') {
+        // Create a new alert record in the Notification table
+        Notification::create([
+            'monitor_id' => $monitor->id,
+            'status' => 'down',
+            'message' => "{$monitorType} Monitoring Failed",  // Log the type of failure
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Send email notification
+        $this->sendEmailNotification($monitor);
+
+        // Send Telegram notification if enabled
+        $this->sendTelegramNotification($monitor);
+
+        // Send PWA push notification if the user is subscribed
+        $this->sendPwaNotification($monitor);
+    }
+}
                 </code></pre>
                 <p>The `sendAlert()` function handles the triggering of alerts when the monitor goes down. It checks if the status has changed to 'down' and then creates an alert record. It also sends notifications via email, Telegram, and PWA based on the monitor's settings.</p>
             </div>
@@ -1150,11 +1141,11 @@
     
                 <!-- Code Snippet for Email Notification -->
                 <pre><code>
-                    private function sendEmailNotification(Monitors $monitor)
-                    {
-                        // Use the MonitorDownAlert mailable to send the email
-                        Mail::to($monitor->user->email)->send(new MonitorDownAlert($monitor));
-                    }
+private function sendEmailNotification(Monitors $monitor)
+{
+    // Use the MonitorDownAlert mailable to send the email
+    Mail::to($monitor->user->email)->send(new MonitorDownAlert($monitor));
+}
                 </code></pre>
                 <p>The `sendEmailNotification()` function sends an email to the user's registered email address, notifying them that the monitor has gone down. The email content is generated using the `MonitorDownAlert` mailable class.</p>
             </div>
@@ -1166,17 +1157,17 @@
     
                 <!-- Code Snippet for Telegram Notification -->
                 <pre><code>
-                    private function sendTelegramNotification(Monitors $monitor)
-                    {
-                        // Send a Telegram message using the Telegram API
-                        $chatId = $monitor->user->telegram_chat_id;
-                        $message = "Alert: {$monitor->name} is down due to {$monitor->monitor_type}.";
-                        
-                        Http::get("https://api.telegram.org/bot{$this->telegramToken}/sendMessage", [
-                            'chat_id' => $chatId,
-                            'text' => $message,
-                        ]);
-                    }
+private function sendTelegramNotification(Monitors $monitor)
+{
+    // Send a Telegram message using the Telegram API
+    $chatId = $monitor->user->telegram_chat_id;
+    $message = "Alert: {$monitor->name} is down due to {$monitor->monitor_type}.";
+    
+    Http::get("https://api.telegram.org/bot{$this->telegramToken}/sendMessage", [
+        'chat_id' => $chatId,
+        'text' => $message,
+    ]);
+}
                 </code></pre>
                 <p>The `sendTelegramNotification()` function sends a message to the user's Telegram chat when a monitor goes down. The message includes details of the monitor's failure and the issue type (e.g., HTTP, DNS, Ping).</p>
             </div>
@@ -1188,23 +1179,23 @@
     
                 <!-- Code Snippet for PWA Push Notification -->
                 <pre><code>
-                    private function sendPwaNotification(Monitors $monitor)
-                    {
-                        // Retrieve the PWA subscription for the user
-                        $subscription = $monitor->user->pwa_subscription;
-    
-                        // Check if subscription exists
-                        if ($subscription) {
-                            // Prepare the notification payload
-                            $payload = [
-                                'title' => "Monitor Down Alert",
-                                'message' => "{$monitor->name} is down due to {$monitor->monitor_type}.",
-                            ];
-    
-                            // Send the push notification
-                            WebPush::send($subscription, $payload);
-                        }
-                    }
+private function sendPwaNotification(Monitors $monitor)
+{
+    // Retrieve the PWA subscription for the user
+    $subscription = $monitor->user->pwa_subscription;
+
+    // Check if subscription exists
+    if ($subscription) {
+        // Prepare the notification payload
+        $payload = [
+            'title' => "Monitor Down Alert",
+            'message' => "{$monitor->name} is down due to {$monitor->monitor_type}.",
+        ];
+
+        // Send the push notification
+        WebPush::send($subscription, $payload);
+    }
+}
                 </code></pre>
                 <p>The `sendPwaNotification()` function sends a push notification to the user's browser if they are subscribed to PWA notifications. It retrieves the user's subscription and sends a message with details about the monitor failure.</p>
             </div>
@@ -1233,31 +1224,30 @@
 
             <!-- Code Snippet for Incident Creation -->
             <pre><code>
-                public function handle(Request $request, Closure $next): Response
-                {
-                    // Allow unrestricted access to the premium page (upgrade page).
-                    if ($request->routeIs('premium.page')) {
-                        return $next($request);
-                    }
-                
-                    // Check if the user is not logged in.
-                    // If not authenticated, redirect to the login page.
-                    if (!$request->user()) {
-                        return redirect()->route('login');
-                    }
-                
-                    // Check if the authenticated user does NOT have a 'paid' status.
-                    // If not a premium user, redirect them to the premium upgrade page with an error message.
-                    if ($request->user()->status !== 'paid') {
-                        return redirect()->route('premium.page')
-                            ->with('error', 'This feature requires a premium subscription');
-                    }
-                
-                    // If the user is authenticated and has 'paid' status, allow the request to proceed.
-                    return $next($request);
-                }
-                
-            </code></pre>
+public function handle(Request $request, Closure $next): Response
+{
+    // Allow unrestricted access to the premium page (upgrade page).
+    if ($request->routeIs('premium.page')) {
+        return $next($request);
+    }
+
+    // Check if the user is not logged in.
+    // If not authenticated, redirect to the login page.
+    if (!$request->user()) {
+        return redirect()->route('login');
+    }
+
+    // Check if the authenticated user does NOT have a 'paid' status.
+    // If not a premium user, redirect them to the premium upgrade page with an error message.
+    if ($request->user()->status !== 'paid') {
+        return redirect()->route('premium.page')
+            ->with('error', 'This feature requires a premium subscription');
+    }
+
+    // If the user is authenticated and has 'paid' status, allow the request to proceed.
+    return $next($request);
+}
+                </code></pre>
             <p>The handle function in the PremiumMiddleware class is responsible for restricting access to certain parts of the application based on the user's subscription status <br>Ensure's that only users with a premium subscription (status = 'paid') can access certain routes in the application(When a user makes a request to a route or controller that is protected by the PremiumMiddleware.).</p>
         
 
@@ -1266,9 +1256,9 @@
 
                     <!-- Code Snippet for SSL Check Route with Middleware -->
                     <pre><code>
-                    Route::get('/ssl-check', [SslCheckController::class, 'index'])
-                        ->middleware('premium_middleware')
-                        ->name('ssl.check');
+Route::get('/ssl-check', [SslCheckController::class, 'index'])
+    ->middleware('premium_middleware')
+    ->name('ssl.check');
                     </code></pre>
                 
     
@@ -1279,20 +1269,20 @@
     
                 <!-- Code Snippet for Fetching Incidents Dynamically -->
                 <pre><code>
-                    public function fetchIncidents()
-                    {
-                        $userId = Auth::id();
-    
-                        // Get the monitor IDs associated with the logged-in user
-                        $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
-    
-                        // Fetch incidents with related monitor data
-                        $incidents = Incident::with('monitor')
-                            ->whereIn('monitor_id', $userMonitors)
-                            ->get();
-    
-                        return response()->json(['incidents' => $incidents]);
-                    }
+public function fetchIncidents()
+{
+    $userId = Auth::id();
+
+    // Get the monitor IDs associated with the logged-in user
+    $userMonitors = Monitors::where('user_id', $userId)->pluck('id');
+
+    // Fetch incidents with related monitor data
+    $incidents = Incident::with('monitor')
+        ->whereIn('monitor_id', $userMonitors)
+        ->get();
+
+    return response()->json(['incidents' => $incidents]);
+}
                 </code></pre>
                 <p>The `fetchIncidents()` method fetches incidents dynamically and returns them as a JSON response. This method is typically used with AJAX for real-time updates of the incident list without reloading the page.</p>
                 
@@ -1319,11 +1309,7 @@
                 <h3>Blade View: DisplayRoles.blade.php</h3>
                 <p>The user creation flow begins from the Blade view where the Superuser is directed to the role management page. The button to add a new user:</p>
     
-                <pre><code>
-                    href="{{ route('add.role') }}" class="d-none d-sm-inline-block btn btn-primary shadow-sm">
-                        Add User
-                    
-                </code></pre>
+                <pre><code>href="{{ route('add.role') }}" class="d-none d-sm-inline-block btn btn-primary shadow-sm">Add User </code></pre>
                 <p>This button, when clicked, will redirect the user to the route named <code>add.role</code>, where the user creation form is displayed.</p>
             </div>
     
@@ -1333,10 +1319,9 @@
                 <p>The next step involves defining the route that will handle the form submission to create a user. This is done in the <code>web.php</code> file:</p>
     
                 <pre><code>
-                    Route::post('/admin/add/users', [UserController::class, 'storeUser'])
-                        ->middleware('permission:add.user')
-                        ->name('add.user');
-                </code></pre>
+Route::post('/admin/add/users', [UserController::class, 'storeUser'])
+    ->middleware('permission:add.user')
+    ->name('add.user');</code></pre>
                 <p>The route listens for a <strong>POST</strong> request at <code>/admin/add/users</code>, and it uses the <code>storeUser</code> method in <code>UserController</code> to handle the form submission. The route is protected by the <strong>permission</strong> middleware, which checks whether the authenticated user has the <code>add.user</code> permission before allowing access to the route.</p>
             </div>
     
@@ -1345,10 +1330,8 @@
                 <h3>Middleware: Permission Check</h3>
                 <p>The permission check is handled by the <code>permission</code> middleware, defined in <code>config/permission.php</code>:</p>
     
-                <pre><code>
-    // In config/permission.php
-    'permission' => Spatie\Permission\Models\Permission::class,
-                </code></pre>
+<pre><code>// In config/permission.php
+'permission' => Spatie\Permission\Models\Permission::class,</code></pre>
                 <p>This middleware uses the Spatie Permission package to check whether the currently authenticated user has the <code>add.user</code> permission. If the user does not have this permission, they will be denied access to the route.</p>
             </div>
     
@@ -1358,63 +1341,63 @@
                 <p>The core logic for creating a user is handled in the <code>storeUser</code> method within the <code>UserController</code>. Here's the complete method:</p>
     
                 <pre><code>
-                    public function storeUser(Request $request)
-                    {
-                        // Validate input data
-                        $validated = $request->validate([
-                            'name' => 'required|string|max:255',
-                            'email' => 'required|email|unique:users',
-                            'password' => 'required|min:3',
-                            'phone' => 'nullable|string',
-                            'role' => 'required|exists:roles,id', // Ensure the role exists
-                            'status' => 'required|in:free,paid',
-                            'premium_end_date' => 'nullable|date'
-                        ]);
-    
-                        try {
-                            // Create the user record in the database
-                            $user = User::create([
-                                'name' => $validated['name'],
-                                'email' => $validated['email'],
-                                'password' => Hash::make($validated['password']),
-                                'phone' => $validated['phone'] ?? null,
-                                'status' => $validated['status'],
-                                'premium_end_date' => $validated['premium_end_date'] ?? null,
-                                'last_login_ip' => $request->ip()
-                            ]);
-    
-                            // Assign the role to the created user
-                            $role = Role::find($validated['role']);
-                            if ($role) {
-                                $user->roles()->attach($role->id);
-                            } else {
-                                Log::warning("Role not found: " . $validated['role']);
-                            }
-    
-                            // Log the activity of user creation
-                            activity()
-                                ->causedBy(auth()->user()) // The admin or user who performed the action
-                                ->performedOn($user)
-                                ->inLog('user_management')
-                                ->event('user-created')
-                                ->withProperties([
-                                    'created_user_name' => $user->name,
-                                    'created_user_email' => $user->email,
-                                    'created_by' => auth()->user()->name,
-                                    'role_assigned' => $role ? $role->name : 'None',
-                                    'status' => $user->status,
-                                ])
-                                ->log("User created successfully: " . $user->name);
-    
-                            Log::info("User created successfully", $user->toArray()); // Log the activity
-    
-                            return redirect()->route('display.users')->with('success', 'User created successfully');
-                        } catch (\Exception $e) {
-                            Log::error("User creation error: " . $e->getMessage());
-    
-                            return back()->with('error', 'User creation failed. Please try again.');
-                        }
-                    }
+public function storeUser(Request $request)
+{
+    // Validate input data
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:3',
+        'phone' => 'nullable|string',
+        'role' => 'required|exists:roles,id', // Ensure the role exists
+        'status' => 'required|in:free,paid',
+        'premium_end_date' => 'nullable|date'
+    ]);
+
+    try {
+        // Create the user record in the database
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'phone' => $validated['phone'] ?? null,
+            'status' => $validated['status'],
+            'premium_end_date' => $validated['premium_end_date'] ?? null,
+            'last_login_ip' => $request->ip()
+        ]);
+
+        // Assign the role to the created user
+        $role = Role::find($validated['role']);
+        if ($role) {
+            $user->roles()->attach($role->id);
+        } else {
+            Log::warning("Role not found: " . $validated['role']);
+        }
+
+        // Log the activity of user creation
+        activity()
+            ->causedBy(auth()->user()) // The admin or user who performed the action
+            ->performedOn($user)
+            ->inLog('user_management')
+            ->event('user-created')
+            ->withProperties([
+                'created_user_name' => $user->name,
+                'created_user_email' => $user->email,
+                'created_by' => auth()->user()->name,
+                'role_assigned' => $role ? $role->name : 'None',
+                'status' => $user->status,
+            ])
+            ->log("User created successfully: " . $user->name);
+
+        Log::info("User created successfully", $user->toArray()); // Log the activity
+
+        return redirect()->route('display.users')->with('success', 'User created successfully');
+    } catch (\Exception $e) {
+        Log::error("User creation error: " . $e->getMessage());
+
+        return back()->with('error', 'User creation failed. Please try again.');
+    }
+}
                 </code></pre>
                 <p>In this method, after validating the incoming data, a new user is created and stored in the database. The method also assigns a role to the user and logs the activity. If there is an error, it catches the exception and logs the error message.</p>
             </div>
@@ -1426,25 +1409,27 @@
                 <li>Fetches users from the <code>users</code> table, excluding the 'superadmin' role.</li>
                 <li>Allows searching for users by name, email, or phone number.</li>
                 <li>Paginates results to display 10 users per page.</li>
-                    $roles = Role::whereNot('name','superadmin')->get();
+                <pre><code>
+$roles = Role::whereNot('name','superadmin')->get();
 
-                     // Basic search functionality
-                    $search = $request->input('search');
-                    $users = User::withTrashed()->with('roles')
+// Basic search functionality
+$search = $request->input('search');
+$users = User::withTrashed()->with('roles')
+                    </code></pre>
             </ul>
             <pre><code>
-                public function DisplayUsers(Request $request)
-                {
-                    $users = User::with('roles')
-                                ->when($search, function($query) use ($search) {
-                                    $query->where('name', 'like', "%{$search}%")
-                    return view('pages.admin.DisplayUsers', compact('users','roles'));
-                                          ->orWhere('phone', 'like', "%{$search}%");
-                                })
-                                ->orderBy('name')
-                                ->paginate(10);
-                    return view('pages.admin.DisplayUsers', compact('users'));
-                }
+public function DisplayUsers(Request $request)
+{
+    $users = User::with('roles')
+                ->when($search, function($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+    return view('pages.admin.DisplayUsers', compact('users','roles'));
+                            ->orWhere('phone', 'like', "%{$search}%");
+                })
+                ->orderBy('name')
+                ->paginate(10);
+    return view('pages.admin.DisplayUsers', compact('users'));
+}
             </code></pre>
         </div>
 
@@ -1453,31 +1438,31 @@
             <h3>3. ShowUser() - Show Details of a Specific User</h3>
             <p>This method retrieves the details of a specific user using their ID and displays it. It also logs the viewing activity:</p>
             <pre><code>
-                 public function ShowUser($id)
-                    {
-                        $user = User::withTrashed()->with('roles')->findOrFail($id);
+    public function ShowUser($id)
+    {
+        $user = User::withTrashed()->with('roles')->findOrFail($id);
 
-                        activity()
-                        ->causedBy(auth()->user()) // super admin
-                        ->performedOn($user)       // the user being viewed
-                        ->inLog('user_management')
-                        ->event('viewed')
-                        ->withProperties([
-                            'viewed_by' => auth()->user()->name,
-                            'viewed_by_email' => auth()->user()->email,
-                            'viewed_user_id' => $user->id,
-                            'viewed_user_name' => $user->name,
-                            'viewed_user_email' => $user->email,
-                        ])
-                        ->log("viewed user details");
+        activity()
+        ->causedBy(auth()->user()) // super admin
+        ->performedOn($user)       // the user being viewed
+        ->inLog('user_management')
+        ->event('viewed')
+        ->withProperties([
+            'viewed_by' => auth()->user()->name,
+            'viewed_by_email' => auth()->user()->email,
+            'viewed_user_id' => $user->id,
+            'viewed_user_name' => $user->name,
+            'viewed_user_email' => $user->email,
+        ])
+        ->log("viewed user details");
 
-                        return view('pages.admin.ViewUserDetails', compact('user'));
-                    }
-                {
-                    $user = User::with('roles')->findOrFail($id);
-                    activity() // Log viewing activity
-                    return view('pages.admin.ViewUserDetails', compact('user'));
-                }
+        return view('pages.admin.ViewUserDetails', compact('user'));
+    }
+{
+    $user = User::with('roles')->findOrFail($id);
+    activity() // Log viewing activity
+    return view('pages.admin.ViewUserDetails', compact('user'));
+}
             </code></pre>
         </div>
 
@@ -1486,22 +1471,22 @@
             <h3>4. EditUsers() - Edit a User's Data</h3>
             <p>This method allows editing a user's details by fetching the current user data and passing it to the edit form:</p>
             <pre><code>
-        public function EditUsers($id)
-            {
-              $user = User::withTrashed()->findOrFail($id);
-              $roles = Role::whereNot('name','superadmin')->get();
+public function EditUsers($id)
+{
+    $user = User::withTrashed()->findOrFail($id);
+    $roles = Role::whereNot('name','superadmin')->get();
 
-              if($user->hasRole('user')||$user->hasRole('superadmin')){
-                        abort(404, 'Page not found.');
-                }
-                    
-              return view('pages.admin.EditUsers', compact('user', 'roles'));      
-            }    
-                {
-                    $user = User::findOrFail($id);
-                    $roles = Role::whereNot('name', 'superadmin')->get();
-                    return view('pages.admin.EditUsers', compact('user', 'roles'));
-                }
+    if($user->hasRole('user')||$user->hasRole('superadmin')){
+            abort(404, 'Page not found.');
+    }
+        
+    return view('pages.admin.EditUsers', compact('user', 'roles'));      
+}    
+    {
+        $user = User::findOrFail($id);
+        $roles = Role::whereNot('name', 'superadmin')->get();
+        return view('pages.admin.EditUsers', compact('user', 'roles'));
+    }
             </code></pre>
         </div>
 
@@ -1515,69 +1500,69 @@
                 <li>Updates the user's information in the database.</li>
             </ul>
             <pre><code>
-                public function UpdateUsers(Request $request, $id)
+        public function UpdateUsers(Request $request, $id)
+{
+    $user = User::withTrashed()->findOrFail($id);
+
+    $oldValues = [
+        'name' => $user->name,
+        'email' => $user->email,
+        'phone' => $user->phone,
+        'role' => $user->roles->pluck('name')->first() ?? 'none',
+    ];
+
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,'.$user->id,
+        'phone' => 'nullable|string|max:20',
+        'role' => 'required|exists:roles,id'
+    ]);
+
+    try {
+        // Update basic user info
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone']
+        ]);
+
+        // Update role
+        $role = Role::findById($validated['role']);
+        $user->syncRoles([$role->name]);
+
+        $newValues = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'role' => $role->name,
+        ];
+
+        activity()
+        ->causedBy(auth()->user()) // Who made the change
+        ->performedOn($user)       // Which user was updated
+        ->inLog('user_update')
+        ->event('user updated')
+        ->withProperties([
+            'edited_by' => auth()->user()->name,
+            'edited_by_email'=>auth()->user()->email,
+            'old' => $oldValues,
+            'new' => $newValues,
+        ])
+        ->log('User details updated');
+
+        return redirect()->route('display.users', $user->id)
+            ->with('success', 'User updated successfully!');
+            
+    } catch (\Exception $e) {
+        return back()->with('error', 'Error updating user: '.$e->getMessage());
+    }
+}
+
         {
-            $user = User::withTrashed()->findOrFail($id);
-
-            $oldValues = [
-                'name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone,
-                'role' => $user->roles->pluck('name')->first() ?? 'none',
-            ];
-
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email,'.$user->id,
-                'phone' => 'nullable|string|max:20',
-                'role' => 'required|exists:roles,id'
-            ]);
-        
-            try {
-                // Update basic user info
-                $user->update([
-                    'name' => $validated['name'],
-                    'email' => $validated['email'],
-                    'phone' => $validated['phone']
-                ]);
-        
-                // Update role
-                $role = Role::findById($validated['role']);
-                $user->syncRoles([$role->name]);
-
-                $newValues = [
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'phone' => $user->phone,
-                    'role' => $role->name,
-                ];
-
-                activity()
-                ->causedBy(auth()->user()) // Who made the change
-                ->performedOn($user)       // Which user was updated
-                ->inLog('user_update')
-                ->event('user updated')
-                ->withProperties([
-                    'edited_by' => auth()->user()->name,
-                    'edited_by_email'=>auth()->user()->email,
-                    'old' => $oldValues,
-                    'new' => $newValues,
-                ])
-                ->log('User details updated');
-        
-                return redirect()->route('display.users', $user->id)
-                    ->with('success', 'User updated successfully!');
-                    
-            } catch (\Exception $e) {
-                return back()->with('error', 'Error updating user: '.$e->getMessage());
-            }
+            $user = User::findOrFail($id);
+            // Validate data, update user and role, log activity
+            return redirect()->route('display.users', $user->id)->with('success', 'User updated!');
         }
-
-                {
-                    $user = User::findOrFail($id);
-                    // Validate data, update user and role, log activity
-                    return redirect()->route('display.users', $user->id)->with('success', 'User updated!');
-                }
             </code></pre>
         </div>
 
@@ -1589,60 +1574,60 @@
                 <li>Prevents the currently authenticated user from deleting their own account.</li>
             </ul>
             <pre><code>    
-                 public function DeleteUser($id)
-        {
-            try {
-                // Prevent deleting yourself
-                if ($id === auth()->id()) {
-                    return redirect()->route('display.users')->with('error', 'You cannot delete your own account!');
-                }
-
-                $user = User::findOrFail($id);
-
-                Log::info('User to be deleted: ', $user->toArray());
-
-
-                //cannot delete superadmin
-                if($user->hasRole('superadmin')){
-                    return redirect()->route('display.users')->with('error', 'Superadmin cannot be deleted.');
-
-                }
-
-                $deletedUserInfo = [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                ];
-
-                $user->delete();
-
-                //Record activity
-                activity()
-                ->causedBy(auth()->user())       // who deleted
-                ->performedOn($user)             // which user was deleted
-                ->inLog('user_update')
-                ->event('user deleted')
-                ->withProperties([
-                    'deleted_by' => auth()->user()->name,
-                    'deleted_by_email' => auth()->user()->email,
-                    'deleted_user' => $deletedUserInfo,
-                ])
-                ->log('A user account was deleted');
-
-
-                return redirect()->route('display.users')
-                    ->with('success', 'User deleted successfully!');
-                    
-            } catch (\Exception $e) {
-                return redirect()->route('display.users')
-                    ->with('error', 'Error deleting user: ' . $e->getMessage());
-            }
+            public function DeleteUser($id)
+{
+    try {
+        // Prevent deleting yourself
+        if ($id === auth()->id()) {
+            return redirect()->route('display.users')->with('error', 'You cannot delete your own account!');
         }
-                    $user = User::findOrFail($id);
-                    // Check conditions and delete user
-                    activity() // Log deletion activity
-                    return redirect()->route('display.users')->with('success', 'User deleted successfully!');
-                }
+
+        $user = User::findOrFail($id);
+
+        Log::info('User to be deleted: ', $user->toArray());
+
+
+        //cannot delete superadmin
+        if($user->hasRole('superadmin')){
+            return redirect()->route('display.users')->with('error', 'Superadmin cannot be deleted.');
+
+        }
+
+        $deletedUserInfo = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ];
+
+        $user->delete();
+
+        //Record activity
+        activity()
+        ->causedBy(auth()->user())       // who deleted
+        ->performedOn($user)             // which user was deleted
+        ->inLog('user_update')
+        ->event('user deleted')
+        ->withProperties([
+            'deleted_by' => auth()->user()->name,
+            'deleted_by_email' => auth()->user()->email,
+            'deleted_user' => $deletedUserInfo,
+        ])
+        ->log('A user account was deleted');
+
+
+        return redirect()->route('display.users')
+            ->with('success', 'User deleted successfully!');
+            
+    } catch (\Exception $e) {
+        return redirect()->route('display.users')
+            ->with('error', 'Error deleting user: ' . $e->getMessage());
+    }
+}
+            $user = User::findOrFail($id);
+            // Check conditions and delete user
+            activity() // Log deletion activity
+            return redirect()->route('display.users')->with('success', 'User deleted successfully!');
+        }
             </code></pre>
         </div>
     
@@ -1669,65 +1654,65 @@
     
                 <!-- Code Snippet for Subuser Creation -->
                 <pre><code>
-            public function StoreSubUser(Request $request)
-        {
-            // This function handles the creation of a sub-user by validating the input,
-            // ensuring only main users can create sub-users, and assigning roles.
+    public function StoreSubUser(Request $request)
+{
+    // This function handles the creation of a sub-user by validating the input,
+    // ensuring only main users can create sub-users, and assigning roles.
 
-            $request->validate([
-                'name'=> 'required|string|max:255',
-                // Validate that the 'name' field is required, must be a string, and cannot exceed 255 characters.
+    $request->validate([
+        'name'=> 'required|string|max:255',
+        // Validate that the 'name' field is required, must be a string, and cannot exceed 255 characters.
 
-                'email'=> 'required|email|unique:users,email',
-                // Validate that the 'email' field is required, must be a valid email format, and must be unique in the 'users' table.
+        'email'=> 'required|email|unique:users,email',
+        // Validate that the 'email' field is required, must be a valid email format, and must be unique in the 'users' table.
 
-                'password'=> 'required|string|min:6',
-                // Validate that the 'password' field is required, must be a string, and must have a minimum length of 6 characters.
+        'password'=> 'required|string|min:6',
+        // Validate that the 'password' field is required, must be a string, and must have a minimum length of 6 characters.
 
-                'phone'=> 'nullable|string',
-                // Validate that the 'phone' field is optional (nullable) and, if provided, must be a string.
-            ]);
+        'phone'=> 'nullable|string',
+        // Validate that the 'phone' field is optional (nullable) and, if provided, must be a string.
+    ]);
 
-            $parentUser = auth()->user();
-            // Retrieve the currently authenticated user who is attempting to create the sub-user.
+    $parentUser = auth()->user();
+    // Retrieve the currently authenticated user who is attempting to create the sub-user.
 
-            // Optional: Ensure only main users can create sub-users
-            if ($parentUser->is_sub_user) {
-                // Check if the authenticated user is a sub-user.
-                // If true, redirect back with an error message, as sub-users are not allowed to create other users.
-                return redirect()->back()->with('error', 'Sub-users cannot create other users.');
-            }
+    // Optional: Ensure only main users can create sub-users
+    if ($parentUser->is_sub_user) {
+        // Check if the authenticated user is a sub-user.
+        // If true, redirect back with an error message, as sub-users are not allowed to create other users.
+        return redirect()->back()->with('error', 'Sub-users cannot create other users.');
+    }
 
-            $subUser = User::create([
-                'name'=> $request->name,
-                // Create a new user with the 'name' provided in the request.
+    $subUser = User::create([
+        'name'=> $request->name,
+        // Create a new user with the 'name' provided in the request.
 
-                'email'=> $request->email,
-                // Set the 'email' field for the new user using the value provided in the request.
+        'email'=> $request->email,
+        // Set the 'email' field for the new user using the value provided in the request.
 
-                'password'=> Hash::make($request->password),
-                // Hash the provided password using Laravel's Hash facade and set it for the new user.
+        'password'=> Hash::make($request->password),
+        // Hash the provided password using Laravel's Hash facade and set it for the new user.
 
-                'status'=> 'subuser',
-                // Set the 'status' field to 'subuser' to indicate that this user is a sub-user.
+        'status'=> 'subuser',
+        // Set the 'status' field to 'subuser' to indicate that this user is a sub-user.
 
-                'phone'=> $request->phone,
-                // Set the 'phone' field for the new user using the value provided in the request (if any).
+        'phone'=> $request->phone,
+        // Set the 'phone' field for the new user using the value provided in the request (if any).
 
-                'parent_user_id'=> $parentUser->id,
-                // Set the 'parent_user_id' field to the ID of the authenticated user, linking the sub-user to their parent user.
+        'parent_user_id'=> $parentUser->id,
+        // Set the 'parent_user_id' field to the ID of the authenticated user, linking the sub-user to their parent user.
 
-                'email_verified_at'=> now(),
-                // Set the 'email_verified_at' field to the current timestamp, marking the email as verified.
-            ]);
+        'email_verified_at'=> now(),
+        // Set the 'email_verified_at' field to the current timestamp, marking the email as verified.
+    ]);
 
-            // Assign role using Spatie
-            $subUser->assignRole('subuser');
-            // Use the Spatie Role and Permission package to assign the 'subuser' role to the newly created user.
+    // Assign role using Spatie
+    $subUser->assignRole('subuser');
+    // Use the Spatie Role and Permission package to assign the 'subuser' role to the newly created user.
 
-            return redirect()->back()->with('success', 'Sub-user added successfully.');
-            // Redirect back to the previous page with a success message indicating that the sub-user was created successfully.
-        }
+    return redirect()->back()->with('success', 'Sub-user added successfully.');
+    // Redirect back to the previous page with a success message indicating that the sub-user was created successfully.
+}
                 </code></pre>
                 <p>The `StoreSubUser()` method creates a new subuser and assigns them a role. It also logs the activity and handles any errors that may occur during the process.</p>
         </div>
@@ -1738,14 +1723,14 @@
     
                 <!-- Code Snippet for Displaying Subusers -->
                 <pre><code>
-            public function DisplaySubUsers()
-        {
-            $user = auth()->user();
-            $subUsers = User::where('parent_user_id', $user->id)->get();
-            // Fetch all subusers associated with the currently authenticated user
-            return view('subusers', compact('subUsers'));
-            // Return a view named 'subusers' and pass the subusers to the view
-        }
+    public function DisplaySubUsers()
+{
+    $user = auth()->user();
+    $subUsers = User::where('parent_user_id', $user->id)->get();
+    // Fetch all subusers associated with the currently authenticated user
+    return view('subusers', compact('subUsers'));
+    // Return a view named 'subusers' and pass the subusers to the view
+}
         
                 </code></pre>
                 <p>The `DisplaySubUsers()` method fetches all subusers associated with the currently authenticated user and returns them to the view for rendering.</p>
@@ -1757,25 +1742,25 @@
     
                 <!-- Code Snippet for Editing Subuser -->
                 <pre><code>
-             public function EditSubUserPermissions($id)
-        {
-            $user = User::findOrFail($id);
+        public function EditSubUserPermissions($id)
+{
+    $user = User::findOrFail($id);
 
-            $targetGroups = ['monitor', 'status_page', 'incident'];
+    $targetGroups = ['monitor', 'status_page', 'incident'];
 
-            // Filter permissions by allowed groups
-            $permissions = Permission::whereIn('group_name', $targetGroups)->get();
+    // Filter permissions by allowed groups
+    $permissions = Permission::whereIn('group_name', $targetGroups)->get();
 
-            $groupedPermissions = $permissions->groupBy('group_name');
+    $groupedPermissions = $permissions->groupBy('group_name');
 
-            $permission_groups = DB::table('permissions')
-                ->select('group_name')
-                ->whereIn('group_name', $targetGroups)
-                ->groupBy('group_name')
-                ->get();
+    $permission_groups = DB::table('permissions')
+        ->select('group_name')
+        ->whereIn('group_name', $targetGroups)
+        ->groupBy('group_name')
+        ->get();
 
-            return view('pages.EditSubUserPermissions', compact('user', 'groupedPermissions', 'permission_groups'));
-        }
+    return view('pages.EditSubUserPermissions', compact('user', 'groupedPermissions', 'permission_groups'));
+}
                 </code></pre>
                 <p>The `editSubUser()` method retrieves the current subuser data and passes it to the edit form for rendering.</p>
                 </div>
@@ -1786,27 +1771,27 @@
     
                 <!-- Code Snippet for Updating Subuser -->
                 <pre><code>
-        public function UpdateSubUserPermissions(Request $request, $id)
-        {
-            // This function updates the permissions of a specific sub-user.
-            // It retrieves the sub-user by their ID, synchronizes their permissions, and redirects back with a success message.
+public function UpdateSubUserPermissions(Request $request, $id)
+{
+    // This function updates the permissions of a specific sub-user.
+    // It retrieves the sub-user by their ID, synchronizes their permissions, and redirects back with a success message.
 
-            $user = User::findOrFail($id);
-            // Retrieve the user with the given ID from the database.
-            // If the user does not exist, throw a 404 error (using `findOrFail`).
+    $user = User::findOrFail($id);
+    // Retrieve the user with the given ID from the database.
+    // If the user does not exist, throw a 404 error (using `findOrFail`).
 
-            $permissions = $request->input('permission', []);
-            // Retrieve the 'permission' input from the request.
-            // If no permissions are provided, default to an empty array.
+    $permissions = $request->input('permission', []);
+    // Retrieve the 'permission' input from the request.
+    // If no permissions are provided, default to an empty array.
 
-            $user->syncPermissions($permissions);
-            // Synchronize the user's permissions with the provided list.
-            // This will remove any permissions not in the list and add any new ones.
+    $user->syncPermissions($permissions);
+    // Synchronize the user's permissions with the provided list.
+    // This will remove any permissions not in the list and add any new ones.
 
-            return redirect()->route('display.sub.users')->with('success', 'Permissions updated successfully.');
-            // Redirect the user back to the 'display.sub.users' route.
-            // Attach a success message to the session indicating that the permissions were updated successfully.
-        }
+    return redirect()->route('display.sub.users')->with('success', 'Permissions updated successfully.');
+    // Redirect the user back to the 'display.sub.users' route.
+    // Attach a success message to the session indicating that the permissions were updated successfully.
+}
                 </code></pre>
                 <p>The `UpdateSubUserPermissions()` method updates a subuser's permission and logs the changes made.</p>      
             </div>
@@ -1837,34 +1822,34 @@
                 <p>This will create a new table named <code>activity_log</code> in the database to store the activity logs.</p>
                 <p>Finally, add the <code>Spatie\Activitylog\Traits\LogsActivity</code> trait to the models you want to log activities for. For example:</p>
                 <pre><code>
-                    use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-                    class User extends Authenticatable
-                    {
-                        use LogsActivity;
+class User extends Authenticatable
+{
+    use LogsActivity;
 
-                        protected static $logAttributes = ['name', 'email', 'phone'];
-                        // Specify the attributes to log
-                    }
+    protected static $logAttributes = ['name', 'email', 'phone'];
+    // Specify the attributes to log
+}
                 </code></pre>
                 <h3>Activity Logging</h3>
                 <p>The activity logging module is responsible for tracking user actions within the application. It uses the Spatie Activitylog package to log various events, such as user creation, updates, and deletions. The following code snippet shows how activity logs are created:</p>
     
                 <!-- Code Snippet for Activity Logging -->
                 <pre><code>
-                    activity()
-                        ->causedBy(auth()->user()) // The user who performed the action
-                        ->performedOn($user)       // The user being acted upon
-                        ->inLog('user_management') // The log name
-                        ->event('user-created')    // The event name
-                        ->withProperties([
-                            'created_user_name' => $user->name,
-                            'created_user_email' => $user->email,
-                            'created_by' => auth()->user()->name,
-                            'role_assigned' => $role ? $role->name : 'None',
-                            'status' => $user->status,
-                        ])
-                        ->log("User created successfully: " . $user->name);
+activity()
+    ->causedBy(auth()->user()) // The user who performed the action
+    ->performedOn($user)       // The user being acted upon
+    ->inLog('user_management') // The log name
+    ->event('user-created')    // The event name
+    ->withProperties([
+        'created_user_name' => $user->name,
+        'created_user_email' => $user->email,
+        'created_by' => auth()->user()->name,
+        'role_assigned' => $role ? $role->name : 'None',
+        'status' => $user->status,
+    ])
+    ->log("User created successfully: " . $user->name);
                 </code></pre>
                 <p>The `activity()` method creates a new activity log entry with the specified properties and event name.</p>   
                 </div>
@@ -1875,15 +1860,15 @@
     
                 <!-- Code Snippet for Displaying Activity Logs -->
                 <pre><code>
-                    public function DisplayActivityLogs()
-        {
-            $activityLogs = Activity::with('causer', 'subject')
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
-            // Fetch all activity logs from the database, ordered by creation date in descending order
-            return view('activity-logs', compact('activityLogs'));
-            // Return a view named 'activity-logs' and pass the activity logs to the view
-        }
+public function DisplayActivityLogs()
+{
+    $activityLogs = Activity::with('causer', 'subject')
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+    // Fetch all activity logs from the database, ordered by creation date in descending order
+    return view('activity-logs', compact('activityLogs'));
+    // Return a view named 'activity-logs' and pass the activity logs to the view
+}
                 </code></pre>
                 <p>The `DisplayActivityLogs()` method fetches all activity logs from the database and returns them to the view for rendering.</p>
                 </div>
@@ -1909,46 +1894,47 @@
 <p>If attachments are included, they are stored in the database and associated with the ticket.</p>
 <h3>Ticket Creation</h3>
 <p>A new ticket is created in database</p>
-<pre><code>public function StoreTicket(Request $request)
-    {
-        $request->validate([
-            'subject' => 'required',
-            'priority' => 'required',
-            'description' => 'required|min:1',
-            'attachments' => 'nullable|array|max:3',
-            'attachments.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
-        ]);
+<pre><code>
+public function StoreTicket(Request $request)
+{
+    $request->validate([
+        'subject' => 'required',
+        'priority' => 'required',
+        'description' => 'required|min:1',
+        'attachments' => 'nullable|array|max:3',
+        'attachments.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
+    ]);
 
-        $attachmentPaths = [];
-        // if ($request->hasFile('attachments')) {
-        //     foreach ($request->file('attachments') as $file) {
-        //         $path = $file->store('attachments', 'public');
-        //         $attachmentPaths[] = $path;
-        //     }
-        // }
+    $attachmentPaths = [];
+    // if ($request->hasFile('attachments')) {
+    //     foreach ($request->file('attachments') as $file) {
+    //         $path = $file->store('attachments', 'public');
+    //         $attachmentPaths[] = $path;
+    //     }
+    // }
 
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-               
-                $fileName = date('Ymd') . rand(1000, 9999) . '.' . $file->getClientOriginalExtension();
-    
-                $file->move(public_path('storage/attachments'), $fileName);
-    
-                $attachmentPaths[] = 'storage/attachments/' . $fileName;
-            }
+    if ($request->hasFile('attachments')) {
+        foreach ($request->file('attachments') as $file) {
+            
+            $fileName = date('Ymd') . rand(1000, 9999) . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path('storage/attachments'), $fileName);
+
+            $attachmentPaths[] = 'storage/attachments/' . $fileName;
         }
-
-        $ticket = Ticket::create([
-            'ticket_id'=>'TKT-' . strtoupper(Str::random(10)),
-            'title' => $request->subject,
-            'message' => $request->description,
-            'priority' => $request->priority,
-            'attachments' => $attachmentPaths,
-            'user_id' => auth()->id(), // If you have user association
-        ]);
-
-        return redirect()->route('display.tickets')->with('success', 'Ticket created successfully');
     }
+
+    $ticket = Ticket::create([
+        'ticket_id'=>'TKT-' . strtoupper(Str::random(10)),
+        'title' => $request->subject,
+        'message' => $request->description,
+        'priority' => $request->priority,
+        'attachments' => $attachmentPaths,
+        'user_id' => auth()->id(), // If you have user association
+    ]);
+
+    return redirect()->route('display.tickets')->with('success', 'Ticket created successfully');
+}
     </code></pre>
 <p>The StoreTicket method handles the ticket creation process. It validates the input data, creates a new ticket, and associates it with the authenticated user. If attachments are included, they are stored in the database and associated with the ticket.</p>
 <p>After the ticket is created, the user is redirected to the ticket display page with a success message.</p>
@@ -1957,83 +1943,93 @@
 <pre><code> return redirect()->route('display.tickets')->with('success', 'Ticket created successfully');</pre></code>
 <h3>Viewing Tickets</h3>
 <p>Users can view the details of their tickets by clicking on the ticket ID. The ShowTicket method retrieves the ticket details and displays them in a separate view.</p>
-<pre><code> public function ViewTicketsUser()
-        {
-         $user = auth()->user();
-         $tickets = Ticket::where('user_id',$user->id)->get();
+<pre><code> 
+public function ViewTicketsUser()
+    {
+        $user = auth()->user();
+        $tickets = Ticket::where('user_id',$user->id)->get();
 
-         if($user->hasRole('support')){
-             $tickets = Ticket::where('assigned_user_id',$user->id)->get();
-         }</code></pre>
+        if($user->hasRole('support')){
+            $tickets = Ticket::where('assigned_user_id',$user->id)->get();
+        }
+        </code></pre>
 <p>The ViewTicketsUser method retrieves all tickets associated with the authenticated user. If the user has the support role, it retrieves tickets assigned to them.</p>
 <p>The TicketsView method retrieves the ticket details and displays them in a separate view.</p>
-<pre><code>   public function TicketsView(){
+<pre><code>   
+public function TicketsView(){
 
-        $tickets = Ticket::all();
+    $tickets = Ticket::all();
 
-        $TotalTickets = Ticket::count();
-        $OpenTickets = Ticket::where('status', 'open')->count();
-        $ClosedTickets = Ticket::where('status', 'closed')->count();
-        $OnHoldTickets = Ticket::where('status', 'on hold')->count();
+    $TotalTickets = Ticket::count();
+    $OpenTickets = Ticket::where('status', 'open')->count();
+    $ClosedTickets = Ticket::where('status', 'closed')->count();
+    $OnHoldTickets = Ticket::where('status', 'on hold')->count();
 
-        \App\Models\Ticket::where('is_read', false)->update(['is_read' => true]);
-        
-        return view('pages.admin.TicketDisplayAdmin', compact('tickets','TotalTickets','OpenTickets','ClosedTickets','OnHoldTickets'));
-    }</code></pre>
+    \App\Models\Ticket::where('is_read', false)->update(['is_read' => true]);
+    
+    return view('pages.admin.TicketDisplayAdmin', compact('tickets','TotalTickets','OpenTickets','ClosedTickets','OnHoldTickets'));
+}
+</code></pre>
     <h3>Retrieve ticket details</h3>
 <p>The ShowTicket method retrieves the details of a specific ticket using its ID and displays it in a separate view. It also logs the viewing activity:</p>
-<pre><code>public function ShowTicket($id)
-    {
-        $ticket = Ticket::findOrFail($id);
-        $comments = $ticket->comments()->with('user')->orderBy('created_at', 'asc')->get();
+<pre><code>
+public function ShowTicket($id)
+{
+    $ticket = Ticket::findOrFail($id);
+    $comments = $ticket->comments()->with('user')->orderBy('created_at', 'asc')->get();
 
-        $supportUsers = User::role('support')->get();
+    $supportUsers = User::role('support')->get();
 
-        return view('pages.tickets.TicketDetails', compact('ticket', 'comments','supportUsers'));
-    }
+    return view('pages.tickets.TicketDetails', compact('ticket', 'comments','supportUsers'));
+}
 </code></pre>
 <p>the ticket details are displayed including it's status priority and attachments. The comments associated with the ticket are also retrieved and displayed in the view.</p>
 <h3>Updating Ticket</h3>
 <p>Support staff can update the ticket details such as status ,priority and assigned user.</p>
-<pre><code>public function UpdateTicket(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required|string|max:50',
-            'message' => 'required|string',
-            'status' => 'required|in:open,closed,on hold',
-            'priority' => 'required|in:low,medium,high',
-            'assigned_user_id' => 'nullable|exists:users,id', 
-        ], [
-            'title.regex' => 'The title must only contain alphabetic characters. Numbers are not allowed.', // Custom error message
-        ]);
-    
+<pre><code>
+public function UpdateTicket(Request $request, $id)
+{
+    $request->validate([
+        'title' => 'required|string|max:50',
+        'message' => 'required|string',
+        'status' => 'required|in:open,closed,on hold',
+        'priority' => 'required|in:low,medium,high',
+        'assigned_user_id' => 'nullable|exists:users,id', 
+    ], [
+        'title.regex' => 'The title must only contain alphabetic characters. Numbers are not allowed.', // Custom error message
+    ]);
 
-        $ticket = Ticket::findOrFail($id);
 
-        $previousAssignedUserId = $ticket->assigned_user_id;
+    $ticket = Ticket::findOrFail($id);
 
-        $ticket->update([
-            'title' => $request->title,
-            'message' => $request->message,
-            'status' => $request->status,
-            'priority' => $request->priority,
-            'assigned_user_id' => $request->assigned_user_id, // Update assigned user
-        ]);
+    $previousAssignedUserId = $ticket->assigned_user_id;
 
-        // Send email if the assigned user has changed
-    if ($previousAssignedUserId !== $request->assigned_user_id && $request->assigned_user_id) {
-        $assignedUser = User::find($request->assigned_user_id);
-        Mail::to($assignedUser->email)->queue(new TicketAssignedMail($ticket));
-    }
+    $ticket->update([
+        'title' => $request->title,
+        'message' => $request->message,
+        'status' => $request->status,
+        'priority' => $request->priority,
+        'assigned_user_id' => $request->assigned_user_id, // Update assigned user
+    ]);
 
-        return redirect()->back()->with('success', 'Ticket updated successfully');
-    }</code></pre>
+    // Send email if the assigned user has changed
+if ($previousAssignedUserId !== $request->assigned_user_id && $request->assigned_user_id) {
+    $assignedUser = User::find($request->assigned_user_id);
+    Mail::to($assignedUser->email)->queue(new TicketAssignedMail($ticket));
+}
+
+    return redirect()->back()->with('success', 'Ticket updated successfully');
+}
+</code></pre>
     <h3>Email Notification</h3>
 <p>If the assigned user changes , an email is sent to the new assignee:</p>
-<pre><code> if ($previousAssignedUserId !== $request->assigned_user_id && $request->assigned_user_id) {
-        $assignedUser = User::find($request->assigned_user_id);
-        Mail::to($assignedUser->email)->queue(new TicketAssignedMail($ticket));
-    }</code></pre>
+<pre><code>
+    if ($previousAssignedUserId !== $request->assigned_user_id && $request->assigned_user_id) 
+{
+    $assignedUser = User::find($request->assigned_user_id);
+    Mail::to($assignedUser->email)->queue(new TicketAssignedMail($ticket));
+}
+</code></pre>
 <p>The email notification is sent using the Laravel Mail facade and the TicketAssignedMail mailable class. The email is queued for sending to improve performance.</p>
 <p>In the TicketAssignedMail class, you can customize the email content and layout. The email will include the ticket details and a link to view the ticket in the application.</p>
 <p>By following these steps, you can implement a ticketing module in your application that allows users to create, manage, and view tickets. The module also includes email notifications for ticket updates and assignments.</p>
@@ -2053,312 +2049,62 @@
 
             <!-- HTTP Monitor Section -->
             <div class="doc-section">
-                <h3>HTTP Monitor</h3>
-                <p>The HTTP monitor checks the status and response time of a URL. It sends a request to the given URL and tracks the response time and status code.</p>
-
-                <!-- Code Snippet for HTTP Monitor Handling -->
+                <h3>Monitor Creation:</h3>
+                <p>  Users add monitors (HTTP, Ping, Port, DNS) from the dashboard. Each monitor is stored in the <code>monitors</code> table with its configuration.</p>
+                <h3>Automated Checks:</h3>
+                <p>The system periodically runs checks for each monitor type explained in monitor section.If a check fails (e.g., status is 'down'), an incident is created and notifications are triggered.In<code>web.php</code>route handles public access to the status page using a unique {hash} for each user/account </p>
                 <pre><code>
-                    
-                    public function checkHttp(Monitors $monitor)
-                    {
-                        $start = microtime(true); // Record start time
-                    
-                        try {
-                            // Send HTTP GET request to the monitor's URL
-                            $response = Http::timeout(10)->get($monitor->url);
-                            $end = microtime(true); // Record end time
-                    
-                            // Save HTTP response details in database
-                            HttpResponse::create([
-                                'monitor_id'    => $monitor->id,
-                                'status_code'   => $response->status(), // HTTP status code
-                                'response_time' => round(($end - $start) * 1000, 2), // ms
-                                'checked_at'    => now(), // Timestamp of the check
-                            ]);
-                        } catch (\Exception $e) {
-                            $end = microtime(true);
-                    
-                            // Store failed response with null status code
-                            HttpResponse::create([
-                                'monitor_id'    => $monitor->id,
-                                'status_code'   => null,
-                                'response_time' => round(($end - $start) * 1000, 2),
-                                'checked_at'    => now(),
-                            ]);
-                        }
-                    }                
-                </code></pre>
+Route::get('/status-page/{hash}', [PublicStatusPageController::class, 'show'])->middleware('blockIp')->name('public.status');
+                </pre></code>
+                    <h3>Public Status Page controller:</h3>
+<p>
+                <p>Receives the {hash} from the URL.Finds the user/account with that hash.Checks if the status page is enabled (enable_public_status).Checks whitelist (if set) to allow/deny access.Loads all monitors and their latest statuses for that user.Passes the data to the Blade view for rendering.</p>
+            <pre><code>
+public function show(Request $request,$hash)
+{
+$user = User::where('status_page_hash', $hash)
+            ->where('enable_public_status', true)
+            ->firstOrFail();
 
-                <p>The above method checkHttp function is designed to perform an HTTP check for a given monitor. It verifies the status of the service by sending an HTTP GET request to the monitor's URL and records the response details, including the response time and HTTP status code. <strong>HttpResponse</strong> table.</p>
+$whitelistRecord = Whitelist::where('user_id',$user->id)->first();
+$whitelistedIPs = $whitelistRecord->whitelist;
+
+$ip = $request->ip();
+if(!in_array($ip, $whitelistedIPs)){
+    return view('pages.StatusPageNotAllowed');
+}
+
+
+// Get days to show based on user status
+$daysToShow = $user->status === 'free' ? 30 : 120;
+
+// Get and enrich public monitors
+$monitors = $user->monitors()
+                ->orderBy('status')
+                ->orderBy('name')
+                ->get()
+                ->map(function ($monitor) use ($daysToShow) {
+                    return $this->getMonitorData($monitor, $daysToShow);
+                });
+
+return view('public-status', [
+    'monitors' => $monitors,
+    'user' => $user
+]);
+}
+                </code></pre>
             </div>
 
-            <!-- Ping Monitor Section -->
             <div class="doc-section">
-                <h3>Ping Monitor</h3>
-                <p>The Ping monitor checks the response time of a network ping to a server's IP address. It helps to determine if a server is reachable.</p>
-
-                <!-- Code Snippet for Ping Monitor Handling -->
-                <pre><code>
-
-                    public function checkPing(Monitors $monitor)
-                    {
-                        // Extract host from URL or use as-is
-                        $host = parse_url($monitor->url, PHP_URL_HOST) ?? $monitor->url;
-                    
-                        $start = microtime(true); // Start timing
-                    
-                        // Detect OS type to use correct ping command
-                        $isWindows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-                    
-                        // Use OS-specific ping command
-                        $command = $isWindows ? "ping -n 1 $host" : "ping -c 1 $host";
-                    
-                        // Execute ping command
-                        exec($command, $output, $status);
-                    
-                        $end = microtime(true); // End timing
-                    
-                        // Store ping response in database
-                        PingResponse::create([
-                            'monitor_id'    => $monitor->id,
-                            'status'        => $status === 0 ? 'up' : 'down', // Status 0 = success
-                            'response_time' => round(($end - $start) * 1000, 2),
-                            'checked_at'    => now(),
-                        ]);
-                    }
-                    
-                </code></pre>
-
-                <p>The above method is designed to monitor the availability of a service by performing a ping test to the target URL of a given monitor. It checks the response time and the availability (up or down) of the service based on the result of the ping command<strong>PingResponse</strong> table.</p>
+                <h3>Public status page</h3>
+                <p>Receives<code>$user</code>and<code>$monitors</code> from the controller.Loops through each monitor and displays:Name, status (Up/Down), response time, last checked, etc.This is the actual HTML page shown to the public.</p>
+                <h3>Access Denied Page:</h3>
+                <p>If the user's IP is not whitelisted, they see a "Status Page Not Allowed" message. This is handled in the controller before loading the status page.</p>
+                <h3>User Setting(Enable/Disable Status page):</h3>
+                <p>Users can enable/disable the public status page from their settings. This is stored in the <code>enable_public_status</code> field in the users table.</p>
+                <code>form method="POST" action="{{ route('user.status-settings.update') }}"</code>
+                    <p>wrfjhln;</p>
             </div>
-
-            <!-- Port Monitor Section -->
-            <div class="doc-section">
-                <h3>Port Monitor</h3>
-                <p>The Port monitor checks whether a specific port is open on a given server. It attempts to connect to the server on the specified port.</p>
-
-                <!-- Code Snippet for Port Monitor Handling -->
-                <pre><code>
-
-                    public function checkPort(Monitors $monitor)
-                    {
-                        $start = microtime(true); // Start timing
-                    
-                        // Try opening the given host:port with a timeout
-                        $connection = @fsockopen($monitor->host, $monitor->port, $errno, $errstr, 10);
-                        $end = microtime(true); // End timing
-                    
-                        // Save port status and response time
-                        PortResponse::create([
-                            'monitor_id'    => $monitor->id,
-                            'port'          => $monitor->port,
-                            'status'        => $connection ? 'up' : 'down', // Based on connection
-                            'response_time' => round(($end - $start) * 1000, 2),
-                            'checked_at'    => now(),
-                        ]);
-                    
-                        // Close connection if successful
-                        if ($connection) {
-                            fclose($connection);
-                        }
-                    }
-                    
-                </code></pre>
-
-                <p>function is responsible for checking the availability of a specific port on a given host (e.g., a server). It attempts to establish a connection to the provided host and port, measures the response time, and records whether the port is open (up) or closed (down)</strong> table.</p>
-            </div>
-
-            <!-- DNS Monitor Section -->
-            <div class="doc-section">
-                <h3>DNS Monitor</h3>
-                <p>The DNS monitor checks the DNS resolution time for a domain. It ensures that the domain can be resolved correctly to an IP address.</p>
-
-                <!-- Code Snippet for DNS Monitor Handling -->
-                <pre><code>
-
-                    public function checkDnsRecords(Monitors $monitor)
-                    {
-                        $start = microtime(true); // Start timing
-                    
-                        // Parse host from URL or fallback to plain domain
-                        $parsed = parse_url($monitor->url);
-                        $host = $parsed['host'] ?? $monitor->url;
-                    
-                        // Default to 'A' record type if not specified
-                        $type = $monitor->dns_record_type ?? 'A';
-                    
-                        // Perform DNS lookup of specified type
-                        $records = dns_get_record($host, constant("DNS_{$type}"));
-                        $end = microtime(true); // End timing
-                    
-                        // Store DNS response data in database
-                        DnsResponse::create([
-                            'monitor_id'    => $monitor->id,
-                            'record_type'   => $type,
-                            'found_records' => json_encode($records), // Save records as JSON
-                            'response_time' => round(($end - $start) * 1000, 2),
-                            'checked_at'    => now(),
-                        ]);
-                    }
-                    
-                </code></pre>
-
-                <p>function is responsible for checking DNS records for a given host (domain) to ensure that it resolves correctly and to gather data about the specified record type (e.g., A record, MX record). The function measures the time it takes to perform the DNS lookup and stores the results</strong> table.</p>
-            </div>
-
-            <!-- Monitor Management Section -->
-            <div class="doc-section">
-                <h3>Monitor Management</h3>
-                <p>Monitors can be edited, paused, resumed, or deleted from the Monitor Dashboard. Each action triggers the appropriate method to update the monitor's status.</p>
-
-                <!-- Code Snippet for Pausing a Monitor -->
-                <pre><code>
-                    public function pauseMonitor(Request $request, $id)
-                    {
-                        // Get the currently authenticated user
-                        $user = auth()->user();
-                    
-                        // Retrieve the monitor by its ID, or fail if it does not exist
-                        $monitor = Monitors::findOrFail($id);
-                    
-                        // Toggle the 'paused' status of the monitor (if paused, resume it, if not paused, pause it)
-                        $monitor->paused = !$monitor->paused;
-                    
-                        // Save the updated monitor status to the database
-                        $monitor->save();
-                    
-                        // Determine the status message based on whether the monitor is paused or resumed
-                        $status = $monitor->paused ? 'paused' : 'resumed';
-                    
-                        // Log the activity with the details of the action (pausing/resuming the monitor)
-                        activity()
-                            ->performedOn($monitor) // Specify the monitor object being affected
-                            ->causedBy(auth()->user()) // Log the user who performed the action
-                            ->inLog('monitor_management') // Log category for monitoring actions
-                            ->event($status) // Event name based on whether the monitor is paused or resumed
-                            ->withProperties([ // Attach properties to the log entry
-                                'name' => $user->name, // The name of the user performing the action
-                                'monitor_id' => $monitor->id, // The ID of the monitor being paused/resumed
-                                'monitor_name' => $monitor->name, // The name of the monitor
-                                'status' => $status, // The new status (paused/resumed)
-                            ])
-                            ->log("Monitor {$monitor->name} has been {$status}"); // Custom log message
-                    
-                        // Return a JSON response with the result of the action (success status, message, and updated monitor status)
-                        return response()->json([
-                            'success' => true,
-                            'message' => "Monitor has been {$status} successfully.",
-                            'paused' => $monitor->paused, // Include the current paused status of the monitor
-                        ]);
-                    }
-                    
-                </code></pre>
-
-                <p>function is responsible for toggling the "paused" status of a specific monitor. When a monitor is paused, it stops being checked for availability, and when resumed, it starts being monitored again.</p>
-
-                <!-- Code Snippet for Deleting a Monitor -->
-                <pre><code>
-                    public function MonitorDelete($id)
-                    {
-                        // Retrieve the monitor by its ID, or fail if it does not exist
-                        $DeleteMonitor = Monitors::findOrFail($id);
-                    
-                        // If the monitor doesn't exist (though findOrFail would have already returned an error)
-                        if (!$DeleteMonitor) {
-                            // Redirect back with an error message if the monitor was not found
-                            return redirect()->back()->with('error', 'Monitoring data not found.');
-                        }
-                    
-                        // Proceed to delete the monitor from the database
-                        $DeleteMonitor->delete();
-                    
-                        // Log the deletion activity with relevant details
-                        activity()
-                            ->performedOn($DeleteMonitor) // Specify the monitor object being deleted
-                            ->causedBy(auth()->user()) // Log the user who performed the action
-                            ->inLog('monitor_management') // Log category for monitoring actions
-                            ->event('monitor deleted') // Event name for the deletion action
-                            ->withProperties([ // Attach properties to the log entry
-                                'monitor_name' => $DeleteMonitor->name, // Name of the monitor being deleted
-                                'monitor_type' => $DeleteMonitor->type, // Type of monitor (HTTP, DNS, etc.)
-                                'user_id' => auth()->id(), // ID of the user who deleted the monitor
-                                'ip' => request()->ip(), // IP address of the user performing the action
-                            ])
-                            ->log("User deleted {$DeleteMonitor->type} monitor"); // Custom log message
-                    
-                        // Redirect to the monitoring dashboard with a success message after deletion
-                        return redirect()->route('monitoring.dashboard')->with('success', 'Monitoring data deleted successfully.');
-                    }
-                    
-                </code></pre>
-
-                <p>function is responsible for deleting a monitor from the database. This method ensures that a monitor can be safely removed, logs the action for auditing purposes, and provides user feedback.</p>
-                <p>To edit monitor</p>
-                <pre><code>
-                    public function MonitorEdit(Request $request, $id)
-                    {
-                        // Validate the incoming request data to ensure proper format and types.
-                        $request->validate([
-                            'name' => 'required|string|max:255', // Name must be a string and a max of 255 characters
-                            'url' => 'required|url', // URL must be a valid URL
-                            'retries' => 'required|integer|min:1', // Retries must be an integer greater than or equal to 1
-                            'interval' => 'required|integer|min:1', // Interval must be an integer greater than or equal to 1
-                            'email' => 'required|email', // Email must be a valid email
-                            'port' => 'nullable|integer', // Port is optional but must be an integer if provided
-                            'dns_resource_type' => 'nullable|string', // DNS resource type is optional but must be a string if provided
-                            'telegram_id' => 'nullable|string', // Telegram ID is optional but must be a string if provided
-                            'telegram_bot_token' => 'nullable|string', // Telegram bot token is optional but must be a string if provided
-                            'type' => 'string' // Type must be a string
-                        ]);
-                    
-                        // Find the monitor by its ID, or fail if not found
-                        $EditMonitoring = Monitors::findOrFail($id);
-                    
-                        // Get the original values of the monitor before updating, to compare later
-                        $original = $EditMonitoring->getOriginal();
-                    
-                        // Update the monitor's attributes with the request data
-                        $EditMonitoring->update($request->all());
-                    
-                        // Initialize the changes array to track old and new values
-                        $changes = [
-                            'old' => [],
-                            'new' => [],
-                        ];
-                    
-                        // Loop through all the incoming request data and compare it with the original values
-                        foreach ($request->all() as $key => $value) {
-                            // If the key exists in the original monitor and the value has changed
-                            if (array_key_exists($key, $original) && $original[$key] != $value) {
-                                // Add the old value and new value to the changes array for logging
-                                $changes['old'][$key] = $original[$key];
-                                $changes['new'][$key] = $value;
-                            }
-                        }
-                    
-                        // Log the activity, indicating that the monitor was updated
-                        activity()
-                            ->performedOn($EditMonitoring) // Specify the object being updated
-                            ->causedBy(auth()->user()) // Log the user who made the change
-                            ->inLog('monitor_management') // Specify the log type/category
-                            ->event('updated monitor') // Specify the event name
-                            ->withProperties($changes) // Attach the changes (old and new data) to the log entry
-                            ->log('Monitoring details updated'); // Log the message
-                    
-                        // Redirect back to the previous page with a success message
-                        return redirect()->back()->with('success', 'Monitoring details updated successfully.');
-                    }
-                    
-                </code></pre>
-                <p> function is designed to handle the editing and updating of a monitor's details in the system. It ensures that the incoming data is valid, updates the monitor record with the new values, and logs the changes for auditing purposes.</p>
-            </div>
-
-            <!-- Conclusion Section -->
-            <div class="doc-footer">
-                <h4>Conclusion</h4>
-                <p>The Monitor Module in CheckMySite provides a comprehensive solution for tracking the status of various services using Ping, Port, HTTP, and DNS monitors. Each type of monitor is handled with specific logic tailored to its purpose, ensuring accurate monitoring and reliable alerting.</p>
-            </div>
-        </div>
     </div>
 </div>
 <script>
