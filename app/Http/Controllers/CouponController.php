@@ -135,7 +135,15 @@ public function CouponUpdate(Request $request, $id)
         'value' => 'required|numeric',
         'max_uses' => 'nullable|integer',
         'valid_from' => 'nullable|date',
-        'valid_until' => 'nullable|date',
+        'valid_until' => [
+            'nullable',
+            'date',
+            function ($attribute, $value, $fail) use ($request) {
+                if ($request->filled('valid_from') && $value < $request->valid_from) {
+                    $fail('The valid until date must be on or after the valid from date.');
+                }
+            },
+        ],
         'is_active' => 'boolean'
     ]);
 
