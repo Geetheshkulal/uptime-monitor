@@ -26,10 +26,11 @@
     }
 </style>
 @endpush
-<div class="container py-4">
+<div class="container-fluid">
 
     <div class="page-title-box d-flex align-items-center justify-content-between">
-    <h1 class="mb-0">Status Page Settings</h1>
+    {{-- <h1 class="mb-0">Status Page Settings</h1> --}}
+     <h1 class="h3 mb-0 text-gray-800 font-600">Status Page Settings</h1>
     <a href="{{ route('status') }}" class="btn btn-primary ms-3" style="padding: 0.5rem 1rem;">
         <i class="fas fa-arrow-left me-2"></i> Back to Status Page
     </a>

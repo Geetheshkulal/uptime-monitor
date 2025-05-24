@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\CouponCode;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use App\Models\Subscriptions;
-use Illuminate\Support\Facades\Log;
 
 class CouponController extends Controller
 {
@@ -42,15 +40,7 @@ public function apply(Request $request)
         return response()->json(['success' => false, 'message' => 'You already used this coupon.']);
     }
 
-    $planAmount = $coupon->subscription->amount;
-    
-    $discountAmount = 0;
-    if ($coupon->discount_type === 'percentage') {
-        $discountAmount = ($planAmount * $coupon->value) / 100;
-    } else {
-        $discountAmount = $coupon->value;
-    }
-
+    // Store in pivot table
     $coupon->users()->attach($user->id);
 
     // Increment uses
@@ -59,20 +49,12 @@ public function apply(Request $request)
     session([
         'applied_coupon' => [
             'code' => $coupon->code,
-            // 'discount' => $coupon->value
-            'discount' => $discountAmount,
-            'discount_type' => $coupon->discount_type
+            'discount' => $coupon->value
         ]
-
     ]);
     
-    // return response()->json(['success' => true, 'discount' => $coupon->value,'message' => 'Coupon applied successfully!']);
-    return response()->json([
-        'success' => true,
-        'discount' => $discountAmount,
-        'discount_type' => $coupon->discount_type,
-        'message' => 'Coupon applied successfully!'
-    ]);
+
+    return response()->json(['success' => true, 'discount' => $coupon->value,'message' => 'Coupon applied successfully!']);
 }
 
 public function remove(Request $request)
@@ -106,9 +88,7 @@ public function DisplayCoupons()
     $coupons = CouponCode::all();
     $users = User::Role('user')->get();
 
-    $subscriptions = Subscriptions::all();
-
-    return view('pages.coupons.DisplayCoupons', compact('coupons','users','subscriptions'));
+    return view('pages.coupons.DisplayCoupons', compact('coupons','users'));
 }
 
 public function CouponStore(Request $request)
@@ -129,7 +109,6 @@ public function CouponStore(Request $request)
             },
         ],
         'is_active' => 'boolean',
-        'subscription_id'=>'required',
         'user_ids' => 'nullable|array',
         'user_ids.*' => 'exists:users,id',
     ]);
@@ -157,15 +136,7 @@ public function CouponUpdate(Request $request, $id)
         'value' => 'required|numeric',
         'max_uses' => 'nullable|integer',
         'valid_from' => 'nullable|date',
-        'valid_until' => [
-            'nullable',
-            'date',
-            function ($attribute, $value, $fail) use ($request) {
-                if ($request->filled('valid_from') && $value < $request->valid_from) {
-                    $fail('The valid until date must be on or after the valid from date.');
-                }
-            },
-        ],
+        'valid_until' => 'nullable|date',
         'is_active' => 'boolean'
     ]);
 
