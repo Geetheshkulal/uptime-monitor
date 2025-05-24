@@ -63,10 +63,12 @@
                                     @endforeach
                                 </td>
                             </tr>
-                            <tr>
+                            @if($user->hasRole('user'))
+                             <tr>
                                 <th>Premium End Date</th>
                                 <td>{{ $user->premium_end_date ? \Carbon\Carbon::parse($user->premium_end_date)->format('M d, Y') : 'N/A' }}</td>
                             </tr>
+                            @endif
                             <tr>
                                 <th>Registered On</th>
                                 <td>{{ $user->created_at->format('M d, Y') }}</td>

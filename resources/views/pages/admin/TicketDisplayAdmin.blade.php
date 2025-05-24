@@ -48,6 +48,9 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Tickets</h1>
+        <a class="btn btn-primary" href="{{route('raise.tickets')}}">
+            <i class="fas fa-plus fa-sm"></i> Raise Ticket
+        </a>
     </div>
 
   <!-- Ticket Card -->
@@ -200,9 +203,7 @@
                 <!-- Card Header -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white px-4">
                     <h6 class="m-0 font-weight-bold text-primary">All Tickets</h6>
-                    <!-- <a href="#" class="btn btn-primary btn-sm">
-                        <i class="fas fa-plus"></i> Add New
-                    </a> -->
+                    
                 </div>
                 
                 <!-- Card Body -->

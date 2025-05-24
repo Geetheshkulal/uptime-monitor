@@ -10,6 +10,7 @@ use Laravolt\Avatar\Avatar;
 use App\Models\User;
 
 use App\Mail\TicketAssignedMail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
@@ -167,7 +168,11 @@ class TicketController extends Controller
             'user_id' => auth()->id(), // If you have user association
         ]);
 
-        return redirect()->route('display.tickets')->with('success', 'Ticket created successfully');
+        $user = auth()->user();
+        if($user->hasRole('superadmin'))
+            return redirect()->route('tickets')->with('success', 'Ticket created successfully');
+        else
+            return redirect()->route('display.tickets')->with('success', 'Ticket created successfully');
     }
 
     
