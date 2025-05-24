@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Payment;
+use App\Models\CouponUser;
 
 use App\Models\CouponCode;
 
@@ -28,6 +29,7 @@ class CashFreePaymentController extends Controller
             'mobile' => 'required',
             'subscription_id' => 'required'
         ]);
+
         $user=auth()->user();
         $userId=$user->id;
 
@@ -40,27 +42,24 @@ class CashFreePaymentController extends Controller
 
         $url = "https://sandbox.cashfree.com/pg/orders";
 
-        $couponCode =DB::table('coupon_user')
-        ->where('user_id', $userId)
-        ->join('coupon_codes', 'coupon_user.coupon_code_id', '=', 'coupon_codes.id')
-        ->where('coupon_codes.is_active', true)
-        ->where(function ($query) {
-            $now = now();
-            $query->whereNull('coupon_codes.valid_from')
-                  ->orWhere('coupon_codes.valid_from', '<=', $now);
-        })
-        ->where(function ($query) {
-            $now = now();
-            $query->whereNull('coupon_codes.valid_until')
-                  ->orWhere('coupon_codes.valid_until', '>=', $now);
-        })
-        ->select('coupon_codes.code','coupon_codes.value')
-        ->first();
+        $couponCode = CouponUser::with(['coupon' => function ($query) {
+                    $now = now();
+                    $query->where('is_active', true)
+                        ->where(function ($q) use ($now) {
+                            $q->whereNull('valid_from')->orWhere('valid_from', '<=', $now);
+                        })
+                        ->where(function ($q) use ($now) {
+                            $q->whereNull('valid_until')->orWhere('valid_until', '>=', $now);
+                        });
+                }])
+                ->where('user_id', $userId)
+                ->first()?->coupon;
+        
 
         $couponCodeValue = null;
         $couponCodeText = null;
 
-        if ($couponCode) {
+        if ($couponCode && ($couponCode->subscription->id ===$subscription->id)) {
             $couponCodeValue = $couponCode->value;
             $couponCodeText = $couponCode->code;
             $orderAmount = max(0, $orderAmount - $couponCode->value);
