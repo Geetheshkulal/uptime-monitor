@@ -45,6 +45,17 @@
                 
                             <!-- Permission Groups -->
                             @foreach($permission_groups as $group)
+                                @php
+                                    // Skip role management permissions for user and subuser roles
+                                    $isUserRole = in_array($role->name, ['user', 'subuser']);
+                                    $isRoleGroup = $group->group_name === 'role';
+                                    
+                                    // Skip displaying role permissions for user/subuser roles
+                                    if ($isUserRole && $isRoleGroup) {
+                                        continue;
+                                    }
+                                @endphp
+                                
                                 <div class="permission-group">
                                     <!-- Group Checkbox -->
                                     <div class="form-check">
@@ -56,9 +67,24 @@
                                         </label>
                                     </div>
                 
-                                    <!-- Individual Permissions -->
+                    
                                     <div>
                                         @foreach($groupedPermissions[$group->group_name] as $permission)
+                                            {{-- @php
+                                                // Skip specific role permissions for user/subuser roles
+                                                $restrictedPermissions = [
+                                                    'see.roles',
+                                                    'edit.role',
+                                                    'edit.role.permissions',
+                                                    'delete.role',
+                                                    'add.role'
+                                                ];
+                                                
+                                                if ($isUserRole && in_array($permission->name, $restrictedPermissions)) {
+                                                    continue;
+                                                }
+                                            @endphp --}}
+                                            
                                             <div class="form-check form-check-inline">
                                                 <input type="checkbox" class="form-check-input permission-checkbox {{ $group->group_name }}"
                                                     name="permission[]"

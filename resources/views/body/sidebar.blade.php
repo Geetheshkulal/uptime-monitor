@@ -335,7 +335,7 @@
             <li class="nav-item {{ request()->routeIs('billing') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('billing') }}">
                     <i class="fas fa-money-bill"></i>
-                    <span>Billing</span>
+                    <span>Subscription Plans</span>
                 </a>
             </li>
         @endhasrole
