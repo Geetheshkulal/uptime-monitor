@@ -193,6 +193,7 @@
 </div>
 
 
+{{-- create Coupon Modals  --}}
   <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <form class="modal-content" method="POST" action="{{ route('coupons.store') }}">
