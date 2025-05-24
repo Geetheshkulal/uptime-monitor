@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\CouponCode;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Models\Subscriptions;
 
 class CouponController extends Controller
 {
@@ -88,7 +89,9 @@ public function DisplayCoupons()
     $coupons = CouponCode::all();
     $users = User::Role('user')->get();
 
-    return view('pages.coupons.DisplayCoupons', compact('coupons','users'));
+    $subscriptions = Subscriptions::all();
+
+    return view('pages.coupons.DisplayCoupons', compact('coupons','users','subscriptions'));
 }
 
 public function CouponStore(Request $request)
@@ -108,6 +111,7 @@ public function CouponStore(Request $request)
             },
         ],
         'is_active' => 'boolean',
+        'subscription_id'=>'required',
         'user_ids' => 'nullable|array',
         'user_ids.*' => 'exists:users,id',
     ]);

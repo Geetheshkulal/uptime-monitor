@@ -243,6 +243,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group mb-2">
+                    <label for="subscription_id" class="small font-weight-bold">Subscription</label>
+                    <select id="subscription_id" name="subscription_id" class="form-control form-control-sm">
+                        <option value="">-- Select Subscription --</option>
+                        @foreach($subscriptions as $subscription)
+                            <option value="{{ $subscription->id }}">
+                                {{ $subscription->name }} ({{ $subscription->amount}}INR)
+                            </option>
+                        @endforeach
+                    </select>
+                </div>  
                 <div class="form-group mt-2 mb-0">
                     <label for="user_ids" class="small font-weight-bold">Assign to Users (optional)</label>
                     <select id="user_ids" name="user_ids[]" class="form-control form-control-sm select2" multiple>
@@ -250,10 +261,8 @@
                             <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
                         @endforeach
                     </select>
-                </div>    
-                
+                </div>              
             </div>
-
             <div class="modal-footer py-2 d-flex justify-content-center">  <!-- Added d-flex justify-content-center -->
                 <button type="submit" class="btn btn-primary btn-lg px-4">Add Coupon</button>
             </div>

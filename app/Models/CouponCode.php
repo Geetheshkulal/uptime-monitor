@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Subscriptions;
 
 class CouponCode extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'code','user_ids','value','max_uses', 'valid_from', 'valid_until', 'is_active', 
+        'code','user_ids','value','max_uses', 'valid_from', 'valid_until', 'is_active','subscription_id'
     ];
     protected $casts = [
         'user_ids' => 'array',
@@ -23,6 +24,11 @@ class CouponCode extends Model
     public function claimedUsers()
     {
         return $this->belongsToMany(User::class, 'coupon_user', 'coupon_code_id', 'user_id')->withTimestamps();;
+    }
+
+    public function subscription()
+    {
+        return $this->belongsTo(Subscriptions::class);
     }
 
 
