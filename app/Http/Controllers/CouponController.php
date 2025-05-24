@@ -40,6 +40,9 @@ public function apply(Request $request)
     if ($coupon->users()->where('user_id', $user->id)->exists()) {
         return response()->json(['success' => false, 'message' => 'You already used this coupon.']);
     }
+    
+    $planAmount=$coupon->subscription()->amount;
+ 
 
     // Store in pivot table
     $coupon->users()->attach($user->id);
