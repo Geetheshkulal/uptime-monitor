@@ -466,11 +466,13 @@
                                     <span class="monitor-name">{{ $monitor->name }}</span>
                                     <span class="monitor-url">{{ $monitor->url }}</span>
                                 </div>
-                                <span class="status-badge bg-{{ $monitor->statusColor }}-100 text-{{ $monitor->statusColor }}-800">
-                                    <i class="fas fa-{{ $monitor->statusIcon }} mr-1"></i>
-                                    {{ ucfirst($monitor->status) }}
-                                    @if($monitor->paused) (Paused) @endif
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label class="font-weight-lightbold mb-0">Current Status:</label>&nbsp
+                                <span class="status-badge bg-{{ $monitor->paused ? 'warning-100' : $monitor->statusColor.'-100' }} text-{{ $monitor->paused ? 'warning-800' : $monitor->statusColor.'-800' }}">
+                                    <i class="fas fa-{{ $monitor->paused ? 'pause-circle' : $monitor->statusIcon }} mr-1"></i>
+                                    {{ $monitor->paused ? 'Paused' : ucfirst($monitor->status) }}
                                 </span>
+                            </div>
                             </div>
                             
                             <!-- Dynamic Day Bar Visualization -->

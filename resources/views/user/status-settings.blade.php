@@ -73,7 +73,7 @@
                         <label class="form-label fw-bold">Embed Code</label>
                         <div class="input-group">
                             <textarea class="form-control" id="embedCode" 
-                                      rows="3" readonly>{{ $iframeCode }}</textarea>
+                                      rows="1" readonly>{{ $iframeCode }}</textarea>
                             <button class="btn btn-outline-secondary" 
                                     type="button" onclick="copyToClipboard('embedCode')">
                                 <i class="fas fa-copy"></i> Copy

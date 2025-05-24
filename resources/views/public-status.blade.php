@@ -336,15 +336,18 @@
                         @foreach($monitors as $monitor)
                         <div class="monitor-card monitor-card-{{ $monitor->status }} hover-shadow mx-3 mb-3 animate-fade-in" style="animation-delay: {{ $loop->index * 0.05 }}s">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <div class="d-flex align-items-center">
-                                    <span class="status-indicator status-indicator-{{ $monitor->status }}"></span>
-                                    <span class="monitor-name">{{ $monitor->name }}</span>
-                                    <span class="monitor-url">{{ $monitor->url }}</span>
-                                </div>
-                                <span class="status-badge bg-{{ $monitor->statusColor }}-100 text-{{ $monitor->statusColor }}-800">
-                                    <i class="fas fa-{{ $monitor->statusIcon }} mr-1"></i>
-                                    {{ ucfirst($monitor->status) }}
+                            <div class="d-flex align-items-center">
+                                <span class="status-indicator status-indicator-{{ $monitor->status }}"></span>
+                                <span class="monitor-name">{{ $monitor->name }}</span>
+                                <span class="monitor-url">{{ $monitor->url }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label class="font-weight-lightbold mb-0">Current Status:</label>&nbsp
+                                <span class="status-badge bg-{{ $monitor->paused ? 'warning-100' : $monitor->statusColor.'-100' }} text-{{ $monitor->paused ? 'warning-800' : $monitor->statusColor.'-800' }}">
+                                    <i class="fas fa-{{ $monitor->paused ? 'pause-circle' : $monitor->statusIcon }} mr-1"></i>
+                                    {{ $monitor->paused ? 'Paused' : ucfirst($monitor->status) }}
                                 </span>
+                            </div>
                             </div>
                             
                             <!-- Dynamic Day Bar Visualization -->
