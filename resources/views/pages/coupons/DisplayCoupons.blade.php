@@ -428,6 +428,16 @@
         $('#valid_until').val('');
         $('#valid_until').attr('min',$('#valid_from').val());
     });
+
+    const coupons = @json($coupons);
+    coupons.map((coupon)=>{
+        $(`#valid_until${coupon.id}`).attr('min',$(`#valid_from${coupon.id}`).val());
+        
+         $(`#valid_from${coupon.id}`).on('change',function(){
+            $(`#valid_until${coupon.id}`).val('');
+            $(`#valid_until${coupon.id}`).attr('min',$(`#valid_from${coupon.id}`).val());
+        });
+    })
 </script>
 @endpush
 
