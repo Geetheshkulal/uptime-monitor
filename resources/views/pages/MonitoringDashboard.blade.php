@@ -542,7 +542,7 @@
                 prevLabel: 'Back',
                 doneLabel: 'Finish'
             });
-    }else{
+    }else if(userRole==='subuser'){
          intro.setOptions({
                 disableInteraction: false,
                 steps:[{
@@ -587,7 +587,7 @@
                 prevLabel: 'Back',
                 doneLabel: 'Finish'
             });
-    }
+    }else{}
 
         if (savedStep !== null) { 
         console.log("Resuming tour from step:", savedStep); 
