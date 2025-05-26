@@ -65,8 +65,6 @@
                                     <th>Log Name</th>
                                     <th>Description</th>
                                     <th>Event</th>
-                                    <th>Causer Type</th>
-                                    <th>User Id</th>
                                     <th>User Name</th>
                                     <th>Date</th>
                                     <th>Properties</th>
@@ -79,8 +77,6 @@
                                     <td>{{ $log->log_name }}</td>
                                     <td>{{ $log->description }}</td>
                                     <td>{{ $log->event }}</td>
-                                    <td>{{ $log->causer_type }}</td>
-                                    <td>{{ $log->causer_id }}</td>
                                     <td>{{ $log->causer?->name }}</td>
                                     <td>{{ $log->created_at->format('d M Y, h:i A') }}</td>
                                     <td>
@@ -132,9 +128,9 @@
             "searching": true,
             "ordering": true,
             "info": true,
-            "order": [[7, "desc"]],
+            "order": [[5, "desc"]],
             "columnDefs": [
-                { "searchable": false, "targets": [8] } // Disable sorting for action column
+                { "searchable": false, "targets": [6] } // Disable sorting for action column
             ]
             
         });
