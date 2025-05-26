@@ -324,38 +324,7 @@
         </li>
     @endcan
 
-    @php
-    use App\Models\Comment;
-    use Illuminate\Support\Facades\Auth;
-    use Spatie\Permission\Models\Role;
-
-    $user = Auth::user();
-    $unreadComments = 0;
-
-    if ($user->hasRole('superadmin')) {
-    $unreadComments = Comment::where('is_read', false)
-        ->whereHas('user.roles', function ($q) {
-            $q->whereIn('name', ['user', 'support']);
-        })
-        ->count();
-}
-
-    if ($user->hasRole('user')) {
-        $unreadComments = Comment::where('is_read', false)
-            ->whereHas('user.roles', function ($q) {
-                $q->whereIn('name', ['superadmin', 'support']);
-            })
-            ->count();
-    }
-    if ($user->hasRole('support')) {
-        $unreadComments = Comment::where('is_read', false)
-            ->whereHas('user.roles', function ($q) {
-                $q->whereIn('name', ['superadmin', 'user']);
-            })
-            ->count();
-    }
-
-@endphp
+  
 
         @hasrole('superadmin')
             <li class="nav-item {{ request()->routeIs('display.permissions') ? 'active' : '' }}">
@@ -374,14 +343,6 @@
                         <i class="fas fa-ticket-alt"></i>
                         <span>Tickets</span>
                       
-                        {{-- <div class="position-absolute" style="top: 8px; right: 5px; display: flex; flex-direction: column; padding-right:43px;">
-                            @if($unreadTickets > 0)
-                                <span class="badge badge-success mb-1" style="font-size: 10px; padding: 2px 6px;">New {{ $unreadTickets }}</span>
-                            @endif
-                            @if($unreadComments > 0)
-                                <span class="badge badge-success" style="font-size: 10px; padding: 2px 6px;">Comments {{ $unreadComments }}</span>
-                            @endif
-                        </div> --}}
                         <div class="badge-container">
                             @if($unreadTickets > 0)
                                 <span class="badge badge-success mb-1" style="font-size: 10px; padding: 2px 6px;">New {{ $unreadTickets }}</span>
