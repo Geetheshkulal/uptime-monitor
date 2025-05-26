@@ -168,7 +168,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="role">User Role*</label>
-                                <select class="form-control @error('role') is-invalid @enderror" id="role" name="role" required>
+                                <select class="form-control @error('role') is-invalid @enderror" id="role" name="role">
                                     <option value="">Select Role</option>
                                     @foreach($roles as $role)
                                         @if($role->name != 'user')
