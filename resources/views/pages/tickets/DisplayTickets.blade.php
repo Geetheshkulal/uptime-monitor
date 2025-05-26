@@ -134,6 +134,11 @@
             font-weight: 600;
         }
 
+        .dataTables_wrapper .dataTables_paginate {
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
         /* ========== ANIMATIONS ========== */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
