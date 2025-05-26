@@ -24,7 +24,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:3',
-            'phone' => 'nullable|string',
+            'phone' => 'nullable|string|digits:10',
             'role' => 'required|exists:roles,id',  // Ensure role exists
             'premium_end_date' => 'nullable|date',
         ]);
@@ -33,7 +33,7 @@ class UserController extends Controller
             // Create user
             $user = User::create([
                 'name' => $validated['name'],
-                'email' => $validated['email'],
+                'email' => strtolower($validated['email']),
                 'password' => Hash::make($validated['password']),
                 'phone' => $validated['phone'] ?? null,
                 'status' => 'free',
@@ -264,10 +264,10 @@ class UserController extends Controller
         public function StoreSubUser(Request $request)
         {
             $request->validate([
-                'name'     => 'required|string|max:255',
-                'email'    => 'required|email|unique:users,email',
-                'password' => 'required|string|min:6',
-                'phone' => 'nullable|string',
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|min:3',
+                'phone' => 'required|nullable|string|digits:10',
             ]);
 
             $parentUser = auth()->user();
@@ -280,7 +280,7 @@ class UserController extends Controller
 
             $subUser = User::create([
                 'name'            => $request->name,
-                'email'           => $request->email,
+                'email'           => strtolower($request->email),
                 'password'        => Hash::make($request->password),
                 'status'          => 'subuser',
                 'phone'           => $request->phone,
