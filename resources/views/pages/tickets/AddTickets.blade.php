@@ -130,7 +130,11 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Create New Ticket</h1>
-        {{-- see only for superadmin --}}
+        @if (!$canCreateTicket)
+            <div class="alert alert-warning">
+                ⚠️ You cannot raise a new ticket while you have open tickets.
+            </div>
+        @endif
         @if (Auth::user()->role == 'user')   
         <a href="{{ route('display.tickets') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-ticket-alt fa-sm text-white-50"></i> View All Tickets
@@ -138,14 +142,15 @@
         @endif
     </div>
 
-    <!-- Card -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Ticket Information</h6>
-        </div>
-        <div class="card-body">
-            <form id="ticketForm" method="POST" action="{{route('store.tickets')}}" enctype="multipart/form-data">
-                @csrf
+    @if ($canCreateTicket)
+        <!-- Show the form for users who can create tickets OR superadmins -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Ticket Information</h6>
+            </div>
+            <div class="card-body">
+                <form id="ticketForm" method="POST" action="{{route('store.tickets')}}" enctype="multipart/form-data">
+                    @csrf
 
                 <!-- Subject -->
                 <div class="form-group row">
@@ -221,6 +226,18 @@
             </form>
         </div>
     </div>
+    @else 
+    <div class="card shadow mb-4">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
+                <h4>You cannot create a new ticket</h4>
+                <p class="mb-0">You currently have open or on-hold tickets. Please resolve them first.</p>
+                <a href="{{ route('display.tickets') }}" class="btn btn-primary mt-3">
+                    <i class="fas fa-ticket-alt mr-2"></i> View My Tickets
+                </a>
+            </div>
+        </div>
+    @endif
 </div>
 
 @push('scripts')
