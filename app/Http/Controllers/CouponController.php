@@ -41,6 +41,7 @@ public function apply(Request $request)
             return response()->json(['success' => false, 'message' => 'You already used this coupon.']);
         }
 
+        
         // Store in pivot table
         $coupon->users()->attach($user->id);
 
@@ -51,7 +52,8 @@ public function apply(Request $request)
             'applied_coupon' => [
                 'code' => $coupon->code,
                 'discount' => $coupon->value,
-                'subscription' => $coupon->subscription_id
+                'subscription' => $coupon->subscription_id,
+                'discount_type' => $coupon->discount_type
             ]
         ]);
         
@@ -60,7 +62,8 @@ public function apply(Request $request)
             'discount' => $coupon->value,
             'subscription_id' => $coupon->subscription_id,
             'code' => $coupon->code,
-            'message' => 'Coupon applied successfully!'
+            'message' => 'Coupon applied successfully!',
+            'discount_type' => $coupon->discount_type
         ]);
     }
 

@@ -62,7 +62,9 @@ class CashFreePaymentController extends Controller
         if ($couponCode && ($couponCode->subscription->id ===$subscription->id)) {
             $couponCodeValue = $couponCode->value;
             $couponCodeText = $couponCode->code;
-            $orderAmount = max(0, $orderAmount - $couponCode->value);
+           
+            Log::info('type'.(string)max(0, $orderAmount - ($couponCode->value/100)*$orderAmount));
+            $orderAmount =($couponCode->discount_type === 'flat')? max(0, $orderAmount - $couponCode->value): round(max(0, $orderAmount - ($couponCode->value/100)*$orderAmount));
         }
 
         $headers = [

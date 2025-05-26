@@ -354,7 +354,8 @@
                         $discount = ($appliedCoupon && $appliedCoupon['subscription'] == $plan->id) 
                                     ? $appliedCoupon['discount'] 
                                     : 0;
-                        $finalPrice = max(0, $originalPrice - $discount);
+                        $finalPrice =($appliedCoupon && $appliedCoupon['discount_type']==='flat')? max(0, $originalPrice - $discount):max(0, $originalPrice - (($originalPrice*$discount)/100));
+
                     @endphp
                     
                     @if($discount > 0)
@@ -369,6 +370,15 @@
                     <div class="applied-coupon-msg">
                         <i class="fas fa-check-circle me-2"></i>Coupon "{{ $appliedCoupon['code'] }}" applied!
                     </div>
+                    @if($appliedCoupon['discount_type'] && $appliedCoupon['discount_type']==='percentage')
+                        <div class="applied-coupon-msg">
+                            <i class="fas fa-tag"></i> {{$appliedCoupon['discount']}}% OFF
+                        </div>
+                    @elseif($appliedCoupon['discount_type'] && $appliedCoupon['discount_type']==='flat')
+                        <div class="applied-coupon-msg">
+                            <i class="fas fa-tag"></i>FLAT {{$appliedCoupon['discount']}} OFF
+                        </div>
+                    @endif
                 @endif
             </div>
             <div class="card-body">          
@@ -513,11 +523,16 @@
                         const originalPrice = parseFloat(priceElement.getAttribute('data-original'));
                         priceElement.innerHTML = `
                             <del>₹${originalPrice.toFixed(2)}</del>
-                            ₹${(originalPrice - data.discount).toFixed(2)}
+                            ₹${(data.discount_type==='flat')?(originalPrice - data.discount).toFixed(2):((originalPrice - (originalPrice * data.discount / 100)).toFixed(2))}
                             <small>/month</small>
                             <div class="applied-coupon-msg">
                                 <i class="fas fa-check-circle me-2"></i>Coupon "${data.code}" applied!
                             </div>
+                            ${
+                                data.discount_type === 'percentage' 
+                                    ? `<div class="applied-coupon-msg"><i class="fas fa-tag"></i> ${data.discount}% OFF</div>` 
+                                    : `<div class="applied-coupon-msg"><i class="fas fa-tag"></i> FLAT ₹${data.discount} OFF</div>`
+                            }
                         `;
                     }
 

@@ -321,7 +321,7 @@
     <div class="bill-container">
         <div class="bill-header">
             <div class="company-info">
-                <div class="company-name">ChechMySite</div>
+                <div class="company-name">CheckMySite</div>
                 <div class="company-tagline">Website Monitoring Solutions</div>
                 <div class="company-address">
                     123 Tech Park, Innovation Road<br>
