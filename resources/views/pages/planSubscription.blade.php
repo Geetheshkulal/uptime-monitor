@@ -259,7 +259,7 @@
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     <th>Coupon Code</th>
-                                    <th>Flat Discount</th>
+                                    <th>Discount</th>
                                     <th>Final Amount</th>
                                     <th>Print Bill</th>
                                 </tr>
@@ -288,7 +288,17 @@
                                     @else
                                         <td><span class="">Not Applied</span></td>
                                     @endif
-                                    <td>{{ $subscription->coupon_value ? $subscription->coupon_value: 'Not Applied' }}</td>
+                                    <td>
+                                        @if($subscription->coupon_value)
+                                            @if($subscription->discount_type === 'percentage')
+                                                {{ $subscription->coupon_value }}%
+                                            @elseif($subscription->discount_type === 'flat')
+                                                ₹{{ $subscription->coupon_value }}
+                                            @endif
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
                                     <td>{{ $subscription->payment_amount }}</td>
                                     <td><button class="btn btn-sm btn-primary print-bill" 
                                         data-id="{{ $subscription->id }}"
@@ -300,6 +310,7 @@
                                         data-coupon-code="{{ $subscription->coupon_code }}"
                                         data-coupon-value="{{ $subscription->coupon_value }}"
                                         data-final-amount="{{ $subscription->payment_amount }}"
+                                        data-discount-type="{{$subscription->discount_type}}"
                                         >Print Bill</button></td>
                                 </tr>
                                 @empty
@@ -372,7 +383,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Premium Subscription Plan</td>
+                    <td>{{$subscription->subscription->name}}</td>
                     <td id="bill-amount"></td>
                 </tr>
                 <tr style="display: none;" id="bill-coupon-row">
@@ -471,6 +482,8 @@
             const couponCode = $(this).data('coupon-code');
             const couponValue = $(this).data('coupon-value');
             const finalAmount = $(this).data('final-amount');
+            const discountType = $(this).data('discount-type');
+
 
             
             
@@ -494,10 +507,15 @@
             $('#bill-start-date').text(startDate);
             $('#bill-end-date').text(endDate);
 
+
             if(couponCode && couponValue) {
                 $('#bill-coupon-row').show();
                 $('#coupon-title').text('Coupon Code-' + couponCode);
-                $('#bill-discount').text('- ₹' + couponValue);
+                const cleanAmount = amount.replace(/[^\d.-]/g, ''); 
+                $('#bill-discount').text(
+                    (discountType==='flat')?'- ₹' + couponValue:
+                    `-₹${Math.floor(Number(cleanAmount)*Number(couponValue)/100)}(${couponValue}%)`
+                );
                 $('#bill-total').text(finalAmount);
             } else {
                 $('#bill-coupon-row').hide();

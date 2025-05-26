@@ -104,12 +104,6 @@
         }
 
         /* ========== TABLE STYLES ========== */
-        .table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            height: 100%;
-        }
 
         .table thead th {
             border: none;

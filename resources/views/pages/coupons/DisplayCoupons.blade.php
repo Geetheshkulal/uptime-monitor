@@ -203,8 +203,8 @@
 
 
 {{-- create Coupon Modals  --}}
-  <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+ <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <form class="modal-content" method="POST" action="{{ route('coupons.store') }}">
             @csrf
             <div class="modal-header">
@@ -216,82 +216,83 @@
 
             <div class="modal-body">
                 <div class="row">
+                    {{-- Left Column --}}
                     <div class="col-md-6">
-                        <div class="form-group mb-2">
+                        <div class="form-group">
                             <label for="code" class="small font-weight-bold">Coupon Code</label>
-                            <input id="code" name="code" class="form-control form-control-sm" placeholder="e.g. SUMMER20" >
+                            <input id="code" name="code" class="form-control form-control-sm" placeholder="e.g. SUMMER20">
                         </div>
 
-                        {{-- <div class="form-group mb-2">
-                            <label for="value" class="small font-weight-bold">Discount (₹)</label>
-                            <input id="value" name="value" class="form-control form-control-sm" placeholder="Amount" >
-                        </div> --}}
+                        <div class="form-group">
+                            <label for="subscription_id" class="small font-weight-bold">Subscription</label>
+                            <select id="subscription_id" name="subscription_id" class="form-control form-control-sm">
+                                <option value="">-- Select Subscription --</option>
+                                @foreach($subscriptions as $subscription)
+                                    <option value="{{ $subscription->id }}">
+                                        {{ $subscription->name }} ({{ $subscription->amount }} INR)
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                        <div class="form-group mb-2">
+                        <div class="form-group">
                             <label for="discount_type" class="small font-weight-bold">Discount Type</label>
                             <select id="discount_type" name="discount_type" class="form-control form-control-sm">
                                 <option value="flat">Flat (₹)</option>
                                 <option value="percentage">Percentage (%)</option>
                             </select>
                         </div>
-                        
-                        <div class="form-group mb-2">
+
+                        <div class="form-group">
                             <label for="value" class="small font-weight-bold">Discount Value</label>
                             <input id="value" name="value" class="form-control form-control-sm" placeholder="e.g. 100 or 20%" min="1">
                         </div>
 
-                        <div class="form-group mb-2">
+                        <div class="form-group">
                             <label for="max_uses" class="small font-weight-bold">Max Uses</label>
                             <input id="max_uses" name="max_uses" class="form-control form-control-sm" placeholder="Leave blank for unlimited">
                         </div>
                     </div>
 
+                    {{-- Right Column --}}
                     <div class="col-md-6">
-                        <div class="form-group mb-2">
+                        <div class="form-group">
                             <label for="valid_from" class="small font-weight-bold">Valid From</label>
-                            <input type="date" id="valid_from" name="valid_from"  min="{{ \Carbon\Carbon::today()->toDateString() }}" class="form-control form-control-sm">
+                            <input type="date" id="valid_from" name="valid_from" min="{{ \Carbon\Carbon::today()->toDateString() }}" class="form-control form-control-sm">
                         </div>
 
-                        <div class="form-group mb-2">
+                        <div class="form-group">
                             <label for="valid_until" class="small font-weight-bold">Valid Until</label>
-                            <input type="date" id="valid_until" name="valid_until"  min="{{ \Carbon\Carbon::today()->toDateString() }}" class="form-control form-control-sm">
+                            <input type="date" id="valid_until" name="valid_until" min="{{ \Carbon\Carbon::today()->toDateString() }}" class="form-control form-control-sm">
                         </div>
 
-                        <div class="form-group mb-2">
+                        <div class="form-group">
                             <label for="is_active" class="small font-weight-bold">Status</label>
                             <select id="is_active" name="is_active" class="form-control form-control-sm">
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
                         </div>
+
+                        <div class="form-group">
+                            <label for="user_ids" class="small font-weight-bold">Assign to Users (optional)</label>
+                            <select id="user_ids" name="user_ids[]" class="form-control form-control-sm select2" multiple>
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group mb-2">
-                    <label for="subscription_id" class="small font-weight-bold">Subscription</label>
-                    <select id="subscription_id" name="subscription_id" class="form-control form-control-sm">
-                        <option value="">-- Select Subscription --</option>
-                        @foreach($subscriptions as $subscription)
-                            <option value="{{ $subscription->id }}">
-                                {{ $subscription->name }} ({{ $subscription->amount}}INR)
-                            </option>
-                        @endforeach
-                    </select>
-                </div>  
-                <div class="form-group mt-2 mb-0">
-                    <label for="user_ids" class="small font-weight-bold">Assign to Users (optional)</label>
-                    <select id="user_ids" name="user_ids[]" class="form-control form-control-sm select2" multiple>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
-                        @endforeach
-                    </select>
-                </div>              
             </div>
-            <div class="modal-footer py-2 d-flex justify-content-center">  <!-- Added d-flex justify-content-center -->
+
+            <div class="modal-footer py-2 d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary btn-lg px-4">Add Coupon</button>
             </div>
         </form>
     </div>
 </div>
+
 
 
   <!-- Edit Coupon Modals - One for each coupon -->
@@ -318,7 +319,7 @@
                         </div>
 
                         <div class="form-group mb-2">
-                            <label for="value{{ $coupon->id }}" class="small font-weight-bold">Discount Flat ₹</label>
+                            <label for="value{{ $coupon->id }}" class="small font-weight-bold">Discount {{$coupon->discount_type}}</label>
                             <input type="number" id="value{{ $coupon->id }}" name="value" class="form-control form-control-sm" value="{{ $coupon->value }}" >
                         </div>
 

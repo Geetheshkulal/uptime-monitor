@@ -11,6 +11,7 @@ class PremiumPageController extends Controller
     //Get plans data(subscriptions) and send it to view
     public function PremiumPage(){
         $plans = Subscriptions::all();
+        $user = auth()->user();
   
       if (!$plans) {
           Log::error("Subscription plan with ID 1 not found.");
@@ -19,6 +20,6 @@ class PremiumPageController extends Controller
   
       Log::info("Plan Data: ", $plans->toArray()); // Detailed log
 
-      return view('pages.premium',compact('plans'));
+      return view('pages.premium',compact('plans','user'));
     }
 }

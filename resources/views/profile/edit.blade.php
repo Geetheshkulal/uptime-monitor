@@ -17,20 +17,38 @@
                 <h1 class="h3 mb-0 text-gray-800">Profile Management</h1>
             </div>
 
-            <div x-data="{ tab: 'profile' }">
+            <div x-data="{
+                tab: localStorage.getItem('profile_tab') || 'profile',
+                setTab(value) {
+                    this.tab = value;
+                    localStorage.setItem('profile_tab', value);
+                }
+            }">
                 <!-- Tabs -->
                 <ul class="nav nav-tabs mb-4 ">
+                    <!-- Profile Tab -->
                     <li class="nav-item btn-primary">
-                        <button class="nav-link btn-primary" :class="{ 'active': tab === 'profile' }" @click="tab = 'profile'">Profile</button>
+                        <button class="nav-link btn-primary"
+                                :class="{ 'active': tab === 'profile' }"
+                                @click="setTab('profile')">Profile</button>
                     </li>
+
+                    <!-- Password Tab -->
                     <li class="nav-item">
-                        <button class="nav-link btn-primary" :class="{ 'active': tab === 'password' }" @click="tab = 'password'">Password</button>
+                        <button class="nav-link btn-primary"
+                                :class="{ 'active': tab === 'password' }"
+                                @click="setTab('password')">Password</button>
                     </li>
+
+                    <!-- Billing Tab -->
                     @hasrole('user')
-                        <li class="nav-item">
-                            <button class="nav-link btn-primary" :class="{ 'active': tab === 'billing' }" @click="tab = 'billing'">Billing Details</button>
-                        </li>
+                    <li class="nav-item">
+                        <button class="nav-link btn-primary"
+                                :class="{ 'active': tab === 'billing' }"
+                                @click="setTab('billing')">Billing Details</button>
+                    </li>
                     @endhasrole
+
                 </ul>
 
                 <!-- Sections -->

@@ -12,7 +12,7 @@ class Payment extends Model
 
     protected $fillable = [
         'coupon_code','coupon_value','payment_amount','status','user_id', 'payment_method', 'amount', 'payment_status', 'transaction_id', 'payment_type',
-        'start_date', 'end_date','subscription_id','address','city','state','pincode','country',
+        'start_date', 'end_date','subscription_id','address','city','state','pincode','country','discount_type'
     ];
     protected $table = 'payment';
 

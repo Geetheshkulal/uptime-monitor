@@ -354,7 +354,7 @@
                         $discount = ($appliedCoupon && $appliedCoupon['subscription'] == $plan->id) 
                                     ? $appliedCoupon['discount'] 
                                     : 0;
-                        $finalPrice =($appliedCoupon && $appliedCoupon['discount_type']==='flat')? max(0, $originalPrice - $discount):max(0, $originalPrice - (($originalPrice*$discount)/100));
+                        $finalPrice =($appliedCoupon && $appliedCoupon['discount_type']==='flat')? round(max(0, $originalPrice - $discount)):round(max(0, $originalPrice - (($originalPrice*$discount)/100)));
 
                     @endphp
                     
@@ -523,7 +523,10 @@
                         const originalPrice = parseFloat(priceElement.getAttribute('data-original'));
                         priceElement.innerHTML = `
                             <del>₹${originalPrice.toFixed(2)}</del>
-                            ₹${(data.discount_type==='flat')?(originalPrice - data.discount).toFixed(2):((originalPrice - (originalPrice * data.discount / 100)).toFixed(2))}
+                            ₹${(data.discount_type==='flat')?
+                                    Math.round((originalPrice - data.discount).toFixed(2)):
+                                    Math.round((originalPrice - (originalPrice * data.discount / 100)).toFixed(2))
+                                }
                             <small>/month</small>
                             <div class="applied-coupon-msg">
                                 <i class="fas fa-check-circle me-2"></i>Coupon "${data.code}" applied!
@@ -607,6 +610,12 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const user = @json($user);
+
+            if(user.address===null||user.city===null||user.state===null||user.pincode===null||user.country===null){
+                toastr.warning('You must fill the billing details in your profile section first');
+                return false;
+            }
             const paymentWindow = window.open('', 'paymentWindow', 'width=600,height=800');
             
             fetch(form.action, {

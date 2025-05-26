@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Payment;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\CouponUser;
 
 use App\Models\CouponCode;
@@ -33,6 +34,7 @@ class CashFreePaymentController extends Controller
         $user=auth()->user();
         $userId=$user->id;
 
+    
 
         $subscription = Subscriptions::with('payment')->find($validated['subscription_id']);
 
@@ -58,10 +60,13 @@ class CashFreePaymentController extends Controller
 
         $couponCodeValue = null;
         $couponCodeText = null;
+        $discount_type = null;
 
         if ($couponCode && ($couponCode->subscription->id ===$subscription->id)) {
             $couponCodeValue = $couponCode->value;
             $couponCodeText = $couponCode->code;
+            $discount_type = $couponCode->discount_type;
+
            
             Log::info('type'.(string)max(0, $orderAmount - ($couponCode->value/100)*$orderAmount));
             $orderAmount =($couponCode->discount_type === 'flat')? max(0, $orderAmount - $couponCode->value): round(max(0, $orderAmount - ($couponCode->value/100)*$orderAmount));
@@ -75,13 +80,13 @@ class CashFreePaymentController extends Controller
         ];
 
 
-
+       
         $data = json_encode([
             'order_id' => $orderId,
             'order_amount' => $orderAmount,
             "order_currency" => "INR",
             "order_note" => "subscription_id:" . $validated['subscription_id'] . "|user_id:" . auth()->id()."|coupon:" . $couponCodeText.
-            "|value:" . $couponCodeValue,
+            "|value:" . $couponCodeValue."|discount_type:".$discount_type,
             "customer_details" => [
                 "customer_id" => 'customer_' . rand(111111111, 999999999),
                 "customer_name" => $validated['name'],
@@ -118,6 +123,8 @@ class CashFreePaymentController extends Controller
         ]);
     }
 
+
+
     // Handle payment success
     public function success(Request $request)
     {
@@ -129,6 +136,8 @@ class CashFreePaymentController extends Controller
         // Close the window and notify parent
         return view('pages.payment-success');
     }
+
+
 
     // Webhook for payment verification
     public function webhook(Request $request)
@@ -205,6 +214,10 @@ class CashFreePaymentController extends Controller
     $userId = null;
     $couponCode = null;
     $couponValue = null;
+    $discount_type = null;
+
+    
+
     
     $parts = explode('|', $orderNote);
     foreach ($parts as $part) {
@@ -220,28 +233,33 @@ class CashFreePaymentController extends Controller
         if (Str::startsWith($part, 'value:')) {
             $couponValue = (float) str_replace('value:', '', $part);
         }
+        if (Str::startsWith($part, 'discount_type:')) {
+            $discount_type = str_replace('discount_type:', '', $part);
+        }
     }
 
     if (!$subscriptionId || !$userId) {
         return null;
     }
 
+
     $paymentStatus = $paymentDetails[0]['payment_status'] ?? 'PENDING'; 
     $paymentAmount = $paymentDetails[0]['payment_amount'] ?? $orderDetails['order_amount']; 
 
     // Process payment
-    return \DB::transaction(function () use ($orderId, $userId, $subscriptionId, $paymentMethod,$paymentAmount,$paymentStatus,$couponCode,$couponValue, $orderDetails) {
+    return \DB::transaction(function () use ($orderId, $userId, $subscriptionId, $paymentMethod,$paymentAmount,$paymentStatus,$couponCode,$couponValue, $orderDetails,$discount_type) {
         $user = \App\Models\User::find($userId);
         
         if (!$user) {
             return null;
         }
-       
+       Log::info('discount type new:'.$discount_type);
         // Create payment record
         $payment = Payment::create([
             'coupon_code' => $couponCode ?: null,
             'coupon_value' => $couponValue > 0 ? $couponValue : null,
             'payment_amount' => $paymentAmount,
+            'discount_type'=> $discount_type,
             'status' => 'active',
             'user_id' => $userId,
             'payment_status' => $paymentStatus,
