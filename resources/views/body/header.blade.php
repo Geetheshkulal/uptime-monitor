@@ -177,30 +177,31 @@
 
   <!-- Topbar Navbar -->
   <ul class="navbar-nav ml-auto">
-    @hasrole('user')
-<li class="nav-item dropdown no-arrow mx-1">
-    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="helpDropdown" role="button"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px 15px; font-size: 1rem; font-weight: 600;">
-        <i class="fas fa-question-circle mr-2" style="font-size: 1.2rem;"></i>
-        <span class="text-gray-600">Help</span>
-        <i class="fas fa-caret-down ml-1" style="font-size: 0.9rem;"></i> <!-- Dropdown indicator -->
-    </a>
-    <!-- Dropdown - Help -->
-    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="helpDropdown">
-        @if (request()->is('dashboard*') || request()->is('ssl-check*') || request()->is('monitoring/add*'))
-            <button class="dropdown-item" id="startTourBtn">
-                <i class="fas fa-play mr-2"></i> Start Tour
-            </button>
-        @endif
-        <a class="dropdown-item" href="{{url('/raise/tickets')}}">
-            <i class="fas fa-bug mr-2"></i> Report an Issue
-        </a>
-        <a class="dropdown-item" href="{{ url('/documentation') }}">
-            <i class="fas fa-info-circle mr-2"></i> For more info
-        </a>
-    </div>
-</li>
-  @endhasrole
+    @hasanyrole(['user','subuser'])
+      <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="helpDropdown" role="button"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 10px 15px; font-size: 1rem; font-weight: 600;">
+              <i class="fas fa-question-circle mr-2" style="font-size: 1.2rem;"></i>
+              <span class="text-gray-600">Help</span>
+              <i class="fas fa-caret-down ml-1" style="font-size: 0.9rem;"></i> <!-- Dropdown indicator -->
+          </a>
+          <!-- Dropdown - Help -->
+          <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="helpDropdown">
+              @if (request()->is('dashboard*') || request()->is('ssl-check*') || request()->is('monitoring/add*'))
+                  <button class="dropdown-item" id="startTourBtn">
+                      <i class="fas fa-play mr-2"></i> Start Tour
+                  </button>
+              @endif
+              <a class="dropdown-item" href="{{url('/raise/tickets')}}">
+                  <i class="fas fa-bug mr-2"></i> Report an Issue
+              </a>
+              <a class="dropdown-item" href="{{ url('/documentation') }}">
+                  <i class="fas fa-info-circle mr-2"></i> For more info
+              </a>
+          </div>
+      </li>
+    
+  @endhasanyrole
       <div class="topbar-divider d-sm-block"></div>
 
       <!-- Nav Item - User Information -->

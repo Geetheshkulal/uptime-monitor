@@ -484,60 +484,110 @@
         const intro = introJs();
         const savedStep=localStorage.getItem("introCurrentStep");
 
-        intro.setOptions({
-            disableInteraction: false,
-            steps:[{
-            title:'Check My Site',
-            intro:'Welcome to check my site! Lets take a quick tour'
-        },
-        {
-         element:document.querySelector('.profile'),
-         intro:'Access your profile settings and account information here.',
-         position:'left'
-       },
-        {
-         element:document.querySelector('.AddMonitor'),
-         intro:'click here to add new monitor',
-         position:'left'
-       },
-       {
-         element:document.querySelector('a.incident'),
-         intro:'View and manage incident reports related to your monitored services.', 
-         position:'right'
-       },
-       {
-         element:document.querySelector('.plan'),
-         intro:'Explore and manage your current subscription plan or upgrade to premium.',
-         position:'right'
-       },
-       {
-         element:document.querySelector('.ssl'),
-         intro:'Check the SSL certificate expiry status of your domains here.',
-         position:'right'
-       },
-       {
-         element:document.querySelector('.first'),
-         intro:'This shows the total number of monitors you have configured.',
-         position:'down'
-       },
-       {
-         element:document.querySelector('.second'),
-         intro:'Displays the number of services that are currently operational.'
-       },
-       {
-         element:document.querySelector('.third'),
-         intro:'Displays the number of services that are currently down.'
-       },
-       {
-         element:document.querySelector('.fourth'),
-         intro:'Shows the number of monitors that are currently paused.'
-       }
-      ],
-            dontShowAgain: true,
-            nextLabel: 'Next',
-            prevLabel: 'Back',
-            doneLabel: 'Finish'
-        });
+        const userRole = @json(auth()->user()->getRoleNames()[0] ?? null);
+        
+
+        if(userRole==='user'){
+            intro.setOptions({
+                disableInteraction: false,
+                steps:[{
+                title:'Check My Site',
+                intro:'Welcome to check my site! Lets take a quick tour'
+            },
+            {
+                element:document.querySelector('.profile'),
+                intro:'Access your profile settings and account information here.',
+                position:'left'
+            },
+            {
+                element:document.querySelector('.AddMonitor'),
+                intro:'click here to add new monitor',
+                position:'left'
+            },
+            {
+                element:document.querySelector('a.incident'),
+                intro:'View and manage incident reports related to your monitored services.', 
+                position:'right'
+            },
+            {
+                element:document.querySelector('.plan'),
+                intro:'Explore and manage your current subscription plan or upgrade to premium.',
+                position:'right'
+            },
+            {
+                element:document.querySelector('.ssl'),
+                intro:'Check the SSL certificate expiry status of your domains here.',
+                position:'right'
+            },
+            {
+                element:document.querySelector('.first'),
+                intro:'This shows the total number of monitors you have configured.',
+                position:'down'
+            },
+            {
+                element:document.querySelector('.second'),
+                intro:'Displays the number of services that are currently operational.'
+            },
+            {
+                element:document.querySelector('.third'),
+                intro:'Displays the number of services that are currently down.'
+            },
+            {
+                element:document.querySelector('.fourth'),
+                intro:'Shows the number of monitors that are currently paused.'
+            }
+        ],
+                dontShowAgain: true,
+                nextLabel: 'Next',
+                prevLabel: 'Back',
+                doneLabel: 'Finish'
+            });
+    }else{
+         intro.setOptions({
+                disableInteraction: false,
+                steps:[{
+                title:'Check My Site',
+                intro:'Welcome to check my site! Lets take a quick tour'
+            },
+            {
+                element:document.querySelector('.profile'),
+                intro:'Access your profile settings and account information here.',
+                position:'left'
+            },
+            {
+                element:document.querySelector('.AddMonitor'),
+                intro:'click here to add new monitor',
+                position:'left'
+            },
+            {
+                element:document.querySelector('a.incident'),
+                intro:'View and manage incident reports related to your monitored services.', 
+                position:'right'
+            },
+            {
+                element:document.querySelector('.first'),
+                intro:'This shows the total number of monitors you have configured.',
+                position:'down'
+            },
+            {
+                element:document.querySelector('.second'),
+                intro:'Displays the number of services that are currently operational.'
+            },
+            {
+                element:document.querySelector('.third'),
+                intro:'Displays the number of services that are currently down.'
+            },
+            {
+                element:document.querySelector('.fourth'),
+                intro:'Shows the number of monitors that are currently paused.'
+            }
+        ],
+                dontShowAgain: true,
+                nextLabel: 'Next',
+                prevLabel: 'Back',
+                doneLabel: 'Finish'
+            });
+    }
 
         if (savedStep !== null) { 
         console.log("Resuming tour from step:", savedStep); 

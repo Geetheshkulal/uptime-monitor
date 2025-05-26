@@ -393,11 +393,6 @@
                         <img src="{{ Avatar::create($comment->user->name)->toBase64() }}" class="comment-avatar" alt="{{ $comment->user->name }}">
                         <span class="comment-author">{{ $comment->user->name }}{{$comment->user->hasRole('support')?'(Support)':''}}</span>
                         <span class="comment-meta">commented on {{ $comment->created_at->format('M j, Y') }}</span>
-                        @if(auth()->id() == $comment->user_id)
-                        <div class="ml-auto">
-                                <button class="btn btn-sm btn-outline delete-comment-btn"><i class="fas fa-trash"></i></button>
-                        </div>
-                        @endif
                     </div>
                     <div class="comment-body markdown-body">
                         {!! $comment->comment_message !!}
@@ -427,7 +422,6 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="reset" class="btn btn-secondary">Cancel</button>
                     <button type="submit" class="btn btn-primary">Comment</button>
                 </div>
             </form>
