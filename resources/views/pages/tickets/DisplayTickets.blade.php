@@ -128,6 +128,11 @@
             font-weight: 600;
         }
 
+        .dataTables_wrapper .dataTables_paginate {
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
         /* ========== ANIMATIONS ========== */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -137,6 +142,15 @@
         .fade-in {
             animation: fadeIn 0.3s ease forwards;
         }
+
+.unread-count-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 50% !important;
+}
     </style>
 </head>
 
@@ -195,8 +209,18 @@
                                                 <td>{{$ticket->created_at->diffForHumans()}}</td>
                                                 <td>{{$ticket->updated_at->diffForHumans()}}</td>
                                                 <td>
-                                                    <a href="{{ route('display.tickets.show',$ticket->id) }}" class="btn btn-sm btn-view">
+                                                    {{-- <a href="{{ route('display.tickets.show',$ticket->id) }}" class="btn btn-sm btn-view">
                                                         <i class="fas fa-eye mr-1"></i>View
+                                                    </a> --}}
+
+                                                    <a href="{{ route('display.tickets.show', $ticket->id) }}" class="btn btn-sm btn-view position-relative">
+                                                        <i class="fas fa-eye mr-1"></i>View
+                                                
+                                                        @if ($ticket->unread_comments_count > 0)
+                                                        <span class="badge badge-success unread-count-badge">
+                                                            {{ $ticket->unread_comments_count }}
+                                                        </span>
+                                                        @endif
                                                     </a>
                                             </td>
                                         </tr>
@@ -221,6 +245,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 <script>
     // Initialize animations
     AOS.init({
