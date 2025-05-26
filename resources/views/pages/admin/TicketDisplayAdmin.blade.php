@@ -41,6 +41,11 @@
             font-size: 2.5rem;
             opacity: 0.3;
         }
+
+ .unread-count-badge {
+   
+    border-radius: 50% !important;
+}
 </style>
 
 
@@ -245,15 +250,23 @@
                                         <td>{{$ticket->assigned_user_id ? $ticket->assigned_user_id :'N/A'}}</td>
                                         <td>{{$ticket->created_at}}</td>
                                         <td>
-                                            <div class="d-flex">
-                                            <a href="{{ route('display.tickets.show', $ticket->id) }}" class="text-decoration-none ToolTip">
-                                            <i id="myComment"  class="far fa-comment-alt" style="color: #0e55e1; font-size:1.5rem; cursor: pointer; padding: 8px;"></i>
-                                        </a>
-                                        @if($ticket->status === 'closed')
-                                        <a class="text-decoration-none" >
-                                            <i id="myClosed" class="fas fa-check-circle text-danger" style="color: #e10e18; font-size:1.5rem; padding: 8px;"></i>
-                                        </a>
-                                         @endif
+                                            <div class="d-flex align-items-center">
+                                                <div class="position-relative">
+                                                    <a href="{{ route('display.tickets.show', $ticket->id) }}" class="text-decoration-none">
+                                                        <i class="far fa-comment-alt" style="color: #0e55e1; font-size: 1.5rem; padding: 8px;"></i>
+                                                        @if ($ticket->unread_comments_count > 0)
+                                                            <span class="badge badge-success position-absolute" style="top: 0; right: 0; font-size: 10px; padding: 3px 6px; transform: translate(50%, -50%);">
+                                                                {{ $ticket->unread_comments_count }}
+                                                            </span>
+                                                        @endif
+                                                    </a>
+                                                </div>
+                                                
+                                                 @if($ticket->status === 'closed')
+                                                    <a class="text-decoration-none ml-2">
+                                                        <i class="fas fa-check-circle text-danger" style="font-size: 1.5rem; padding: 8px;"></i>
+                                                    </a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

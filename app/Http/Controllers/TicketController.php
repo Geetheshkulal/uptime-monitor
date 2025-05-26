@@ -17,14 +17,26 @@ class TicketController extends Controller
 {
     public function TicketsView(){
 
-        $tickets = Ticket::all();
+        // $tickets = Ticket::all();
 
         $TotalTickets = Ticket::count();
         $OpenTickets = Ticket::where('status', 'open')->count();
         $ClosedTickets = Ticket::where('status', 'closed')->count();
         $OnHoldTickets = Ticket::where('status', 'on hold')->count();
 
+        $user = auth()->user();
+
+        $ticketsQuery = Ticket::withCount([
+            'comments as unread_comments_count' => function ($query) use ($user) {
+                $query->where('is_read', false)
+                    ->where('user_id', '!=', $user->id);
+            }
+        ]);
+
+    $tickets = $ticketsQuery->get();
+
         \App\Models\Ticket::where('is_read', false)->update(['is_read' => true]);
+
         
         return view('pages.admin.TicketDisplayAdmin', compact('tickets','TotalTickets','OpenTickets','ClosedTickets','OnHoldTickets'));
     }
@@ -41,6 +53,11 @@ class TicketController extends Controller
             abort(404);
         }
         
+        // Mark unread comments from other users as read
+    \App\Models\Comment::where('ticket_id', $id)
+    ->where('is_read', false)
+    ->where('user_id', '!=', $user->id)
+    ->update(['is_read' => true]);
 
         return view('pages.tickets.TicketDetails', compact('ticket', 'comments','supportUsers'));
     }
@@ -113,13 +130,29 @@ class TicketController extends Controller
 
     public function ViewTicketsUser()
     {
-         $user = auth()->user();
-         $tickets = Ticket::where('user_id',$user->id)->get();
+        //  $user = auth()->user();
+        //  $tickets = Ticket::where('user_id',$user->id)->get();
 
-         if($user->hasRole('support')){
-             $tickets = Ticket::where('assigned_user_id',$user->id)->get();
-         }
+        //  if($user->hasRole('support')){
+        //      $tickets = Ticket::where('assigned_user_id',$user->id)->get();
+        //  }
 
+    $user = auth()->user();
+
+    // Base query depending on role
+    if ($user->hasRole('support')) {
+        $tickets = Ticket::where('assigned_user_id', $user->id);
+    } else {
+        $tickets = Ticket::where('user_id', $user->id);
+    }
+
+    // Add unread comment count (comments not written by the current user)
+    $tickets = $tickets->withCount([
+        'comments as unread_comments_count' => function ($query) use ($user) {
+            $query->where('is_read', false)
+                  ->where('user_id', '!=', $user->id);
+        }
+    ])->get();
        
         
         return view('pages.tickets.DisplayTickets', compact('tickets'));

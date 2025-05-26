@@ -184,6 +184,23 @@
         opacity: 0.2;
         pointer-events: none;
     }
+.badge-container {
+    position: absolute;
+    top: 8px;
+    right: 5px;
+    display: flex;
+    flex-direction: column;
+    padding-right: 43px;
+    align-items: flex-end;
+}
+
+/* If there's only one badge, center it horizontally */
+.badge-container > span:first-child:last-child {
+    right: 50%;
+    align-self: center;
+    margin-top: 10px;
+    
+}
 
 </style>
 
@@ -307,6 +324,39 @@
         </li>
     @endcan
 
+    @php
+    use App\Models\Comment;
+    use Illuminate\Support\Facades\Auth;
+    use Spatie\Permission\Models\Role;
+
+    $user = Auth::user();
+    $unreadComments = 0;
+
+    if ($user->hasRole('superadmin')) {
+    $unreadComments = Comment::where('is_read', false)
+        ->whereHas('user.roles', function ($q) {
+            $q->whereIn('name', ['user', 'support']);
+        })
+        ->count();
+}
+
+    if ($user->hasRole('user')) {
+        $unreadComments = Comment::where('is_read', false)
+            ->whereHas('user.roles', function ($q) {
+                $q->whereIn('name', ['superadmin', 'support']);
+            })
+            ->count();
+    }
+    if ($user->hasRole('support')) {
+        $unreadComments = Comment::where('is_read', false)
+            ->whereHas('user.roles', function ($q) {
+                $q->whereIn('name', ['superadmin', 'user']);
+            })
+            ->count();
+    }
+
+@endphp
+
         @hasrole('superadmin')
             <li class="nav-item {{ request()->routeIs('display.permissions') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('display.permissions') }}">
@@ -319,13 +369,28 @@
                     $unreadTickets = \App\Models\Ticket::where('is_read', false)->count();
                 @endphp
                 <li class="nav-item {{ request()->routeIs('tickets') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('tickets') }}">
+                    <a class="nav-link  position-relative" href="{{ route('tickets') }}">
                         
                         <i class="fas fa-ticket-alt"></i>
                         <span>Tickets</span>
-                        @if($unreadTickets > 0)
-                        <span class="badge badge-danger ml-2" style="font-size: 10px; padding: 2px 5px;">New {{$unreadTickets}}</span>
-                        @endif
+                      
+                        {{-- <div class="position-absolute" style="top: 8px; right: 5px; display: flex; flex-direction: column; padding-right:43px;">
+                            @if($unreadTickets > 0)
+                                <span class="badge badge-success mb-1" style="font-size: 10px; padding: 2px 6px;">New {{ $unreadTickets }}</span>
+                            @endif
+                            @if($unreadComments > 0)
+                                <span class="badge badge-success" style="font-size: 10px; padding: 2px 6px;">Comments {{ $unreadComments }}</span>
+                            @endif
+                        </div> --}}
+                        <div class="badge-container">
+                            @if($unreadTickets > 0)
+                                <span class="badge badge-success mb-1" style="font-size: 10px; padding: 2px 6px;">New {{ $unreadTickets }}</span>
+                            @endif
+                            @if($unreadComments > 0)
+                                <span class="badge badge-success" style="font-size: 10px; padding: 2px 6px;">Comments {{ $unreadComments }}</span>
+                            @endif
+                        </div>
+              
                     </a>
                 </li>
 
@@ -355,6 +420,9 @@
                 <a class="nav-link" href="{{route('display.tickets')}}">
                     <i class="fas fa-headset"></i>
                     <span>Raise Issue</span>
+                    @if($unreadComments > 0)
+                        <span class="badge badge-success ml-2" style="font-size: 10px; padding: 2px 5px;">comments {{$unreadComments}}</span>
+                        @endif
                 </a>
             </li>
         @endhasrole
