@@ -24,7 +24,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:3',
-            'phone' => 'nullable|string|digits:10',
+            'phone' => 'nullable|string|digits:10|unique:users,phone',
             'role' => 'required|exists:roles,id',  // Ensure role exists
             'premium_end_date' => 'nullable|date',
         ]);
@@ -153,7 +153,7 @@ class UserController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users,email,'.$user->id,
-                'phone' => 'nullable|string|max:20',
+                'phone' => 'nullable|string|max:20|unique:users,phone',
                 'role' => 'required|exists:roles,id'
             ]);
         
@@ -267,7 +267,7 @@ class UserController extends Controller
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|min:3',
-                'phone' => 'required|nullable|string|digits:10',
+                'phone' => 'required|nullable|string|digits:10|unique:users,phone',
             ]);
 
             $parentUser = auth()->user();
