@@ -181,6 +181,7 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
 
     Route::get('/admin/delete/permission/{id}', [PermissionController::class, 'DeletePermission'])->middleware('role:superadmin')->name('delete.permission');
     Route::get('/admin/display/activity', [ActivityController::class,'DisplayActivity'])->middleware('permission:see.activity')->name('display.activity');
+    Route::get('/activity-logs/data', [ActivityController::class, 'getActivityData'])->name('activity.logs.data');
 
     
     Route::get('/admin/edit/permissions/{id}', [PermissionController::class, 'EditPermission'])->middleware('role:superadmin')->name('edit.permission');

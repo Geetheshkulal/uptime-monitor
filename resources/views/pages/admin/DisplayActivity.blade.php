@@ -38,8 +38,6 @@
 @endpush
 <div class="page-content">
 <div class="container-fluid">
-
- 
         
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Activity Log</h1>
@@ -91,6 +89,8 @@
                     </div>
                 </div>
             </div>
+
+            
 </div></div>
 
 <!-- Bootstrap 4 Modal -->
@@ -113,16 +113,20 @@
     </div>
 </div>
 
-@push('scripts')
+
+
+
+ @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> 
+
 
 <script>
     $(document).ready(function() {
-        // Initialize DataTable
+     
         var table = $('#activityTable').DataTable({ 
             "paging": true,
             "searching": true,
@@ -130,18 +134,18 @@
             "info": true,
             "order": [[5, "desc"]],
             "columnDefs": [
-                { "searchable": false, "targets": [6] } // Disable sorting for action column
+                { "searchable": false, "targets": [6] } 
             ]
             
         });
 
-        // Initialize Select2 with search and placeholder
+        
         $('.js-example-basic-single').select2({
             placeholder: "Select a user",
             allowClear: true
         });
 
-        // Filter table when user is selected
+     
         $('#userFilter').change(function() {
             var userId = $(this).val();
             table.column(5).search(userId).draw();
@@ -149,7 +153,7 @@
     });
 
     function showPropertiesModal(properties) {
-        // Format JSON and display inside <pre> tag
+        
         document.getElementById("propertiesContent").textContent = JSON.stringify(properties, null, 4);
         $('#propertiesModal').modal('show');
     }
@@ -160,6 +164,6 @@
     toastr.success("{{ session('success') }}");
 </script>
 @endif
-@endpush
+@endpush 
 
 @endsection
