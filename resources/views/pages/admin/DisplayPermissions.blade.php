@@ -47,20 +47,24 @@
                                     <td>{{ $permission->group_name }}</td>
                                     @canany(['edit.permission','delete.permission'])
                                         <td>
-                                            @can('edit.permission')
-                                                <a href="{{ route('edit.permission',$permission->id) }}" 
-                                                class="btn btn-sm btn-primary px-3 py-1 mr-1">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                            @endcan
-                                            
-                                            @can('delete.permission')
-                                                <a href="{{route('delete.permission',$permission->id)}}" 
-                                                class="btn btn-sm btn-danger px-3 py-1" 
-                                                onclick="return confirm('Are you sure?')">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            @endcan
+                                            @if($permission->type==='system')
+                                                <span>System Permission</span>
+                                            @elseif($permission->type==='custom')
+                                                @can('edit.permission')
+                                                    <a href="{{ route('edit.permission',$permission->id) }}" 
+                                                    class="btn btn-sm btn-primary px-3 py-1 mr-1">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                @endcan
+                                                
+                                                @can('delete.permission')
+                                                    <a href="{{route('delete.permission',$permission->id)}}" 
+                                                    class="btn btn-sm btn-danger px-3 py-1" 
+                                                    onclick="return confirm('Are you sure?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                @endcan
+                                            @endif
                                         </td>
                                     @endcanany
                                 </tr>

@@ -40,11 +40,9 @@
                                 <select class="form-select select-enhanced @error('group_name') is-invalid @enderror" 
                                         id="group_name" name="group_name" required>
                                     <option value="">Select Group</option>
-                                    <option value="user">User</option>
-                                    <option value="role">Role</option>
-                                    <option value="permission">Permission</option>
-                                    <option value="monitor">Monitor</option>
-                                    <option value="activity">Activity</option>
+                                    @foreach($groups as $group)
+                                        <option value="{{$group}}">{{$group}}</option>
+                                    @endforeach
                                 </select>
                                 @error('group_name')
                                     <div class="invalid-feedback">{{ $message }}</div>

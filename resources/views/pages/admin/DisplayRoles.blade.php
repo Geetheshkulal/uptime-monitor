@@ -74,9 +74,7 @@
                                                 @endcan
                                         </td>
                                         @endcanany
-
                                     @endif
-
                                 </tr>
                                 @endforeach
                             </tbody>

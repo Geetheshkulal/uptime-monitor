@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Validation\Rule;
+
+
 
 class PermissionController extends Controller
 {
@@ -17,21 +20,26 @@ class PermissionController extends Controller
     //Add permission page
     public function AddPermission()
     {
-        return view('pages.admin.AddPermission');
+        $groups = Permission::select('group_name')->distinct()->pluck('group_name');
+        return view('pages.admin.AddPermission',compact('groups'));
     }
 
     //Function to store permission
     public function StorePermission(Request $request)
     {
         //validation
+
+        
+        $validGroups = Permission::select('group_name')->distinct()->pluck('group_name')->toArray();
+
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:permissions,name',
-            'group_name' => 'required|string|in:user,role,permission,monitor,activity'
+            'group_name' => ['required', 'string', Rule::in($validGroups)],
         ]);
 
         //Create the permissionjs
 
-        $permission=Permission::create($validated);
+        $permission=Permission::create(array_merge($validated,['type'=>'custom']));
 
         //log activity
         activity()
@@ -60,6 +68,10 @@ class PermissionController extends Controller
             $permission = Permission::findOrFail($id);
 
             $deletedData = $permission->toArray();
+
+            if ($permission->type === 'system') {
+                abort(404);
+            }
 
             $permission->delete(); //delete the permission
 
@@ -90,6 +102,9 @@ class PermissionController extends Controller
     public function EditPermission($id)
     {
         $permission = Permission::findOrFail($id);
+        if ($permission->type === 'system') {
+            abort(404);
+        }
         return view('pages.admin.EditPermission', compact('permission'));
     }
 
@@ -104,6 +119,9 @@ class PermissionController extends Controller
         try {
             $permission = Permission::findOrFail($id); //Find a permission.
 
+              if ($permission->type === 'system') {
+                abort(404);
+              }
             $oldValues = $permission->getOriginal();
 
             $permission->update($validated);
