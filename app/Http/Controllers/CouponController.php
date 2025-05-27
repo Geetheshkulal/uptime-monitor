@@ -110,22 +110,22 @@ public function CouponStore(Request $request)
         'code' => 'required|unique:coupon_codes,code',
         'discount_type' => 'required|in:flat,percentage',
         'value' => [
-        'required',
-        'numeric',
-        function ($attribute, $value, $fail) use ($request) {
-            if ($request->discount_type === 'percentage' && $value > 100) {
-                $fail('The percentage discount cannot be more than 100%.');
-            }
-
-            if ($request->discount_type === 'flat') {
-                // Ensure subscription exists
-                $subscription = \App\Models\Subscription::find($request->subscription_id);
-                if ($subscription && $value > $subscription->amount) {
-                    $fail("The flat discount cannot be more than the subscription amount ({$subscription->amount}).");
+            'required',
+            'numeric',
+            function ($attribute, $value, $fail) use ($request) {
+                if ($request->discount_type === 'percentage' && $value > 100) {
+                    $fail('The percentage discount cannot be more than 100%.');
                 }
-            }
-        },
-    ],
+
+                if ($request->discount_type === 'flat') {
+                    // Ensure subscription exists
+                    $subscription = \App\Models\Subscriptions::find($request->subscription_id);
+                    if ($subscription && $value > $subscription->amount) {
+                        $fail("The flat discount cannot be more than the subscription amount ({$subscription->amount}).");
+                    }
+                }
+            },
+        ],
         'max_uses' => 'nullable|integer',
         'valid_from' => 'nullable|date',
         'valid_until' => [
@@ -163,7 +163,23 @@ public function CouponUpdate(Request $request, $id)
 
     $request->validate([
         'code' => 'required|unique:coupon_codes,code,' . $coupon->id,
-        'value' => 'required|numeric',
+        'value' => [
+            'required',
+            'numeric',
+            function ($attribute, $value, $fail) use ($request) {
+                if ($request->discount_type === 'percentage' && $value > 100) {
+                    $fail('The percentage discount cannot be more than 100%.');
+                }
+
+                if ($request->discount_type === 'flat') {
+                    // Ensure subscription exists
+                    $subscription = \App\Models\Subscriptions::find($request->subscription_id);
+                    if ($subscription && $value > $subscription->amount) {
+                        $fail("The flat discount cannot be more than the subscription amount ({$subscription->amount}).");
+                    }
+                }
+            },
+        ],
         'max_uses' => 'nullable|integer',
         'valid_from' => 'nullable|date',
         'valid_until' => [

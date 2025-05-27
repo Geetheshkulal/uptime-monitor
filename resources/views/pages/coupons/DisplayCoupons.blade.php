@@ -295,7 +295,7 @@
 
 
 
-  <!-- Edit Coupon Modals - One for each coupon -->
+<!-- Edit Coupon Modals - One for each coupon -->
 @foreach($coupons as $coupon)
 <div class="modal fade" id="editCouponModal{{ $coupon->id }}" tabindex="-1" role="dialog" aria-labelledby="editCouponModalLabel{{ $coupon->id }}" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -322,6 +322,9 @@
                             <label for="value{{ $coupon->id }}" class="small font-weight-bold">Discount {{$coupon->discount_type}}</label>
                             <input type="number" id="value{{ $coupon->id }}" name="value" class="form-control form-control-sm" value="{{ $coupon->value }}" >
                         </div>
+
+                        <input type="hidden" value="{{$coupon->discount_type}}" name="discount_type"/>
+                        <input type="hidden" value="{{$coupon->subscription_id}}" name="subscription_id"/>
 
                         <div class="form-group mb-2">
                             <label for="max_uses{{ $coupon->id }}" class="small font-weight-bold">Max Uses</label>
