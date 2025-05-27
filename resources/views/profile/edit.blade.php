@@ -21,6 +21,7 @@
                 tab: localStorage.getItem('profile_tab') || 'profile',
                 setTab(value) {
                     this.tab = value;
+                    
                     localStorage.setItem('profile_tab', value);
                 }
             }">
@@ -58,9 +59,11 @@
                 <div x-show="tab === 'password'" class="mt-4">
                     @include('profile.partials.update-password-form')
                 </div>
-                <div  x-show="tab === 'billing'" class="mt-4">
-                    @include('profile.partials.billing-details-form')   
-                </div>
+                @hasrole('user')
+                    <div  x-show="tab === 'billing'" class="mt-4">
+                        @include('profile.partials.billing-details-form')   
+                    </div>
+                @endhasrole
             </div>
         </div>
         
