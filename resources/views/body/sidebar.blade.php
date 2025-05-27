@@ -366,6 +366,15 @@
             </li>
         @endhasrole
 
+        @can('manage.coupons')
+            <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('display.coupons') }}">
+                    <i class="fas fa-percent"></i>
+                    <span>Coupons</span>
+                </a>
+            </li>
+        @endcan
+
         @can('see.activity')
             <li class="nav-item {{ request()->routeIs('display.activity') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('display.activity') }}">
@@ -397,14 +406,7 @@
         @endhasrole
 
 
-        @can('manage.coupons')
-            <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('display.coupons') }}">
-                    <i class="fas fa-percent"></i>
-                    <span>Coupons</span>
-                </a>
-            </li>
-        @endcan
+        
 
         @hasrole('support')
             <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">

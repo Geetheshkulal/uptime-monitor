@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Monitors;
 use Illuminate\Http\Request;
-
+use Illuminate\Validation\Rule;
 
 //Controller for Ping Monitors.
 class PingMonitoringController extends Controller
@@ -17,7 +17,14 @@ class PingMonitoringController extends Controller
 
         $request->validate([
             'name' => 'required|string',
-            'url' => 'required',
+            'url' => [
+                'required',
+                'url',
+                Rule::unique('monitors')->where(function ($query) use ($user, $request) {
+                    return $query->where('user_id', $user->id)
+                                ->where('type', 'ping');
+                }),
+            ],
             'email' => 'required|email',
             'retries' => 'required|integer|min:1',
             'interval' => 'required|integer|min:1',

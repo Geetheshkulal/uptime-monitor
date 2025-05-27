@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Monitors;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 //Controller for DNS
 class DNSController extends Controller
@@ -16,7 +17,14 @@ class DNSController extends Controller
 
         $request->validate([
             'name' => 'required|string',
-            'domain' => 'required|string|max:255',
+            'domain' => [
+                'required',
+                'url',
+                Rule::unique('monitors','url')->where(function ($query) use ($user, $request) {
+                    return $query->where('user_id', $user->id)
+                                ->where('type', 'dns');
+                }),
+            ],
             'email' => 'required|email|max:255',
             'telegram_id' => 'nullable|string|max:255',
             'telegram_bot_token' => 'nullable|string|max:255',

@@ -9,6 +9,7 @@ use App\Models\Monitors;
 use App\Models\PingResponse;
 use App\Models\PortResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 
 
@@ -317,10 +318,24 @@ class MonitoringController extends Controller
   //Function to Edit Monitor
    public function MonitorEdit(Request $request, $id)
    {
+
+        $user = auth()->user();
+
+        $user = ($user->hasRole('subuser'))?$user->parentUser:auth()->user();
+        
         //Form validation
         $request->validate([
             'name'=>'required|string|max:255',
-            'url'=>'required|url',
+            'url' => [
+                'required',
+                'url',
+                Rule::unique('monitors', 'url')
+                    ->where(function ($query) use ($user, $request) {
+                        return $query->where('user_id', $user->id)
+                                    ->where('type', $request->type);
+                    })
+                    ->ignore($id), // Ignore current record when checking for uniqueness
+            ],
             'retries' => 'required|integer|min:1',
             'interval' => 'required|integer|min:1',
             'email' => 'required|email',

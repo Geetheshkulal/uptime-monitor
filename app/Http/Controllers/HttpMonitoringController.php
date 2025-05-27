@@ -6,6 +6,7 @@ use App\Models\Monitors;
 use App\Models\HttpResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; 
+use Illuminate\Validation\Rule;
 
 //Controller for HttP
 class HttpMonitoringController extends Controller
@@ -19,7 +20,14 @@ class HttpMonitoringController extends Controller
         Log::info('HTTP Monitor Request: ', $request->all());
         $request->validate([
             'name' => 'required|string',
-            'url' => 'required|url',
+            'url' => [
+                'required',
+                'url',
+                Rule::unique('monitors')->where(function ($query) use ($user, $request) {
+                    return $query->where('user_id', $user->id)
+                                ->where('type', 'http');
+                }),
+            ],
             'email' => 'required|email',
             'retries' => 'required|integer|min:1',
             'interval' => 'required|integer|min:1',

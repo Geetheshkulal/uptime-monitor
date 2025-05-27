@@ -140,7 +140,7 @@
                 { data: 'description', name: 'description', orderable: true },
                 { data: 'event', name: 'event', orderable: true },
                 { data: 'causer_name', name: 'causer_name', orderable: true },
-                { data: 'created_at', name: 'created_at', orderable: true },
+                { data: 'created_at', name: 'created_at', orderable: true},
                 { 
                     data: 'properties_button', 
                     name: 'properties', 

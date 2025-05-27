@@ -7,6 +7,7 @@ use App\Models\Monitors;
 use App\Models\PortResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 //Controller for port monitor.
 class PortMonitorController extends Controller
@@ -20,7 +21,14 @@ class PortMonitorController extends Controller
 
        Log::info('Request data:', $request->all());
         $request->validate([
-            'url' => 'required|string',
+            'url' => [
+                'required',
+                'url',
+                Rule::unique('monitors')->where(function ($query) use ($user, $request) {
+                    return $query->where('user_id', $user->id)
+                                ->where('type', 'port');
+                }),
+            ],
             'name' => 'required|string',
             'port' => 'required|integer|min:1|max:65535',
             'retries' => 'required|integer|min:1',
