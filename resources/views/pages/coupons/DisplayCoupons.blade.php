@@ -324,7 +324,7 @@
                         </div>
 
                         <input type="hidden" value="{{$coupon->discount_type}}" name="discount_type"/>
-                        <input type="hidden" value="{{$coupon->subscription_id}}" name="subscription_id"/>
+                        <input type="hidden" value="{{$coupon->subscription->id}}" name="subscription_id"/>
 
                         <div class="form-group mb-2">
                             <label for="max_uses{{ $coupon->id }}" class="small font-weight-bold">Max Uses</label>
