@@ -118,12 +118,16 @@
     </div>
 </div>
 
-@push('scripts')
+
+
+
+ @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> 
+
 
 <script>
     $(document).ready(function() {
@@ -179,13 +183,13 @@
             responsive: true
         });
 
-        // Initialize Select2 with search and placeholder
+        
         $('.js-example-basic-single').select2({
             placeholder: "Select a user",
             allowClear: true
         });
 
-        // Filter table when user is selected
+     
         $('#userFilter').change(function() {
             table.ajax.reload();
         });
@@ -197,7 +201,7 @@
     });
 
     function showPropertiesModal(properties) {
-        // Format JSON and display inside <pre> tag
+        
         document.getElementById("propertiesContent").textContent = JSON.stringify(properties, null, 4);
         $('#propertiesModal').modal('show');
     }
@@ -208,6 +212,6 @@
     toastr.success("{{ session('success') }}");
 </script>
 @endif
-@endpush
+@endpush 
 
 @endsection
