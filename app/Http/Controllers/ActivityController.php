@@ -11,7 +11,7 @@ class ActivityController extends Controller
     public function DisplayActivity()
     {
         // Fetch users for the filter dropdown
-        $userQuery = User::select('id', 'name');
+        $userQuery = User::select('id', 'name','email','phone');
 
         if(!auth()->user()->hasRole('superadmin')) {
             $superadminIds = User::role('superadmin')->pluck('id');

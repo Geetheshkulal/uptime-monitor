@@ -45,6 +45,12 @@
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid #ddd;
         }
+
+        .select2-results__options {
+            max-height: 200px; /* Adjust this value as needed */
+            overflow-y: auto;
+        }
+
     </style>
 @endpush
 
@@ -62,7 +68,7 @@
                     <select class="js-example-basic-single form-control" id="userFilter" style="width: 300px;">
                         <option value="">All Users</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }} (ID: {{ $user->id }})</option>
+                            <option value="{{ $user->id }}">{{ $user->name }} | {{$user->email}} | {{$user->phone}}</option>
                         @endforeach
                     </select>
                 </div>
