@@ -180,9 +180,15 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
     Route::post('admin/store/permission', [PermissionController::class, 'StorePermission'])->middleware('role:superadmin')->name('store.permission');
 
     Route::get('/admin/delete/permission/{id}', [PermissionController::class, 'DeletePermission'])->middleware('role:superadmin')->name('delete.permission');
-    Route::get('/admin/display/activity', [ActivityController::class,'DisplayActivity'])->middleware('permission:see.activity')->name('display.activity');
+    Route::get('/admin/display/activity', [ActivityController::class,'DisplayActivity'])
+        ->middleware('permission:see.activity')
+        ->name('display.activity');
 
-    
+    // Add the AJAX route for fetching activity logs
+    Route::get('/activity-logs/ajax', [ActivityController::class, 'fetchActivityLogs'])
+        ->middleware('permission:see.activity')
+        ->name('activity.logs.ajax');
+
     Route::get('/admin/edit/permissions/{id}', [PermissionController::class, 'EditPermission'])->middleware('role:superadmin')->name('edit.permission');
     Route::put('/admin/update/permissions/{id}', [PermissionController::class, 'UpdatePermission'])->middleware('role:superadmin')->name('update.permission');
 

@@ -161,7 +161,7 @@ class UserController extends Controller
                 // Update basic user info
                 $user->update([
                     'name' => $validated['name'],
-                    'email' => $validated['email'],
+                    'email' => strtolower($request->email),
                     'phone' => $validated['phone']
                 ]);
         

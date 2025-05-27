@@ -4,7 +4,6 @@
 @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css"> --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     
     <style>
@@ -34,64 +33,62 @@
         * {
             border-radius: 0 !important;
         }
+        .dataTables_processing {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            margin-left: -100px;
+            margin-top: -26px;
+            text-align: center;
+            padding: 1em 0;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ddd;
+        }
     </style>
 @endpush
-<div class="page-content">
-<div class="container-fluid">
 
- 
+<div class="page-content">
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Activity Log</h1>
+        </div>
         
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Activity Log</h1>
-    </div>
-            <!-- Activity Log Table -->
-            <div class="card shadow mb-4">
-                <div class="card-body px-4 py-4">
-                    <div class="filter-container">
-                        <label for="userFilter">Filter by User:</label>
-                        <select class="js-example-basic-single form-control" id="userFilter" style="width: 300px;">
-                            <option value="">All Users</option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }} (ID: {{ $user->id }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <div class="table-responsive">
-                        <table class="table table-bordered" id="activityTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Log Name</th>
-                                    <th>Description</th>
-                                    <th>Event</th>
-                                    <th>User Name</th>
-                                    <th>Date</th>
-                                    <th>Properties</th>
-                                </tr>
-                            </thead>
-                            <tbody>                                                                                                                    
-                                @foreach($logs as $log)
-                                <tr>
-                                    <td>{{ $log->id }}</td>
-                                    <td>{{ $log->log_name }}</td>
-                                    <td>{{ $log->description }}</td>
-                                    <td>{{ $log->event }}</td>
-                                    <td>{{ $log->causer?->name }}</td>
-                                    <td>{{ $log->created_at->format('d M Y, h:i A') }}</td>
-                                    <td>
-                                        <button class="btn btn-success btn-sm" onclick="showPropertiesModal({{ json_encode($log->properties) }})">
-                                            View
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+        <!-- Activity Log Table -->
+        <div class="card shadow mb-4">
+            <div class="card-body px-4 py-4">
+                <div class="filter-container">
+                    <label for="userFilter">Filter by User:</label>
+                    <select class="js-example-basic-single form-control" id="userFilter" style="width: 300px;">
+                        <option value="">All Users</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }} (ID: {{ $user->id }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="activityTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Log Name</th>
+                                <th>Description</th>
+                                <th>Event</th>
+                                <th>User Name</th>
+                                <th>Date</th>
+                                <th>Properties</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be loaded via AJAX -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-</div></div>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap 4 Modal -->
 <div class="modal fade" id="propertiesModal" tabindex="-1" role="dialog" aria-labelledby="propertiesModalLabel" aria-hidden="true">
@@ -122,17 +119,56 @@
 
 <script>
     $(document).ready(function() {
-        // Initialize DataTable
-        var table = $('#activityTable').DataTable({ 
-            "paging": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "order": [[5, "desc"]],
-            "columnDefs": [
-                { "searchable": false, "targets": [6] } // Disable sorting for action column
-            ]
-            
+        // Initialize DataTable with server-side processing
+        var table = $('#activityTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('activity.logs.ajax') }}",
+                type: "GET",
+                data: function(d) {
+                    d.user_filter = $('#userFilter').val();
+                },
+                error: function(xhr, error, thrown) {
+                    console.error('DataTables AJAX error:', error);
+                    alert('Error loading data. Please try again.');
+                }
+            },
+            columns: [
+                { data: 'id', name: 'id', orderable: true },
+                { data: 'log_name', name: 'log_name', orderable: true },
+                { data: 'description', name: 'description', orderable: true },
+                { data: 'event', name: 'event', orderable: true },
+                { data: 'causer_name', name: 'causer_name', orderable: true },
+                { data: 'created_at', name: 'created_at', orderable: true },
+                { 
+                    data: 'properties_button', 
+                    name: 'properties', 
+                    orderable: false, 
+                    searchable: false 
+                }
+            ],
+            order: [[5, "desc"]], // Order by date column (created_at) descending
+            pageLength: 25,
+            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+            language: {
+                processing: '<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div> Loading...',
+                search: "Search:",
+                lengthMenu: "Show _MENU_ entries",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                paginate: {
+                    first: "First",
+                    last: "Last",
+                    next: "Next",
+                    previous: "Previous"
+                }
+            },
+            dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+                 '<"row"<"col-sm-12"tr>>' +
+                 '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+            responsive: true
         });
 
         // Initialize Select2 with search and placeholder
@@ -143,8 +179,12 @@
 
         // Filter table when user is selected
         $('#userFilter').change(function() {
-            var userId = $(this).val();
-            table.column(5).search(userId).draw();
+            table.ajax.reload();
+        });
+
+        // Handle DataTable errors
+        table.on('error.dt', function(e, settings, techNote, message) {
+            console.error('DataTable error: ', message);
         });
     });
 

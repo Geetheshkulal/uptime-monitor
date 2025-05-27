@@ -146,7 +146,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="password">Password*</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password"  required>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
                                 <span class="fas fa-eye password-toggle" id="togglePassword"></span>
                                 @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -257,125 +257,6 @@ $(document).ready(function() {
         passwordInput.attr('type', type);
         $(this).toggleClass('fa-eye fa-eye-slash');
     });
-
-    // Form validation
-    $('#addUserForm').on('submit', function(e) {
-        if (!validateForm()) {
-            e.preventDefault();
-        }
-    });
-
-    // Validate on input change
-    $('#addUserForm input, #addUserForm select').on('change', function() {
-        validateField($(this));
-    });
-
-    // Validate after typing stops for text inputs
-    $('#addUserForm input[type="text"], #addUserForm input[type="email"], #addUserForm input[type="password"]').on('input', function() {
-        const input = $(this);
-        clearTimeout(input.data('typingTimer'));
-        input.data('typingTimer', setTimeout(function() {
-            validateField(input);
-        }, 500));
-    });
-
-    function validateForm() {
-        let isValid = true;
-        
-        // Validate each field
-        isValid = validateField($('#name')) && isValid;
-        isValid = validateField($('#email')) && isValid;
-        isValid = validateField($('#password')) && isValid;
-        
-        // Phone is optional, only validate if value exists
-        if ($('#phone').val().trim()) {
-            isValid = validateField($('#phone')) && isValid;
-        }
-        
-        isValid = validateField($('#role')) && isValid;
-        
-        return isValid;
-    }
-
-    function validateField(input) {
-        let isValid = true;
-        let errorMessage = '';
-        const inputElement = input[0] || input; // Handle both jQuery object and DOM element
-        
-        // Clear previous error
-        $(input).removeClass('is-invalid');
-        let errorElement = $(input).next('.invalid-feedback');
-        
-        // For password field which has the eye icon
-        if ($(input).attr('id') === 'password') {
-            errorElement = $(input).nextAll('.invalid-feedback').first();
-        }
-        
-        // Field-specific validation
-        switch($(input).attr('id')) {
-            case 'name':
-                if (!$(input).val().trim()) {
-                    errorMessage = 'Name is required';
-                    isValid = false;
-                }
-                break;
-                
-            case 'email':
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!$(input).val().trim()) {
-                    errorMessage = 'Email is required';
-                    isValid = false;
-                } else if (!emailRegex.test($(input).val())) {
-                    errorMessage = 'Please enter a valid email address';
-                    isValid = false;
-                }
-                break;
-                
-            case 'password':
-                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-                if (!$(input).val().trim()) {
-                    errorMessage = 'Password is required';
-                    isValid = false;
-                } else if (!passwordRegex.test($(input).val())) {
-                    errorMessage = 'Password must contain at least one uppercase, one lowercase, one number and one special character';
-                    isValid = false;
-                }
-                break;
-                
-            case 'phone':
-                if ($(input).val().trim() && !/^[0-9]{10}$/.test($(input).val())) {
-                    errorMessage = 'Phone number must be exactly 10 digits';
-                    isValid = false;
-                }
-                break;
-                
-            case 'role':
-                if (!$(input).val()) {
-                    errorMessage = 'Role is required';
-                    isValid = false;
-                }
-                break;
-        }
-        
-        if (!isValid) {
-            $(input).addClass('is-invalid');
-            if (errorElement.length) {
-                errorElement.text(errorMessage).show();
-            } else {
-                const errorDiv = $('<div>').addClass('invalid-feedback').text(errorMessage).css('display', 'block');
-                
-                if ($(input).attr('id') === 'password') {
-                    $(input).parent().find('.password-toggle').after(errorDiv);
-                } else {
-                    $(input).after(errorDiv);
-                }
-            }
-        } else {
-            errorElement.hide();
-        }
-        
-        return isValid;
-    }
 });
 
 @if(session('success'))

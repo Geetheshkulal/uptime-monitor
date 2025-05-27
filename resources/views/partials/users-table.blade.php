@@ -30,9 +30,11 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
                                     @can('edit.user')
-                                    <a href="{{ route('edit.user', $user->id) }}" class="btn btn-sm btn-info" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                        @if(!$user->hasRole('superadmin'))
+                                            <a href="{{ route('edit.user', $user->id) }}" class="btn btn-sm btn-info" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        @endif
                                     @endcan
                                 </div>
                             </td>
