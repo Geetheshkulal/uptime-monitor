@@ -9,22 +9,14 @@ class ActivityController extends Controller
 {
     public function DisplayActivity()
     {
-<<<<<<< HEAD
         // Fetch users for the filter dropdown
         $userQuery = User::select('id', 'name','email','phone');
-=======
-      
-        $query = Activity::latest();
-        
-        $userQuery = User::select('id', 'name');
->>>>>>> activity
 
         if(!auth()->user()->hasRole('superadmin')) {
             $superadminIds = User::role('superadmin')->pluck('id');
             $userQuery->whereNotIn('id', $superadminIds);
         }
 
-<<<<<<< HEAD
         if(auth()->user()->hasRole('user')){
             $subUserIds = User::role('subuser')->where('parent_user_id', auth()->user()->id)->pluck('id');
             $userQuery->whereIn('id', $subUserIds);
@@ -55,8 +47,6 @@ class ActivityController extends Controller
         // Apply role-based filtering
         if(!auth()->user()->hasRole('superadmin')) {
             $superadminIds = User::role('superadmin')->pluck('id');
-=======
->>>>>>> activity
             $query->whereNotIn('causer_id', $superadminIds);
         }
 
@@ -70,7 +60,6 @@ class ActivityController extends Controller
             $query->where('causer_id', $userFilter);
         }
 
-<<<<<<< HEAD
         // Apply global search
         if (!empty($searchValue)) {
             $query->where(function($q) use ($searchValue) {
@@ -82,10 +71,6 @@ class ActivityController extends Controller
                   });
             });
         }
-=======
-        
-        $users = $userQuery->get();
->>>>>>> activity
 
         // Get total count before pagination
         $totalRecords = Activity::count();
@@ -128,8 +113,4 @@ class ActivityController extends Controller
             'data' => $data
         ]);
     }
-<<<<<<< HEAD
 }
-=======
-} 
->>>>>>> activity
