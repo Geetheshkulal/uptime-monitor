@@ -38,6 +38,11 @@ class ActivityController extends Controller
         $orderDirection = $request->get('order')[0]['dir'] ?? 'desc';
         $userFilter = $request->get('user_filter');
 
+        // search by name email phone
+        $searchName = $request->get('search_name');
+        $searchEmail = $request->get('search_email');
+        $searchPhone = $request->get('search_phone');
+
         // Define column mapping for ordering
         $columns = ['id', 'log_name', 'description', 'event', 'causer_id', 'created_at', 'properties'];
         
@@ -71,6 +76,23 @@ class ActivityController extends Controller
                   });
             });
         }
+
+        // Apply specific search filters
+        if (!empty($searchName)) {
+            $query->whereHas('causer', function($q) use ($searchName) {
+                $q->where('name', 'LIKE', "%{$searchName}%");
+            });
+        }
+        if (!empty($searchEmail)) {
+            $query->whereHas('causer', function($q) use ($searchEmail) {
+                $q->where('email', 'LIKE', "%{$searchEmail}%");
+            });
+        } 
+        if (!empty($searchPhone)) {
+            $query->whereHas('causer', function($q) use ($searchPhone) {
+                $q->where('phone', 'LIKE', "%{$searchPhone}%");
+            });
+        }  
 
         // Get total count before pagination
         $totalRecords = Activity::count();

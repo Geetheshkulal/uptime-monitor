@@ -56,6 +56,7 @@
     </style>
 @endpush
 
+
 <div class="page-content">
     <div class="container-fluid">
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -73,6 +74,20 @@
                             <option value="{{ $user->id }}">{{ $user->name }} | {{$user->email}} | {{$user->phone}}</option>
                         @endforeach
                     </select>
+
+                    {{-- seperate search for name email phone --}}
+                    
+                    {{-- <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" id="searchName" class="form-control" placeholder="Search by Name">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="searchEmail" class="form-control" placeholder="Search by Email">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="searchPhone" class="form-control" placeholder="Search by Phone">
+                        </div>
+                    </div> --}}
                 </div>
                 
                 <div class="table-responsive">
@@ -97,6 +112,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Bootstrap 4 Modal -->
 <div class="modal fade" id="propertiesModal" tabindex="-1" role="dialog" aria-labelledby="propertiesModalLabel" aria-hidden="true">
@@ -140,6 +156,10 @@
                 type: "GET",
                 data: function(d) {
                     d.user_filter = $('#userFilter').val();
+
+                    d.search_name = $('#searchName').val();
+                    d.search_email = $('#searchEmail').val();
+                    d.search_phone = $('#searchPhone').val();
                 },
                 error: function(xhr, error, thrown) {
                     console.error('DataTables AJAX error:', error);
@@ -191,6 +211,10 @@
 
      
         $('#userFilter').change(function() {
+            table.ajax.reload();
+        });
+
+        $('#searchName, #searchEmail, #searchPhone').on('keyup', function() {
             table.ajax.reload();
         });
 
