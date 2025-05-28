@@ -219,7 +219,7 @@
                                 <tr>
                                     <th>SL No</th>
                                     <th>Ticket Id</th>
-                                    <th>User Id</th>
+                                    <th>Created by</th>
                                     <th>Title</th>
                                     <th>Status</th>
                                     <th>Priority</th>
@@ -233,7 +233,7 @@
                                     <tr>
                                         <td>{{$ticket->id}}</td>
                                         <td>{{ $ticket->ticket_id }}</td>
-                                        <td>{{ $ticket->user_id }}</td>
+                                        <td>{{ $ticket->user->name ?? 'N/A' }}</td>
                                         <td>{{$ticket->title}}</td>
                                         <td>
                                             @if($ticket->status === 'open')
