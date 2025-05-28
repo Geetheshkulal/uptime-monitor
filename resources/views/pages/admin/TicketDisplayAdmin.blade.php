@@ -233,7 +233,8 @@
                                     <tr>
                                         <td>{{$ticket->id}}</td>
                                         <td>{{ $ticket->ticket_id }}</td>
-                                        <td>{{ $ticket->user->name ?? 'N/A' }}</td>
+                                        <td>{{ $ticket->user->name ?? 'N/A' }}<br>
+                                             ({{($ticket->user->phone) }})</td>
                                         <td>{{$ticket->title}}</td>
                                         <td>
                                             @if($ticket->status === 'open')
@@ -363,7 +364,11 @@ document.addEventListener("DOMContentLoaded", function() {
             "searching": true,
             "ordering": true,
             "info": true,
-            "order": [[0, "asc"]]
+            "order": [[0, "asc"]],
+            "language": {
+            // "search": "", // Hides default "Search:" label
+            "searchPlaceholder": "Search by name, phone"
+        }
         });
 
         // Handle edit button click
