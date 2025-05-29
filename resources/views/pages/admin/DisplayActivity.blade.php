@@ -68,12 +68,7 @@
             <div class="card-body px-4 py-4">
                 <div class="filter-container">
                     <label for="userFilter">Filter by User:</label>
-                    <select class="js-example-basic-single form-control" id="userFilter" style="width: 300px;">
-                        <option value="">All Users</option>
-                        @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->name }} | {{$user->email}} | {{$user->phone}}</option>
-                        @endforeach
-                    </select>
+                    <select class="js-user-select form-control" id="userFilter" style="width: 300px;"></select>
                 </div>
                 
                 <div class="table-responsive">
@@ -190,11 +185,28 @@
         });
 
         
-        $('.js-example-basic-single').select2({
+       
+        $('.js-user-select').select2({
             placeholder: "Select a user",
-            allowClear: true
+            allowClear: true,
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ route("activity.users.search") }}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data
+                    };
+                },
+                cache: true
+            }
         });
-
      
         $('#userFilter').change(function() {
             table.ajax.reload();
