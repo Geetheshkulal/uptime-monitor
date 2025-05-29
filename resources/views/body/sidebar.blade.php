@@ -133,7 +133,7 @@
         color: white;
         border: none;
         border-radius: 15px;
-        padding: 20px 25px;
+        padding: 13px 19px;
         position: relative;
         overflow: hidden;
         box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
@@ -449,16 +449,18 @@
                                     </div>
                                 
                                 </div>
+                                @if($availableCoupons->count())
+                                    <div class="alert alert-info">
+                                        🎁 New Coupon: <strong>{{ $availableCoupons->first()->code }}</strong> available for you!
+                                    </div>
+                              @endif
+                                
                             </div>
                         </div>
                     </li>
                     @endif
 
-                    @if($availableCoupons->count())
-                        <div class="alert alert-info">
-                            🎁 New Coupon: <strong>{{ $availableCoupons->first()->code }}</strong> available for you!
-                        </div>
-                    @endif
+                    
 
         @endif
             @endhasrole
