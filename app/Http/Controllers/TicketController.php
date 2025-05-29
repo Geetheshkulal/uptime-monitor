@@ -54,10 +54,10 @@ class TicketController extends Controller
         }
         
         // Mark unread comments from other users as read
-    \App\Models\Comment::where('ticket_id', $id)
-    ->where('is_read', false)
-    ->where('user_id', '!=', $user->id)
-    ->update(['is_read' => true]);
+        \App\Models\Comment::where('ticket_id', $id)
+        ->where('is_read', false)
+        ->where('user_id', '!=', $user->id)
+        ->update(['is_read' => true]);
 
         return view('pages.tickets.TicketDetails', compact('ticket', 'comments','supportUsers'));
     }
@@ -130,47 +130,50 @@ class TicketController extends Controller
 
     public function ViewTicketsUser()
     {
-        //  $user = auth()->user();
-        //  $tickets = Ticket::where('user_id',$user->id)->get();
+        $user = auth()->user();
 
-        //  if($user->hasRole('support')){
-        //      $tickets = Ticket::where('assigned_user_id',$user->id)->get();
-        //  }
-
-    $user = auth()->user();
-
-    // Base query depending on role
-    if ($user->hasRole('support')) {
-        $tickets = Ticket::where('assigned_user_id', $user->id);
-    } else {
-        $tickets = Ticket::where('user_id', $user->id);
-    }
-
-    // Add unread comment count (comments not written by the current user)
-    $tickets = $tickets->withCount([
-        'comments as unread_comments_count' => function ($query) use ($user) {
-            $query->where('is_read', false)
-                  ->where('user_id', '!=', $user->id);
+        // Base query depending on role
+        if ($user->hasRole('support')) {
+            $tickets = Ticket::where('assigned_user_id', $user->id);
+        } else {
+            $tickets = Ticket::where('user_id', $user->id);
         }
-    ])->get();
-       
+
+        // Add unread comment count (comments not written by the current user)
+        $tickets = $tickets->withCount([
+            'comments as unread_comments_count' => function ($query) use ($user) {
+                $query->where('is_read', false)
+                    ->where('user_id', '!=', $user->id);
+            }
+        ])->get();
+        
         
         return view('pages.tickets.DisplayTickets', compact('tickets'));
     }
 
     public function RaiseTicketsPage()
     {
-    $user = auth()->user();
-    
-    // Check if user has any open/on-hold tickets
-    $existingTickets = Ticket::where('user_id', $user->id)
-                            ->whereIn('status', ['open', 'on hold'])
-                            ->exists();
+        $user = auth()->user();
 
-    return view('pages.tickets.AddTickets', 
-    [
-        'canCreateTicket' => !$existingTickets
-    ]);
+        $allUsers = User::select('id', 'name', 'email', 'phone')
+        ->whereHas('roles', function ($query) {
+            $query->where('name', 'user');
+        })->get();
+
+     
+        
+        
+        // Check if user has any open/on-hold tickets
+        $existingTickets = Ticket::where('user_id', $user->id)
+                                ->whereIn('status', ['open', 'on hold'])
+                                ->exists();
+
+        return view('pages.tickets.AddTickets', 
+            [
+                'canCreateTicket' => !$existingTickets,
+                'allUsers'=>$allUsers
+            ]
+        );
     }
 
     public function StoreTicket(Request $request)
@@ -182,6 +185,12 @@ class TicketController extends Controller
             'attachments' => 'nullable|array|max:3',
             'attachments.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
+
+        if(!(auth()->user()->hasRole('user') || auth()->user()->hasRole('subuser'))){
+             $request->validate([
+                'forUser'=>'required'
+             ]);
+        }
 
         $attachmentPaths = [];
         // if ($request->hasFile('attachments')) {
@@ -207,8 +216,9 @@ class TicketController extends Controller
             'title' => $request->subject,
             'message' => $request->description,
             'priority' => $request->priority,
+            'created_by'=>auth()->id(),
             'attachments' => $attachmentPaths,
-            'user_id' => auth()->id(), // If you have user association
+            'user_id' => $request->forUser??auth()->id(), // If you have user association
         ]);
 
         $user = auth()->user();

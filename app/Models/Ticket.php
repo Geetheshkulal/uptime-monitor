@@ -11,7 +11,7 @@ class Ticket extends Model
 
     protected $fillable = [
         'ticket_id', 'user_id', 'title', 'message', 'status',
-        'priority', 'assigned_user_id','is_read','attachments',
+        'priority', 'assigned_user_id','is_read','attachments','created_by'
     ];
     protected $casts = [
         'attachments' => 'array',
@@ -28,4 +28,7 @@ class Ticket extends Model
     public function comments(){
         return $this->hasMany(Comment::class);
     }  
+    public function created_by_user(){
+        return $this->belongsTo(User::class,'created_by');
+    }
 }

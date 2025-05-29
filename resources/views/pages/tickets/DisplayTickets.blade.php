@@ -217,9 +217,9 @@
                                                         <i class="fas fa-eye mr-1"></i>View
                                                 
                                                         @if ($ticket->unread_comments_count > 0)
-                                                        <span class="badge badge-success unread-count-badge">
-                                                            {{ $ticket->unread_comments_count }}
-                                                        </span>
+                                                            <span class="badge badge-success unread-count-badge">
+                                                                {{ $ticket->unread_comments_count }}
+                                                            </span>
                                                         @endif
                                                     </a>
                                             </td>

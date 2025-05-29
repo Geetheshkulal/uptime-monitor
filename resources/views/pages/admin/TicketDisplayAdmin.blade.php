@@ -219,11 +219,12 @@
                                 <tr>
                                     <th>SL No</th>
                                     <th>Ticket Id</th>
-                                    <th>Created by</th>
+                                    <th>User</th>
                                     <th>Title</th>
                                     <th>Status</th>
                                     <th>Priority</th>
                                     <th>Assigned User</th>
+                                    <th>Created By</th>
                                     <th>Created at</th>
                                     <th>Action</th>
                                 </tr>
@@ -249,6 +250,7 @@
                                         </td>
                                         <td>{{$ticket->priority}}</td>
                                         <td>{{$ticket->assigned_user_id ? $ticket->assigned_user_id :'N/A'}}</td>
+                                        <td>{{ $ticket->created_by_user->name}}</td>
                                         <td>{{$ticket->created_at}}</td>
                                         <td>
                                             <div class="d-flex align-items-center">

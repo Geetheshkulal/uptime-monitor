@@ -4,7 +4,8 @@
     @push('styles')
     <!-- Quill Editor CSS -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- Custom Styles -->
     <style>
         :root {
@@ -122,6 +123,20 @@
             object-fit: contain;
             margin-left: 10px;
         }
+
+         .select2-container--default .select2-selection--single {
+            height: 38px;
+            border: 1px solid #d1d3e2;
+            border-radius: 0.35rem;
+            padding: 6px 12px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 24px;
+        }
+
     </style>
 @endpush
 </head>
@@ -166,17 +181,32 @@
                 <!-- Priority -->
                 <div class="form-group row">
                         <label for="priority" class="col-md-2 col-form-label">Priority*</label>
-                        <div class="col-md-10">
-                        <select class="custom-select @error('priority') is-invalid @enderror" id="priority" name="priority">
-                            <option value="" selected disabled>Select priority</option>
-                            <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
-                            <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
-                            <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
-                        </select>
-                        @error('priority')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="col-md-4">
+                            <select class="custom-select @error('priority') is-invalid @enderror" id="priority" name="priority">
+                                <option value="" selected disabled>Select priority</option>
+                                <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
+                                <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
+                                <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
+                            </select>
+                            @error('priority')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <!-- To select user -->
+                        @if(!(auth()->user()->hasRole('user') || auth()->user()->hasRole('subuser')))
+                            <label for="userSelect">For User*</label>
+                            <div class="col-md-4">
+                                <select class="js-example-basic-single form-control" id="userSelect" name="forUser" style="width: 300px;">
+                                    <option value="">All Users</option>
+                                    @foreach($allUsers as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }} | {{$user->email}} | {{$user->phone}}</option>
+                                    @endforeach
+                                </select>
+                                @error('forUser')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endif      
                 </div>
 
                 <!-- Description (Quill Editor) -->
@@ -227,7 +257,7 @@
         </div>
     </div>
     @else 
-    <div class="card shadow mb-4">
+        <div class="card shadow mb-4">
             <div class="card-body text-center py-5">
                 <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
                 <h4>You cannot create a new ticket</h4>
@@ -357,7 +387,7 @@
         // Update the label and preview
         document.querySelector('.custom-file-label').textContent = 
             files.length > 0 ? files.map(f => f.name).join(', ') : 'Choose files';
-        showAttachmentPreviews(dataTransfer.files);
+            showAttachmentPreviews(dataTransfer.files);
     }
 
     // Function to format file size
@@ -373,7 +403,13 @@
 
 
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> 
+<script>
+    $('.js-example-basic-single').select2({
+            placeholder: "Select a user",
+            allowClear: true
+        });
+</script>
 @endpush
 
 @endsection

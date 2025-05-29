@@ -74,20 +74,6 @@
                             <option value="{{ $user->id }}">{{ $user->name }} | {{$user->email}} | {{$user->phone}}</option>
                         @endforeach
                     </select>
-
-                    {{-- seperate search for name email phone --}}
-                    
-                    {{-- <div class="row">
-                        <div class="col-md-4">
-                            <input type="text" id="searchName" class="form-control" placeholder="Search by Name">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="searchEmail" class="form-control" placeholder="Search by Email">
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="searchPhone" class="form-control" placeholder="Search by Phone">
-                        </div>
-                    </div> --}}
                 </div>
                 
                 <div class="table-responsive">
