@@ -145,7 +145,7 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Create New Ticket</h1>
-         <a href="{{(!(auth()->user()->hasRole('user') || auth()->user->hasRole('subuser')))?route('tickets'):route('display.tickets') }}" class="btn btn-primary">
+         <a href="{{(!(auth()->user()->hasRole('user') || auth()->user()->hasRole('subuser')))?route('tickets'):route('display.tickets') }}" class="btn btn-primary">
             <i class="fas fa-arrow-left mr-1"></i> Back
         </a>
         @if (Auth::user()->role == 'user')   

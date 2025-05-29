@@ -259,7 +259,7 @@ class CashFreePaymentController extends Controller
             'coupon_code' => $couponCode ?: null,
             'coupon_value' => $couponValue > 0 ? $couponValue : null,
             'payment_amount' => $paymentAmount,
-            'discount_type'=> $discount_type,
+            'discount_type'=> $discount_type??null,
             'status' => 'active',
             'user_id' => $userId,
             'payment_status' => $paymentStatus,

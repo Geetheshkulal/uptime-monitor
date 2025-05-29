@@ -56,7 +56,7 @@
                                             </a>
                                         </td>
                                     @endcan
-                                    @if(in_array($role->name,['user','subuser','support']))
+                                    @if(in_array($role->name,['user','subuser','support','admin']))
                                         <td class="text-center">System Role</td>
                                     @else
                                         @canany(['edit.role','delete.role'])
