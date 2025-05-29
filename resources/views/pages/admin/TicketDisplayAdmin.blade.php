@@ -254,7 +254,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="position-relative">
                                                     <a href="{{ route('display.tickets.show', $ticket->id) }}" class="text-decoration-none">
-                                                        <i class="far fa-comment-alt" style="color: #0e55e1; font-size: 1.5rem; padding: 8px;"></i>
+                                                        <i id="myComment" class="far fa-comment-alt" style="color: #0e55e1; font-size: 1.5rem; padding: 8px;"></i>
                                                         @if ($ticket->unread_comments_count > 0)
                                                             <span class="badge badge-success position-absolute" style="top: 0; right: 0; font-size: 10px; padding: 3px 6px; transform: translate(50%, -50%);">
                                                                 {{ $ticket->unread_comments_count }}
@@ -336,6 +336,8 @@
     animation: 'scale', 
     arrow: true, 
     placement: 'top', 
+    animation: 'fade',
+    duration: [150, 250]
 });
 
 tippy('#myClosed', {
@@ -367,7 +369,7 @@ document.addEventListener("DOMContentLoaded", function() {
             "order": [[0, "asc"]],
             "language": {
             // "search": "", // Hides default "Search:" label
-            "searchPlaceholder": "Search by name, phone"
+            "searchPlaceholder": "name, phone, ticket id"
         }
         });
 

@@ -445,7 +445,11 @@
             "order": [[7, "desc"]],
             "columnDefs": [
                 { "searchable": false, "targets": [8] } // Disable sorting for action column
-            ]
+            ],
+            "language": {
+            // "search": "", // Hides default "Search:" label
+            "searchPlaceholder": "Code, discount type"
+        }
             
         });
 
