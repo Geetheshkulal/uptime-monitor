@@ -231,7 +231,7 @@
                             <tbody>
                                 @forelse ($tickets as $ticket)
                                     <tr>
-                                        <td>{{$ticket->id}}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $ticket->ticket_id }}</td>
                                         <td>{{ $ticket->user->name ?? 'N/A' }} | {{($ticket->user->phone) }} |<br>
                                              {{($ticket->user->email) }}</td>

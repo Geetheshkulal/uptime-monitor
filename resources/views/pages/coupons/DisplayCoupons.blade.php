@@ -146,7 +146,7 @@
                             <tbody>                                                                                                                    
                                 @foreach($coupons as $coupon)
                                 <tr>
-                                    <td>{{ $coupon->id }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>
                                         {{ $coupon->code }}
                                         <i class="fas fa-copy ml-2 text-primary" style="cursor: pointer;" onclick="copyToClipboard('{{$coupon->code}}')" title="Copy code"></i>
