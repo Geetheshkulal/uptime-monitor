@@ -254,12 +254,15 @@ class CashFreePaymentController extends Controller
             return null;
         }
        Log::info('discount type new:'.$discount_type);
+
+       $discount_type = in_array($discount_type, ['fixed', 'percentage']) ? $discount_type : null;
+
         // Create payment record
         $payment = Payment::create([
             'coupon_code' => $couponCode ?: null,
             'coupon_value' => $couponValue > 0 ? $couponValue : null,
             'payment_amount' => $paymentAmount,
-            'discount_type'=> $discount_type??null,
+            'discount_type'=> $discount_type,
             'status' => 'active',
             'user_id' => $userId,
             'payment_status' => $paymentStatus,
