@@ -233,8 +233,8 @@
                                     <tr>
                                         <td>{{$ticket->id}}</td>
                                         <td>{{ $ticket->ticket_id }}</td>
-                                        <td>{{ $ticket->user->name ?? 'N/A' }}<br>
-                                             ({{($ticket->user->phone) }})</td>
+                                        <td>{{ $ticket->user->name ?? 'N/A' }} | {{($ticket->user->phone) }} |<br>
+                                             {{($ticket->user->email) }}</td>
                                         <td>{{$ticket->title}}</td>
                                         <td>
                                             @if($ticket->status === 'open')
