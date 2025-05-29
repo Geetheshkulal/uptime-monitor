@@ -148,11 +148,6 @@
          <a href="{{(!(auth()->user()->hasRole('user') || auth()->user->hasRole('subuser')))?route('tickets'):route('display.tickets') }}" class="btn btn-primary">
             <i class="fas fa-arrow-left mr-1"></i> Back
         </a>
-        @if (!$canCreateTicket)
-            <div class="alert alert-warning">
-                ⚠️ You cannot raise a new ticket while you have open tickets.
-            </div>
-        @endif
         @if (Auth::user()->role == 'user')   
         <a href="{{ route('display.tickets') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
             <i class="fas fa-ticket-alt fa-sm text-white-50"></i> View All Tickets
