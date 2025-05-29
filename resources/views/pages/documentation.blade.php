@@ -321,6 +321,9 @@
             <i class="fas fa-ticket-alt"></i> Raise Ticket
         </a>
         <a href="#" onclick="showTab('tab8')">
+            <i class="fas fa-signal"></i> Status page
+        </a>
+        <a href="#" onclick="showTab('tab9')">
             <i class="fas fa-credit-card"></i> Plan & Subscription
         </a>
     </div>
@@ -628,6 +631,7 @@
         </div>
       </div>
     </div>
+
     <!--Subuser Tab-->
     <div id="tab6" class="tab-content">
       <div class="content-header">
@@ -671,9 +675,10 @@
           </div>
         </div>
       </div>
-  </div>
+    </div>
+
   <!--Raise Ticket Tab-->
-  <div id="tab7" class="tab-content">
+    <div id="tab7" class="tab-content">
       <div class="content-header">
         <h2><i class="fas fa-ticket-alt feature-icon"></i> Raise Ticket</h2>
       </div>
@@ -731,63 +736,112 @@
         </div>
       </div>
     </div>
-    <!-- Plan & Subscription Tab -->
+    
+    <!-- Status Page Tab -->
     <div id="tab8" class="tab-content">
       <div class="content-header">
-        <h2><i class="fas fa-credit-card feature-icon"></i> Plan & Subscription</h2>
+        <h2><i class="fas fa-signal feature-icon"></i>Status page</h2>
       </div>
-      
-      <p class="lead">Choose the plan that fits your monitoring needs and manage your subscription preferences.</p>
-      
-      <div class="row mt-4">
+    <div class="row align-items-center mb-5">
         <div class="col-lg-6">
-          <div class="card h-100">
+          <div class="card">
             <div class="card-header bg-primary text-white">
-              <h5 class="mb-0"><i class="fas fa-star me-2"></i> Basic Plan</h5>
+              <h5 class="mb-0">Status page view for user</h5>
             </div>
             <div class="card-body">
-              <h4 class="card-title pricing-card-title">₹0<small class="text-muted fw-light">/month</small></h4>
-              <ul class="list-unstyled mt-3 mb-4">
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> Monitor 5 websites</li>
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> 5-minute check</li>
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> Email alerts</li>
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i> 1-Month history</li>
-                <li class="mb-3"><i class="fas fa-times-circle" style="color: #ea230d;"></i> Telegram alert unavailable</li>
-                <li class="mb-3"><i class="fas fa-times-circle" style="color: #ea230d;"></i> SSL expiry check unavailable</li>
-                <li class="mb-3">
-                  <i class="fas fa-times-circle" style="color: #ea230d;"></i>  Create and manage team members unavailable
-                </li>
+              <p>The users can view the status page from their account itself</p>
+              <ul class="mb-0">
+                <li>Navigate to the Status page section</li>
+              <li>It will show the status of all the websites that are being monitored</li>
               </ul>
             </div>
           </div>
         </div>
-        
+        <div class="col-lg-6 text-center">
+          <img src="frontend/assets/img/status_page.png" class="img-fluid img-preview" alt="SSL Form Preview">
+        </div>
+      </div>
+      <div class="row align-items-center mb-5">
         <div class="col-lg-6">
-          <div class="card h-100 border-primary">
-            @foreach($plans as $plan) 
+          <div class="card">
             <div class="card-header bg-primary text-white">
-              <h5 class="mb-0"><i class="fas fa-crown me-2"></i>{{$plan->name }}</h5>
+              <h5 class="mb-0">How to make the status page Public</h5>
             </div>
             <div class="card-body">
-              <h4 class="card-title pricing-card-title">₹{{$plan->amount}}<small class="text-muted fw-light">/month</small></h4>
-              <ul class="list-unstyled mt-3 mb-4">
-                @endforeach
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  All basic features</li>
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  Monitor unlimited websites</li>
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  1-minute check</li>
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  Telegram bot notification alert</li>
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  4-Month history</li>
-                <li class="mb-3"><i class="fas fa-check-circle" style="color: #065bef;"></i>  SSL expiry check</li>
-                <li class="mb-3">
-                  <i class="fas fa-check-circle" style="color: #065bef;"></i>  Create and manage team members
-                </li>
+              <p>If the user wants to make the status page to be seen by other's :</p>
+              <ul class="mb-0">
+                <li>Navigate to the Status page section</li>
+              <li>It will show button to share status page,click on that button</li>
+              <li>whitelist your ip address to make the status page public</li>
+              <li>click on enable public status page</li>
+              <li>now click on save settings button and your status page will be public</li>
+              <li>you can share the link with anyone to view the status page</li>
               </ul>
             </div>
           </div>
         </div>
+        <div class="col-lg-6 text-center">
+          <img src="frontend/assets/img/public_status_page.png" class="img-fluid img-preview" alt="SSL Form Preview">
+        </div>
       </div>
       
-      
+    </div>
+
+    <!-- Plan & Subscription Tab -->
+    <div id="tab9" class="tab-content">
+  <div class="content-header">
+    <h2><i class="fas fa-credit-card feature-icon"></i> Plan & Subscription</h2>
+  </div>
+
+  <p class="lead">Choose the plan that fits your monitoring needs and manage your subscription preferences.</p>
+
+  <div class="row mt-4">
+    <!-- Basic Plan -->
+    <div class="col-lg-6 mb-4">
+      <div class="card h-100">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="fas fa-star me-2"></i> Basic Plan</h5>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title pricing-card-title">₹0<small class="text-muted fw-light">/month</small></h4>
+          <ul class="list-unstyled mt-3 mb-4">
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> Monitor 5 websites</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> 5-minute check</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> Email alerts</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> 1-Month history</li>
+            <li class="mb-3"><i class="fas fa-times-circle text-primary"></i> Public Status page</li>
+            <li class="mb-3"><i class="fas fa-times-circle text-danger"></i> Telegram alert unavailable</li>
+            <li class="mb-3"><i class="fas fa-times-circle text-danger"></i> SSL expiry check unavailable</li>
+            <li class="mb-3"><i class="fas fa-times-circle text-danger"></i> Team management unavailable</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Premium Plans -->
+    @foreach($plans as $plan)
+    <div class="col-lg-6 mb-4">
+      <div class="card h-100 border-primary">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="fas fa-crown me-2"></i> {{ $plan->name }}</h5>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title pricing-card-title">₹{{ $plan->amount }}<small class="text-muted fw-light">/month</small></h4>
+          <ul class="list-unstyled mt-3 mb-4">
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> All basic features</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> Monitor unlimited websites</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> 1-minute check</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> Telegram bot notification alert</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> 4-Month history</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> Public Status page</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> SSL expiry check</li>
+            <li class="mb-3"><i class="fas fa-check-circle text-primary"></i> Team management</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    @endforeach
+  </div>
     </div>
 
 

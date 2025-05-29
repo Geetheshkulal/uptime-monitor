@@ -284,6 +284,23 @@
                 padding-right: 16px;
             }
         }
+        /* Extra rule for screens smaller than 400px */
+        .comment-note {
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .comment-note {
+                width: 75%;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .comment-note {
+                width: 50%;
+            }
+        }
+
     </style>
     @endpush
 </head>
@@ -421,9 +438,22 @@
                     @enderror
                 </div>
 
+                @if($ticket->status == 'open' || $ticket->status == 'on hold')
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Comment</button>
                 </div>
+                @else
+                {{--  show message that ticket is closed and no comments can be added and disable the button --}}
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" disabled>
+                        <i class="fas fa-lock mr-1"></i> Ticket is closed
+                    </button>
+                </div>
+                <div class="comment-note bg-warning mt-2 p-2">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>This ticket is closed. You cannot add comments to a closed ticket.</strong> 
+                </div>
+                @endif      
+
             </form>
         </div>
     </div>
