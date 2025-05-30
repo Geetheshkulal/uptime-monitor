@@ -13,14 +13,16 @@ class RolePermissionController extends Controller
     //Edit permissions in role
     public function EditRolePermissions($id)
     {
-        $superadminIds = User::role('superadmin')->pluck('id');
+        $blockedIds =['superadmin', 'user','subuser'];
+
+        $role = Role::findOrFail($id);
 
         //Cant edit superadmin permissions
-        if($superadminIds->contains($id)) {
+        if(in_array($role->name, $blockedIds)) {
             abort(404);
         }
         
-        $role = Role::findOrFail($id); //Find role to edit permissions
+        //Find role to edit permissions
         $permission_groups = Permission::select('group_name')->groupBy('group_name')->get();
         
         // Get all permissions grouped by group_name
