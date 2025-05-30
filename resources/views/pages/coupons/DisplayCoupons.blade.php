@@ -103,7 +103,7 @@
 .select2-dropdown {
   /* max-width: 100% !important; */
   box-sizing: border-box;
-  padding: 19px;
+  padding: 5px;
   border-color:#F8F8FF;
 }
 
