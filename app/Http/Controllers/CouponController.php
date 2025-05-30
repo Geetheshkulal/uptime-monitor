@@ -67,6 +67,44 @@ public function apply(Request $request)
         ]);
     }
 
+     public function UserSearch(Request $request){
+        $search = $request->get('q');
+        $query = User::select('id', 'name', 'email', 'phone')->role('user');
+
+        if (!auth()->user()->hasRole('superadmin')) {
+            $superadminIds = User::role('superadmin')->pluck('id');
+            $query->whereNotIn('id', $superadminIds);
+        }
+
+        if (auth()->user()->hasRole('user')) {
+            $subUserIds = User::role('subuser')
+                ->where('parent_user_id', auth()->id())
+                ->pluck('id');
+            $query->whereIn('id', $subUserIds);
+        }
+
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('phone', 'like', "%{$search}%");
+        });
+
+        $query->orderByRaw("CASE 
+            WHEN name LIKE ? THEN 1
+            WHEN name LIKE ? THEN 2
+            ELSE 3
+            END", ["{$search}%", "%{$search}%"]);
+
+        $users = $query->limit(10)->get();
+
+        return response()->json($users->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'text' => "{$user->name} | {$user->email} | {$user->phone}",
+            ];
+        }));
+    }
+
     public function remove(Request $request)
     {
         if (session()->has('applied_coupon')) {
