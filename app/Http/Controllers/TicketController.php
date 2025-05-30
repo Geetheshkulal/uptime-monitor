@@ -10,6 +10,7 @@ use Laravolt\Avatar\Avatar;
 use App\Models\User;
 
 use App\Mail\TicketAssignedMail;
+use App\Mail\CommentAddMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -108,6 +109,16 @@ class TicketController extends Controller
             'user_id' => auth()->id(), // Assuming the logged-in user is adding the comment
             'comment_message' => $request->description,
         ]);
+
+        $ticket = Ticket::with('user')->findOrFail($request->ticket_id);
+
+        if(auth()->id()!== $ticket->user->id){
+            try {
+                Mail::to($ticket->user->email)->queue(new CommentAddMail($ticket));
+            } catch (\Exception $e) {
+                Log::error('Mail sending failed: ' . $e->getMessage());
+            }
+       }     
     
         return redirect()->back()->with('success', 'Comment added successfully.');
     }
