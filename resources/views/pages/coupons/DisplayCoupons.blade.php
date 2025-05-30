@@ -104,6 +104,7 @@
   /* max-width: 100% !important; */
   box-sizing: border-box;
   padding: 19px;
+  border-color:#F8F8FF;
 }
 
 
