@@ -44,10 +44,11 @@
                             </thead>
                             <tbody>
                                 @foreach($roles as $key => $role)
+                                @if(in_array($role->name,['support','admin']))
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>
-                                        <span class="badge badge-primary py-1 px-2">{{ $role->name }}</span>
+                                            <span class="badge badge-primary py-1 px-2">{{ $role->name }}</span>
                                     </td>
                                     @can('edit.role.permissions')
                                         <td class="text-center">
@@ -56,7 +57,7 @@
                                             </a>
                                         </td>
                                     @endcan
-                                    @if(in_array($role->name,['user','subuser','support','admin']))
+                                    @if(in_array($role->name,['support','admin']))
                                         <td class="text-center">System Role</td>
                                     @else
                                         @canany(['edit.role','delete.role'])
@@ -76,6 +77,7 @@
                                         @endcanany
                                     @endif
                                 </tr>
+                                @endif 
                                 @endforeach
                             </tbody>
                         </table>

@@ -332,9 +332,7 @@
   <!-- Sidebar Navigation -->
   <div class="sidebar">
     <div class="sidebar-header">
-      <a href="/">
         <h4><i class="fas fa-heartbeat me-2"></i>CheckMySite</h4>
-      </a>
     </div>
     <div class="nav-menu">
       <a href="#" onclick="showTab('tab1')" class="active">
@@ -370,9 +368,6 @@
         <a href="#" onclick="showTab('tab11')">
             <i class="fas fa-signal"></i> Status Page 
             </a>
-        <a href="/" class="back-btn">
-      <i class="fas fa-arrow-left"></i> Back
-    </a>
     </div>
   </div>
 
