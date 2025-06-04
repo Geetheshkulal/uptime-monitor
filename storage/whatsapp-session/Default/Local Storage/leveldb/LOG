@@ -1,3 +1,5 @@
-2025/06/04-14:05:19.018 59d0 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/MANIFEST-000001
-2025/06/04-14:05:19.023 59d0 Recovering log #8
-2025/06/04-14:05:19.026 59d0 Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/000008.log 
+2025/06/04-15:17:48.569 2e34 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/MANIFEST-000001
+2025/06/04-15:17:48.573 2e34 Recovering log #8
+2025/06/04-15:17:48.574 2e34 Level-0 table #10: started
+2025/06/04-15:17:48.581 2e34 Level-0 table #10: 16339 bytes OK
+2025/06/04-15:17:48.587 2e34 Delete type=0 #8

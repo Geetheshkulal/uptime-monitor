@@ -31,20 +31,27 @@ class WhatsAppInvoiceBotTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) use ($url, $pdfPath) {
             $browser->visit($url)
-                ->pause(4000)
-                ->clickLink('Continue to Chat')
-                ->pause(2000)
-                ->clickLink('use WhatsApp Web')
-                ->pause(10000)
-                ->waitFor('span[data-icon="clip"]', 20)
-                ->click('span[data-icon="clip"]') // Open attachment menu
-                ->pause(1000)
-                ->attach('input[type="file"]', $pdfPath) // Upload PDF
-                ->pause(3000)
-                ->keys('div[role="textbox"][aria-label="Type a message"]', '{enter}') // Press Enter to send
-                ->pause(3000);
-        });
+            ->pause(4000)
+            ->clickLink('Continue to Chat')
+            ->pause(2000)
+            ->clickLink('use WhatsApp Web')
+            ->pause(15000) // Give time to scan QR if needed
+            ->waitFor('span[data-icon="plus-rounded"]', 20)
+            ->click('span[data-icon="plus-rounded"]')
+            ->pause(2000);
 
-        @unlink($payloadPath); // Optional cleanup
+        // Make the hidden input[type=file] visible
+        $browser->script("document.querySelector('input[type=file]').style.display = 'block';");
+
+        // Continue browser interaction separately
+        $browser->attach('input[type="file"]', $pdfPath)
+            ->pause(5000)
+            ->waitFor('div[role="button"][aria-label="Send"]', 10)
+            ->click('div[role="button"][aria-label="Send"]')
+            ->pause(3000);
+    });
+
+    // Optional cleanup
+    // @unlink($payloadPath);
     }
 }
