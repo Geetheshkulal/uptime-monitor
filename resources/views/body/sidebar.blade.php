@@ -153,7 +153,7 @@
     }
 
     .alert-info strong {
-        color: #fff;
+        /* color: #fff; */
         font-size: 1.3em;
         letter-spacing: 1.5px;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
@@ -167,7 +167,7 @@
 
     .alert-info strong:hover {
         transform: scale(1.05);
-        background: rgba(255, 255, 255, 0.25);
+        /* background: rgba(255, 255, 255, 0.25); */
     }
 
 
@@ -179,11 +179,12 @@
         left: -20px;
         right: -20px;
         bottom: -20px;
-        background: radial-gradient(circle, transparent 20%, rgba(255,255,255,0.1) 20%);
+        /* background: radial-gradient(circle, transparent 20%, rgba(255,255,255,0.1) 20%); */
         background-size: 10px 10px;
         opacity: 0.2;
         pointer-events: none;
     }
+
 .badge-container {
     position: absolute;
     top: 8px;

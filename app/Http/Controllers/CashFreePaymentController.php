@@ -10,8 +10,11 @@ use Illuminate\Support\Str;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\CouponUser;
-
 use App\Models\CouponCode;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
+
 
 class CashFreePaymentController extends Controller
 {
@@ -290,6 +293,23 @@ class CashFreePaymentController extends Controller
                 'premium_end_date' => now()->addMonth(),
             ]);
         }
+
+        $pdf = Pdf::loadView('pdf.invoice', ['payment' => $payment]);
+
+        // Save to storage/app/public/invoices/...
+        $filename = "invoice_{$payment->transaction_id}.pdf";
+        Storage::put("public/invoices/{$filename}", $pdf->output());
+
+        // payload for invoice
+        $payloadData=[
+            'phone'=>$user->phone,
+            'pdf_path'=>storage_path("app/public/invoices/{$filename}"),
+        ];
+
+        file_put_contents(storage_path('app/whatsapp-invoice-payload.json'), json_encode($payloadData));
+
+        // Artisan::call('dusk --filter=WhatsAppInvoiceBotTest');
+
 
         return $payment;
     });

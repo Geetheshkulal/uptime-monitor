@@ -1,0 +1,17 @@
+[1904:23180:0604/140518.923:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[1904:23180:0604/140518.948:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[22132:15880:0604/140519.031:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[9440:19208:0604/140519.031:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[3892:2352:0604/140519.068:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
+[13472:19764:0604/140519.272:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[6336:21760:0604/140519.443:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[24224:2688:0604/140520.250:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[19032:16272:0604/140520.555:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[1904:23180:0604/140521.483:INFO:CONSOLE:0] "Manifest fetch from https://api.whatsapp.com/data/manifest.json failed, code 404", source: https://api.whatsapp.com/send/?phone=919916695572&text&type=phone_number&app_absent=0 (0)
+[1904:23180:0604/140524.606:INFO:CONSOLE:0] "Not allowed to launch 'whatsapp://send/?phone=919916695572&text&type=phone_number&app_absent=0' because a user gesture is required.", source: https://api.whatsapp.com/send/?phone=919916695572&text&type=phone_number&app_absent=0 (0)
+[1712:12768:0604/140524.647:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[21564:17228:0604/140526.680:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[1904:23180:0604/140526.952:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/y8/r/Oyu_3j2TcrJ.js (163)
+[22784:12772:0604/140527.321:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[2052:3700:0604/140528.138:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[1904:23180:0604/140528.672:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/y8/r/Oyu_3j2TcrJ.js (163)

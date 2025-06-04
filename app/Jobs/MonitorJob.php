@@ -23,6 +23,8 @@ use App\Mail\FollowUpMail;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
 use Str;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 
 class MonitorJob
@@ -55,6 +57,30 @@ class MonitorJob
             if($monitor->telegram_bot_token && $monitor->telegram_id && $monitor->user->status !== 'free')
             {
                 $this->sendTelegramNotification($monitor);
+            }
+
+            if($monitor->user->phone && $monitor->user->status !== 'free')
+            {
+
+                $rawPhone = $monitor->user->phone;
+
+                // Add +91 if number is 10 digits and doesn't already start with it
+                $phone = preg_match('/^\d{10}$/', $rawPhone) ? '91' . $rawPhone : $rawPhone;
+
+                $message = "🚨 Monitor '{$monitor->name}' is DOWN!";
+
+                Storage::disk('local')->put('whatsapp-payload.json', json_encode([
+                    'phone' => $monitor->user->phone,
+                    'message' => $message,
+                    'url'=>$monitor->url,
+                    'type'=> $monitor->type,
+                    'monitor_id' => $monitor->id
+                ]));
+                Artisan::call('dusk --filter=WhatsAppBotTest');
+
+                // Optional: Cleanup file if needed
+                Storage::delete('whatsapp-details.json');
+
             }
             
         }
