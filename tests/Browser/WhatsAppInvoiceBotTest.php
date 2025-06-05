@@ -26,16 +26,17 @@ class WhatsAppInvoiceBotTest extends DuskTestCase
             return;
         }
 
-        $url = "https://wa.me/{$phoneNumber}";
+        // $url = "https://wa.me/{$phoneNumber}";
+        $url = "https://web.whatsapp.com/send?phone={$phoneNumber}";
         
 
         $this->browse(function (Browser $browser) use ($url, $pdfPath) {
             $browser->visit($url)
             ->pause(4000)
-            ->clickLink('Continue to Chat')
-            ->pause(2000)
-            ->clickLink('use WhatsApp Web')
-            ->pause(15000) // Give time to scan QR if needed
+            // ->clickLink('Continue to Chat')
+            // ->pause(2000)
+            // ->clickLink('use WhatsApp Web')
+            // ->pause(15000)
 
             ->waitFor('span[data-icon="plus-rounded"]', 20)
             ->click('span[data-icon="plus-rounded"]')
