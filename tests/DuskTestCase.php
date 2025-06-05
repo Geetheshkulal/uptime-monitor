@@ -37,6 +37,7 @@ abstract class DuskTestCase extends BaseTestCase
             '--disable-smooth-scrolling',
             '--user-data-dir=' . $userDataDir, // Persist session
             '--profile-directory=Default', 
+
         ])->unless($this->hasHeadlessDisabled(), function (Collection $items) {
             return $items->merge([
                 '--disable-gpu',
