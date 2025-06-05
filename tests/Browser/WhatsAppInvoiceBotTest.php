@@ -36,13 +36,26 @@ class WhatsAppInvoiceBotTest extends DuskTestCase
             ->pause(2000)
             ->clickLink('use WhatsApp Web')
             ->pause(15000) // Give time to scan QR if needed
+
             ->waitFor('span[data-icon="plus-rounded"]', 20)
             ->click('span[data-icon="plus-rounded"]')
-            ->pause(2000);
+            ->pause(2000)
 
         // Make the hidden input[type=file] visible
-        $browser->script("document.querySelector('input[type=file]').style.display = 'block';");
-
+        // $browser->script("document.querySelector('input[type=file]').style.display = 'block';");
+        ->script("
+                Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+                let input = document.querySelector('input[type=file]');
+                if (input) {
+                    input.style.display = 'block';
+                    input.style.opacity = '1';
+                    input.style.visibility = 'visible';
+                    input.style.height = 'auto';
+                    input.style.width = 'auto';
+                }
+            ");
+            
+        $browser->screenshot('whatsapp-file-upload');
         // Continue browser interaction separately
         $browser->attach('input[type="file"]', $pdfPath)
             ->pause(5000)
