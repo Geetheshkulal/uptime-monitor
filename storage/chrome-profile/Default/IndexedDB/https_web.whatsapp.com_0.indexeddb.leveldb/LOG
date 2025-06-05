@@ -1,0 +1,91 @@
+2025/06/03-17:12:11.967 22ac Reusing MANIFEST C:\xampp\htdocs\UP_TIME\uptime-monitor\storage\chrome-profile\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/06/03-17:12:11.967 22ac Recovering log #742
+2025/06/03-17:12:11.993 22ac Reusing old log C:\xampp\htdocs\UP_TIME\uptime-monitor\storage\chrome-profile\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000742.log 
+2025/06/03-17:12:13.586 22ac Level-0 table #761: started
+2025/06/03-17:12:13.595 22ac Level-0 table #761: 309349 bytes OK
+2025/06/03-17:12:13.598 22ac Delete type=0 #742
+2025/06/03-17:12:13.598 22ac Manual compaction at level-0 from '\x00a\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00b\x00\x00\x00' @ 0 : 0; will stop at '\x00a\x00\x00\x05' @ 2285313 : 1
+2025/06/03-17:12:13.599 22ac Compacting 1@0 + 0@1 files
+2025/06/03-17:12:13.666 22ac Generated table #762@0: 9760 keys, 156152 bytes
+2025/06/03-17:12:13.704 22ac Generated table #763@0: 1976 keys, 33372 bytes
+2025/06/03-17:12:13.704 22ac Compacted 1@0 + 0@1 files => 189524 bytes
+2025/06/03-17:12:13.706 22ac compacted to: files[ 0 2 13 0 0 0 0 ]
+2025/06/03-17:12:13.707 22ac Delete type=2 #761
+2025/06/03-17:12:13.707 22ac Manual compaction at level-0 from '\x00a\x00\x00\x05' @ 2285313 : 1 .. '\x00b\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/06/03-17:12:14.773 4ad8 Compacting 1@1 + 10@2 files
+2025/06/03-17:12:14.852 4ad8 Generated table #764@1: 62730 keys, 2219224 bytes
+2025/06/03-17:12:14.921 4ad8 Generated table #765@1: 45916 keys, 2211505 bytes
+2025/06/03-17:12:14.942 4ad8 Generated table #766@1: 1110 keys, 2134091 bytes
+2025/06/03-17:12:14.970 4ad8 Generated table #767@1: 2290 keys, 2146299 bytes
+2025/06/03-17:12:15.001 4ad8 Generated table #768@1: 4316 keys, 2159590 bytes
+2025/06/03-17:12:15.064 4ad8 Generated table #769@1: 27583 keys, 2266981 bytes
+2025/06/03-17:12:15.117 4ad8 Generated table #770@1: 29855 keys, 2195532 bytes
+2025/06/03-17:12:15.147 4ad8 Generated table #771@1: 5681 keys, 2123516 bytes
+2025/06/03-17:12:15.246 4ad8 Generated table #772@1: 111284 keys, 2265078 bytes
+2025/06/03-17:12:15.334 4ad8 Generated table #773@1: 109673 keys, 2262474 bytes
+2025/06/03-17:12:15.342 4ad8 Generated table #774@1: 5829 keys, 120210 bytes
+2025/06/03-17:12:15.342 4ad8 Compacted 1@1 + 10@2 files => 22104500 bytes
+2025/06/03-17:12:15.344 4ad8 compacted to: files[ 0 1 14 0 0 0 0 ]
+2025/06/03-17:12:15.344 4ad8 Delete type=2 #746
+2025/06/03-17:12:15.344 4ad8 Delete type=2 #747
+2025/06/03-17:12:15.344 4ad8 Delete type=2 #748
+2025/06/03-17:12:15.344 4ad8 Delete type=2 #749
+2025/06/03-17:12:15.344 4ad8 Delete type=2 #750
+2025/06/03-17:12:15.344 4ad8 Delete type=2 #751
+2025/06/03-17:12:15.345 4ad8 Delete type=2 #752
+2025/06/03-17:12:15.345 4ad8 Delete type=2 #753
+2025/06/03-17:12:15.345 4ad8 Delete type=2 #754
+2025/06/03-17:12:15.345 4ad8 Delete type=2 #755
+2025/06/03-17:12:15.345 4ad8 Delete type=2 #762
+2025/06/03-17:12:19.514 4ad8 Compacting 1@1 + 3@2 files
+2025/06/03-17:12:19.631 4ad8 Generated table #775@1: 109996 keys, 2263304 bytes
+2025/06/03-17:12:19.655 4ad8 Generated table #776@1: 21186 keys, 447310 bytes
+2025/06/03-17:12:19.655 4ad8 Compacted 1@1 + 3@2 files => 2710614 bytes
+2025/06/03-17:12:19.657 4ad8 compacted to: files[ 0 0 13 0 0 0 0 ]
+2025/06/03-17:12:19.658 4ad8 Delete type=2 #756
+2025/06/03-17:12:19.658 4ad8 Delete type=2 #757
+2025/06/03-17:12:19.658 4ad8 Delete type=2 #758
+2025/06/03-17:12:19.658 4ad8 Delete type=2 #763
+2025/06/03-17:12:25.950 46c Level-0 table #778: started
+2025/06/03-17:12:25.984 46c Level-0 table #778: 1051274 bytes OK
+2025/06/03-17:12:25.986 46c Delete type=0 #760
+2025/06/03-17:12:25.988 4ad8 Compacting 1@0 + 0@1 files
+2025/06/03-17:12:26.018 4ad8 Generated table #779@0: 28077 keys, 528469 bytes
+2025/06/03-17:12:26.023 4ad8 Generated table #780@0: 3434 keys, 64401 bytes
+2025/06/03-17:12:26.024 4ad8 Compacted 1@0 + 0@1 files => 592870 bytes
+2025/06/03-17:12:26.025 4ad8 compacted to: files[ 0 2 13 0 0 0 0 ]
+2025/06/03-17:12:27.034 46c Compacting 1@1 + 10@2 files
+2025/06/03-17:12:27.092 46c Generated table #781@1: 64383 keys, 2221782 bytes
+2025/06/03-17:12:27.142 46c Generated table #782@1: 46313 keys, 2211007 bytes
+2025/06/03-17:12:27.157 46c Generated table #783@1: 1114 keys, 2135180 bytes
+2025/06/03-17:12:27.177 46c Generated table #784@1: 2265 keys, 2148066 bytes
+2025/06/03-17:12:27.198 46c Generated table #785@1: 3681 keys, 2160067 bytes
+2025/06/03-17:12:27.245 46c Generated table #786@1: 27821 keys, 2265462 bytes
+2025/06/03-17:12:27.288 46c Generated table #787@1: 30307 keys, 2198233 bytes
+2025/06/03-17:12:27.311 46c Generated table #788@1: 4240 keys, 2125419 bytes
+2025/06/03-17:12:27.377 46c Generated table #789@1: 107245 keys, 2259345 bytes
+2025/06/03-17:12:27.467 46c Generated table #790@1: 109444 keys, 2260750 bytes
+2025/06/03-17:12:27.478 46c Generated table #791@1: 11234 keys, 230583 bytes
+2025/06/03-17:12:27.478 46c Compacted 1@1 + 10@2 files => 22215894 bytes
+2025/06/03-17:12:27.480 46c compacted to: files[ 0 1 14 0 0 0 0 ]
+2025/06/03-17:12:27.481 46c Delete type=2 #764
+2025/06/03-17:12:27.481 46c Delete type=2 #765
+2025/06/03-17:12:27.481 46c Delete type=2 #766
+2025/06/03-17:12:27.481 46c Delete type=2 #767
+2025/06/03-17:12:27.481 46c Delete type=2 #768
+2025/06/03-17:12:27.481 46c Delete type=2 #769
+2025/06/03-17:12:27.481 46c Delete type=2 #770
+2025/06/03-17:12:27.481 46c Delete type=2 #771
+2025/06/03-17:12:27.481 46c Delete type=2 #772
+2025/06/03-17:12:27.481 46c Delete type=2 #773
+2025/06/03-17:12:27.481 46c Delete type=2 #778
+2025/06/03-17:12:27.481 46c Delete type=2 #779
+2025/06/03-17:12:28.074 4ad8 Compacting 1@1 + 3@2 files
+2025/06/03-17:12:28.196 4ad8 Generated table #792@1: 110069 keys, 2263656 bytes
+2025/06/03-17:12:28.225 4ad8 Generated table #793@1: 30361 keys, 639691 bytes
+2025/06/03-17:12:28.225 4ad8 Compacted 1@1 + 3@2 files => 2903347 bytes
+2025/06/03-17:12:28.227 4ad8 compacted to: files[ 0 0 13 0 0 0 0 ]
+2025/06/03-17:12:28.227 4ad8 Delete type=2 #774
+2025/06/03-17:12:28.227 4ad8 Delete type=2 #775
+2025/06/03-17:12:28.227 4ad8 Delete type=2 #776
+2025/06/03-17:12:28.227 4ad8 Delete type=2 #780

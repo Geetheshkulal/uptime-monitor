@@ -1,0 +1,11 @@
+[5420:9064:0603/171210.675:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[5420:9064:0603/171210.698:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[21060:2548:0603/171210.929:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
+[13124:8632:0603/171211.063:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 4
+[8184:15392:0603/171211.294:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 4
+[19676:20412:0603/171211.430:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 4
+[9884:19816:0603/171211.685:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 4
+[5420:9064:0603/171211.951:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/y7/r/bCdXTUXnaTK.js (163)
+[3304:17568:0603/171212.322:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 4
+[15780:17420:0603/171235.174:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+[15780:17420:0603/171235.174:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.

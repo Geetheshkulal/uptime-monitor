@@ -23,6 +23,8 @@ use App\Mail\FollowUpMail;
 use Minishlink\WebPush\Subscription;
 use Minishlink\WebPush\WebPush;
 use Str;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class MonitorJob
@@ -36,29 +38,108 @@ class MonitorJob
     {
         //
     }
-    private function sendAlert(Monitors $monitor, string $status)
-    {
-       
+ private function sendAlert(Monitors $monitor, string $status)
+{
+    // Only proceed for down alerts when monitor was previously up
+    if ($status !== 'down' || !in_array($monitor->status, ['up', null])) {
+        return;
+    }
 
-        if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null) ) {
-            $token = Str::random(32);
+    // Load user relationship if not already loaded
+    $monitor->loadMissing('user');
+    $user = $monitor->user;
 
+    // Check if we've already sent an alert recently (within last 5 minutes)
+    $recentAlert = Notification::where('monitor_id', $monitor->id)
+        ->where('created_at', '>=', now()->subMinutes(5))
+        ->exists();
         
-            Notification::create([
-                'monitor_id'=> $monitor->id,
-                'status'=> 'unread',
-                'token'=> $token
-            ]);
-            
-            Mail::to($monitor->email)->send(new MonitorDownAlert($monitor,$token));
+    if ($recentAlert) {
+        Log::info("Skipping duplicate alert for monitor {$monitor->id} - alert already sent recently");
+        return;
+    }
 
-            if($monitor->telegram_bot_token && $monitor->telegram_id && $monitor->user->status !== 'free')
-            {
-                $this->sendTelegramNotification($monitor);
+    // Prepare alert details
+    $details = [
+        'url' => $monitor->url,
+        'type' => $monitor->type,
+        'time' => now()->toDateTimeString(),
+        'phone' => $user->phone,
+    ];
+
+    try {
+        // Store details to file for WhatsApp
+        Storage::disk('local')->put('whatsapp-details.json', json_encode($details));
+        Log::info('whatsapp-details.json saved with alert data.');
+
+        // Run Dusk test in background
+        $this->triggerWhatsAppNotification();
+
+        // Generate unique token for notification
+        $token = Str::random(32);
+
+        // Create notification record first (acts as a lock)
+        $notification = Notification::create([
+            'monitor_id' => $monitor->id,
+            'status' => 'unread',
+            'token' => $token,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Send email alert
+        Mail::to($monitor->email)->send(new MonitorDownAlert($monitor, $token));
+
+        // Send Telegram notification if configured
+        if ($monitor->telegram_bot_token && $monitor->telegram_id && $monitor->user->status !== 'free') {
+            $this->sendTelegramNotification($monitor);
+        }
+
+        // Update monitor status to prevent duplicate alerts
+        $monitor->update(['status' => 'down']);
+
+    } catch (\Exception $e) {
+        Log::error("Failed to send alert for monitor {$monitor->id}: " . $e->getMessage());
+        
+        // Clean up failed notification if it was created
+        if (isset($notification)) {
+            try {
+                $notification->delete();
+            } catch (\Exception $deleteException) {
+                Log::error("Failed to clean up notification: " . $deleteException->getMessage());
             }
-            
+        }
+        
+        throw $e; // Re-throw to allow job retry if needed
+    } finally {
+        // Clean up WhatsApp details file if it exists
+        if (Storage::disk('local')->exists('whatsapp-details.json')) {
+            Storage::delete('whatsapp-details.json');
         }
     }
+}
+
+private function triggerWhatsAppNotification()
+{
+    try {
+        Log::info('Triggering WhatsApp Dusk test via exec...');
+
+        $command = 'php artisan dusk --filter=WhatsAppTest >> storage/logs/dusk.log 2>&1 &';
+        $output = [];
+        $returnCode = 0;
+        
+        exec($command, $output, $returnCode);
+
+        if ($returnCode === 0) {
+            Log::info('WhatsApp Dusk test launched successfully.');
+        } else {
+            Log::error("WhatsApp Dusk test failed to start. Return code: $returnCode");
+            Log::debug('Exec output: ' . implode("\n", $output));
+        }
+    } catch (\Exception $e) {
+        Log::error('Exception while triggering WhatsApp Dusk: ' . $e->getMessage());
+    }
+}
 
     private function sendTelegramNotification(Monitors $monitor)
     {
