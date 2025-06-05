@@ -52,4 +52,10 @@ abstract class DuskTestCase extends BaseTestCase
             )
         );
     }
+
+    protected function tearDown(): void
+        {
+                // Do not close the browser
+                // parent::tearDown(); ← COMMENT or REMOVE this
+         }
 }

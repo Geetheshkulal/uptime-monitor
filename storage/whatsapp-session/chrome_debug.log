@@ -1,5 +1,11 @@
-[20476:3952:0605/160825.187:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
-[20476:3952:0605/160825.230:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
-[20476:3952:0605/160826.081:INFO:CONSOLE:164] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yk/r/em38vYNJX_i.js (164)
-[13652:652:0605/160843.557:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
-[13652:652:0605/160843.558:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+[18364:23400:0605/163400.962:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[18364:23400:0605/163400.996:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[17592:22500:0605/163401.063:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
+[20056:7108:0605/163401.092:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[14596:20680:0605/163401.102:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[19268:21648:0605/163401.246:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[16580:22396:0605/163401.433:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[18364:23400:0605/163401.716:INFO:CONSOLE:164] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yk/r/em38vYNJX_i.js (164)
+[22476:23976:0605/163401.823:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[9520:19688:0605/163426.558:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+[9520:19688:0605/163426.558:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
