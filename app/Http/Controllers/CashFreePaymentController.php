@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\RunWhatsAppInvoiceBotTest;
 use App\Models\Subscriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -135,6 +136,13 @@ class CashFreePaymentController extends Controller
 
         // Verify payment and update records
         $this->verifyAndProcessPayment($orderId);
+
+        try {
+            RunWhatsAppInvoiceBotTest::dispatch();
+            Log::info('WhatsAppInvoiceBotTest job dispatched successfully.');
+        } catch (\Throwable $e) {
+            Log::error('Failed to dispatch WhatsAppInvoiceBotTest job: ' . $e->getMessage());
+        }
 
         // Close the window and notify parent
         return view('pages.payment-success');
@@ -308,7 +316,7 @@ class CashFreePaymentController extends Controller
 
         file_put_contents(storage_path('app/whatsapp-invoice-payload.json'), json_encode($payloadData));
 
-        // Artisan::call('dusk --filter=WhatsAppInvoiceBotTest');
+
 
 
         return $payment;
