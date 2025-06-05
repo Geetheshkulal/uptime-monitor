@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2025/06/05-16:34:01.078 5a84 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\shared_proto_db\metadata/MANIFEST-000001
 2025/06/05-16:34:01.079 5a84 Recovering log #3
 2025/06/05-16:34:01.079 5a84 Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\shared_proto_db\metadata/000003.log 
+=======
+2025/06/05-16:48:11.793 14d8 Reusing MANIFEST C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\shared_proto_db\metadata/MANIFEST-000001
+2025/06/05-16:48:11.794 14d8 Recovering log #3
+2025/06/05-16:48:11.794 14d8 Reusing old log C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\shared_proto_db\metadata/000003.log 
+>>>>>>> 732f850e500808d0644c0ff13a998699a1eb021e

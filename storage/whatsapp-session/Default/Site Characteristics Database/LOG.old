@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2025/06/05-16:33:34.084 546c Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Site Characteristics Database/MANIFEST-000001
 2025/06/05-16:33:34.085 546c Recovering log #3
 2025/06/05-16:33:34.085 546c Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Site Characteristics Database/000003.log 
+=======
+2025/06/05-16:46:42.029 180 Reusing MANIFEST C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\Site Characteristics Database/MANIFEST-000001
+2025/06/05-16:46:42.030 180 Recovering log #3
+2025/06/05-16:46:42.031 180 Reusing old log C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\Site Characteristics Database/000003.log 
+>>>>>>> 732f850e500808d0644c0ff13a998699a1eb021e

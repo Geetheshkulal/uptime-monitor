@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2025/06/05-16:33:34.117 44c0 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/MANIFEST-000001
 2025/06/05-16:33:34.123 44c0 Recovering log #22
 2025/06/05-16:33:34.123 44c0 Level-0 table #25: started
@@ -17,3 +18,8 @@
 2025/06/05-16:33:34.152 3c70 Delete type=2 #20
 2025/06/05-16:33:34.152 3c70 Delete type=2 #23
 2025/06/05-16:33:34.152 3c70 Delete type=2 #25
+=======
+2025/06/05-16:46:42.354 12c4 Reusing MANIFEST C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/MANIFEST-000001
+2025/06/05-16:46:42.382 12c4 Recovering log #22
+2025/06/05-16:46:42.387 12c4 Reusing old log C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/000022.log 
+>>>>>>> 732f850e500808d0644c0ff13a998699a1eb021e

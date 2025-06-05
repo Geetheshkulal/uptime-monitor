@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2025/06/05-16:34:01.053 502c Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/MANIFEST-000001
 2025/06/05-16:34:01.059 502c Recovering log #34
 2025/06/05-16:34:01.063 502c Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/000034.log 
+=======
+2025/06/05-16:48:11.824 a88 Reusing MANIFEST C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/MANIFEST-000001
+2025/06/05-16:48:11.834 a88 Recovering log #22
+2025/06/05-16:48:11.842 a88 Reusing old log C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/000022.log 
+>>>>>>> 732f850e500808d0644c0ff13a998699a1eb021e

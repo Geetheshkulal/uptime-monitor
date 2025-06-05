@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [18364:23400:0605/163400.962:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
 [18364:23400:0605/163400.996:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
 [17592:22500:0605/163401.063:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
@@ -9,3 +10,10 @@
 [22476:23976:0605/163401.823:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
 [9520:19688:0605/163426.558:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
 [9520:19688:0605/163426.558:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+=======
+[18816:2432:0605/164811.608:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[18816:2432:0605/164811.650:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[18816:2432:0605/164812.572:INFO:CONSOLE:164] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yG/r/JX1jtDYritc.js (164)
+[14600:18684:0605/164829.779:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+[14600:18684:0605/164829.780:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+>>>>>>> 732f850e500808d0644c0ff13a998699a1eb021e
