@@ -19,4 +19,6 @@
 /.fleet
 /.idea
 /.vscode
+# Ignore WhatsApp session data used by Dusk
 /storage/whatsapp-session/
+
