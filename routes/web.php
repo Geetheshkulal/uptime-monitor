@@ -34,6 +34,7 @@ use App\Http\Controllers\PublicStatusPageController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\TrafficLogController;
+use App\Http\Controllers\AdminWhatsAppController;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
@@ -238,6 +239,11 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
 
     Route::post('block/ip/${ip}',[BlockController::class,'BlockIP'])->name('block.ip');
     Route::post('unblock/ip/${ip}',[BlockController::class,'UnblockIP'])->name('unblock.ip');
+
+    Route::get('/admin/whatsapp-login', [AdminWhatsAppController::class, 'AdminWhatsappLogin'])->name('admin.whatsapp.login');
+    Route::get('/admin/fetch-qr', [AdminWhatsAppController::class, 'fetchQr'])->name('admin.whatsapp.fetchQr');
+    Route::get('/admin/whatsapp/live-status', [AdminWhatsAppController::class, 'liveStatus']);
+
 
 });
 

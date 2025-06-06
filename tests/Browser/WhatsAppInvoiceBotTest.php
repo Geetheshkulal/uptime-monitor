@@ -38,12 +38,12 @@ class WhatsAppInvoiceBotTest extends DuskTestCase
             // ->clickLink('use WhatsApp Web')
             // ->pause(15000)
 
-            ->waitFor('span[data-icon="plus-rounded"]', 20)
+            ->waitFor('span[data-icon="plus-rounded"]', 30)
             ->click('span[data-icon="plus-rounded"]')
-            ->pause(2000)
+            ->pause(3000)
 
         // Make the hidden input[type=file] visible
-        // $browser->script("document.querySelector('input[type=file]').style.display = 'block';");
+ 
         ->script("
                 Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
                 let input = document.querySelector('input[type=file]');
@@ -56,16 +56,21 @@ class WhatsAppInvoiceBotTest extends DuskTestCase
                 }
             ");
             
-        $browser->screenshot('whatsapp-file-upload');
         // Continue browser interaction separately
         $browser->attach('input[type="file"]', $pdfPath)
             ->pause(5000)
             ->waitFor('div[role="button"][aria-label="Send"]', 10)
             ->click('div[role="button"][aria-label="Send"]')
             ->pause(3000);
+
+              //  Keep the browser open
+            while (true) {
+                sleep(10); // Keeps it running
+            }
     });
 
     // Optional cleanup
     // @unlink($payloadPath);
     }
+
 }

@@ -1,19 +1,11 @@
-<<<<<<< HEAD
-[18364:23400:0605/163400.962:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
-[18364:23400:0605/163400.996:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
-[17592:22500:0605/163401.063:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
-[20056:7108:0605/163401.092:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[14596:20680:0605/163401.102:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[19268:21648:0605/163401.246:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[16580:22396:0605/163401.433:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[18364:23400:0605/163401.716:INFO:CONSOLE:164] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yk/r/em38vYNJX_i.js (164)
-[22476:23976:0605/163401.823:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[9520:19688:0605/163426.558:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
-[9520:19688:0605/163426.558:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
-=======
-[18816:2432:0605/164811.608:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
-[18816:2432:0605/164811.650:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
-[18816:2432:0605/164812.572:INFO:CONSOLE:164] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yG/r/JX1jtDYritc.js (164)
-[14600:18684:0605/164829.779:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
-[14600:18684:0605/164829.780:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
->>>>>>> 732f850e500808d0644c0ff13a998699a1eb021e
+[21200:20724:0606/171105.426:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[21200:20724:0606/171105.458:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[19336:21280:0606/171105.547:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
+[22540:20048:0606/171105.554:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[4248:15240:0606/171105.562:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[19764:20728:0606/171105.797:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[10852:19700:0606/171105.883:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[21200:20724:0606/171106.180:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yk/r/Xp67_nfEfKT.js (163)
+[21036:18164:0606/171106.284:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[22632:4876:0606/171114.812:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+[22632:4876:0606/171114.812:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.

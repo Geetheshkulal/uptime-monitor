@@ -406,8 +406,15 @@
             </li>
         @endhasrole
 
+        @hasrole('superadmin')
+            <li class="nav-item {{ request()->routeIs('admin.whatsapp.login') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.whatsapp.login') }}">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp Login</span>
+                </a>
+            </li>
+        @endhasrole
 
-        
 
         @hasrole('support')
             <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">
