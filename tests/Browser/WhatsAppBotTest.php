@@ -29,17 +29,12 @@ class WhatsAppBotTest extends DuskTestCase
                 📡 Type: {$payload['type']}
                 TEXT;
 
-        $url = "https://wa.me/{$phoneNumber}?text=" . urlencode($message);
+        $url = $url = "https://web.whatsapp.com/send?phone={$phoneNumber}&text=" . urlencode($message);
 
         $this->browse(function (Browser $browser) use ($url) {
             $browser->visit($url)
-                ->pause(5000)
-                ->clickLink('Continue to Chat')
-                ->pause(3000)
-                ->clickLink('use WhatsApp Web')
-                ->pause(10000) // wait for WhatsApp Web to load
-                ->waitFor('div[role="textbox"][aria-label="Type a message"]', 20)
-                ->keys('div[role="textbox"][aria-label="Type a message"]', '{enter}')
+                ->waitFor('button[aria-label="Send"]', 10)
+                ->click('button[aria-label="Send"]')
                 ->pause(2000);
         });
 
@@ -48,30 +43,3 @@ class WhatsAppBotTest extends DuskTestCase
     }
 }
 
-// namespace Tests\Browser;
-
-// use Laravel\Dusk\Browser;
-// use Tests\DuskTestCase;
-
-// class WhatsAppBotTest extends DuskTestCase
-// {
-//     public function testSendWhatsAppMessage()
-//     {
-        
-//         $phoneNumber = '919916695572';
-//         $message = '✅ Your server is down! Please take action now.';
-//         $url = "https://wa.me/{$phoneNumber}?text=" . urlencode($message);
-
-//         $this->browse(function (Browser $browser) use ($url) {
-//             $browser->visit($url)
-//                 ->pause(5000)
-//                 ->clickLink('Continue to Chat')
-//                 ->pause(3000)
-//                 ->clickLink('use WhatsApp Web')
-//                 ->pause(10000) 
-//                 ->waitFor('div[role="textbox"][aria-label="Type a message"]', 20)
-//                 ->keys('div[role="textbox"][aria-label="Type a message"]', '{enter}')
-//                 ->pause(2000);
-//         });
-//     }
-// }
