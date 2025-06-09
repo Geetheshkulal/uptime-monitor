@@ -76,8 +76,10 @@ class MonitorJob
                     'type'=> $monitor->type,
                     'monitor_id' => $monitor->id
                 ]));
-                Artisan::call('dusk --filter=WhatsAppBotTest');
-
+                Artisan::call('dusk', [
+                    'test' => 'tests/Browser/WhatsAppBotTest.php',
+                ]);
+                Log::info('Job whatsapp output:'.Artisan::output());
                 // Optional: Cleanup file if needed
                 Storage::delete('whatsapp-details.json');
 

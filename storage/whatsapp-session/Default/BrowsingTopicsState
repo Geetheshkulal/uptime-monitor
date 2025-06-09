@@ -7,6 +7,11 @@
       "taxonomy_version": 0,
       "top_topics_and_observing_domains": [  ]
    } ],
+<<<<<<< HEAD
    "hex_encoded_hmac_key": "21F4E719AA0F999E1DBFDE0A3C037C3109FAAC51252D6806451FE75090AF8E0D",
    "next_scheduled_calculation_time": "13394546833622324"
+=======
+   "hex_encoded_hmac_key": "B6FC0CD40F69DD6897864AAFEEADD178FA457304BBB7CD84FC74432913F94D6C",
+   "next_scheduled_calculation_time": "13394264278367048"
+>>>>>>> 02ce6e143d8587093fb77671885ba33b6fb69ed7
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [23344:13032:0609/165839.420:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
 [23344:13032:0609/165839.447:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
 [14708:25184:0609/165839.536:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
@@ -91,3 +92,10 @@
 [25732:8868:0609/165923.844:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000014c
 [25732:8868:0609/165924.049:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000014f
 [25732:8868:0609/170135.047:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000074
+=======
+[1712:7688:0609/171320.800:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[1712:7688:0609/171320.854:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[1712:7688:0609/171321.788:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yv/r/uhwV2Qz8YC6.js (163)
+[15352:10460:0609/171330.317:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+[15352:10460:0609/171330.320:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+>>>>>>> 02ce6e143d8587093fb77671885ba33b6fb69ed7

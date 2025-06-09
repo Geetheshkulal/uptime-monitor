@@ -67,10 +67,10 @@ class WhatsAppInvoiceBotTest extends DuskTestCase
             while (true) {
                 sleep(10); // Keeps it running
             }
-    });
+        });
 
-    // Optional cleanup
-    // @unlink($payloadPath);
+
+        @unlink($payloadPath);
     }
 
 }

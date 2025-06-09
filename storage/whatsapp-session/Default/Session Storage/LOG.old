@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 2025/06/09-16:57:09.649 1a64 Creating DB C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Session Storage since it was missing.
 2025/06/09-16:57:09.665 1a64 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Session Storage/MANIFEST-000001
 2025/06/09-16:57:09.666 1a64 Recovering log #3
 2025/06/09-16:57:09.671 1a64 Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Session Storage/000003.log 
+=======
+2025/06/09-17:13:09.000 2dc4 Reusing MANIFEST C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\Session Storage/MANIFEST-000001
+2025/06/09-17:13:09.011 2dc4 Recovering log #4
+2025/06/09-17:13:09.018 2dc4 Reusing old log C:\xampp\htdocs\Project2\uptime\storage\whatsapp-session\Default\Session Storage/000004.log 
+>>>>>>> 02ce6e143d8587093fb77671885ba33b6fb69ed7
