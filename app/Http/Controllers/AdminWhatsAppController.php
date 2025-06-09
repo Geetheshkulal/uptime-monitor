@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class AdminWhatsAppController extends Controller
 {
@@ -17,32 +18,34 @@ class AdminWhatsAppController extends Controller
 
     public function fetchQr()
     {
-        $path = storage_path('app/whatsapp/qr.txt');
-        if (!file_exists($path)) {
-            return response()->json(['qr' => null]);
-        }
+        $qrPath = storage_path('app/whatsapp/qr.txt');
+        $statusPath = storage_path('app/whatsapp/status.txt');
 
-        $qr = File::get($path);
-        return response()->json(['qr' => $qr]);
+        $qr = File::exists($qrPath) ? File::get($qrPath) : null;
+        $status = File::exists($statusPath) ? trim(File::get($statusPath)) : 'pending';
+
+        return response()->json([
+            'qr' => $qr,
+            'status' => $status,
+        ]);
     }
 
-    public function liveStatus()
+    public function disconnectWhatsApp()
     {
         try {
-            Artisan::call('whatsapp:check-status');
-            $output = Artisan::output();
+            // Remove session folder
+            File::deleteDirectory(storage_path('whatsapp-session'));
     
-            // Optional: you can read a flag, or parse output to decide
-            // But for simplicity, just return "assumed connected"
-            return response()->json([
-                'status' => 'connected', // or dynamically set
-            ]);
+            // Remove QR and status
+            File::delete(storage_path('app/whatsapp/qr.txt'));
+            File::put(storage_path('app/whatsapp/status.txt'), 'pending');
+    
+            return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ]);
+            Log::error('[WHATSAPP DISCONNECT ERROR] ' . $e->getMessage());
+            return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }
     }
+    
 
 }

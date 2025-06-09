@@ -15,7 +15,7 @@ class WhatsAppLoginTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('https://web.whatsapp.com');
 
-            $browser->pause(8000); 
+            $browser->pause(30000); 
 
             Log::info('[DUSK] Trying to extract QR code');
 
@@ -29,6 +29,10 @@ class WhatsAppLoginTest extends DuskTestCase
                 Log::info('[DUSK] QR extracted and saved. Size: ' . strlen($qrBase64));
             }else{
                 Log::warning('[DUSK] QR code not found (canvas was null)');
+            }
+
+            while (true) {
+                sleep(10); // Keeps it running
             }
         });
     }

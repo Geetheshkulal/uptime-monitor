@@ -1,3 +1,4 @@
-2025/06/06-16:47:16.081 511c Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Extension State/MANIFEST-000001
-2025/06/06-16:47:16.081 511c Recovering log #3
-2025/06/06-16:47:16.082 511c Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Extension State/000003.log 
+2025/06/09-16:57:09.712 cf8 Creating DB C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Extension State since it was missing.
+2025/06/09-16:57:09.720 cf8 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Extension State/MANIFEST-000001
+2025/06/09-16:57:09.721 cf8 Recovering log #3
+2025/06/09-16:57:09.722 cf8 Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Extension State/000003.log 
