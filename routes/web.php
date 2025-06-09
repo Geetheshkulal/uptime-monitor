@@ -242,7 +242,7 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
 
     Route::get('/admin/whatsapp-login', [AdminWhatsAppController::class, 'AdminWhatsappLogin'])->name('admin.whatsapp.login');
     Route::get('/admin/fetch-qr', [AdminWhatsAppController::class, 'fetchQr'])->name('admin.whatsapp.fetchQr');
-    Route::get('/admin/whatsapp/live-status', [AdminWhatsAppController::class, 'liveStatus']);
+    Route::get('/admin/whatsapp/live-status', [AdminWhatsAppController::class, 'liveStatus'])->name('admin.whatsapp.liveStatus');
 
 
 });

@@ -39,7 +39,7 @@
 </script>
 <script>
     async function checkWhatsAppConnection() {
-        const res = await fetch('/admin/whatsapp/live-status');
+        const res = await fetch("{{ route('admin.whatsapp.liveStatus') }}");
         const data = await res.json();
 
         const el = document.getElementById('wa-status');
