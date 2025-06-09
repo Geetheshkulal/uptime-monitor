@@ -1,5 +1,5 @@
-[6900:12300:0609/155418.398:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
-[6900:12300:0609/155418.444:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
-[6900:12300:0609/155419.319:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yv/r/uhwV2Qz8YC6.js (163)
-[6900:12300:0609/155430.548:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yv/r/uhwV2Qz8YC6.js (163)
-[6900:12300:0609/155451.343:ERROR:CONSOLE:1] "console.assert", source: devtools://devtools/bundled/core/sdk/sdk.js (1)
+[1712:7688:0609/171320.800:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[1712:7688:0609/171320.854:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[1712:7688:0609/171321.788:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yv/r/uhwV2Qz8YC6.js (163)
+[15352:10460:0609/171330.317:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
+[15352:10460:0609/171330.320:WARNING:net\extras\sqlite\sqlite_persistent_store_backend_base.cc:176] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:226 to client_task_runner_.
