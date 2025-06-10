@@ -20,7 +20,7 @@ class WhatsAppSessionRunner extends Command
     public function handle()
     {
         $process = new Process([
-            base_path('vendor/laravel/dusk/bin/chromedriver.exe'),
+            base_path('vendor/laravel/dusk/bin/chromedriver-win.exe'),
             '--port=9515'
         ]);
         $process->start();
@@ -29,7 +29,7 @@ class WhatsAppSessionRunner extends Command
         $userDataDir = storage_path('whatsapp-session');
         $options = (new ChromeOptions)->addArguments([
             '--disable-gpu',
-           // '--headless=new', // or remove headless to view actual browser
+           '--headless=new', // or remove headless to view actual browser
             '--no-sandbox',
             '--disable-dev-shm-usage',
             '--window-size=1920,1080',
