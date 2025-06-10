@@ -1,15 +1,20 @@
-[3580:8452:0610/094929.143:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
-[3580:8452:0610/094929.174:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
-[16812:3464:0610/094929.269:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
-[12808:5196:0610/094929.277:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[2608:888:0610/094929.294:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[16964:11152:0610/094929.496:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[20512:6636:0610/094929.965:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[3580:8452:0610/094930.265:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/y6/r/olu9U863g-Z.js (163)
-[20324:10700:0610/094930.382:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[3580:8452:0610/094956.402:INFO:CONSOLE:76] "Uncaught (in promise) Error: secretKey is null or undefined", source: https://static.whatsapp.net/rsrc.php/v4/yM/r/c0D_4RGhsnc.js (76)
-[3580:8452:0610/095019.952:INFO:CONSOLE:76] "ErrorUtils caught an error:
-
-Converting to a string will drop content data. Hash="undefined" Translation="{user_name} added {names}" Content="{"key":null,"ref":null,"props":{"contact":{"id":"919534815559@c.us","type":"in","textStatusLastUpdateTime":-1,"syncToAddressbook":false},"showNotifyName":true,"elevatedPushNamesEnabled":true,"onClick":null}}" (type=object,Object)
-
-Subsequent non-fatal errors won't be logged; see https://fburl.com/debugjs. [object Object]", source: https://static.whatsapp.net/rsrc.php/v4/yM/r/c0D_4RGhsnc.js (76)
+[9872:1904:0610/103658.623:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[9872:1904:0610/103658.654:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[8664:13020:0610/103658.758:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
+[15772:13368:0610/103658.782:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[10256:15856:0610/103658.782:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[21376:13760:0610/103659.101:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[12216:21444:0610/103659.134:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[15708:6652:0610/103659.492:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[540:15568:0610/103700.658:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[9872:1904:0610/103701.558:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/y6/r/olu9U863g-Z.js (163)
+[9872:1904:0610/103710.140:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:5155
+[9872:1904:0610/103710.147:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:265059
+[9872:1904:0610/103710.591:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:883094
+[9872:1904:0610/103710.882:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:45153
+[9872:1904:0610/103710.914:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2200227
+[9872:1904:0610/103711.580:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2992963
+[9872:1904:0610/103711.937:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:4680
+[9872:1904:0610/103712.328:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:118577
+[9872:1904:0610/103714.469:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2747169
+[9872:1904:0610/103721.844:INFO:CONSOLE:76] "Uncaught (in promise) Error: secretKey is null or undefined", source: https://static.whatsapp.net/rsrc.php/v4/y4/r/gzZy68pGgAw.js (76)
