@@ -35,7 +35,7 @@ abstract class DuskTestCase extends BaseTestCase
             '--user-data-dir=' . $userDataDir,
             '--profile-directory=Default',
             '--disable-gpu',
-            //'--headless'
+            '--headless'
     ]);
 
     return RemoteWebDriver::create(
