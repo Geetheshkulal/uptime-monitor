@@ -1,23 +1,22 @@
 <?php
-
 namespace Tests\Browser;
 
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Tests\DuskTestCase;
 
 class WhatsAppLoginTest extends DuskTestCase
 {
-    public function testLoginAndExtractQr()
+    public function testWhatsappSessionLogin()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('https://web.whatsapp.com');
 
-            $browser->pause(30000); 
+            Log::info('[WHATSAPP SESSION] Opened WhatsApp Web');
+            Storage::put('whatsapp/status.txt', 'pending');
 
-            Log::info('[DUSK] Trying to extract QR code');
+            sleep(15); // Wait for QR code to appear
 
             $qrBase64 = $browser->script("
                 let canvas = document.querySelector('canvas');
@@ -26,14 +25,32 @@ class WhatsAppLoginTest extends DuskTestCase
 
             if ($qrBase64) {
                 Storage::put('whatsapp/qr.txt', $qrBase64);
-                Log::info('[DUSK] QR extracted and saved. Size: ' . strlen($qrBase64));
-            }else{
-                Log::warning('[DUSK] QR code not found (canvas was null)');
+                Log::info('[WHATSAPP SESSION] QR saved');
             }
 
-            while (true) {
-                sleep(10); // Keeps it running
+            $browser->waitUntilMissing('canvas', 60);
+            Storage::put('whatsapp/status.txt', 'loading');
+
+            $browser->waitUsing(120, 5, function () use ($browser) {
+                return $browser->script("
+                    return document.querySelector('[aria-label=\"Chat list\"]') !== null;
+                ")[0];
+            });
+
+            $isLoggedIn = $browser->script("
+                return document.querySelector('[aria-label=\"Chat list\"]') !== null;
+            ")[0];
+
+            if ($isLoggedIn) {
+                Storage::put('whatsapp/status.txt', 'connected');
+                Log::info('[WHATSAPP SESSION] WhatsApp login successful!');
+            } else {
+                Storage::put('whatsapp/status.txt', 'pending');
+                Log::warning('[WHATSAPP SESSION] Login fallback check failed. Still pending...');
             }
+
+            // Optionally keep browser open (normally tests quit after execution)
+            sleep(30); // simulate alive check
         });
     }
 }
