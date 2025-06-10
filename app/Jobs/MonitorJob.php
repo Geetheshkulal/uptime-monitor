@@ -43,9 +43,17 @@ class MonitorJob
        
 
         if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null) ) {
-            $token = Str::random(32);
 
-        
+              try {
+                    $monitor->update([
+                        'last_checked_at' => now(),
+                        'status' => $status,
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error("Failed to update monitor status for {$monitor->id}: " . $e->getMessage());
+                }
+                
+            $token = Str::random(32);
             Notification::create([
                 'monitor_id'=> $monitor->id,
                 'status'=> 'unread',
@@ -85,6 +93,16 @@ class MonitorJob
 
             }
             
+        }else{
+              // Update monitor status
+                try {
+                    $monitor->update([
+                        'last_checked_at' => now(),
+                        'status' => $status,
+                    ]);
+                } catch (\Exception $e) {
+                    Log::error("Failed to update monitor status for {$monitor->id}: " . $e->getMessage());
+                }
         }
     }
 
@@ -235,15 +253,7 @@ class MonitorJob
         }
         $this->createIncident($monitor, $status, 'HTTP');
 
-        // Update monitor status
-        try {
-            $monitor->update([
-                'last_checked_at' => now(),
-                'status' => $status,
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Failed to update monitor status for {$monitor->id}: " . $e->getMessage());
-        }
+     
     }
 
 
@@ -303,17 +313,6 @@ class MonitorJob
         }
 
         $this->createIncident($monitor, $status, 'DNS');
-
-        // Update last_checked_at in the monitors table
-        try {
-            $monitor->update([
-                'last_checked_at' => now(),
-                'status' => $status // Also update the monitor's last status
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Failed to update monitor status for {$monitor->url}: " . $e->getMessage());
-        }
-
         
     
         return $records ?: null;
@@ -377,15 +376,7 @@ class MonitorJob
             Log::error("Failed to send alert: " . $e->getMessage());
         }
         $this->createIncident($monitor, $status, 'PORT');
-        // Update last_checked_at and status in the monitors table
-        try {
-            $monitor->update([
-                'last_checked_at' => now(),
-                'status' => $status
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Failed to update monitor: " . $e->getMessage());
-        }
+      
     
         Log::info("Port check completed: {$monitor->host}:{$monitor->port} is $status.");
     
@@ -433,11 +424,8 @@ class MonitorJob
 
             $this->createIncident($monitor, $status, monitorType: 'PING');
 
-            // Update monitor status
-            $monitor->update([
-                'last_checked_at' => now(),
-                'status' => $status
-            ]);
+   
+   
     
             return $status === 'up';
     
