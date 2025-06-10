@@ -242,6 +242,7 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
 
     Route::get('/admin/whatsapp-login', [AdminWhatsAppController::class, 'AdminWhatsappLogin'])->name('admin.whatsapp.login');
     Route::get('/admin/fetch-qr', [AdminWhatsAppController::class, 'fetchQr'])->name('admin.whatsapp.fetchQr');
+    Route::post('/admin/whatsapp/trigger-login', [AdminWhatsAppController::class, 'triggerLogin'])->name('admin.whatsapp.triggerLogin');
     Route::post('/admin/whatsapp/disconnect', [AdminWhatsAppController::class, 'disconnectWhatsApp'])->name('admin.whatsapp.disconnect');
 
 

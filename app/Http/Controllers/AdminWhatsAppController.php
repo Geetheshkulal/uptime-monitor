@@ -8,6 +8,10 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Process\Process;
+use App\Jobs\WhatsAppLogin;
+
+
 
 class AdminWhatsAppController extends Controller
 {
@@ -46,6 +50,20 @@ class AdminWhatsAppController extends Controller
             return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }
     }
-    
+
+    public function triggerLogin()
+    {
+        try {
+        // Safer: use Process to run Artisan Dusk (non-blocking)
+                WhatsAppLogin::dispatch();
+                $output = Artisan::output();
+                Log::info('[WHATSAPP LOGIN] Artisan command executed: ' . $output);
+        
+            return response()->json(['success' => true]);
+            } catch (\Exception $e) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+}
+ 
 
 }

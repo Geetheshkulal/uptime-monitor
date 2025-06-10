@@ -28,7 +28,7 @@ class WhatsAppLoginTest extends DuskTestCase
                 Log::info('[WHATSAPP SESSION] QR saved');
             }
 
-            $browser->waitUntilMissing('canvas', 60);
+            $browser->waitUntilMissing('canvas', 30);
             Storage::put('whatsapp/status.txt', 'loading');
 
             $browser->waitUsing(120, 5, function () use ($browser) {

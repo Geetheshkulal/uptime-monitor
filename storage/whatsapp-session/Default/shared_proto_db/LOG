@@ -1,2 +1,3 @@
-2025/06/10-10:36:58.801 4518 Creating DB C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\shared_proto_db since it was missing.
-2025/06/10-10:36:58.812 4518 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\shared_proto_db/MANIFEST-000001
+2025/06/10-16:52:03.555 2a84 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\shared_proto_db/MANIFEST-000001
+2025/06/10-16:52:03.556 2a84 Recovering log #3
+2025/06/10-16:52:03.556 2a84 Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\shared_proto_db/000003.log 

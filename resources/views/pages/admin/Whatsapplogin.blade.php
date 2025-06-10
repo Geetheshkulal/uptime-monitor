@@ -45,7 +45,7 @@
         background: #25D366;
         color: white;
         padding: 0.6rem 1.5rem;
-        border-radius: 50px;
+        border-radius: 50px !important;
         font-weight: 600;
         border: none;
         transition: all 0.3s;
@@ -76,10 +76,16 @@
         <i class="fas fa-circle-notch fa-spin"></i> Checking WhatsApp Status...
     </div>
     
+    <button id="connect-whatsapp-btn" class="btn btn-whatsapp mt-3">
+        <i class="fas fa-plug"></i> Connect WhatsApp
+    </button>
+
     <!-- QR Code Container -->
     <div id="qr-box" class="qr-container" style="display: none;">
         <h5 class="mb-3">Scan this QR code with your phone</h5>
-        <img id="qr-code" class="qr-code" src="" alt="WhatsApp QR Code">
+        <span id="qr-code-container">
+            
+        </span>
         <p class="text-muted mt-2">Open WhatsApp > Settings > Linked Devices > Link a Device</p>
     </div>
     
@@ -139,9 +145,11 @@
             if (data.qr) {
                 const currentHash = await hashString(data.qr);
                 if (currentHash !== lastHash) {
-                    document.getElementById('qr-code').src = data.qr;
+                    document.getElementById('qr-code-container').innerHTML = `<img id="qr-code" class="qr-code" src="${data.qr}" alt="Waiting for QR code...">`;
                     lastHash = currentHash;
                 }
+            }else{
+                document.getElementById('qr-code-container').innerHTML = "<span class='text-muted'>Waiting for QR code...</span>";
             }
 
             updateStatus(data.status || 'pending');
@@ -158,12 +166,15 @@
         const connectedStatus = document.getElementById('connected-status');
         const errorStatus = document.getElementById('error-status');
         const disconnectBtn = document.getElementById('disconnect-btn');
+        const connectBtn = document.getElementById('connect-whatsapp-btn');
+        
 
         // Reset all displays first
         qrBox.style.display = 'none';
         loadingLottie.style.display = 'none';
         connectedStatus.style.display = 'none';
         errorStatus.style.display = 'none';
+        statusIndicator.style.display = 'none';
 
         switch (status) {
             case 'connected':
@@ -171,6 +182,7 @@
                 statusIndicator.className = 'status-indicator bg-success text-white';
                 connectedStatus.style.display = 'block';
                 disconnectBtn.style.display = 'inline-block';
+                connectBtn.style.display = 'none';
                 break;
 
             case 'loading':
@@ -178,13 +190,15 @@
                 statusIndicator.className = 'status-indicator bg-primary text-white';
                 loadingLottie.style.display = 'block';
                 disconnectBtn.style.display = 'none';
+                connectBtn.style.display = 'none';
                 break;
 
             case 'pending':
-                statusIndicator.innerHTML = '<i class="fas fa-qrcode"></i> WAITING FOR SCAN';
-                statusIndicator.className = 'status-indicator bg-warning text-white';
+                // statusIndicator.innerHTML = '<i class="fas fa-qrcode"></i> WAITING FOR QR CODE';
+                // statusIndicator.className = 'status-indicator bg-warning text-white';
                 qrBox.style.display = 'block';
                 disconnectBtn.style.display = 'none';
+                connectBtn.style.display = 'inline-block';
                 break;
 
             default: // error
@@ -231,7 +245,33 @@
     // Initial check
     fetchQrCode();
 </script>
+ <script>
+    document.getElementById('connect-whatsapp-btn').addEventListener('click', async () => {
+    const confirmRun = confirm("This will start the WhatsApp login process. Continue?");
+    if (!confirmRun) return;
 
+    try {
+        const res = await fetch("{{ route('admin.whatsapp.triggerLogin') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await res.json();
+        if (data.success) {
+            alert("Login process started.");
+        } else {
+            alert("Failed to start: " + (data.message || "Unknown error"));
+        }
+    } catch (e) {
+        console.error("Trigger error:", e);
+        alert("Something went wrong while starting WhatsApp login.");
+    }
+});
+
+</script>
 @endsection
 
 
