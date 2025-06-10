@@ -34,8 +34,7 @@ abstract class DuskTestCase extends BaseTestCase
             '--disable-smooth-scrolling',
             '--user-data-dir=' . $userDataDir,
             '--profile-directory=Default',
-            '--disable-gpu',
-            //'--headless'
+           // '--headless'
     ]);
 
     return RemoteWebDriver::create(
