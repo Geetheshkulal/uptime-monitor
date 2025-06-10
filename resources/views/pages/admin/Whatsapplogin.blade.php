@@ -14,7 +14,7 @@
     <!-- Lottie Animation -->
     <div id="loading-lottie" class="my-4" style="display: none;">
         <lottie-player
-            src="https://assets1.lottiefiles.com/packages/lf20_mfdfvyvu.json"
+            src="{{ asset('animations/loading.json') }}"
             background="transparent"
             speed="1"
             style="width: 150px; height: 150px; margin: auto;"

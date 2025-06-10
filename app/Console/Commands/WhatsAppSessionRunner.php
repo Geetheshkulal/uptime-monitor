@@ -61,6 +61,11 @@ class WhatsAppSessionRunner extends Command
                 Log::info('[WHATSAPP SESSION] QR saved');
             }
 
+            // Wait for QR to disappear (user scanned it)
+            $browser->waitUntilMissing('canvas', 60);
+            
+            Storage::put('whatsapp/status.txt', 'loading');
+
             // Wait until QR disappears (i.e. login)
             $browser->waitUsing(120, 5, function () use ($browser) {
                 return $browser->script("
