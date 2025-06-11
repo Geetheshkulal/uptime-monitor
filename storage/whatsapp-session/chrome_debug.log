@@ -1,92 +1,23 @@
-[11828:6936:0610/165203.413:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
-[11828:6936:0610/165203.436:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
-[14032:8536:0610/165203.526:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
-[12448:15372:0610/165203.529:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[9784:5660:0610/165203.529:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[22272:9164:0610/165203.729:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[22004:5812:0610/165203.840:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[11828:6936:0610/165204.114:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/y6/r/olu9U863g-Z.js (163)
-[22228:8140:0610/165204.221:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[16684:21356:0610/165237.340:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000001c
-[16684:21356:0610/165237.341:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000001b
-[16684:21356:0610/165237.341:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000001d
-[11828:6936:0610/165237.973:INFO:CONSOLE:76] "Uncaught (in promise) Error: secretKey is null or undefined", source: https://static.whatsapp.net/rsrc.php/v4/y4/r/gzZy68pGgAw.js (76)
-[16684:21356:0610/165241.666:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000022
-[11828:6936:0610/165241.680:INFO:CONSOLE:1] "Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope': The script at 'https://static.whatsapp.net/rsrc.php/v4/yJ/r/XSIFMuKwuUc.js' failed to load.", source: https://web.whatsapp.com/static_resources/webworker_v1/init_script/?__hs=20249.HYP%3Awhatsapp_comet_pkg.2.1...1&__spin_r=1023673470&__spin_b=trunk&__spin_t=1749554534 (1)
-[16684:21356:0610/165242.005:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000024
-[16684:21356:0610/165242.364:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000025
-[16684:21356:0610/165242.381:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000027
-[16684:21356:0610/165242.383:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000039
-[16684:21356:0610/165242.385:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000003a
-[16684:21356:0610/165242.395:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000003b
-[16684:21356:0610/165242.396:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000029
-[16684:21356:0610/165242.398:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000044
-[16684:21356:0610/165242.398:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000002a
-[16684:21356:0610/165242.399:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000003c
-[16684:21356:0610/165242.400:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000002b
-[16684:21356:0610/165242.401:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000002c
-[16684:21356:0610/165242.401:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000032
-[16684:21356:0610/165242.401:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000026
-[16684:21356:0610/165242.402:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000033
-[16684:21356:0610/165242.402:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000034
-[16684:21356:0610/165242.403:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000041
-[16684:21356:0610/165242.403:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000035
-[16684:21356:0610/165242.403:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000036
-[16684:21356:0610/165242.404:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000037
-[16684:21356:0610/165242.405:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000042
-[16684:21356:0610/165242.405:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000038
-[16684:21356:0610/165242.405:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000028
-[16684:21356:0610/165242.406:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000003d
-[16684:21356:0610/165242.407:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000002d
-[16684:21356:0610/165242.407:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000003e
-[16684:21356:0610/165242.408:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000043
-[16684:21356:0610/165242.408:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000003f
-[16684:21356:0610/165242.409:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000045
-[16684:21356:0610/165242.413:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000002e
-[16684:21356:0610/165242.418:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000002f
-[16684:21356:0610/165242.418:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000030
-[16684:21356:0610/165242.420:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000031
-[16684:21356:0610/165242.422:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000040
-[16684:21356:0610/165242.436:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000047
-[16684:21356:0610/165242.437:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000046
-[16684:21356:0610/165242.438:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000048
-[16684:21356:0610/165242.469:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000049
-[16684:21356:0610/165242.470:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000004a
-[16684:21356:0610/165242.476:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000004b
-[16684:21356:0610/165242.479:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000004e
-[16684:21356:0610/165242.480:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000004d
-[16684:21356:0610/165242.481:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000004c
-[16684:21356:0610/165242.482:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000004f
-[16684:21356:0610/165242.484:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000051
-[16684:21356:0610/165242.485:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000050
-[16684:21356:0610/165242.487:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000052
-[16684:21356:0610/165242.489:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000053
-[16684:21356:0610/165242.491:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000054
-[16684:21356:0610/165242.495:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000055
-[16684:21356:0610/165242.495:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000056
-[16684:21356:0610/165242.497:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000057
-[16684:21356:0610/165242.499:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000058
-[16684:21356:0610/165242.500:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000059
-[16684:21356:0610/165242.501:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000005a
-[16684:21356:0610/165242.503:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000005b
-[16684:21356:0610/165242.504:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000005c
-[16684:21356:0610/165242.504:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000005d
-[16684:21356:0610/165246.709:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000005e
-[16684:21356:0610/165248.559:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000060
-[16684:21356:0610/165248.559:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000061
-[16684:21356:0610/165248.559:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000005f
-[16684:21356:0610/165248.657:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000062
-[16684:21356:0610/165253.309:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000064
-[16684:21356:0610/165253.309:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000066
-[16684:21356:0610/165253.325:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000065
-[16684:21356:0610/165253.342:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000063
-[16684:21356:0610/165254.004:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000006d
-[16684:21356:0610/165254.032:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000006e
-[16684:21356:0610/165254.316:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000006f
-[16684:21356:0610/165254.392:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000067
-[16684:21356:0610/165254.425:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000069
-[16684:21356:0610/165254.469:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000006a
-[16684:21356:0610/165254.477:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000006b
-[16684:21356:0610/165254.834:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000070
-[16684:21356:0610/165254.835:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000071
-[16684:21356:0610/165256.394:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000006c
+[16000:3296:0611/120735.007:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[16000:3296:0611/120735.039:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[19708:14936:0611/120735.173:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[20084:8520:0611/120735.257:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[19812:19476:0611/120735.389:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
+[19544:12832:0611/120735.656:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[6728:19852:0611/120735.713:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[2920:6772:0611/120735.987:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[19812:18608:0611/120736.239:WARNING:ui\gl\angle_platform_impl.cc:54] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(139,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[18424:8796:0611/120737.078:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[16000:3296:0611/120737.865:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yN/r/_VjZ6odv1Ay.js (163)
+[16000:3296:0611/120747.023:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:5155
+[16000:3296:0611/120747.389:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:265059
+[16000:3296:0611/120747.673:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:883094
+[16000:3296:0611/120747.872:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2200227
+[16000:3296:0611/120747.972:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:45153
+[16000:3296:0611/120748.388:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2992963
+[16000:3296:0611/120748.572:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2747168
+[16000:3296:0611/120748.856:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:118577
+[16000:3296:0611/120749.373:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:4680
+[16000:3296:0611/120808.893:INFO:CONSOLE:76] "Uncaught (in promise) Error: secretKey is null or undefined", source: https://static.whatsapp.net/rsrc.php/v4/yB/r/eTxd-L_R5mX.js (76)

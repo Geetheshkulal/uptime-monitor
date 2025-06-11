@@ -135,7 +135,9 @@
 </div>
 
 <script>
+
     let lastHash = null;
+    let connecting=false;
 
     async function fetchQrCode() {
         try {
@@ -147,6 +149,13 @@
                 if (currentHash !== lastHash) {
                     document.getElementById('qr-code-container').innerHTML = `<img id="qr-code" class="qr-code" src="${data.qr}" alt="Waiting for QR code...">`;
                     lastHash = currentHash;
+
+                    document.getElementById('connect-whatsapp-btn').disabled = true;
+
+                    if(connecting){
+                        document.getElementById('loading-lottie').style.display = 'none';
+                        connecting=false;
+                    }
                 }
             }else{
                 document.getElementById('qr-code-container').innerHTML = "<span class='text-muted'>Waiting for QR code...</span>";
@@ -194,14 +203,27 @@
                 break;
 
             case 'pending':
-                // statusIndicator.innerHTML = '<i class="fas fa-qrcode"></i> WAITING FOR QR CODE';
-                // statusIndicator.className = 'status-indicator bg-warning text-white';
+
+                // qrBox.style.display = 'block';
+                // disconnectBtn.style.display = 'none';
+                // connectBtn.style.display = 'inline-block';
                 qrBox.style.display = 'block';
                 disconnectBtn.style.display = 'none';
-                connectBtn.style.display = 'inline-block';
+
+                // 🛠 FIX: Only show connect button if not already connecting
+                if (!connecting) {
+                    connectBtn.style.display = 'inline-block';
+                    loadingLottie.style.display = 'none';
+                } else {
+                    connectBtn.style.display = 'none';
+                    loadingLottie.style.display = 'block';
+                    statusIndicator.style.display = 'block';
+                    statusIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> CONNECTING';
+                    statusIndicator.className = 'status-indicator bg-primary text-white';
+                }
                 break;
 
-            default: // error
+            default: 
                 statusIndicator.innerHTML = '<i class="fas fa-exclamation-triangle"></i> CONNECTION ERROR';
                 statusIndicator.className = 'status-indicator bg-danger text-white';
                 errorStatus.style.display = 'block';
@@ -231,6 +253,7 @@
             if (data.success) {
                 alert("Disconnected from WhatsApp successfully.");
                 location.reload();
+                // document.getElementById('connect-whatsapp-btn').disabled = false;
             } else {
                 alert("Failed to disconnect: " + (data.message || 'Unknown error'));
             }
@@ -247,8 +270,16 @@
 </script>
  <script>
     document.getElementById('connect-whatsapp-btn').addEventListener('click', async () => {
-    const confirmRun = confirm("This will start the WhatsApp login process. Continue?");
-    if (!confirmRun) return;
+        const connectBtn = document.getElementById('connect-whatsapp-btn');
+        const loadingLottie = document.getElementById('loading-lottie');
+        const statusIndicator=document.getElementById('status-indicator');
+
+        connecting=true;
+        connectBtn.style.display = 'none';
+        loadingLottie.style.display = 'block';
+        statusIndicator.style.display = 'block';
+        statusIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> CONNECTING';
+        statusIndicator.className = 'status-indicator bg-primary text-white';
 
     try {
         const res = await fetch("{{ route('admin.whatsapp.triggerLogin') }}", {
@@ -261,13 +292,22 @@
 
         const data = await res.json();
         if (data.success) {
-            alert("Login process started.");
+            // alert("Login process started.");
+            console.log("Login process started.");
         } else {
             alert("Failed to start: " + (data.message || "Unknown error"));
+            connecting=false;
+            connectBtn.style.display = 'inline-block';
+            loadingLottie.style.display = 'none';
         }
     } catch (e) {
         console.error("Trigger error:", e);
         alert("Something went wrong while starting WhatsApp login.");
+
+        connecting=false;
+        connectBtn.style.display = 'inline-block';
+        loadingLottie.style.display = 'none';
+        
     }
 });
 

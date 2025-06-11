@@ -1,3 +1,2 @@
-2025/06/10-16:52:03.446 5474 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Site Characteristics Database/MANIFEST-000001
-2025/06/10-16:52:03.447 5474 Recovering log #3
-2025/06/10-16:52:03.447 5474 Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Site Characteristics Database/000003.log 
+2025/06/11-12:07:35.044 4bbc Creating DB C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Site Characteristics Database since it was missing.
+2025/06/11-12:07:35.079 4bbc Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Site Characteristics Database/MANIFEST-000001

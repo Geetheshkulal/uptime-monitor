@@ -1,3 +1,2 @@
-2025/06/10-16:52:03.445 2a84 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Sync Data\LevelDB/MANIFEST-000001
-2025/06/10-16:52:03.446 2a84 Recovering log #3
-2025/06/10-16:52:03.446 2a84 Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Sync Data\LevelDB/000003.log 
+2025/06/11-12:07:35.035 2718 Creating DB C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Sync Data\LevelDB since it was missing.
+2025/06/11-12:07:35.059 2718 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Sync Data\LevelDB/MANIFEST-000001
