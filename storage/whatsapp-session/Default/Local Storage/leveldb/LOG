@@ -1,4 +1,3 @@
-2025/06/11-12:17:37.332 2e74 Creating DB C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb since it was missing.
-2025/06/11-12:17:37.350 2e74 Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/MANIFEST-000001
-2025/06/11-12:17:37.351 2e74 Recovering log #3
-2025/06/11-12:17:37.354 2e74 Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/000003.log 
+2025/06/11-16:48:03.846 4b7c Reusing MANIFEST C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/MANIFEST-000001
+2025/06/11-16:48:03.855 4b7c Recovering log #3
+2025/06/11-16:48:03.860 4b7c Reusing old log C:\xampp\htdocs\uptime\storage\whatsapp-session\Default\Local Storage\leveldb/000003.log 

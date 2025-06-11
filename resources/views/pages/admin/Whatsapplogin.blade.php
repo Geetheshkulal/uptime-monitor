@@ -67,7 +67,10 @@
     }
 </style>
 
+
+
 <div class="whatsapp-container">
+
     <h3 class="mb-4">
         <i class="fab fa-whatsapp text-success"></i> WhatsApp Connection
     </h3>
@@ -202,6 +205,14 @@
                 connectBtn.style.display = 'none';
                 break;
 
+            case 'disconnected':
+                    statusIndicator.innerHTML = '<i class="fas fa-times-circle"></i> DISCONNECTED';
+                    statusIndicator.className = 'status-indicator bg-dark text-white';
+                    errorStatus.style.display = 'block';
+                    connectBtn.style.display = 'inline-block';
+                    disconnectBtn.style.display = 'none';
+                    break;
+
             case 'pending':
 
                 // qrBox.style.display = 'block';
@@ -249,6 +260,7 @@
                     'Content-Type': 'application/json'
                 }
             });
+
             const data = await res.json();
             if (data.success) {
                 alert("Disconnected from WhatsApp successfully.");
