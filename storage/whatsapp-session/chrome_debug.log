@@ -1,23 +1,36 @@
-[16000:3296:0611/120735.007:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
-[16000:3296:0611/120735.039:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
-[19708:14936:0611/120735.173:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[20084:8520:0611/120735.257:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[19812:19476:0611/120735.389:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
-[19544:12832:0611/120735.656:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[6728:19852:0611/120735.713:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[2920:6772:0611/120735.987:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[19812:18608:0611/120736.239:WARNING:ui\gl\angle_platform_impl.cc:54] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
-C:\fakepath(139,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
-
-[18424:8796:0611/120737.078:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
-[16000:3296:0611/120737.865:INFO:CONSOLE:163] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v4/yN/r/_VjZ6odv1Ay.js (163)
-[16000:3296:0611/120747.023:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:5155
-[16000:3296:0611/120747.389:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:265059
-[16000:3296:0611/120747.673:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:883094
-[16000:3296:0611/120747.872:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2200227
-[16000:3296:0611/120747.972:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:45153
-[16000:3296:0611/120748.388:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2992963
-[16000:3296:0611/120748.572:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2747168
-[16000:3296:0611/120748.856:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:118577
-[16000:3296:0611/120749.373:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:4680
-[16000:3296:0611/120808.893:INFO:CONSOLE:76] "Uncaught (in promise) Error: secretKey is null or undefined", source: https://static.whatsapp.net/rsrc.php/v4/yB/r/eTxd-L_R5mX.js (76)
+[16128:19180:0611/121737.226:INFO:components\enterprise\browser\controller\chrome_browser_cloud_management_controller.cc:202] No machine level policy manager exists.
+[16128:19180:0611/121737.259:WARNING:chrome\browser\extensions\extension_service.cc:359] --load-extension is not allowed in Google Chrome, ignoring.
+[2960:7728:0611/121737.374:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[12360:20184:0611/121737.380:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[8088:7720:0611/121737.584:VERBOSE1:components\viz\service\main\viz_main_impl.cc:85] VizNullHypothesis is disabled (not a warning)
+[16128:11864:0611/121737.615:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000005
+[16128:11864:0611/121737.615:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000004
+[16128:11864:0611/121737.615:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000003
+[16128:11864:0611/121737.652:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000002
+[16128:11864:0611/121737.655:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000001
+[4484:11372:0611/121737.756:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[19448:2204:0611/121737.774:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[6748:19416:0611/121738.104:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000004
+[6748:19416:0611/121738.104:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000003
+[6748:19416:0611/121738.107:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000005
+[6748:19416:0611/121738.107:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000007
+[6748:19416:0611/121738.109:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000000a
+[6748:19416:0611/121738.109:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 8000000b
+[6748:19416:0611/121738.110:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000002
+[6748:19416:0611/121738.110:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000006
+[6748:19416:0611/121738.111:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000009
+[16992:18852:0611/121738.157:INFO:third_party\webrtc\system_wrappers\source\cpu_info.cc:56] Available number of cores: 12
+[6748:19416:0611/121738.200:ERROR:net\disk_cache\blockfile\entry_impl.cc:1027] No file for 80000008
+[16128:19180:0611/121741.427:INFO:CONSOLE:0] "The resource https://static.whatsapp.net/rsrc-translations.php/v8iYpu4/y2/l/en_GB/p8dV_2g2tIN.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://web.whatsapp.com/ (0)
+[16128:19180:0611/121741.427:INFO:CONSOLE:0] "The resource https://static.whatsapp.net/rsrc-translations.php/v8iQ2z4/yx/l/en_GB/WAzl_eJLSat.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://web.whatsapp.com/ (0)
+[16128:19180:0611/121741.427:INFO:CONSOLE:0] "The resource https://static.whatsapp.net/rsrc-translations.php/v8idjy4/y7/l/en_GB/kxmRfbSZJOQOgjwXdzTbshReGxmN5SnbvfwA_k4oHAeOUppNwOnlyEV3-dZ9ns7Oy5cwbMyoHz5RC039SIvl4s6ZvsWqehdEtWw.js was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://web.whatsapp.com/ (0)
+[16128:19180:0611/121741.427:INFO:CONSOLE:0] "The resource https://static.whatsapp.net/rsrc.php/v5/yR/l/0,cross/aLayfEdlYMe74Kt8PowQI1.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.", source: https://web.whatsapp.com/ (0)
+[16128:19180:0611/121747.996:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:5155
+[16128:19180:0611/121748.115:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:265059
+[16128:19180:0611/121748.508:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:883094
+[16128:19180:0611/121748.705:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:45153
+[16128:19180:0611/121748.721:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2200227
+[16128:19180:0611/121749.158:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2992963
+[16128:19180:0611/121750.491:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:2747168
+[16128:19180:0611/121750.738:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:118577
+[16128:19180:0611/121752.216:WARNING:components\download\internal\background_service\controller_impl.cc:1187] Background download complete, client: 6, completion type: 0, file size:4680

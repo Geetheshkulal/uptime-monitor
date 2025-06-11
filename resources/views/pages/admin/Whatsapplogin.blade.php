@@ -57,13 +57,6 @@
         box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
     }
     
-    .btn-whatsapp:disabled {
-        background: #cccccc;
-        cursor: not-allowed;
-        transform: none;
-        box-shadow: none;
-    }
-    
     .instructions {
         margin-top: 1.5rem;
         padding: 1rem;
@@ -71,11 +64,6 @@
         border-left: 4px solid #25D366;
         border-radius: 0 4px 4px 0;
         text-align: left;
-    }
-    
-    .loading-spinner {
-        display: inline-block;
-        margin-right: 8px;
     }
 </style>
 
@@ -85,23 +73,19 @@
     </h3>
     
     <div id="status-indicator" class="status-indicator bg-secondary text-white">
-        <i class="fas fa-circle-notch fa-spin loading-spinner"></i> Checking WhatsApp Status...
+        <i class="fas fa-circle-notch fa-spin"></i> Checking WhatsApp Status...
     </div>
     
-    <button id="connect-whatsapp-btn" class="btn btn-whatsapp mt-3" style="display: none;">
+    <button id="connect-whatsapp-btn" class="btn btn-whatsapp mt-3">
         <i class="fas fa-plug"></i> Connect WhatsApp
     </button>
 
     <!-- QR Code Container -->
     <div id="qr-box" class="qr-container" style="display: none;">
         <h5 class="mb-3">Scan this QR code with your phone</h5>
-        <div id="qr-code-container">
-            <div class="d-flex justify-content-center">
-                <div class="spinner-border" role="status">
-                    <span class="sr-only">Loading QR code...</span>
-                </div>
-            </div>
-        </div>
+        <span id="qr-code-container">
+            
+        </span>
         <p class="text-muted mt-2">Open WhatsApp > Settings > Linked Devices > Link a Device</p>
     </div>
     
@@ -141,38 +125,21 @@
     
     <!-- Action Buttons -->
     <div class="mt-4">
-        <button id="disconnect-btn" class="btn btn-danger" style="display: none;">
+        <button id="disconnect-btn" class="btn btn-danger" style="display: none;" onclick="disconnectWhatsApp()">
             <i class="fas fa-power-off"></i> Disconnect WhatsApp
         </button>
-        <button id="refresh-btn" class="btn btn-outline-primary">
+        <button id="refresh-btn" class="btn btn-outline-primary" onclick="location.reload()">
             <i class="fas fa-sync-alt"></i> Refresh Status
         </button>
     </div>
 </div>
 
-@push('scripts')
 <script>
 
     let lastHash = null;
     let connecting=false;
 
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', function() {
-        // Check the initial status immediately
-        checkWhatsAppStatus();
-        
-        // Set up event listeners
-        document.getElementById('connect-whatsapp-btn').addEventListener('click', startWhatsAppConnection);
-        document.getElementById('disconnect-btn').addEventListener('click', disconnectWhatsApp);
-        document.getElementById('refresh-btn').addEventListener('click', function() {
-            location.reload();
-        });
-        
-        // Start periodic status checking
-        statusCheckInterval = setInterval(checkWhatsAppStatus, 3000);
-    });
-
-    async function checkWhatsAppStatus() {
+    async function fetchQrCode() {
         try {
             const response = await fetch("{{ route('admin.whatsapp.fetchQr') }}");
             const data = await response.json();
@@ -190,63 +157,14 @@
                         connecting=false;
                     }
                 }
-            } else {
-                updateStatus('disconnected');
-                isConnecting = false;
+            }else{
+                document.getElementById('qr-code-container').innerHTML = "<span class='text-muted'>Waiting for QR code...</span>";
             }
+
+            updateStatus(data.status || 'pending');
         } catch (error) {
-            console.error('Error checking status:', error);
+            console.error('Error fetching QR:', error);
             updateStatus('error');
-            isConnecting = false;
-        }
-    }
-
-    function displayQrCode(qrData) {
-        const currentHash = hashString(qrData);
-        if (currentHash !== lastHash) {
-            document.getElementById('qr-code-container').innerHTML = `<img class="qr-code" src="${qrData}" alt="WhatsApp QR Code">`;
-            lastHash = currentHash;
-        }
-    }
-
-    async function startWhatsAppConnection() {
-        const connectBtn = document.getElementById('connect-whatsapp-btn');
-        
-        // Disable the button and show loading state
-        connectBtn.disabled = true;
-        connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin loading-spinner"></i> Connecting...';
-        isConnecting = true;
-        
-        updateStatus('loading');
-        
-        try {
-            const res = await fetch("{{ route('admin.whatsapp.triggerLogin') }}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            const data = await res.json();
-            if (!data.success) {
-                alert("Failed to start: " + (data.message || "Unknown error"));
-                updateStatus('error');
-                
-                // Re-enable the button
-                connectBtn.disabled = false;
-                connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect WhatsApp';
-                isConnecting = false;
-            }
-        } catch (e) {
-            console.error("Trigger error:", e);
-            alert("Something went wrong while starting WhatsApp login.");
-            updateStatus('error');
-            
-            // Re-enable the button
-            connectBtn.disabled = false;
-            connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect WhatsApp';
-            isConnecting = false;
         }
     }
 
@@ -258,13 +176,14 @@
         const errorStatus = document.getElementById('error-status');
         const disconnectBtn = document.getElementById('disconnect-btn');
         const connectBtn = document.getElementById('connect-whatsapp-btn');
+        
 
         // Reset all displays first
         qrBox.style.display = 'none';
         loadingLottie.style.display = 'none';
         connectedStatus.style.display = 'none';
         errorStatus.style.display = 'none';
-        statusIndicator.style.display = 'block';
+        statusIndicator.style.display = 'none';
 
         switch (status) {
             case 'connected':
@@ -276,7 +195,7 @@
                 break;
 
             case 'loading':
-                statusIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin loading-spinner"></i> CONNECTING';
+                statusIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> CONNECTING';
                 statusIndicator.className = 'status-indicator bg-primary text-white';
                 loadingLottie.style.display = 'block';
                 disconnectBtn.style.display = 'none';
@@ -309,9 +228,6 @@
                 statusIndicator.className = 'status-indicator bg-danger text-white';
                 errorStatus.style.display = 'block';
                 disconnectBtn.style.display = 'none';
-                connectBtn.style.display = 'inline-block';
-                connectBtn.disabled = false;
-                connectBtn.innerHTML = '<i class="fas fa-plug"></i> Connect WhatsApp';
         }
     }
 
@@ -336,7 +252,6 @@
             const data = await res.json();
             if (data.success) {
                 alert("Disconnected from WhatsApp successfully.");
-                updateStatus('disconnected');
                 location.reload();
                 // document.getElementById('connect-whatsapp-btn').disabled = false;
             } else {
@@ -347,6 +262,11 @@
             alert("An error occurred while disconnecting.");
         }
     }
+
+    // Check status every 3 seconds
+    setInterval(fetchQrCode, 3000);
+    // Initial check
+    fetchQrCode();
 </script>
  <script>
     document.getElementById('connect-whatsapp-btn').addEventListener('click', async () => {
