@@ -25,6 +25,7 @@ use Minishlink\WebPush\WebPush;
 use Str;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Process;
 
 
 class MonitorJob
@@ -84,9 +85,14 @@ class MonitorJob
                     'type'=> $monitor->type,
                     'monitor_id' => $monitor->id
                 ]));
-                Artisan::call('dusk', [
-                    'test' => 'tests/Browser/WhatsAppBotTest.php',
+                 $process = new Process([
+                    'php',
+                    'artisan',
+                    'dusk',
+                    'tests/Browser/WhatsAppBotTest.php'
                 ]);
+            
+                $process->run();
                 Log::info('Job whatsapp output:'.Artisan::output());
                 // Optional: Cleanup file if needed
                 Storage::delete('whatsapp-details.json');

@@ -30,7 +30,7 @@
 
     <!-- Skeleton Loader Styles -->
     <style>
-        *:not(.status-dot):not(.status-badge,.status-indicator,.bar-segment) {
+        *:not(.status-dot):not(.status-badge,.status-indicator,.bar-segment):not(#login-spinner) {
             border-radius: 0 !important;
         }
         * {
