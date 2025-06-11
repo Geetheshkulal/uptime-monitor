@@ -5,6 +5,7 @@ use Laravel\Dusk\Browser;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Tests\DuskTestCase;
+use Illuminate\Support\Facades\File;
 
 class WhatsAppLoginTest extends DuskTestCase
 {
@@ -46,6 +47,8 @@ class WhatsAppLoginTest extends DuskTestCase
                 Log::info('[WHATSAPP SESSION] WhatsApp login successful!');
             } else {
                 Storage::put('whatsapp/status.txt', 'pending');
+                Storage::delete('whatsapp/qr.txt');
+                File::deleteDirectory(storage_path('whatsapp-session'));
                 Log::warning('[WHATSAPP SESSION] Login fallback check failed. Still pending...');
             }
 

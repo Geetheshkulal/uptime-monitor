@@ -281,35 +281,35 @@
         statusIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> CONNECTING';
         statusIndicator.className = 'status-indicator bg-primary text-white';
 
-    try {
-        const res = await fetch("{{ route('admin.whatsapp.triggerLogin') }}", {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            }
-        });
+        try {
+            const res = await fetch("{{ route('admin.whatsapp.triggerLogin') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                }
+            });
 
-        const data = await res.json();
-        if (data.success) {
-            // alert("Login process started.");
-            console.log("Login process started.");
-        } else {
-            alert("Failed to start: " + (data.message || "Unknown error"));
+            const data = await res.json();
+            if (data.success) {
+                // alert("Login process started.");
+                console.log("Login process started.");
+            } else {
+                alert("Failed to start: " + (data.message || "Unknown error"));
+                connecting=false;
+                connectBtn.style.display = 'inline-block';
+                loadingLottie.style.display = 'none';
+            }
+        } catch (e) {
+            console.error("Trigger error:", e);
+            alert("Something went wrong while starting WhatsApp login.");
+
             connecting=false;
             connectBtn.style.display = 'inline-block';
             loadingLottie.style.display = 'none';
+            
         }
-    } catch (e) {
-        console.error("Trigger error:", e);
-        alert("Something went wrong while starting WhatsApp login.");
-
-        connecting=false;
-        connectBtn.style.display = 'inline-block';
-        loadingLottie.style.display = 'none';
-        
-    }
-});
+    });
 
 </script>
 @endsection
