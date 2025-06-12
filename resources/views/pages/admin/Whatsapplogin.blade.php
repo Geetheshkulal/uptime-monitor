@@ -210,6 +210,7 @@
                     statusIndicator.className = 'status-indicator bg-dark text-white';
                     errorStatus.style.display = 'block';
                     connectBtn.style.display = 'inline-block';
+                    connectBtn.disabled = false;
                     disconnectBtn.style.display = 'none';
                     break;
 
