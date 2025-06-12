@@ -32,6 +32,16 @@ class WhatsAppLoginTest extends DuskTestCase
             } else {
                 Storage::put('whatsapp/status.txt', 'pending');
                 Storage::delete('whatsapp/qr.txt');
+
+                if (strncasecmp(PHP_OS, 'WIN', 3) === 0) {
+                    // Windows
+                    exec('taskkill /F /IM chromedriver.exe');
+
+                } else {
+                    // Linux / macOS
+                    exec('pkill -f chromedriver');
+                }
+                sleep(1);
                 File::deleteDirectory(storage_path('whatsapp-session'));
                 Log::warning('[WHATSAPP SESSION] Login fallback check failed. Still pending...');
             }
@@ -43,6 +53,19 @@ class WhatsAppLoginTest extends DuskTestCase
             } catch (TimeoutException $e) {
                 // QR was never scanned
                 Storage::put('whatsapp/status.txt', 'disconnected');
+                Storage::delete('whatsapp/qr.txt');
+                
+                if (strncasecmp(PHP_OS, 'WIN', 3) === 0) {
+                    // Windows
+                    exec('taskkill /F /IM chromedriver.exe');
+
+                } else {
+                    // Linux / macOS
+                    exec('pkill -f chromedriver');
+                }
+                sleep(1);
+
+                File::deleteDirectory(storage_path('whatsapp-session'));
                 Log::warning('[WHATSAPP SESSION] QR not scanned in time.');
                 return;
             }
@@ -59,6 +82,8 @@ class WhatsAppLoginTest extends DuskTestCase
                 });
             } catch (TimeoutException $e) {
                 Storage::put('whatsapp/status.txt', 'disconnected');
+                Storage::delete('whatsapp/qr.txt');
+                File::deleteDirectory(storage_path('whatsapp-session'));
                 Log::warning('[WHATSAPP SESSION] Login failed after QR scanned.');
                 return;
             }

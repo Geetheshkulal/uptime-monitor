@@ -4,6 +4,8 @@
 <!-- Lottie & FontAwesome -->
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 <style>
     .whatsapp-container {
@@ -137,6 +139,31 @@
     </div>
 </div>
 
+<!-- Optional Bootstrap Modal (for confirmation) -->
+<!-- Disconnect Confirmation Modal -->
+<div class="modal fade" id="disconnectConfirmModal" tabindex="-1" role="dialog" aria-labelledby="disconnectModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-black">
+          <h5 class="modal-title" id="disconnectModalLabel">Disconnect WhatsApp</h5>
+          <button type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to disconnect WhatsApp?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDisconnectBtn">Disconnect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
 <script>
 
     let lastHash = null;
@@ -251,7 +278,12 @@
     }
 
     async function disconnectWhatsApp() {
-        if (!confirm('Are you sure you want to disconnect WhatsApp?')) return;
+
+         const modal = new bootstrap.Modal(document.getElementById('disconnectConfirmModal'));
+            modal.show();
+
+        document.getElementById('confirmDisconnectBtn').onclick = async function () {
+            modal.hide();
         
         try {
             const res = await fetch("{{ route('admin.whatsapp.disconnect') }}", {
@@ -264,17 +296,18 @@
 
             const data = await res.json();
             if (data.success) {
-                alert("Disconnected from WhatsApp successfully.");
-                location.reload();
+                toastr.success("Disconnected from WhatsApp successfully.");
+                setTimeout(() => location.reload(), 1500);
                 // document.getElementById('connect-whatsapp-btn').disabled = false;
             } else {
-                alert("Failed to disconnect: " + (data.message || 'Unknown error'));
+                toastr.error("Failed to disconnect: " + (data.message || 'Unknown error'));
             }
         } catch (error) {
             console.error('Disconnect failed:', error);
-            alert("An error occurred while disconnecting.");
+            toastr.error("An error occurred while disconnecting.");
         }
     }
+}
 
     // Check status every 3 seconds
     setInterval(fetchQrCode, 3000);
