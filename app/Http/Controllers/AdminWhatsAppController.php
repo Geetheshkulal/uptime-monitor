@@ -64,6 +64,20 @@ class AdminWhatsAppController extends Controller
                 return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
 }
- 
 
+public function retryWhatsApp()
+{
+    try {
+        // Remove session folder
+        File::deleteDirectory(storage_path('whatsapp-session'));
+
+        File::put(storage_path('app/whatsapp/status.txt'), 'pending');
+
+        return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+        Log::error('[WHATSAPP retry ERROR] ' . $e->getMessage());
+        return response()->json(['success' => false, 'error' => $e->getMessage()]);
+    }
+}
+ 
 }

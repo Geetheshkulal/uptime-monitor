@@ -54,7 +54,7 @@
     }
     
     .btn-whatsapp:hover {
-        background: #128C7E;
+        background: lightgreen;
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
     }
@@ -66,6 +66,15 @@
         border-left: 4px solid #25D366;
         border-radius: 0 4px 4px 0;
         text-align: left;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .spin{
+        animation: spin 0.5s linear infinite;
+        display: inline-block;
     }
 </style>
 
@@ -84,6 +93,8 @@
     <button id="connect-whatsapp-btn" class="btn btn-whatsapp mt-3">
         <i class="fas fa-plug"></i> Connect WhatsApp
     </button>
+
+  
 
     <!-- QR Code Container -->
     <div id="qr-box" class="qr-container" style="display: none;">
@@ -127,6 +138,8 @@
         <h4 class="text-danger mb-3">Connection Error</h4>
         <p>Failed to connect to WhatsApp. Please try again.</p>
     </div>
+
+    
     
     <!-- Action Buttons -->
     <div class="mt-4">
@@ -135,6 +148,9 @@
         </button>
         <button id="refresh-btn" class="btn btn-outline-primary" onclick="location.reload()">
             <i class="fas fa-sync-alt"></i> Refresh Status
+        </button>
+        <button id="retry-whatsapp-btn" class="btn btn-whatsapp mt-3" onclick="retryWhatsApp()">
+            <i class="fas fa-sync-alt" id="retry-spinner-icon"></i> Retry
         </button>
     </div>
 </div>
@@ -206,6 +222,10 @@
         const errorStatus = document.getElementById('error-status');
         const disconnectBtn = document.getElementById('disconnect-btn');
         const connectBtn = document.getElementById('connect-whatsapp-btn');
+        const retryBtn = document.getElementById('retry-whatsapp-btn');
+        const refreshBtn = document.getElementById('refresh-btn');
+        
+
         
 
         // Reset all displays first
@@ -236,9 +256,11 @@
                     statusIndicator.innerHTML = '<i class="fas fa-times-circle"></i> DISCONNECTED';
                     statusIndicator.className = 'status-indicator bg-dark text-white';
                     errorStatus.style.display = 'block';
-                    connectBtn.style.display = 'inline-block';
+                    retryBtn.style.display='inline-block';
+                    connectBtn.style.display = 'none';
                     connectBtn.disabled = false;
                     disconnectBtn.style.display = 'none';
+                    refreshBtn.style.display = 'none';
                     break;
 
             case 'pending':
@@ -248,6 +270,7 @@
                 // connectBtn.style.display = 'inline-block';
                 qrBox.style.display = 'block';
                 disconnectBtn.style.display = 'none';
+                retryBtn.style.display='none';
 
                 // 🛠 FIX: Only show connect button if not already connecting
                 if (!connecting) {
@@ -309,10 +332,48 @@
     }
 }
 
-    // Check status every 3 seconds
-    setInterval(fetchQrCode, 3000);
+async function retryWhatsApp(){
+    const retrySpinnerIcon = document.getElementById('retry-spinner-icon');
+    const retryBtn = document.getElementById('retry-whatsapp-btn');
+
+    retryBtn.disabled = true;
+    retrySpinnerIcon.classList.add('spin');
+
+    try{
+        const res = await fetch("{{ route('admin.whatsapp.retry') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                }
+            });
+
+
+            const data = await res.json();
+            if (data.success) {
+               
+            } else {
+                toastr.error("Failed to reconnect: " + (data.message || 'Unknown error'));
+            }
+
+    }catch(error){
+        console.error('Disconnect failed:', error);
+        toastr.error("An error occurred while disconnecting.");
+
+    }
+
+
+    retrySpinnerIcon.classList.remove('spin');
+    retryBtn.disabled = false;
+    window.location.reload();
+
+}
+
+    // Check status every 2 seconds
+    setInterval(fetchQrCode, 2000);
     // Initial check
     fetchQrCode();
+
 </script>
  <script>
     document.getElementById('connect-whatsapp-btn').addEventListener('click', async () => {
