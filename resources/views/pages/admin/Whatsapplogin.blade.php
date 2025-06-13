@@ -242,6 +242,8 @@
                 connectedStatus.style.display = 'block';
                 disconnectBtn.style.display = 'inline-block';
                 connectBtn.style.display = 'none';
+                retryBtn.style.display='none';
+
                 break;
 
             case 'loading':
@@ -250,18 +252,20 @@
                 loadingLottie.style.display = 'block';
                 disconnectBtn.style.display = 'none';
                 connectBtn.style.display = 'none';
+                retryBtn.style.display='none';
+
                 break;
 
             case 'disconnected':
-                    statusIndicator.innerHTML = '<i class="fas fa-times-circle"></i> DISCONNECTED';
-                    statusIndicator.className = 'status-indicator bg-dark text-white';
-                    errorStatus.style.display = 'block';
-                    retryBtn.style.display='inline-block';
-                    connectBtn.style.display = 'none';
-                    connectBtn.disabled = false;
-                    disconnectBtn.style.display = 'none';
-                    refreshBtn.style.display = 'none';
-                    break;
+                statusIndicator.innerHTML = '<i class="fas fa-times-circle"></i> DISCONNECTED';
+                statusIndicator.className = 'status-indicator bg-dark text-white';
+                errorStatus.style.display = 'block';
+                retryBtn.style.display='inline-block';
+                connectBtn.style.display = 'none';
+                connectBtn.disabled = false;
+                disconnectBtn.style.display = 'none';
+                refreshBtn.style.display = 'none';
+                break;
 
             case 'pending':
 
@@ -290,6 +294,8 @@
                 statusIndicator.className = 'status-indicator bg-danger text-white';
                 errorStatus.style.display = 'block';
                 disconnectBtn.style.display = 'none';
+                retryBtn.style.display='none';
+
         }
     }
 
