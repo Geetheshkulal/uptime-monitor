@@ -413,6 +413,12 @@
                     <span>WhatsApp Login</span>
                 </a>
             </li>
+            <li class="nav-item {{ request()->routeIs('edit.template.page') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('edit.template.page') }}">
+                    <i class="far fa-file-alt"></i>
+                    <span>Edit Templates</span>
+                </a>
+            </li>
         @endhasrole
 
 
@@ -467,10 +473,7 @@
                         </div>
                     </li>
                     @endif
-
-                    
-
-        @endif
+                @endif
             @endhasrole
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
