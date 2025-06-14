@@ -245,7 +245,7 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
     Route::post('/admin/whatsapp/trigger-login', [AdminWhatsAppController::class, 'triggerLogin'])->name('admin.whatsapp.triggerLogin');
     Route::post('/admin/whatsapp/disconnect', [AdminWhatsAppController::class, 'disconnectWhatsApp'])->name('admin.whatsapp.disconnect');
     Route::post('/admin/whatsapp/retry', [AdminWhatsAppController::class, 'retryWhatsApp'])->name('admin.whatsapp.retry');
-
+    Route::get('/admin/whatsapp/profile-image', [AdminWhatsappController::class, 'serveProfileImage'])->name('admin.whatsapp.profileImage');
 
 
 });

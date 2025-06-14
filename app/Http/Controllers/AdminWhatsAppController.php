@@ -24,13 +24,17 @@ class AdminWhatsAppController extends Controller
     {
         $qrPath = storage_path('app/whatsapp/qr.txt');
         $statusPath = storage_path('app/whatsapp/status.txt');
+        $userName = storage_path('app/whatsapp/user_name.txt');
+
 
         $qr = File::exists($qrPath) ? File::get($qrPath) : null;
         $status = File::exists($statusPath) ? trim(File::get($statusPath)) : 'pending';
+        $userName = File::exists($userName) ? trim(File::get($userName)) : 'N/A';
 
         return response()->json([
             'qr' => $qr,
             'status' => $status,
+            'userName' =>$userName,
         ]);
     }
 
@@ -42,7 +46,9 @@ class AdminWhatsAppController extends Controller
     
             // Remove QR and status
             File::delete(storage_path('app/whatsapp/qr.txt'));
+            File::delete(storage_path('app/whatsapp/profile_photo.png'));
             File::put(storage_path('app/whatsapp/status.txt'), 'pending');
+
     
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
@@ -79,5 +85,16 @@ public function retryWhatsApp()
         return response()->json(['success' => false, 'error' => $e->getMessage()]);
     }
 }
+
+    public function serveProfileImage()
+    {
+        $path = storage_path('app/whatsapp/profile_photo.png');
+
+        if (File::exists($path)) {
+            return response()->file($path);
+        }
+
+        abort(404);
+    }
  
 }
