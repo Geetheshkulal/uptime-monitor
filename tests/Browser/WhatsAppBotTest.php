@@ -2,6 +2,8 @@
 
 namespace Tests\Browser;
 
+use App\Models\Monitors;
+use App\Models\Template;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Illuminate\Support\Facades\Log;
@@ -90,16 +92,20 @@ class WhatsAppBotTest extends DuskTestCase
 
         $payload = json_decode(file_get_contents($payloadPath), true);
 
+        $monitor = Monitors::find($payload['monitor_id']);
+
+        $rawPhone = $monitor->user->phone;
+        $phoneNumber = preg_match('/^\d{10}$/', $rawPhone) ? '91' . $rawPhone : $rawPhone;
+      
+        $template = Template::where('template_name', $payload['template_used'])->first();
+
+        echo "Using template: {$template->template_name}\n";
+
+        $templateContent = $template->content;
         
-        $phoneNumber = $payload['phone'];
-        // $message = $payload['message'];
 
-        // <<<TEXT is PHP's "nowdoc" or "heredoc" syntax, specifically a heredoc, used to define multi-line strings
         $message = <<<TEXT
-                {$payload['message']}
-
-                🔗 URL: {$payload['url']}
-                📡 Type: {$payload['type']}
+                {$this->convertHtmlToWhatsappText($this->replaceTemplateVariables($monitor, $templateContent))}
                 TEXT;
 
         $url = "https://web.whatsapp.com/send?phone={$phoneNumber}&text=" . urlencode($message);

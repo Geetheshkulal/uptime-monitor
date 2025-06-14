@@ -83,18 +83,14 @@ class MonitorJob
                 $rawPhone = $monitor->user->phone;
 
                 // Add +91 if number is 10 digits and doesn't already start with it
-                $phone = preg_match('/^\d{10}$/', $rawPhone) ? '91' . $rawPhone : $rawPhone;
 
-                $message = "🚨 Monitor '{$monitor->name}' is DOWN!";
+                Storage::disk('local')->put('whatsapp-payload.json', json_encode(
+                    [
+                        'monitor_id' => $monitor->id,
+                        'template_used' => $status==='down'?'whatsap_monitor_down':'whatsapp_monitor_up',
+                    ]));
 
-                Storage::disk('local')->put('whatsapp-payload.json', json_encode([
-                    'phone' => $monitor->user->phone,
-                    'message' => $message,
-                    'url'=>$monitor->url,
-                    'type'=> $monitor->type,
-                    'monitor_id' => $monitor->id
-                ]));
-                 $process = new Process([
+                $process = new Process([
                     'php',
                     'artisan',
                     'dusk',
