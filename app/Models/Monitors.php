@@ -31,5 +31,15 @@ class Monitors extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function incidents()
+    {
+        return $this->hasMany(Incident::class, 'monitor_id');
+    }
+
+    public function latestIncident()
+    {
+        return $this->incidents()->orderByDesc('start_timestamp')->first();
+    }
     
 }

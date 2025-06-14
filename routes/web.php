@@ -35,6 +35,8 @@ use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\TrafficLogController;
 use App\Http\Controllers\AdminWhatsAppController;
+use App\Http\Controllers\EditTemplateController;
+
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
@@ -240,11 +242,17 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
     Route::post('block/ip/${ip}',[BlockController::class,'BlockIP'])->name('block.ip');
     Route::post('unblock/ip/${ip}',[BlockController::class,'UnblockIP'])->name('unblock.ip');
 
+
+    //WHATSAPP ROUTES
     Route::get('/admin/whatsapp-login', [AdminWhatsAppController::class, 'AdminWhatsappLogin'])->name('admin.whatsapp.login');
     Route::get('/admin/fetch-qr', [AdminWhatsAppController::class, 'fetchQr'])->name('admin.whatsapp.fetchQr');
     Route::post('/admin/whatsapp/trigger-login', [AdminWhatsAppController::class, 'triggerLogin'])->name('admin.whatsapp.triggerLogin');
     Route::post('/admin/whatsapp/disconnect', [AdminWhatsAppController::class, 'disconnectWhatsApp'])->name('admin.whatsapp.disconnect');
     Route::post('/admin/whatsapp/retry', [AdminWhatsAppController::class, 'retryWhatsApp'])->name('admin.whatsapp.retry');
+
+    // Template Routes
+    Route::get('/admin/edit/template',[EditTemplateController::class,'EditTemplatePage'])->name('edit.template.page');
+    Route::post('/templates/store', [EditTemplateController::class, 'store'])->name('templates.store');
     Route::get('/admin/whatsapp/profile-image', [AdminWhatsappController::class, 'serveProfileImage'])->name('admin.whatsapp.profileImage');
 
 
