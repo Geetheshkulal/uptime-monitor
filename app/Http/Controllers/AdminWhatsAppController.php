@@ -46,6 +46,7 @@ class AdminWhatsAppController extends Controller
     
             // Remove QR and status
             File::delete(storage_path('app/whatsapp/qr.txt'));
+            File::delete(storage_path('app/whatsapp/user_name.txt'));
             File::delete(storage_path('app/whatsapp/profile_photo.png'));
             File::put(storage_path('app/whatsapp/status.txt'), 'pending');
 

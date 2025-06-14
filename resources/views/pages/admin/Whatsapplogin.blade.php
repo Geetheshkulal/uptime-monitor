@@ -218,6 +218,14 @@
                 document.getElementById('qr-code-container').innerHTML = "<span class='text-muted'>Waiting for QR code...</span>";
             }
 
+             const nameElement = document.getElementById('wa-username');
+                if (data.userName && data.userName !== 'N/A') {
+                    nameElement.textContent = data.userName;
+                    nameElement.style.display = 'block';
+                } else {
+                    nameElement.style.display = 'none';
+                }
+
             updateStatus(data.status || 'pending');
         } catch (error) {
             console.error('Error fetching QR:', error);
@@ -236,10 +244,9 @@
         const retryBtn = document.getElementById('retry-whatsapp-btn');
         const refreshBtn = document.getElementById('refresh-btn');
         const profilePhoto = document.getElementById('profile-photo');
-        const userName = document.getElementById('wa-username');
-        
-
-        
+        const nameElement = document.getElementById('wa-username');
+       
+     
 
         // Reset all displays first
         qrBox.style.display = 'none';
@@ -256,6 +263,7 @@
                 disconnectBtn.style.display = 'inline-block';
                 connectBtn.style.display = 'none';
                 retryBtn.style.display='none';
+                nameElement.style.display = 'block';
 
                 const profileImageUrl = "{{ route('admin.whatsapp.profileImage') }}?t=" + new Date().getTime();
 
@@ -277,6 +285,7 @@
                 disconnectBtn.style.display = 'none';
                 connectBtn.style.display = 'none';
                 retryBtn.style.display='none';
+                nameElement.style.display = 'none';
 
                 break;
 
@@ -289,6 +298,7 @@
                 connectBtn.disabled = false;
                 disconnectBtn.style.display = 'none';
                 refreshBtn.style.display = 'none';
+                nameElement.style.display = 'none';
                 break;
 
             case 'pending':
@@ -299,6 +309,7 @@
                 qrBox.style.display = 'block';
                 disconnectBtn.style.display = 'none';
                 retryBtn.style.display='none';
+                nameElement.style.display = 'none';
 
                 // 🛠 FIX: Only show connect button if not already connecting
                 if (!connecting) {
@@ -319,6 +330,7 @@
                 errorStatus.style.display = 'block';
                 disconnectBtn.style.display = 'none';
                 retryBtn.style.display='none';
+                nameElement.style.display = 'none';
 
         }
     }
