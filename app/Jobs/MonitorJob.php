@@ -14,6 +14,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Monitors;
 use App\Models\DnsResponse;
 use App\Mail\MonitorDownAlert;
+use App\Mail\MonitorUpAlert;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -43,7 +44,10 @@ class MonitorJob
     {
        
 
-        if ($status === 'down' && ($monitor->status === 'up' || $monitor->status === null) ) {
+        if (($status === 'down' && ($monitor->status === 'up' || $monitor->status === null) ) || 
+             ($status === 'up' && ($monitor->status === 'down' || $monitor->status === null) )
+        
+        )  {
 
               try {
                     $monitor->update([
@@ -61,14 +65,19 @@ class MonitorJob
                 'token'=> $token
             ]);
             
-            Mail::to($monitor->email)->send(new MonitorDownAlert($monitor,$token));
+            if($status === 'down')
+            {
+                Mail::to($monitor->email)->send(new MonitorDownAlert($monitor,$token));
+            }else{
+                Mail::to($monitor->email)->send(new MonitorUpAlert($monitor,$token));
+            }
 
             if($monitor->telegram_bot_token && $monitor->telegram_id && $monitor->user->status !== 'free')
             {
                 $this->sendTelegramNotification($monitor);
             }
 
-            if($monitor->user->phone && $monitor->user->status !== 'free')
+            if($monitor->user->phone)
             {
 
                 $rawPhone = $monitor->user->phone;

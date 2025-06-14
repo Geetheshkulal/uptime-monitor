@@ -67,6 +67,9 @@
         border-radius: 0 4px 4px 0;
         text-align: left;
     }
+    #profile-photo{
+        border-radius:50% !important;
+    }
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -124,6 +127,14 @@
             <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
         </div>
         <h4 class="text-success mb-3">Successfully Connected!</h4>
+        {{-- profile image --}}
+
+    <div id="profile-photo-wrapper" class="mb-3">
+        <img id="profile-photo" src="" alt="Profile Photo"  style="width: 100px; height: 100px; object-fit: cover; display: none;">
+    </div>
+
+    <p id="wa-username" class="mt-2 fw-bold" style="display: none;"></p>
+
         <div class="instructions">
             <p><strong>WhatsApp is now connected</strong> and ready to use.</p>
             <p class="mb-0">To switch accounts, please disconnect first.</p>
@@ -224,6 +235,8 @@
         const connectBtn = document.getElementById('connect-whatsapp-btn');
         const retryBtn = document.getElementById('retry-whatsapp-btn');
         const refreshBtn = document.getElementById('refresh-btn');
+        const profilePhoto = document.getElementById('profile-photo');
+        const userName = document.getElementById('wa-username');
         
 
         
@@ -243,6 +256,17 @@
                 disconnectBtn.style.display = 'inline-block';
                 connectBtn.style.display = 'none';
                 retryBtn.style.display='none';
+
+                const profileImageUrl = "{{ route('admin.whatsapp.profileImage') }}?t=" + new Date().getTime();
+
+                if(profileImageUrl)
+                {
+                    profilePhoto.src = profileImageUrl;
+                    profilePhoto.style.display = 'inline-block';
+
+                }else{
+                    profilePhoto.style.display = 'none';
+                }
 
                 break;
 

@@ -253,6 +253,7 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
     // Template Routes
     Route::get('/admin/edit/template',[EditTemplateController::class,'EditTemplatePage'])->name('edit.template.page');
     Route::post('/templates/store', [EditTemplateController::class, 'store'])->name('templates.store');
+    Route::get('/admin/whatsapp/profile-image', [AdminWhatsappController::class, 'serveProfileImage'])->name('admin.whatsapp.profileImage');
 
 
 });
