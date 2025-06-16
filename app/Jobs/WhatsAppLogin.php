@@ -15,6 +15,9 @@ class WhatsAppLogin implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    
+    public  $tries = 1; // Number of attempts before failing the job'
+    public $timeout = 120; // Timeout in seconds for the job to complete
     /**
      * Create a new job instance.
      */
