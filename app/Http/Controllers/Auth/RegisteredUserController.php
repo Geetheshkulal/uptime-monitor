@@ -27,14 +27,14 @@ class RegisteredUserController extends Controller
     {
         $ip = request()->ip();
         if ($ip === '127.0.0.1' || $ip === '::1') {
-            $ip = '8.8.8.8'; // fallback IP for localhost
+            $ip = '122.179.30.115'; // fallback IP for localhost
         }
     
         $countryCode = null;
         $dialCode = null;
     
         try {
-            $response = Http::get("https://ipinfo.io/{$ip}?token=46a74af3621b70"); // Replace with your token
+            $response = Http::get("https://ipinfo.io/{$ip}?token=".env('IPINFO_TOKEN')); // Replace with your token
             if ($response->successful()) {
                 $countryCode = $response->json()['country'] ?? null;
 
