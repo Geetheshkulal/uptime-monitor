@@ -14,6 +14,9 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
 
 class RegisteredUserController extends Controller
 {
@@ -22,7 +25,32 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $ip = request()->ip();
+        if ($ip === '127.0.0.1' || $ip === '::1') {
+            $ip = '8.8.8.8'; // fallback IP for localhost
+        }
+    
+        $countryCode = null;
+        $dialCode = null;
+    
+        try {
+            $response = Http::get("https://ipinfo.io/{$ip}?token=46a74af3621b70"); // Replace with your token
+            if ($response->successful()) {
+                $countryCode = $response->json()['country'] ?? null;
+
+                $dialingCodes = include(base_path('app/Helpers/CountryDialingCodes.php'));
+                Log::info('All Dial Codes', $dialingCodes);
+
+                $dialCode = $dialingCodes[$countryCode] ?? null;
+
+                Log::info("Dial Code Detected", ['dialCode' => $dialCode, 'countryCode' => $countryCode]);
+            }
+        } catch (\Exception $e) {
+            Log::warning("IPInfo API failed: " . $e->getMessage());
+        }
+    
+
+        return view('auth.register', compact('dialCode','countryCode'));
     }
 
     /**
@@ -46,6 +74,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'last_login_ip' => $request->ip(),
             'phone'=> $request->phone,
+            'country_code' => $request->country_code,
         ]);
 
          // Fire the Registered event to send the verification email

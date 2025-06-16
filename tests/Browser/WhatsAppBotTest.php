@@ -95,7 +95,7 @@ class WhatsAppBotTest extends DuskTestCase
         $monitor = Monitors::find($payload['monitor_id']);
 
         $rawPhone = $monitor->user->phone;
-        $phoneNumber = preg_match('/^\d{10}$/', $rawPhone) ? '91' . $rawPhone : $rawPhone;
+        $phoneNumber = preg_match('/^\d{10}$/', $rawPhone) ? str_replace('+','',$monitor->user->country_code). $rawPhone : $rawPhone;
       
         $template = Template::where('template_name', $payload['template_used'])->first();
 
