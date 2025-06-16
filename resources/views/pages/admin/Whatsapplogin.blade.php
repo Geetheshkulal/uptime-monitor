@@ -359,6 +359,7 @@
                 // connectBtn.style.display = 'inline-block';
                 qrBox.style.display = 'block';
                 disconnectBtn.style.display = 'none';
+                statusIndicator.style.display='none';
                 retryBtn.style.display='none';
                 nameElement.style.display = 'none';
 
