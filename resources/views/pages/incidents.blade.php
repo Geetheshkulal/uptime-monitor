@@ -135,7 +135,6 @@
                                 <tr>
                                     <th>Status</th>
                                     <th>Monitor</th>
-                                    <th>Root Cause</th>
                                     <th>Start Time</th>
                                     <th>Resolved</th>
                                     <th>Duration</th>
@@ -176,7 +175,6 @@
                                             </a>
                                             <small class="monitor-name">{{ $incident->monitor->name }}</small>
                                         </td>
-                                        <td>{{ $incident->root_cause ?? 'Not specified' }}</td>
                                         <td>{{ $incident->start_timestamp->format('M d, Y h:i A') }}</td>
                                         <td>
                                             @if ($incident->end_timestamp)
@@ -227,7 +225,7 @@
             "searching": true,
             "ordering": true,
             "info": true,
-            "order": [[3, "desc"]], // Sort by start time by default
+            "order": [[2, "desc"]], // Sort by start time by default
             "language": {
                 "search": "_INPUT_",
                 "searchPlaceholder": "Search incidents...",
@@ -301,7 +299,6 @@
                                     </a>
                                     <small class="monitor-name">${incident.monitor.name}</small>
                                 </td>
-                                <td>${incident.root_cause || 'Not specified'}</td>
                                 <td>${new Date(incident.start_timestamp).toLocaleDateString('en-US', { 
                                     month: 'short', 
                                     day: 'numeric', 

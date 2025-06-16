@@ -26,6 +26,7 @@ class WhatsAppBotTest extends DuskTestCase
                 '{{up_timestamp}}',
                 '{{monitor_type}}',
                 '{{downtime_duration}}',
+                '{{monitor_url}}',
             ],
             [
                 optional($monitor->user)->name ?? 'N/A',
@@ -36,6 +37,7 @@ class WhatsAppBotTest extends DuskTestCase
                 $incident?->end_timestamp
                     ? $incident->end_timestamp->diffInMinutes($incident->start_timestamp) . ' minutes'
                     : 'N/A',
+                $monitor->url,
             ],
             $content
         );

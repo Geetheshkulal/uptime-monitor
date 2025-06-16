@@ -6,6 +6,7 @@ use App\Models\HttpResponse;
 use App\Models\Notification;
 use App\Models\PortResponse;
 use App\Models\PushSubscription;
+use App\Models\Template;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -39,6 +40,75 @@ class MonitorJob
     public function __construct()
     {
         //
+    }
+    private function replaceTemplateVariables($monitor, string $content): string
+    {
+        $incident = $monitor->latestIncident();
+
+        // Replace placeholders
+        $replacedContent = str_replace(
+            [
+                '{{user_name}}',
+                '{{monitor_name}}',
+                '{{down_timestamp}}',
+                '{{up_timestamp}}',
+                '{{monitor_type}}',
+                '{{downtime_duration}}',
+                '{{monitor_url}}',
+            ],
+            [
+                optional($monitor->user)->name ?? 'N/A',
+                $monitor->name,
+                optional($incident?->start_timestamp)?->format('Y-m-d H:i:s') ?? 'N/A',
+                optional($incident?->end_timestamp)?->format('Y-m-d H:i:s') ?? 'N/A',
+                $monitor->type,
+                $incident?->end_timestamp
+                    ? $incident->end_timestamp->diffInMinutes($incident->start_timestamp) . ' minutes'
+                    : 'N/A',
+                $monitor->url,
+            ],
+            $content
+        );
+
+        // Clean BOM and zero-width characters
+        $cleaned = preg_replace('/\x{FEFF}/u', '', $replacedContent);
+        return str_replace("\xEF\xBB\xBF", '', $cleaned);
+    }
+
+    private function convertHtmlToWhatsappText($html)
+    {
+        $text = $html;
+
+        // Bold and Italic replacements
+        $text = str_replace(['<strong>', '</strong>', '<b>', '</b>'], '*', $text);
+        $text = str_replace(['<em>', '</em>', '<i>', '</i>'], '_', $text);
+
+        // Line breaks and paragraphs
+        $text = preg_replace('/<br\s*\/?>/i', "\n", $text);
+        $text = preg_replace('/<\/?p[^>]*>/i', "\n", $text);
+
+        // Handle ordered list (must run before li is stripped)
+        $text = preg_replace_callback('/<ol[^>]*>(.*?)<\/ol>/is', function ($matches) {
+            $items = [];
+            preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $matches[1], $liMatches);
+            foreach ($liMatches[1] as $index => $item) {
+                $items[] = ($index + 1) . '. ' . strip_tags($item);
+            }
+            return implode("\n", $items) . "\n";
+        }, $text);
+
+        // Handle unordered list
+        $text = preg_replace('/<ul[^>]*>/', '', $text);
+        $text = preg_replace('/<\/ul>/', '', $text);
+        $text = preg_replace('/<li[^>]*>(.*?)<\/li>/is', "• $1\n", $text);
+
+        // Decode HTML entities and remove leftover tags
+        $text = html_entity_decode(strip_tags($text));
+
+        // Remove extra newlines
+        $text = preg_replace("/\n{2,}/", "\n", $text);
+
+        return trim($text);
     }
     private function sendAlert(Monitors $monitor, string $status)
     {
@@ -80,8 +150,6 @@ class MonitorJob
             if($monitor->user->phone)
             {
 
-                $rawPhone = $monitor->user->phone;
-
                 // Add +91 if number is 10 digits and doesn't already start with it
 
                 Storage::disk('local')->put('whatsapp-payload.json', json_encode(
@@ -122,17 +190,15 @@ class MonitorJob
         $botToken = $monitor->telegram_bot_token;
         $chatId = $monitor->telegram_id;
 
-        $message = "🚨 Monitor Down Alert!
-        \n🔴 URL: {$monitor->url}
-        \n🛠 Type: {$monitor->type}
-        \n📅 Detected At: " . now()->toDateTimeString();
-
         $start=microtime(true);
         
+        $template_used = $monitor->status === 'down' ? 'telegram_monitor_down' : 'telegram_monitor_up';
+        $template = Template::where('template_name', $template_used)->first();
+
         $response=Http::get("https://api.telegram.org/bot{$botToken}/sendMessage", [
             'chat_id' => $chatId,
-            'text' => $message,
-            'parse_mode' => 'Markdown'
+            'text' => $this->convertHtmlToWhatsappText($this->replaceTemplateVariables($monitor, $template->content)),
+            'parse_mode' => 'Markdown',
         ]);
 
         $duration=microtime(true)-$start;
@@ -255,14 +321,17 @@ class MonitorJob
         } catch (\Exception $e) {
             Log::error("Failed to insert HTTP response for {$monitor->id}: " . $e->getMessage());
         }
-
+        
+        
+        $this->createIncident($monitor, $status, 'HTTP');
+        
         // Send alert if status is down
         try{
             $this->sendAlert($monitor, $status);
         }catch (\Exception $e) {
             Log::error(''. $e->getMessage());
         }
-        $this->createIncident($monitor, $status, 'HTTP');
+        
 
      
     }
@@ -316,14 +385,17 @@ class MonitorJob
         } catch (\Exception $e) {
             Log::error("Failed to insert DNS response for {$monitor->url}: " . $e->getMessage());
         }
-    
+        
+        $this->createIncident($monitor, $status, 'DNS');
+
+
         try{
             $this->sendAlert($monitor,$status);
         }catch(\Exception $e){
             Log::error(''. $e->getMessage());
         }
 
-        $this->createIncident($monitor, $status, 'DNS');
+        
         
     
         return $records ?: null;
@@ -379,14 +451,18 @@ class MonitorJob
         } catch (\Exception $e) {
             Log::error("Failed to store port response: " . $e->getMessage());
         }
-    
+
+        //Create an incident.
+
+        $this->createIncident($monitor, $status, 'PORT');
+        
         // Send alert if necessary
         try {
             $this->sendAlert($monitor, $status);
         } catch (\Exception $e) {
             Log::error("Failed to send alert: " . $e->getMessage());
         }
-        $this->createIncident($monitor, $status, 'PORT');
+        
       
     
         Log::info("Port check completed: {$monitor->host}:{$monitor->port} is $status.");
@@ -425,7 +501,9 @@ class MonitorJob
                 'status' => $status,
                 'response_time' => $responseTime
             ]);
-    
+
+           $this->createIncident($monitor, $status, monitorType: 'PING');
+
             // Send alert and create incident
            try{ 
                 $this->sendAlert($monitor, $status);
@@ -433,7 +511,7 @@ class MonitorJob
                 Log::error($e->getMessage());
             }
 
-            $this->createIncident($monitor, $status, monitorType: 'PING');
+           
 
    
    
