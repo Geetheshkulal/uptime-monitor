@@ -67,8 +67,42 @@
         border-radius: 0 4px 4px 0;
         text-align: left;
     }
-    #profile-photo{
-        border-radius:50% !important;
+    #profile-photo-wrapper {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+        position: relative;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #profile-photo-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #profile-photo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: none;
+    }
+    
+    .profile-photo-loaded {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        display: none;
     }
     @keyframes spin {
         0% { transform: rotate(0deg); }
@@ -130,7 +164,10 @@
         {{-- profile image --}}
 
     <div id="profile-photo-wrapper" class="mb-3">
-        <img id="profile-photo" src="" alt="Profile Photo"  style="width: 100px; height: 100px; object-fit: cover; display: none;">
+        <div id="profile-photo-loading" class="profile-photo-loading">
+            <i class="fas fa-spinner fa-spin text-muted"></i>
+        </div>
+        <img id="profile-photo" class="profile-photo-loaded" src="" alt="Profile Photo">
     </div>
 
     <p id="wa-username" class="mt-2 fw-bold" style="display: none;"></p>
@@ -194,7 +231,8 @@
 <script>
 
     let lastHash = null;
-    let connecting=false;
+    let connecting = false;
+    let imageStatus = false;
 
     async function fetchQrCode() {
         try {
@@ -206,7 +244,6 @@
                 if (currentHash !== lastHash) {
                     document.getElementById('qr-code-container').innerHTML = `<img id="qr-code" class="qr-code" src="${data.qr}" alt="Waiting for QR code...">`;
                     lastHash = currentHash;
-
                     document.getElementById('connect-whatsapp-btn').disabled = true;
 
                     if(connecting){
@@ -214,17 +251,17 @@
                         connecting=false;
                     }
                 }
-            }else{
+            } else {
                 document.getElementById('qr-code-container').innerHTML = "<span class='text-muted'>Waiting for QR code...</span>";
             }
 
-             const nameElement = document.getElementById('wa-username');
-                if (data.userName && data.userName !== 'N/A') {
-                    nameElement.textContent = data.userName;
-                    nameElement.style.display = 'block';
-                } else {
-                    nameElement.style.display = 'none';
-                }
+            const nameElement = document.getElementById('wa-username');
+            if (data.userName && data.userName !== 'N/A') {
+                nameElement.textContent = data.userName;
+                nameElement.style.display = 'block';
+            } else {
+                nameElement.style.display = 'none';
+            }
 
             updateStatus(data.status || 'pending');
         } catch (error) {
@@ -234,49 +271,63 @@
     }
 
     function updateStatus(status) {
-        const statusIndicator = document.getElementById('status-indicator');
-        const qrBox = document.getElementById('qr-box');
-        const loadingLottie = document.getElementById('loading-lottie');
-        const connectedStatus = document.getElementById('connected-status');
-        const errorStatus = document.getElementById('error-status');
-        const disconnectBtn = document.getElementById('disconnect-btn');
-        const connectBtn = document.getElementById('connect-whatsapp-btn');
-        const retryBtn = document.getElementById('retry-whatsapp-btn');
-        const refreshBtn = document.getElementById('refresh-btn');
-        const profilePhoto = document.getElementById('profile-photo');
-        const nameElement = document.getElementById('wa-username');
-       
-     
+    const statusIndicator = document.getElementById('status-indicator');
+    const qrBox = document.getElementById('qr-box');
+    const loadingLottie = document.getElementById('loading-lottie');
+    const connectedStatus = document.getElementById('connected-status');
+    const errorStatus = document.getElementById('error-status');
+    const disconnectBtn = document.getElementById('disconnect-btn');
+    const connectBtn = document.getElementById('connect-whatsapp-btn');
+    const retryBtn = document.getElementById('retry-whatsapp-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const profilePhoto = document.getElementById('profile-photo');
+    const nameElement = document.getElementById('wa-username');
 
-        // Reset all displays first
-        qrBox.style.display = 'none';
-        loadingLottie.style.display = 'none';
-        connectedStatus.style.display = 'none';
-        errorStatus.style.display = 'none';
-        statusIndicator.style.display = 'none';
+    // Reset all displays first
+    qrBox.style.display = 'none';
+    loadingLottie.style.display = 'none';
+    connectedStatus.style.display = 'none';
+    errorStatus.style.display = 'none';
+    statusIndicator.style.display = 'block';
 
-        switch (status) {
-            case 'connected':
-                statusIndicator.innerHTML = '<i class="fas fa-check-circle"></i> CONNECTED';
-                statusIndicator.className = 'status-indicator bg-success text-white';
-                connectedStatus.style.display = 'block';
-                disconnectBtn.style.display = 'inline-block';
-                connectBtn.style.display = 'none';
-                retryBtn.style.display='none';
-                nameElement.style.display = 'block';
+    switch (status) {
+        case 'connected':
+            statusIndicator.innerHTML = '<i class="fas fa-check-circle"></i> CONNECTED';
+            statusIndicator.className = 'status-indicator bg-success text-white';
+            connectedStatus.style.display = 'block';
+            disconnectBtn.style.display = 'inline-block';
+            connectBtn.style.display = 'none';
+            retryBtn.style.display = 'none';
+            nameElement.style.display = 'block';
 
+            // Get DOM elements
+            const photoWrapper = document.getElementById('profile-photo-wrapper');
+            const photoLoading = document.getElementById('profile-photo-loading');
+            const profilePhotoImg = document.getElementById('profile-photo');
+            
+            // Only load the profile photo if we haven't already loaded it
+            if (!imageStatus) {
+                photoLoading.innerHTML = '<i class="fas fa-spinner fa-spin text-muted"></i>';
+                photoLoading.style.display = 'flex';
+                profilePhotoImg.style.display = 'none';
+
+                // Load profile image with cache busting
                 const profileImageUrl = "{{ route('admin.whatsapp.profileImage') }}?t=" + new Date().getTime();
-
-                if(profileImageUrl)
-                {
-                    profilePhoto.src = profileImageUrl;
-                    profilePhoto.style.display = 'inline-block';
-
-                }else{
-                    profilePhoto.style.display = 'none';
-                }
-
-                break;
+                
+                profilePhotoImg.onload = function() {
+                    photoLoading.style.display = 'none';
+                    profilePhotoImg.style.display = 'block';
+                    imageStatus = true;
+                };
+                
+                profilePhotoImg.onerror = function() {
+                    photoLoading.innerHTML = '<i class="fas fa-user-circle text-muted" style="font-size: 2.5rem;"></i>';
+                    imageStatus = true; // Even if it fails, we don't want to keep trying
+                };
+                
+                profilePhotoImg.src = profileImageUrl;
+            }
+            break;
 
             case 'loading':
                 statusIndicator.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> CONNECTING';
@@ -299,7 +350,7 @@
                 disconnectBtn.style.display = 'none';
                 refreshBtn.style.display = 'none';
                 nameElement.style.display = 'none';
-                break;
+            break;
 
             case 'pending':
 
@@ -343,15 +394,46 @@
     }
 
     async function disconnectWhatsApp() {
-
-         const modal = new bootstrap.Modal(document.getElementById('disconnectConfirmModal'));
-            modal.show();
+        const modal = new bootstrap.Modal(document.getElementById('disconnectConfirmModal'));
+        modal.show();
 
         document.getElementById('confirmDisconnectBtn').onclick = async function () {
             modal.hide();
-        
+            imageStatus = false; // Reset the image status
+            
+            try {
+                const res = await fetch("{{ route('admin.whatsapp.disconnect') }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    toastr.success("Disconnected from WhatsApp successfully.");
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    toastr.error("Failed to disconnect: " + (data.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Disconnect failed:', error);
+                toastr.error("An error occurred while disconnecting.");
+            }
+        }
+    }
+
+    async function retryWhatsApp() {
+        const retrySpinnerIcon = document.getElementById('retry-spinner-icon');
+        const retryBtn = document.getElementById('retry-whatsapp-btn');
+
+        retryBtn.disabled = true;
+        retrySpinnerIcon.classList.add('spin');
+        imageStatus = false; // Reset the image status
+
         try {
-            const res = await fetch("{{ route('admin.whatsapp.disconnect') }}", {
+            const res = await fetch("{{ route('admin.whatsapp.retry') }}", {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -360,56 +442,18 @@
             });
 
             const data = await res.json();
-            if (data.success) {
-                toastr.success("Disconnected from WhatsApp successfully.");
-                setTimeout(() => location.reload(), 1500);
-                // document.getElementById('connect-whatsapp-btn').disabled = false;
-            } else {
-                toastr.error("Failed to disconnect: " + (data.message || 'Unknown error'));
+            if (!data.success) {
+                toastr.error("Failed to reconnect: " + (data.message || 'Unknown error'));
             }
-        } catch (error) {
+        } catch(error) {
             console.error('Disconnect failed:', error);
             toastr.error("An error occurred while disconnecting.");
         }
+
+        retrySpinnerIcon.classList.remove('spin');
+        retryBtn.disabled = false;
+        window.location.reload();
     }
-}
-
-async function retryWhatsApp(){
-    const retrySpinnerIcon = document.getElementById('retry-spinner-icon');
-    const retryBtn = document.getElementById('retry-whatsapp-btn');
-
-    retryBtn.disabled = true;
-    retrySpinnerIcon.classList.add('spin');
-
-    try{
-        const res = await fetch("{{ route('admin.whatsapp.retry') }}", {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json'
-                }
-            });
-
-
-            const data = await res.json();
-            if (data.success) {
-               
-            } else {
-                toastr.error("Failed to reconnect: " + (data.message || 'Unknown error'));
-            }
-
-    }catch(error){
-        console.error('Disconnect failed:', error);
-        toastr.error("An error occurred while disconnecting.");
-
-    }
-
-
-    retrySpinnerIcon.classList.remove('spin');
-    retryBtn.disabled = false;
-    window.location.reload();
-
-}
 
     // Check status every 2 seconds
     setInterval(fetchQrCode, 2000);
