@@ -103,5 +103,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(CouponCode::class, 'coupon_user');
     }
 
+    public function notifications()
+    {
+        return $this->morphMany(UserNotification::class, 'notifiable')
+                   ->orderBy('created_at', 'desc');
+    }
+
 
   }

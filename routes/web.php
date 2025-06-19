@@ -36,7 +36,8 @@ use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\TrafficLogController;
 use App\Http\Controllers\AdminWhatsAppController;
 use App\Http\Controllers\EditTemplateController;
-
+use App\Events\AdminNotification;
+use App\Http\Controllers\AppNotificationController;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
@@ -148,9 +149,9 @@ Route::middleware(['auth','verified','CheckUserSession','blockIp'])->group(funct
     Route::put('/coupons/{id}', [CouponController::class, 'CouponUpdate'])->middleware('permission:manage.coupons')->name('coupons.update');
     Route::delete('/coupons/{id}', [CouponController::class, 'destroy'])->middleware('permission:manage.coupons')->name('coupons.destroy');
     Route::get('/claimed-users/{coupon_id}', [CouponController::class, 'showClaimedUsers'])->middleware('permission:manage.coupons')->name('view.claimed.users');
-
-
     Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->middleware('role:user')->name('premium.page');
+
+    
 });
 
 
@@ -254,6 +255,19 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
     Route::get('/admin/edit/template',[EditTemplateController::class,'EditTemplatePage'])->name('edit.template.page');
     Route::post('/templates/store', [EditTemplateController::class, 'store'])->name('templates.store');
     Route::get('/admin/whatsapp/profile-image', [AdminWhatsappController::class, 'serveProfileImage'])->name('admin.whatsapp.profileImage');
+
+    Route::get('/admin/send-notification',[AppNotificationController::class,'ViewAppNotification'])->name('notification.page')->middleware('role:superadmin');
+    Route::post('/admin/app-notification',[AppNotificationController::class,'sendNotificationToUsers'])->name('admin.send.notification')->middleware('role:superadmin');
+
+    Route::get('/test-notification', function () {
+        event(new AdminNotification([
+            'message' => '📢 This is a test notification!',
+            'type' => 'alert',
+            'time' => now()->diffForHumans(),
+        ]));
+    
+        return 'Test notification sent!';
+    });
 
 
 });
