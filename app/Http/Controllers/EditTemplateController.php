@@ -18,6 +18,7 @@ class EditTemplateController extends Controller
 
     public function store(Request $request)
     {
+        $user = auth()->user();
         Log::info('EditTemplateController@store called with request: ' . json_encode($request->all()));
         $data = $request->validate([
             'template_type' => 'required|string|max:255',
@@ -39,6 +40,17 @@ class EditTemplateController extends Controller
 
         if ($template) {
             $template->update(['content' => $data['content']]);
+
+            activity()
+                ->performedOn($template)
+                ->causedBy(auth()->user())
+                ->inLog("Edited {$template->template_type} template") 
+                ->event('edited')
+                ->withProperties([
+                    'user_name' => $user->name,
+                    'template_name' => $template->template_name,
+                ])
+                ->log("Edited {$template->template_type} template");
 
             return redirect()
             ->back()

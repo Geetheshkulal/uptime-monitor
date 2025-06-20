@@ -60,9 +60,20 @@ class AdminWhatsAppController extends Controller
 
     public function triggerLogin()
     {
+        $user = auth()->user();
         try {
         // Safer: use Process to run Artisan Dusk (non-blocking)
                 WhatsAppLogin::dispatch();
+                activity()
+                ->causedBy(auth()->user())
+                ->inLog('Whatsapp Login') 
+                ->event('whatsapp_login')
+                ->withProperties([
+                    'user_name' => $user->name,
+                    'login_time'=> now()->toDateTimeString(),
+                ])
+                ->log("Logged in to whatsapp.");
+                
                 $output = Artisan::output();
                 Log::info('[WHATSAPP LOGIN] Artisan command executed: ' . $output);
         

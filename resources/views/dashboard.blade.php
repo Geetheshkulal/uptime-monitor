@@ -30,7 +30,7 @@
 
     <!-- Skeleton Loader Styles -->
     <style>
-        *:not(.status-dot):not(.status-badge,.status-indicator,.bar-segment,.badge):not(#login-spinner):not(#profile-photo) {
+        *:not(.status-dot):not(.status-badge,.status-indicator,.bar-segment,.badge,.whatsapp-bubble, .telegram-bubble):not(#login-spinner):not(#profile-photo) {
             border-radius: 0 !important;
         }
         * {
