@@ -78,6 +78,7 @@ class TicketController extends Controller
 
         $ticket = Ticket::findOrFail($id);
 
+
         $previousAssignedUserId = $ticket->assigned_user_id;
 
         $ticket->update([
@@ -89,10 +90,24 @@ class TicketController extends Controller
         ]);
 
         // Send email if the assigned user has changed
-    if ($previousAssignedUserId !== $request->assigned_user_id && $request->assigned_user_id) {
-        $assignedUser = User::find($request->assigned_user_id);
-        Mail::to($assignedUser->email)->queue(new TicketAssignedMail($ticket));
-    }
+        if ($previousAssignedUserId !== $request->assigned_user_id && $request->assigned_user_id) {
+            $assignedUser = User::find($request->assigned_user_id);
+            Mail::to($assignedUser->email)->queue(new TicketAssignedMail($ticket));
+        }
+
+        // Log the activity
+        activity()
+            ->performedOn($ticket)
+            ->causedBy(auth()->user())
+            ->inLog('Ticket Management')
+            ->event('updated')
+            ->withProperties([
+                'user_name' => auth()->user()->name,
+                'ticket_id' => $ticket->id,
+                'ticket_title' => $ticket->title,
+                'assigned_user_id' => $request->assigned_user_id,
+            ])
+            ->log('Ticket updated');
 
         return redirect()->back()->with('success', 'Ticket updated successfully');
     }

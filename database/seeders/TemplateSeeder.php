@@ -11,7 +11,7 @@ class TemplateSeeder extends Seeder
     {
         DB::table('templates')->insert([
             [
-                'template_name' => 'whatsap_monitor_down',
+                'template_name' => 'whatsapp_monitor_down',
                 'content' => '',
                 'variables' => json_encode(['user_name', 'monitor_name', 'down_timestamp', 'monitor_type','monitor_url']),
                 'created_at' => now(),

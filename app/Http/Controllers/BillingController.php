@@ -22,6 +22,19 @@ class BillingController extends Controller
         $subscription = Subscriptions::find($id);
         $subscription->update($vaildated);
 
+        //Log activity.
+        activity()
+            ->performedOn($subscription)
+            ->causedBy(auth()->user())
+            ->inLog('Billing')
+            ->event('edited')
+            ->withProperties([
+                'user_name' => auth()->user()->name,
+                'subscription_name' => $subscription->name,
+                'subscription_amount' => $subscription->amount,
+            ])
+            ->log('Edited subscription');
+
         return redirect()->back()->with('success','Subscription edited successfully');
     }
 }

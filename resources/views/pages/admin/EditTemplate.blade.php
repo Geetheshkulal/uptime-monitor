@@ -33,6 +33,102 @@
         .buttons-container{
             gap:20px;
         }
+        .editor-container {
+            display: flex;
+            gap: 30px;
+        }
+        .editor-column {
+            flex: 1;
+        }
+        .preview-column {
+            flex: 1;
+            border-left: 1px solid #eee;
+            padding-left: 30px;
+        }
+        .preview-content {
+            padding: 20px;
+            border-radius: 5px;
+            min-height: 300px;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        /* WhatsApp message style */
+        .whatsapp-message {
+            max-width: 75%;
+            margin-left: auto;
+            margin-bottom: 15px;
+        }
+        .whatsapp-bubble {
+            background: #e1ffc7;
+            border-radius: 7.5px 0 7.5px 7.5px;
+            padding: 8px 12px;
+            position: relative;
+            color: #111;
+            font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: 14.2px;
+            line-height: 19px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+        }
+        .whatsapp-meta {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 4px;
+        }
+        .whatsapp-time {
+            color: #667781;
+            font-size: 11px;
+            margin-right: 4px;
+        }
+        .whatsapp-ticks {
+            color: #4fc3f7;
+            font-size: 14px;
+        }
+        
+        /* Telegram message style */
+       .telegram-message {
+            max-width: 75%;
+            margin-left: auto; /* Changed from margin-right to left */
+            margin-bottom: 15px;
+        }
+        .telegram-bubble {
+            background: #ffffff;
+            border-radius: 7.5px 0 7.5px 7.5px; /* Adjusted for right alignment */
+            padding: 8px 12px;
+            position: relative;
+            color: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            line-height: 20px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e6e6e6;
+        }
+        .telegram-meta {
+            display: flex;
+            justify-content: flex-end; /* Keep time on the right */
+            align-items: center;
+            margin-top: 4px;
+        }
+        .telegram-time {
+            color: #999999;
+            font-size: 11px;
+        }
+        
+        /* Default preview style */
+        .default-preview {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
     </style>
 @endpush
 
@@ -59,15 +155,25 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="editor">Template Content</label>
-                <div id="editor"></div>
-                <textarea name="content" id="template-content" hidden></textarea>
+            <div class="editor-container">
+                <div class="editor-column">
+                    <div class="section-title">Template Content</div>
+                    <div id="editor"></div>
+                    <textarea name="content" id="template-content" hidden></textarea>
+                    
+                    <div class="mt-3">Template Variables</div>
+                    <div class="d-flex gap-3 flex-wrap mb-4 mt-2 buttons-container" id="variablesContainer"> 
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Template</button>
+                </div>
+                
+                <div class="preview-column">
+                    <div class="section-title">Preview</div>
+                    <div class="preview-content" id="previewContent">
+                        <!-- Preview content will be displayed here -->
+                    </div>
+                </div>
             </div>
-            <div>Template Variables</div>
-            <div class="d-flex gap-3 flex-wrap mb-4 mt-2 buttons-container" id="variablesContainer"> 
-            </div>
-            <button type="submit" class="btn btn-primary">Save Template</button>
         </form>
     </div>
 </div>
@@ -80,15 +186,49 @@
     <script>
         let quill;
 
-       
+        function formatTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            return `${hours}:${minutes} ${ampm}`;
+        }
+
+        function generateWhatsAppPreview(content) {
+            return `
+                <div class="whatsapp-message">
+                    <div class="whatsapp-bubble">${content}</div>
+                    <div class="whatsapp-meta">
+                        <span class="whatsapp-time">${formatTime()}</span>
+                        <span class="whatsapp-ticks">✓✓</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateTelegramPreview(content) {
+            return `
+                <div class="telegram-message">
+                    <div class="telegram-bubble">${content}</div>
+                    <div class="telegram-meta">
+                        <span class="telegram-time">${formatTime()}</span>
+                    </div>
+                </div>
+            `;
+        }
+
         function SetEditorAndVariables(value) {
             const variablesContainer = document.getElementById('variablesContainer');
+            const previewContent = document.getElementById('previewContent');
 
-            localStorage.setItem('selected_template_type', value); // Store selected template type in localStorage
+            localStorage.setItem('selected_template_type', value);
 
             const templates = @json($templates);
-            const currentTemplate= templates.find(template => template.template_name === value);
-            variablesContainer.innerHTML = ''; // Clear existing variables
+            const currentTemplate = templates.find(template => template.template_name === value);
+            variablesContainer.innerHTML = '';
 
             JSON.parse(currentTemplate.variables).forEach(variable => {
                 const variableSpan = document.createElement('span');
@@ -98,11 +238,21 @@
                 variablesContainer.appendChild(variableSpan);
             });
 
-            quill.setContents([]); // Clear the editor content
-            quill.root.innerHTML=currentTemplate.content; // Clear the editor text
+            quill.setContents([]);
+            quill.root.innerHTML = currentTemplate.content;
+            
+            let previewHtml;
+            if (value.toLowerCase().startsWith('whatsapp')) {
+                previewHtml = generateWhatsAppPreview(currentTemplate.content);
+            } else if (value.toLowerCase().startsWith('telegram')) {
+                previewHtml = generateTelegramPreview(currentTemplate.content);
+            } else {
+                previewHtml = `<div class="default-preview">${currentTemplate.content}</div>`;
+            }
+            
+            previewContent.innerHTML = previewHtml;
         }   
 
-        
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('templateForm');
             const contentField = document.getElementById('template-content');
@@ -113,34 +263,40 @@
                         ['bold', 'italic'],
                     ]
                 }
-
             });
 
-            // Update hidden textarea whenever text changes
             quill.on('text-change', function () {
                 contentField.value = quill.root.innerHTML.trim();
+                
+                const previewContent = document.getElementById('previewContent');
+                const templateName = document.getElementById('templateSelector').value.toLowerCase();
+                let previewHtml;
+                
+                if (templateName.startsWith('whatsapp')) {
+                    previewHtml = generateWhatsAppPreview(quill.root.innerHTML);
+                } else if (templateName.startsWith('telegram')) {
+                    previewHtml = generateTelegramPreview(quill.root.innerHTML);
+                } else {
+                    previewHtml = `<div class="default-preview">${quill.root.innerHTML}</div>`;
+                }
+                
+                previewContent.innerHTML = previewHtml;
             });
 
-            // Add form submit handler to ensure content is updated
             form.addEventListener('submit', function(e) {
-                // Force update content before submission
                 contentField.value = quill.root.innerHTML.trim();
             });
 
-
-
-            //set the default template type from localStorage or the first template
             $('#templateSelector').val(
                 localStorage.getItem('selected_template_type') 
                 ? localStorage.getItem('selected_template_type') 
                 : @json($templates)[0].template_name
             );
 
-            //set value in the editor and variables initially
             SetEditorAndVariables(
                 localStorage.getItem('selected_template_type')? localStorage.getItem('selected_template_type') :
                 @json($templates)[0].template_name
-            ); // Populate with the first template by default
+            );
         });
     </script>
 
@@ -191,6 +347,4 @@
             toastr.success(@json(session('status')));
         @endif
     </script>
-
-
 @endpush
