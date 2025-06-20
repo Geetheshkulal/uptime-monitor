@@ -109,5 +109,4 @@ class User extends Authenticatable implements MustVerifyEmail
                    ->orderBy('created_at', 'desc');
     }
 
-
   }

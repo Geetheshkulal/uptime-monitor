@@ -1,4 +1,6 @@
 {{-- @extends('layouts.app') --}}
+
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @push('styles')
   <style>
       @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
@@ -284,9 +286,15 @@
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-bell fa-fw" style="color: #084bbf; font-size: larger;"></i>
         <!-- Counter - Alerts -->
-        <span class="badge badge-danger badge-counter" id="notificationCounter">
+        @php
+            $unreadCount = auth()->user()->unreadNotifications->count();
+        @endphp
+
+        <span class="badge badge-danger badge-counter" {{ $unreadCount === 0 ? 'd-none' : ''}} id="notificationCounter">
             {{-- {{ auth()->user()->unreadNotifications->count() > 0 ? auth()->user()->unreadNotifications->count() : '' }} --}}
+            {{ $unreadCount }}
         </span>
+       
     </a>
     <!-- Dropdown - Alerts -->
     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -369,8 +377,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
-        const counter = document.getElementById('notificationCounter');
-        counter.style.display = 'none';
+        const bell = document.getElementById('alertsDropdown');
 
         if (typeof window.Echo === 'undefined') {
             console.error('❌ Echo is not defined yet');
@@ -385,12 +392,17 @@
                 updateNotificationUI(e.notification);
             });
 
+
         function updateNotificationUI(notification) {
+
+            const counter = document.getElementById('notificationCounter');
+
             const currentCount = parseInt(counter.textContent) || 0;
             counter.textContent = currentCount + 1;
             counter.style.display = 'inline-block';
             counter.classList.add('pulse');
             setTimeout(() => counter.classList.remove('pulse'), 1000);
+
 
             const notificationList = document.getElementById('notificationList');
             const emptyMessage = notificationList.querySelector('.text-muted');
@@ -462,6 +474,27 @@
                 });
             }
         }
+
+        if (bell) {
+
+        bell.addEventListener('click', function () {
+            fetch('/admin/notifications/mark-read', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const counter = document.getElementById('notificationCounter');
+                counter.textContent = '';
+                counter.style.display = 'none';
+            });
+        });
+    }
+
     });
 </script>
 @endpush

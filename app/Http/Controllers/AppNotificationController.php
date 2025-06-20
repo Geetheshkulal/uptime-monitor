@@ -46,5 +46,14 @@ class AppNotificationController extends Controller
     
         return back()->with('success', 'Notification sent to all users!');
     }
+    
+
+    public function markNotificationsAsRead(Request $request)
+    {
+       
+        auth()->user()->unreadNotifications->markAsRead();
+
+        return response()->json(['status' => 'success']);
+    }
 
 }

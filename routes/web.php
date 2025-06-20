@@ -259,15 +259,7 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
     Route::get('/admin/send-notification',[AppNotificationController::class,'ViewAppNotification'])->name('notification.page')->middleware('role:superadmin');
     Route::post('/admin/app-notification',[AppNotificationController::class,'sendNotificationToUsers'])->name('admin.send.notification')->middleware('role:superadmin');
 
-    Route::get('/test-notification', function () {
-        event(new AdminNotification([
-            'message' => '🎉 Soketi is working!',
-            'type' => 'alert',
-            'time' => now()->diffForHumans(),
-        ]));
-    
-        return 'Test notification sent!';
-    });
+    Route::post('/admin/notifications/mark-read', [AppNotificationController::class,'markNotificationsAsRead'])->name('admin.notifications.mark-read');
 
 
 });
