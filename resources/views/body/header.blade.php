@@ -285,7 +285,7 @@
         <i class="fas fa-bell fa-fw" style="color: #084bbf;"></i>
         <!-- Counter - Alerts -->
         <span class="badge badge-danger badge-counter" id="notificationCounter">
-            {{ auth()->user()->unreadNotifications->count() > 0 ? auth()->user()->unreadNotifications->count() : '' }}
+            {{-- {{ auth()->user()->unreadNotifications->count() > 0 ? auth()->user()->unreadNotifications->count() : '' }} --}}
         </span>
     </a>
     <!-- Dropdown - Alerts -->
@@ -369,6 +369,9 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
+        const counter = document.getElementById('notificationCounter');
+        counter.style.display = 'none';
+
         if (typeof window.Echo === 'undefined') {
             console.error('❌ Echo is not defined yet');
             return;
@@ -383,7 +386,6 @@
             });
 
         function updateNotificationUI(notification) {
-            const counter = document.getElementById('notificationCounter');
             const currentCount = parseInt(counter.textContent) || 0;
             counter.textContent = currentCount + 1;
             counter.style.display = 'inline-block';
