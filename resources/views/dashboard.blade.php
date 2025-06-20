@@ -31,7 +31,7 @@
 
     <!-- Skeleton Loader Styles -->
     <style>
-        *:not(.status-dot):not(.status-badge,.status-indicator,.bar-segment,.badge):not(#login-spinner):not(#profile-photo) {
+        *:not(.status-dot):not(.status-badge,.status-indicator,.bar-segment,.badge):not(#login-spinner):not(#profile-photo):not(.icon-circle) {
             border-radius: 0 !important;
         }
         * {

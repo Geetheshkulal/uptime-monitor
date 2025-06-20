@@ -148,15 +148,23 @@
         100% { transform: scale(0.7); }
     }
 
-    .icon-circle {
+    /* .icon-circle {
         height: 2.5rem;
         width: 2.5rem;
         border-radius: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-    }
+    } */
 
+    .icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
     .dropdown-list {
         width: 20rem !important;
         max-height: 80vh;
@@ -183,6 +191,8 @@
     }
 </style>
 @endpush
+
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -288,8 +298,23 @@
             @forelse(auth()->user()->notifications->take(10) as $notification)
                 <a class="dropdown-item d-flex align-items-start" href="{{ $notification->data['url'] ?? '#' }}">
                     <div class="mr-3">
-                        <div class="icon-circle bg-{{ $notification->data['type'] === 'alert' ? 'danger' : 'primary' }}">
+                        {{-- <div class="icon-circle bg-{{ $notification->data['type'] === 'alert' ? 'danger' : 'primary' }}">
                             <i class="fas fa-{{ $notification->data['type'] === 'alert' ? 'exclamation-triangle' : 'info-circle' }} text-white"></i>
+                        </div> --}}
+
+                        @php
+                            $type = $notification->data['type'] ?? 'info';
+                            $iconMap = [
+                                'alert' => ['color' => 'danger', 'icon' => 'exclamation-triangle'],
+                                'announcement' => ['color' => 'info', 'icon' => 'bullhorn'],
+                                'update' => ['color' => 'warning', 'icon' => 'sync-alt'],
+                            ];
+                            $color = $iconMap[$type]['color'] ?? 'primary';
+                            $icon = $iconMap[$type]['icon'] ?? 'info-circle';
+                        @endphp
+
+                        <div class="icon-circle bg-{{ $color }}">
+                            <i class="fas fa-{{ $icon }} text-white"></i>
                         </div>
                     </div>
                     <div class="flex-grow-1">
@@ -340,7 +365,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-{{-- @push('scripts')
+@push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -375,15 +400,41 @@
             newNotification.className = 'dropdown-item d-flex align-items-start';
             newNotification.href = notification.url || '#';
 
-            const typeBadge = notification.type !== 'info'
-                ? `<span class="badge badge-${notification.type === 'alert' ? 'danger' : 'warning'} ml-2">
-                        ${notification.type.charAt(0).toUpperCase() + notification.type.slice(1)}
-                    </span>` : '';
+            // const typeBadge = notification.type !== 'info'
+            //     ? `<span class="badge badge-${notification.type === 'alert' ? 'danger' : 'warning'} ml-2">
+            //             ${notification.type.charAt(0).toUpperCase() + notification.type.slice(1)}
+            //         </span>` : '';
+
+            const iconMap = {
+                alert: { color: 'danger', icon: 'exclamation-triangle', badge: 'danger' },
+                announcement: { color: 'info', icon: 'bullhorn', badge: 'info' },
+                update: { color: 'warning', icon: 'sync-alt', badge: 'warning' },
+            };
+
+            const type = notification.type || 'info';
+            const { color, icon, badge } = iconMap[type] || { color: 'primary', icon: 'info-circle', badge: 'secondary' };
+
+            const typeBadge = `<span class="badge badge-${badge} ml-2">
+                ${type.charAt(0).toUpperCase() + type.slice(1)}
+            </span>`;
+
+            // newNotification.innerHTML = `
+            //     <div class="mr-3">
+            //         <div class="icon-circle bg-${notification.type === 'alert' ? 'danger' : 'primary'}">
+            //             <i class="fas fa-${notification.type === 'alert' ? 'exclamation-triangle' : 'info-circle'} text-white"></i>
+            //         </div>
+            //     </div>
+            //     <div class="flex-grow-1">
+            //         <div class="small text-gray-500">${notification.time}</div>
+            //         <span class="font-weight-bold">${notification.message}</span>
+            //         ${typeBadge}
+            //     </div>
+            // `;
 
             newNotification.innerHTML = `
                 <div class="mr-3">
-                    <div class="icon-circle bg-${notification.type === 'alert' ? 'danger' : 'primary'}">
-                        <i class="fas fa-${notification.type === 'alert' ? 'exclamation-triangle' : 'info-circle'} text-white"></i>
+                    <div class="icon-circle bg-${color}">
+                        <i class="fas fa-${icon} text-white"></i>
                     </div>
                 </div>
                 <div class="flex-grow-1">
@@ -392,6 +443,7 @@
                     ${typeBadge}
                 </div>
             `;
+
 
             notificationList.insertBefore(newNotification, notificationList.firstChild);
 
@@ -410,4 +462,4 @@
         }
     });
 </script>
-@endpush --}}
+@endpush

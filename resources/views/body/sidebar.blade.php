@@ -422,8 +422,8 @@
 
             <li class="nav-item {{ request()->routeIs('notification.page') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('notification.page') }}">
-                    <i class="far fa-file-alt"></i>
-                    <span>send in app notification</span>
+                    <i class="fas fa-bell" style="color: #0355e2;"></i>
+                    <span>Send in app notification</span>
                 </a>
             </li>
         @endhasrole

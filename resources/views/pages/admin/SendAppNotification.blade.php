@@ -10,19 +10,20 @@
 
 <form method="POST" action="{{ route('admin.send.notification') }}">
     @csrf
-    <div class="form-group">
+    <h1 class="h3 mb-2 text-gray-800 ml-3">Send Notification to All Users</h1>
+    <div class="form-group ml-3">
         <label for="message">Message</label>
-        <textarea class="form-control w-50" name="message" placeholder="Enter your notification message" required rows="3"></textarea>
+        <textarea class="form-control w-25" name="message" placeholder="Enter your notification message" required rows="3"></textarea>
     </div>
-    <div class="form-group">
+    <div class="form-group ml-3">
         <label for="type">Notification Type</label>
-        <select class="form-control w-50" name="type">
+        <select class="form-control w-25" name="type">
             <option value="announcement">Announcement</option>
             <option value="alert">Alert</option>
             <option value="update">Update</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Send to All Users</button>
+    <button type="submit" class="btn btn-primary ml-3">Send to All Users</button>
 </form>
 
 

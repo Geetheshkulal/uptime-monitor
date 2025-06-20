@@ -215,7 +215,7 @@
     </style>
     @endpush
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+   
     
 </head>
 
@@ -440,20 +440,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
-<script>
-   document.addEventListener('DOMContentLoaded', function () {
-    if (typeof window.Echo === 'undefined') {
-        console.error('Echo not defined');
-        return;
-    }
-    console.log('✅ Echo connected.');
 
-    window.Echo.channel('global.notifications')
-        .listen('.new.global.notification', (e) => {
-            console.log('📣 Notification:', e.notification);
-        });
-});
-</script>
 
 <script>
     // Initialize animations

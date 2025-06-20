@@ -31,14 +31,14 @@ class AdminNotification implements ShouldBroadcastNow
         return 'new.global.notification';
     }
 
-    public function broadcastWith(): array
-    {
-        return [
-            'notification' => [
-                'message' => 'This is a test notification!',
-                'time' => now()->toDateTimeString(),
-                'type' => 'info',
-            ]
-        ];
-    }
+    // public function broadcastWith(): array
+    // {
+    //     return [
+    //         'notification' => [
+    //             'message' => 'This is a test notification!',
+    //             'time' => now()->toDateTimeString(),
+    //             'type' => 'info',
+    //         ]
+    //     ];
+    // }
 }
