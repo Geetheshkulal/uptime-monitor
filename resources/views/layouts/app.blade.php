@@ -14,6 +14,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- @yield('scripts') --}}
+    {{-- @stack('scripts') --}}
 
     </head>
     <body class="font-sans antialiased">
@@ -30,11 +31,11 @@
             @endif
 
             <!-- Page Content -->
-            <main>
+            {{-- <main>
                 {{ $slot }}
-            </main>
+            </main> --}}
         </div>
 
-        @stack('scripts')
+       @stack('scripts')
     </body>
 </html>

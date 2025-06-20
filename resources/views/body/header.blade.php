@@ -1,3 +1,4 @@
+{{-- @extends('layouts.app') --}}
 @push('styles')
   <style>
       @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
@@ -339,7 +340,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-@push('scripts')
+{{-- @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -353,7 +354,7 @@
         window.Echo.channel('global.notifications')
             .listen('.new.global.notification', (e) => {
                 console.log('📣 New Notification Received:', e.notification);
-                // updateNotificationUI(e.notification);
+                updateNotificationUI(e.notification);
             });
 
         function updateNotificationUI(notification) {
@@ -409,4 +410,4 @@
         }
     });
 </script>
-@endpush
+@endpush --}}

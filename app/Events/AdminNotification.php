@@ -16,27 +16,29 @@ class AdminNotification implements ShouldBroadcastNow
 
     public $notification;
 
-    /**
-     * Create a new event instance.
-     */
     public function __construct($notification)
     {
         $this->notification = $notification;
     }
 
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): Channel
+    public function broadcastOn()
     {
         return new Channel('global.notifications');
-        
     }
-    public function broadcastAs(): string
+
+    public function broadcastAs()
     {
         return 'new.global.notification';
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'notification' => [
+                'message' => 'This is a test notification!',
+                'time' => now()->toDateTimeString(),
+                'type' => 'info',
+            ]
+        ];
     }
 }

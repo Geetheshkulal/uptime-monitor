@@ -261,7 +261,7 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
 
     Route::get('/test-notification', function () {
         event(new AdminNotification([
-            'message' => '📢 This is a test notification!',
+            'message' => '🎉 Soketi is working!',
             'type' => 'alert',
             'time' => now()->diffForHumans(),
         ]));
