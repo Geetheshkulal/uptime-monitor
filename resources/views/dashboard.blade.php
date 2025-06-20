@@ -28,6 +28,7 @@
     <link href="{{ asset('frontend/assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700,800,900" rel="stylesheet">
 
+
     <!-- Skeleton Loader Styles -->
     <style>
         *:not(.status-dot):not(.status-badge,.status-indicator,.bar-segment,.badge,.whatsapp-bubble, .telegram-bubble):not(#login-spinner):not(#profile-photo) {
@@ -158,6 +159,7 @@
     <script src="{{ asset('frontend/assets/vendor/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 
     @stack('scripts')
 

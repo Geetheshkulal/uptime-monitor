@@ -359,7 +359,6 @@
     @if(session('error'))
         toastr.error("{{ session('error') }}");
     @endif
-
     
 </script>
  

@@ -8,6 +8,9 @@ use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use Spatie\Activitylog\Models\Activity;
 use App\Models\Monitors;
+use App\Events\AdminNotification;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -105,5 +108,7 @@ class AdminController extends Controller
             'cpuPercent'
         ));
     }
+
+   
 
 }

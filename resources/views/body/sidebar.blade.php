@@ -419,6 +419,13 @@
                     <span>Edit Templates</span>
                 </a>
             </li>
+
+            <li class="nav-item {{ request()->routeIs('notification.page') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('notification.page') }}">
+                    <i class="far fa-file-alt"></i>
+                    <span>send in app notification</span>
+                </a>
+            </li>
         @endhasrole
 
 

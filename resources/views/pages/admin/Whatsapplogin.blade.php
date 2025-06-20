@@ -360,6 +360,7 @@
                 qrBox.style.display = 'block';
                 statusIndicator.style.display = 'none';
                 disconnectBtn.style.display = 'none';
+                statusIndicator.style.display='none';
                 retryBtn.style.display='none';
                 nameElement.style.display = 'none';
 
