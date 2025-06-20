@@ -5,6 +5,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Monitors;
 use App\Events\AdminNotification;
+use App\Notifications\GeneralNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -37,7 +38,7 @@ class AppNotificationController extends Controller
         // Store notification for all users
         $users = User::all();
         foreach ($users as $user) {
-            $user->notify(new \App\Notifications\GeneralNotification($notification));
+            $user->notify(new GeneralNotification($notification));
         }
 
         event(new AdminNotification($notification));

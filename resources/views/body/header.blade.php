@@ -126,16 +126,16 @@
   }
 
 </style>
-@push('styles')
+{{-- @push('styles') --}}
 <style>
     /* Notification styles */
     .badge-counter {
         position: absolute;
         transform: scale(0.7);
         transform-origin: top right;
-        right: 0.25rem;
-        top: 0.25rem;
-        font-size: 0.6rem;
+        right: 2.25rem;
+        margin-top: -0.25rem;
+        font-size: small;
     }
 
     .pulse {
@@ -282,7 +282,7 @@
 <li class="nav-item dropdown no-arrow mx-1">
     <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-bell fa-fw" style="color: #084bbf;"></i>
+        <i class="fas fa-bell fa-fw" style="color: #084bbf; font-size: larger;"></i>
         <!-- Counter - Alerts -->
         <span class="badge badge-danger badge-counter" id="notificationCounter">
             {{-- {{ auth()->user()->unreadNotifications->count() > 0 ? auth()->user()->unreadNotifications->count() : '' }} --}}
@@ -295,7 +295,7 @@
             Notification Center
         </h6>
         <div id="notificationList">
-            @forelse(auth()->user()->notifications->take(10) as $notification)
+            @forelse(auth()->user()->notifications->take(4) as $notification)
                 <a class="dropdown-item d-flex align-items-start" href="{{ $notification->data['url'] ?? '#' }}">
                     <div class="mr-3">
                         {{-- <div class="icon-circle bg-{{ $notification->data['type'] === 'alert' ? 'danger' : 'primary' }}">
