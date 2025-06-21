@@ -151,6 +151,16 @@ Route::middleware(['auth','verified','CheckUserSession','blockIp'])->group(funct
     Route::get('/claimed-users/{coupon_id}', [CouponController::class, 'showClaimedUsers'])->middleware('permission:manage.coupons')->name('view.claimed.users');
     Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->middleware('role:user')->name('premium.page');
 
+
+    // Test route to trigger PropertyTypeAdded event
+    Route::get('/test-broadcast', function () {
+        event(new AdminNotification([
+            'title' => 'Test Property Type',
+            'description' => 'This is a test broadcast!'
+        ]));
+        return 'Broadcast event triggered!';
+    });
+
     
 });
 

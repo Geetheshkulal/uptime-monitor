@@ -8,6 +8,7 @@ use App\Events\AdminNotification;
 use App\Notifications\GeneralNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -19,7 +20,13 @@ class AppNotificationController extends Controller
 
     public function ViewAppNotification(){
 
-        return view('pages.admin.SendAppNotification');
+        // Pass latest 5 notifications to view
+        $LatestNotifications = DB::table('user_notifications')
+        ->latest()
+        ->take(5)
+        ->get();
+
+        return view('pages.admin.SendAppNotification', compact('LatestNotifications'));
     }
 
     public function sendNotificationToUsers(Request $request)

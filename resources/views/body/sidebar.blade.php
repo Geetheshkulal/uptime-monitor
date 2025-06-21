@@ -203,12 +203,23 @@
     
 }
 
+/* Default light mode sidebar */
+.sidebar {
+    background-color: #4e73df; /* Light */
+    color: white;
+}
+
+/* Dark mode override */
+.dark-mode .sidebar {
+    background-color: #1f1f2e !important; /* Dark */
+    color: #f1f1f1;
+}
 </style>
 
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion d-flex flex-column" id="accordionSidebar">
+<ul class="navbar-nav sidebar sidebar-dark accordion d-flex flex-column"  id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center " href="/">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-heartbeat"></i>
         </div>
@@ -365,16 +376,18 @@
                     <span>Subscription Plans</span>
                 </a>
             </li>
+
+            @can('manage.coupons')
+                <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('display.coupons') }}">
+                        <i class="fas fa-percent"></i>
+                        <span>Coupons</span>
+                    </a>
+                </li>
+            @endcan
         @endhasrole
 
-        @can('manage.coupons')
-            <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('display.coupons') }}">
-                    <i class="fas fa-percent"></i>
-                    <span>Coupons</span>
-                </a>
-            </li>
-        @endcan
+       
 
         @can('see.activity')
             <li class="nav-item {{ request()->routeIs('display.activity') ? 'active' : '' }}">

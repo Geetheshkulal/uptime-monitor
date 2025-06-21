@@ -258,27 +258,11 @@
           </div>
       </li>
 
-                <!-- Nav Item - Alerts -->
-                        {{-- <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="notification" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw" style="color: #084bbf;"></i>
-                               
-                                <span class="badge badge-danger badge-counter">3+</span>
-                            </a>
-                           
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="notification">
-                                <h6 class="dropdown-header">
-                                    Notifications
-                                </h6>
-                                <div id="notification-bell">
-                                  <span class="dropdown-item text-muted">No notifications yet.</span>
-                              </div>
-                            </div>
-                        </li> --}}
+      {{-- dark mode button after deploy can we enable it  --}}
 
-                        <!-- Nav Item - Alerts -->
+      {{-- <button id="darkModeToggle" class="btn btn-sm ml-2" title="Toggle Dark Mode">
+        <i id="themeIcon" class="fas fa-moon"></i>
+    </button> --}}
 
 <!-- Nav Item - Alerts -->
 <li class="nav-item dropdown no-arrow mx-1">
@@ -374,6 +358,47 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 @push('scripts')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleBtn = document.getElementById('darkModeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const root = document.body;
+
+        function setTheme(isDark) {
+            if (isDark) {
+                root.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+                if (themeIcon) {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                    themeIcon.title = "Switch to Light Mode";
+                }
+            } else {
+                root.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+                if (themeIcon) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                    themeIcon.title = "Switch to Dark Mode";
+                }
+            }
+        }
+
+        // Initial Load
+        const storedTheme = localStorage.getItem('theme');
+        setTheme(storedTheme === 'dark');
+
+        // Toggle on Click
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                const isDark = !root.classList.contains('dark-mode');
+                setTheme(isDark);
+            });
+        }
+    });
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
