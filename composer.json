@@ -6,17 +6,20 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "barryvdh/laravel-dompdf": "^3.1",
         "guzzlehttp/guzzle": "^7.9",
         "jenssegers/agent": "^2.6",
         "laravel-notification-channels/webpush": "^9.0",
         "laravel/framework": "^10.10",
+        "laravel/reverb": "^1.5",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "laravolt/avatar": "^6.2",
         "minishlink/web-push": "^9.0",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-permission": "^6.16",
-        "spatie/laravel-server-monitor": "^1.10"
+        "spatie/laravel-server-monitor": "^1.10",
+        "symfony/process": "^6.4"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",

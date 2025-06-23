@@ -28,4 +28,9 @@ class Payment extends Model
         return $this->belongsTo(Subscriptions::class,'subscription_id');
     }
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+
 }

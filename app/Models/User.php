@@ -37,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'last_login_ip',
         'phone', 
+        'country_code',
         'premium_end_date',
         'status',
         'role',
@@ -102,5 +103,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(CouponCode::class, 'coupon_user');
     }
 
+    public function notifications()
+    {
+        return $this->morphMany(UserNotification::class, 'notifiable')
+                   ->orderBy('created_at', 'desc');
+    }
 
   }

@@ -25,5 +25,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AssignDefaultPermissions::class,
         ]);   
+        $this->call([
+            TemplateSeeder::class,
+        ]);
     }
 }

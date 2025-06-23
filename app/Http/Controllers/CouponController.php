@@ -56,6 +56,18 @@ public function apply(Request $request)
                 'discount_type' => $coupon->discount_type
             ]
         ]);
+
+
+        activity()
+        ->performedOn($coupon)
+        ->causedBy($user)
+        ->inLog("Coupon Management") 
+        ->event('edited')
+        ->withProperties([
+            'user_name' => $user->name,
+            'coupon_code' => $coupon->code,
+        ])
+        ->log("Applied Coupon`");
         
         return response()->json([
             'success' => true, 
@@ -126,130 +138,175 @@ public function apply(Request $request)
 
             session()->forget('applied_coupon');
 
+            activity()
+            ->performedOn($coupon)
+            ->causedBy($user)
+            ->inLog("Coupon Management") 
+            ->event('removed coupon')
+            ->withProperties([
+                'user_name' => $user->name,
+                'coupon_code' => $coupon->code,
+            ])
+            ->log("User {$user->name} Removed Coupon`");
+
             return response()->json(['success' => true, 'message' => 'Coupon removed successfully!']);
         }
 
         return response()->json(['success' => false, 'message' => 'No coupon applied.'], 400);
     }
 
-public function DisplayCoupons()
-{
-    $coupons = CouponCode::all();
-    $users = User::Role('user')->get();
+    public function DisplayCoupons()
+    {
+        $coupons = CouponCode::all();
+        $users = User::Role('user')->get();
 
-    $subscriptions = Subscriptions::all();
+        $subscriptions = Subscriptions::all();
 
-    return view('pages.coupons.DisplayCoupons', compact('coupons','users','subscriptions'));
-}
-
-public function CouponStore(Request $request)
-{
-    $request->validate([
-        'code' => 'required|unique:coupon_codes,code',
-        'discount_type' => 'required|in:flat,percentage',
-        'value' => [
-            'required',
-            'numeric',
-            function ($attribute, $value, $fail) use ($request) {
-                if ($request->discount_type === 'percentage' && $value > 100) {
-                    $fail('The percentage discount cannot be more than 100%.');
-                }
-
-                if ($request->discount_type === 'flat') {
-                    // Ensure subscription exists
-                    $subscription = \App\Models\Subscriptions::find($request->subscription_id);
-                    if ($subscription && $value > $subscription->amount) {
-                        $fail("The flat discount cannot be more than the subscription amount ({$subscription->amount}).");
-                    }
-                }
-            },
-        ],
-        'max_uses' => 'nullable|integer',
-        'valid_from' => 'nullable|date',
-        'valid_until' => [
-            'nullable',
-            'date',
-            function ($attribute, $value, $fail) use ($request) {
-                if ($request->filled('valid_from') && $value < $request->valid_from) {
-                    $fail('The valid until date must be on or after the valid from date.');
-                }
-            },
-        ],
-        'is_active' => 'boolean',
-        'subscription_id'=>'required',
-        'user_ids' => 'nullable|array',
-        'user_ids.*' => 'exists:users,id',
-    ]);
-
-    $data = $request->except('user_ids');
-
-    if($request->filled('user_ids')){
-
-        $data['user_ids'] = json_encode($request->user_ids);
-    
+        return view('pages.coupons.DisplayCoupons', compact('coupons','users','subscriptions'));
     }
-        
-    // CouponCode::create($request->all());
-    CouponCode::create($data);
 
-    return back()->with('success', 'Coupon created successfully.');
-}
-
-public function CouponUpdate(Request $request, $id)
-{
-    $coupon = CouponCode::findOrFail($id);
-
-    $request->validate([
-        'code' => 'required|unique:coupon_codes,code,' . $coupon->id,
-        'value' => [
-            'required',
-            'numeric',
-            function ($attribute, $value, $fail) use ($request) {
-                if ($request->discount_type === 'percentage' && $value > 100) {
-                    $fail('The percentage discount cannot be more than 100%.');
-                }
-
-                if ($request->discount_type === 'flat') {
-                    // Ensure subscription exists
-                    $subscription = \App\Models\Subscriptions::find($request->subscription_id);
-                    if ($subscription && $value > $subscription->amount) {
-                        $fail("The flat discount cannot be more than the subscription amount ({$subscription->amount}).");
+    public function CouponStore(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|unique:coupon_codes,code',
+            'discount_type' => 'required|in:flat,percentage',
+            'value' => [
+                'required',
+                'numeric',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->discount_type === 'percentage' && $value > 100) {
+                        $fail('The percentage discount cannot be more than 100%.');
                     }
-                }
-            },
-        ],
-        'max_uses' => 'nullable|integer',
-        'valid_from' => 'nullable|date',
-        'valid_until' => [
-            'nullable',
-            'date',
-            function ($attribute, $value, $fail) use ($request) {
-                if ($request->filled('valid_from') && $value < $request->valid_from) {
-                    $fail('The valid until date must be on or after the valid from date.');
-                }
-            },
-        ],
-        'is_active' => 'boolean'
-    ]);
 
-    $coupon->update($request->all());
+                    if ($request->discount_type === 'flat') {
+                        // Ensure subscription exists
+                        $subscription = \App\Models\Subscriptions::find($request->subscription_id);
+                        if ($subscription && $value > $subscription->amount) {
+                            $fail("The flat discount cannot be more than the subscription amount ({$subscription->amount}).");
+                        }
+                    }
+                },
+            ],
+            'max_uses' => 'nullable|integer',
+            'valid_from' => 'nullable|date',
+            'valid_until' => [
+                'nullable',
+                'date',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->filled('valid_from') && $value < $request->valid_from) {
+                        $fail('The valid until date must be on or after the valid from date.');
+                    }
+                },
+            ],
+            'is_active' => 'boolean',
+            'subscription_id'=>'required',
+            'user_ids' => 'nullable|array',
+            'user_ids.*' => 'exists:users,id',
+        ]);
 
-    return redirect()->back()->with('success', 'Coupon updated successfully.');
+        $data = $request->except('user_ids');
+
+        if($request->filled('user_ids')){
+
+            $data['user_ids'] = json_encode($request->user_ids);
+        
+        }
+            
+        // CouponCode::create($request->all());
+        CouponCode::create($data);
+
+        activity()
+            ->performedOn(new CouponCode())
+            ->causedBy(auth()->user())
+            ->inLog('Coupon Management') 
+            ->event('created')
+            ->withProperties([
+                'user_name' => auth()->user()->name,
+                'coupon_code' => $request->code,
+            ])
+            ->log("Created Coupon: {$request->code}");
+
+        return back()->with('success', 'Coupon created successfully.');
+    }
+
+    public function CouponUpdate(Request $request, $id)
+    {
+        $coupon = CouponCode::findOrFail($id);
+
+        $request->validate([
+            'code' => 'required|unique:coupon_codes,code,' . $coupon->id,
+            'value' => [
+                'required',
+                'numeric',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->discount_type === 'percentage' && $value > 100) {
+                        $fail('The percentage discount cannot be more than 100%.');
+                    }
+
+                    if ($request->discount_type === 'flat') {
+                        // Ensure subscription exists
+                        $subscription = \App\Models\Subscriptions::find($request->subscription_id);
+                        if ($subscription && $value > $subscription->amount) {
+                            $fail("The flat discount cannot be more than the subscription amount ({$subscription->amount}).");
+                        }
+                    }
+                },
+            ],
+            'max_uses' => 'nullable|integer',
+            'valid_from' => 'nullable|date',
+            'valid_until' => [
+                'nullable',
+                'date',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($request->filled('valid_from') && $value < $request->valid_from) {
+                        $fail('The valid until date must be on or after the valid from date.');
+                    }
+                },
+            ],
+            'is_active' => 'boolean'
+        ]);
+
+        $coupon->update($request->all());
+
+        activity()
+            ->performedOn($coupon)
+            ->causedBy(auth()->user())
+            ->inLog('Coupon Management') 
+            ->event('updated')
+            ->withProperties([
+                'user_name' => auth()->user()->name,
+                'coupon_code' => $request->code,
+            ])
+            ->log("Updated Coupon: {$request->code}");
+
+        return redirect()->back()->with('success', 'Coupon updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $coupon = CouponCode::findOrFail($id);
+        $coupon->delete();
+
+        activity()
+            ->performedOn($coupon)
+            ->causedBy(auth()->user())
+            ->inLog('Coupon Management') 
+            ->event('deleted')
+            ->withProperties([
+                'user_name' => auth()->user()->name,
+                'coupon_code' => $coupon->code,
+            ])
+            ->log("Deleted Coupon: {$coupon->code}");
+
+        return back()->with('success', 'Coupon deleted successfully.');
+    }
+
+    public function showClaimedUsers($coupon_id)
+    {
+        $coupon = CouponCode::findOrFail($coupon_id);
+        $claimedUsers = $coupon->claimedUsers;
+
+        return view('pages.coupons.claimed_users', compact('claimedUsers', 'coupon'));
+    }
 }
-
-public function destroy($id)
-{
-    $coupon = CouponCode::findOrFail($id);
-    $coupon->delete();
-
-    return back()->with('success', 'Coupon deleted successfully.');
-}
-
-public function showClaimedUsers($coupon_id)
-{
-    $coupon = CouponCode::findOrFail($coupon_id);
-    $claimedUsers = $coupon->claimedUsers;
-
-    return view('pages.coupons.claimed_users', compact('claimedUsers', 'coupon'));
-}
-}
+        

@@ -13,8 +13,8 @@
 @endpush
 
 <div class="container-fluid">
-        <!-- Page Heading -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">User Details</h1>
         <div>
             <a href="{{ route('display.users') }}" class="btn btn-primary">

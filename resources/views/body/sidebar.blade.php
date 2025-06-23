@@ -153,7 +153,7 @@
     }
 
     .alert-info strong {
-        color: #fff;
+        /* color: #fff; */
         font-size: 1.3em;
         letter-spacing: 1.5px;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
@@ -167,7 +167,7 @@
 
     .alert-info strong:hover {
         transform: scale(1.05);
-        background: rgba(255, 255, 255, 0.25);
+        /* background: rgba(255, 255, 255, 0.25); */
     }
 
 
@@ -179,11 +179,12 @@
         left: -20px;
         right: -20px;
         bottom: -20px;
-        background: radial-gradient(circle, transparent 20%, rgba(255,255,255,0.1) 20%);
+        /* background: radial-gradient(circle, transparent 20%, rgba(255,255,255,0.1) 20%); */
         background-size: 10px 10px;
         opacity: 0.2;
         pointer-events: none;
     }
+
 .badge-container {
     position: absolute;
     top: 8px;
@@ -202,12 +203,23 @@
     
 }
 
+/* Default light mode sidebar */
+.sidebar {
+    background-color: #4e73df; /* Light */
+    color: white;
+}
+
+/* Dark mode override */
+.dark-mode .sidebar {
+    background-color: #1f1f2e !important; /* Dark */
+    color: #f1f1f1;
+}
 </style>
 
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion d-flex flex-column" id="accordionSidebar">
+<ul class="navbar-nav sidebar sidebar-dark accordion d-flex flex-column"  id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center " href="/">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-heartbeat"></i>
         </div>
@@ -364,16 +376,18 @@
                     <span>Subscription Plans</span>
                 </a>
             </li>
+
+            @can('manage.coupons')
+                <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('display.coupons') }}">
+                        <i class="fas fa-percent"></i>
+                        <span>Coupons</span>
+                    </a>
+                </li>
+            @endcan
         @endhasrole
 
-        @can('manage.coupons')
-            <li class="nav-item {{ request()->routeIs('display.coupons') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('display.coupons') }}">
-                    <i class="fas fa-percent"></i>
-                    <span>Coupons</span>
-                </a>
-            </li>
-        @endcan
+       
 
         @can('see.activity')
             <li class="nav-item {{ request()->routeIs('display.activity') ? 'active' : '' }}">
@@ -405,8 +419,28 @@
             </li>
         @endhasrole
 
+        @hasrole('superadmin')
+            <li class="nav-item {{ request()->routeIs('admin.whatsapp.login') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('admin.whatsapp.login') }}">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp Login</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs('edit.template.page') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('edit.template.page') }}">
+                    <i class="far fa-file-alt"></i>
+                    <span>Edit Templates</span>
+                </a>
+            </li>
 
-        
+            <li class="nav-item {{ request()->routeIs('notification.page') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('notification.page') }}">
+                    <i class="fas fa-bell"></i>
+                    <span>Send App Notification</span>
+                </a>
+            </li>
+        @endhasrole
+
 
         @hasrole('support')
             <li class="nav-item {{ request()->routeIs('display.tickets') ? 'active' : '' }}">
@@ -459,10 +493,7 @@
                         </div>
                     </li>
                     @endif
-
-                    
-
-        @endif
+                @endif
             @endhasrole
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">

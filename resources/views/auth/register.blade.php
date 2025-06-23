@@ -247,10 +247,19 @@
                                             @enderror
                                         </div>
                                         
+                                    
                                         <div class="form-group">
+                                        <div class="input-group">
+                                            @if(isset($dialCode))
+                                                <div class="input-group-prepend">
+                                                     <input type="hidden" name="country_code" value="{{ $dialCode }}">
+                                                    <span class="input-group-text">{{ $dialCode }}</span>
+                                                </div>
+                                            @endif
                                             <input type="text" class="form-control form-control-user" 
                                                 id="phone" name="phone" placeholder="Phone Number" 
                                                 value="{{ old('phone') }}" required>
+                                        </div>
                                             @error('phone')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror

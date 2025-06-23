@@ -213,6 +213,10 @@
             pointer-events: none;
         }
     </style>
+    @endpush
+
+   
+    
 </head>
 
 <!-- Main Content -->
@@ -435,6 +439,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+
 
 <script>
     // Initialize animations

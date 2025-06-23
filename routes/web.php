@@ -34,6 +34,10 @@ use App\Http\Controllers\PublicStatusPageController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\ChangelogController;
 use App\Http\Controllers\TrafficLogController;
+use App\Http\Controllers\AdminWhatsAppController;
+use App\Http\Controllers\EditTemplateController;
+use App\Events\AdminNotification;
+use App\Http\Controllers\AppNotificationController;
 
 Route::get('/Product_documentation', function () {
     return view('pages.CheckMySiteDocumentation');
@@ -145,9 +149,19 @@ Route::middleware(['auth','verified','CheckUserSession','blockIp'])->group(funct
     Route::put('/coupons/{id}', [CouponController::class, 'CouponUpdate'])->middleware('permission:manage.coupons')->name('coupons.update');
     Route::delete('/coupons/{id}', [CouponController::class, 'destroy'])->middleware('permission:manage.coupons')->name('coupons.destroy');
     Route::get('/claimed-users/{coupon_id}', [CouponController::class, 'showClaimedUsers'])->middleware('permission:manage.coupons')->name('view.claimed.users');
-
-
     Route::get('premium',[PremiumPageController::class,'PremiumPage'])->middleware('premium_middleware')->middleware('role:user')->name('premium.page');
+
+
+    // Test route to trigger PropertyTypeAdded event
+    Route::get('/test-broadcast', function () {
+        event(new AdminNotification([
+            'title' => 'Test Property Type',
+            'description' => 'This is a test broadcast!'
+        ]));
+        return 'Broadcast event triggered!';
+    });
+
+    
 });
 
 
@@ -238,6 +252,25 @@ Route::group(['middleware' => ['auth','blockIp']], function () {
 
     Route::post('block/ip/${ip}',[BlockController::class,'BlockIP'])->name('block.ip');
     Route::post('unblock/ip/${ip}',[BlockController::class,'UnblockIP'])->name('unblock.ip');
+
+
+    //WHATSAPP ROUTES
+    Route::get('/admin/whatsapp-login', [AdminWhatsAppController::class, 'AdminWhatsappLogin'])->name('admin.whatsapp.login');
+    Route::get('/admin/fetch-qr', [AdminWhatsAppController::class, 'fetchQr'])->name('admin.whatsapp.fetchQr');
+    Route::post('/admin/whatsapp/trigger-login', [AdminWhatsAppController::class, 'triggerLogin'])->name('admin.whatsapp.triggerLogin');
+    Route::post('/admin/whatsapp/disconnect', [AdminWhatsAppController::class, 'disconnectWhatsApp'])->name('admin.whatsapp.disconnect');
+    Route::post('/admin/whatsapp/retry', [AdminWhatsAppController::class, 'retryWhatsApp'])->name('admin.whatsapp.retry');
+
+    // Template Routes
+    Route::get('/admin/edit/template',[EditTemplateController::class,'EditTemplatePage'])->name('edit.template.page');
+    Route::post('/templates/store', [EditTemplateController::class, 'store'])->name('templates.store');
+    Route::get('/admin/whatsapp/profile-image', [AdminWhatsappController::class, 'serveProfileImage'])->name('admin.whatsapp.profileImage');
+
+    Route::get('/admin/send-notification',[AppNotificationController::class,'ViewAppNotification'])->name('notification.page')->middleware('role:superadmin');
+    Route::post('/admin/app-notification',[AppNotificationController::class,'sendNotificationToUsers'])->name('admin.send.notification')->middleware('role:superadmin');
+
+    Route::post('/admin/notifications/mark-read', [AppNotificationController::class,'markNotificationsAsRead'])->name('admin.notifications.mark-read');
+
 
 });
 
