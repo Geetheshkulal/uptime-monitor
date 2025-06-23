@@ -223,7 +223,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-heartbeat"></i>
         </div>
-        <div class="sidebar-brand-text mx-2">CheckMySite</div>
+        <div class="sidebar-brand-text mx-2">DRISHTI PULSE</div>
     </a>
 
     <!-- Divider -->

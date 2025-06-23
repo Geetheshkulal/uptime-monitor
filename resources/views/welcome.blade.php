@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-  <title>CheckMySite - Website Monitoring Service</title>
+  <title>DRISHTI PULSE - Website Monitoring Service</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome -->
@@ -455,6 +455,18 @@
     font-size: 0.7rem;
   }
 
+
+  @media (max-width: 400px) {
+    .auth-buttons .btn {
+      padding: 4px 8px !important;
+      font-size: 12px !important;
+    }
+
+    .auth-buttons i {
+      font-size: 10px;
+    }
+  }
+
 </style>
 
 
@@ -469,7 +481,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
     <div class="container">
       <a class="navbar-brand text-primary fw-bold d-flex align-items-center" href="/">
-        <i class="fas fa-heartbeat me-2"></i>CheckMySite
+        <i class="fas fa-heartbeat me-2"></i>DRISHTI PULSE
       </a>
       
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -515,12 +527,14 @@
                 <a href="{{ route('monitoring.dashboard') }}" class="btn btn-primary btn-sm">Dashboard</a>
               @endhasrole
             @else
+            <div class="auth-buttons d-flex">
             <a href="{{ route('login') }}" class="btn btn-primary btn-sm me-2">
               <i class="fas fa-sign-in-alt me-1"></i> Login
             </a>
             <a href="{{ route('register') }}" class="btn btn-primary btn-sm">
               <i class="fas fa-user-plus me-1"></i> Register
             </a>
+          </div>
             @endauth 
           @endif
         </div>
@@ -821,10 +835,10 @@
         <div class="col-lg-3 col-md-6">
           <div class="d-flex align-items-center mb-3">
             <i class="fas fa-heartbeat text-primary me-2 fs-4"></i>
-            <h3 class="h5 fw-bold mb-0">CheckMySite</h3>
+            <h3 class="h5 fw-bold mb-0">DRISHTI PULSE</h3>
           </div>
           <p class="mb-3 text-muted">Enterprise-grade website monitoring for businesses of all sizes.</p>
-          <div class="d-flex gap-3">
+          <!-- <div class="d-flex gap-3">
             <a href="#" class="social-icon text-light opacity-75 hover-opacity-100 transition">
               <i class="fab fa-twitter"></i>
             </a>
@@ -837,7 +851,7 @@
             <a href="#" class="social-icon text-light opacity-75 hover-opacity-100 transition">
               <i class="fab fa-github"></i>
             </a>
-          </div>
+          </div> -->
         </div>
   
         <!-- Product Links -->
@@ -863,11 +877,11 @@
           <div class="d-flex flex-column gap-2">
             <p class="mb-1 d-flex align-items-center">
               <i class="fas fa-envelope text-primary me-2"></i>
-              <a href="mailto:checkmysite2025@gmail.com" class="text-light text-decoration-none hover-text-primary transition">checkmysite2025@gmail.com</a>
+              <a href="mailto:drishtipulse2025@gmail.com" class="text-light text-decoration-none hover-text-primary transition">drishtipulse2025@gmail.com</a>
             </p>
             <p class="mb-1 d-flex align-items-center">
               <i class="fas fa-phone text-primary me-2"></i>
-              <a href="tel:+18005551234" class="text-light text-decoration-none hover-text-primary transition">+1 (800) 555-1234</a>
+              <a href="tel:+18005551234" class="text-light text-decoration-none hover-text-primary transition">+91 8073462033</a>
             </p>
             <p class="mb-3 d-flex align-items-center">
               <i class="fas fa-map-marker-alt text-primary me-2"></i>
@@ -876,7 +890,7 @@
                 target="_blank" 
                 style="text-decoration: none; color: inherit;"
               >
-                <span>Mangalore</span>
+                <span>Mangalore, Karnataka, India</span>
               </a>
             </p>
             <div class="mt-2">
@@ -894,7 +908,7 @@
       <!-- Copyright & Legal Links -->
       <div class="row align-items-center">
         <div class="col-md-6 text-center text-md-start">
-          <p class="mb-md-0 text-muted small">© 2025 CheckMySite. All rights reserved.</p>
+          <p class="mb-md-0 text-muted small">© 2025 DRISHTI PULSE. All rights reserved.</p>
         </div>
         <div class="col-md-6 text-center text-md-end">
           <a href="#" class="text-light text-decoration-none me-3 hover-text-primary transition small">Privacy Policy</a>
